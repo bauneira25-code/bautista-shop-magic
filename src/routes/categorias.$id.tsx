@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Search, Flame, Users, Sparkles } from "lucide-react";
+import { Search, Flame, Users, Sparkles, Eye } from "lucide-react";
 import { CATEGORY_THEMES } from "@/lib/categoryThemes";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { CategoryHero } from "@/components/CategoryHero";
+import { CategoryAmbient } from "@/components/CategoryAmbient";
 
 export const Route = createFileRoute("/categorias/$id")({
   component: CategoryPage,
@@ -30,8 +31,19 @@ function CategoryPage() {
   const all = products.length ? products : MOCK_PRODUCTS;
 
   return (
-    <div className="relative mx-auto min-h-screen w-full max-w-[480px] pb-28" style={{ background: theme.bg }}>
+    <div className="relative mx-auto min-h-screen w-full max-w-[480px] overflow-hidden pb-28" style={{ background: theme.bg }}>
+      {/* Immersive ambient decorations specific to the category world */}
+      <CategoryAmbient theme={theme} />
+      <div className="relative z-10">
       <CategoryHero theme={theme} />
+
+      {/* Live viewers chip */}
+      <div className="px-5 pt-3">
+        <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: "rgba(0,0,0,0.4)" }}>
+          <Eye className="h-3 w-3" style={{ color: theme.accent }} />
+          <span className="text-[11px] font-bold text-white">{(1240 + Math.floor(Math.random() * 800)).toLocaleString("es-AR")} viendo {theme.name.toLowerCase()} ahora</span>
+        </div>
+      </div>
 
       {/* Search bar matching theme */}
       <div className="px-5 pt-5">
@@ -136,6 +148,7 @@ function CategoryPage() {
         </div>
       </section>
 
+      </div>
       {/* Bottom CTA */}
       <div className="fixed bottom-3 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 px-5">
         <Link
