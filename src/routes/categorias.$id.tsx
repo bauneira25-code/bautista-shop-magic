@@ -26,6 +26,8 @@ function CategoryPage() {
   const { id } = Route.useParams();
   const theme = CATEGORY_THEMES[id];
   if (!theme) throw notFound();
+  const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
+  const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
 
   // Filtros especiales para categorías agregadoras
   const products =
@@ -59,7 +61,7 @@ function CategoryPage() {
           <Search className="h-4 w-4" style={{ color: theme.accent }} />
           <input
             placeholder={`Buscar en ${theme.name}...`}
-            className={`flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40 ${theme.font}`}
+            className={`flex-1 bg-transparent text-sm text-white outline-none placeholder:text-foreground/40 dark:text-white/40 ${theme.font}`}
           />
         </div>
       </div>
@@ -147,7 +149,7 @@ function CategoryPage() {
               <p className={`text-sm font-bold ${theme.font}`} style={{ color: theme.accent }}>
                 {formatARS(p.price.group)}
               </p>
-              <p className="text-[10px] text-white/40 line-through">{formatARS(p.price.individual)}</p>
+              <p className="text-[10px] text-foreground/40 dark:text-white/40 line-through">{formatARS(p.price.individual)}</p>
             </Link>
           ))}
         </div>
@@ -198,7 +200,7 @@ function FeaturedCard({ theme, product }: { theme: typeof CATEGORY_THEMES[string
             <p className={`text-2xl font-bold ${theme.font}`} style={{ color: theme.accent }}>
               {formatARS(product.price.group)}
             </p>
-            <p className="text-[10px] text-white/40 line-through">{formatARS(product.price.individual)}</p>
+            <p className="text-[10px] text-foreground/40 dark:text-white/40 line-through">{formatARS(product.price.individual)}</p>
           </div>
           <span
             className="rounded-full px-3 py-1.5 text-[10px] font-bold"
