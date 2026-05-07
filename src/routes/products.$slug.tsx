@@ -415,20 +415,17 @@ function ModeCard({
   active: boolean; onClick: () => void; title: string; icon: string; price: number; sub: string; highlight?: boolean; badge?: string; compareAt?: number;
 }) {
   return (
-    <button onClick={onClick} className={`relative flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition ${active ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}>
-      {highlight && <span className="absolute -top-2 right-3 rounded-full bg-warning px-2 py-0.5 text-[9px] font-black uppercase text-background">⚡ Más elegida</span>}
-      <span className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-xl">{icon}</span>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-bold">{title}</p>
-          {badge && <span className="rounded-md bg-success/20 px-1.5 py-0.5 text-[9px] font-bold text-success">{badge}</span>}
-        </div>
-        <p className="text-[11px] text-muted-foreground">{sub}</p>
-      </div>
-      <div className="text-right">
-        <p className="font-display text-base">{formatARS(price)}</p>
-        {compareAt && compareAt > price && <p className="text-[10px] text-muted-foreground line-through">{formatARS(compareAt)}</p>}
-      </div>
+    <button onClick={onClick} className={`relative flex flex-col items-center gap-1 rounded-xl border p-2 text-center transition ${active ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}>
+      {highlight && <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 rounded-full bg-warning px-1.5 py-0.5 text-[8px] font-black uppercase text-background whitespace-nowrap">⚡ Top</span>}
+      <span className="text-lg leading-none mt-0.5">{icon}</span>
+      <p className="text-[11px] font-bold leading-tight">{title}</p>
+      <p className="font-display text-sm leading-none text-primary">{formatARS(price)}</p>
+      {compareAt && compareAt > price ? (
+        <p className="text-[9px] text-muted-foreground line-through leading-none">{formatARS(compareAt)}</p>
+      ) : (
+        <p className="text-[9px] text-muted-foreground leading-none">{sub}</p>
+      )}
+      {badge && <span className="rounded bg-success/20 px-1 py-0.5 text-[8px] font-bold text-success leading-none">{badge}</span>}
     </button>
   );
 }
