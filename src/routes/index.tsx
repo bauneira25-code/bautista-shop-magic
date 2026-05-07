@@ -61,7 +61,7 @@ function Home() {
         </div>
       </header>
 
-      <main className="space-y-7 px-5 pt-4">
+      <main className="space-y-5 px-5 pt-3">
         {/* Live ticker */}
         <div className="overflow-hidden rounded-2xl border border-border bg-card/50">
           <div className="flex items-center gap-2 border-b border-border px-3 py-1.5">
@@ -92,16 +92,25 @@ function Home() {
           </div>
         </Link>
 
-        {/* Categories */}
+        {/* Categories — scroll horizontal con bordes naranjas */}
         <section>
           <SectionHeader title="Categorías" />
-          <div className="mt-3 grid grid-cols-3 gap-3">
-            {CATEGORIES.map((c) => (
-              <Link key={c.id} to="/categorias/$id" params={{ id: c.id }} className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-3 transition-transform active:scale-95">
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-2xl">{c.emoji}</span>
-                <span className="text-[11px] font-semibold text-foreground/90">{c.name}</span>
-              </Link>
-            ))}
+          <div className="relative mt-3">
+            <span className="pointer-events-none absolute left-0 top-1/2 z-10 h-12 w-[3px] -translate-y-1/2 rounded-full bg-gradient-to-b from-transparent via-primary to-transparent" />
+            <span className="pointer-events-none absolute right-0 top-1/2 z-10 h-12 w-[3px] -translate-y-1/2 rounded-full bg-gradient-to-b from-transparent via-primary to-transparent" />
+            <div className="-mx-5 flex gap-2 overflow-x-auto px-5 scrollbar-hide">
+              {CATEGORIES.map((c) => (
+                <Link
+                  key={c.id}
+                  to="/categorias/$id"
+                  params={{ id: c.id }}
+                  className="group flex w-[78px] shrink-0 flex-col items-center gap-1.5 rounded-2xl border border-primary/30 bg-card p-2 transition-transform active:scale-95"
+                >
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-xl">{c.emoji}</span>
+                  <span className="text-[10px] font-semibold text-foreground/90 text-center leading-tight">{c.name}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
 
