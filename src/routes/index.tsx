@@ -1,118 +1,224 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Truck, ShieldCheck, Sparkles } from "lucide-react";
-import { Header } from "@/components/Header";
-import { Button } from "@/components/ui/button";
-import { ProductGrid } from "@/components/ProductGrid";
+import { Search, Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight } from "lucide-react";
+import { MobileShell } from "@/components/MobileShell";
+import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, TRENDING, VIRAL, LIVE_FEED, formatARS } from "@/lib/mockData";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NEIBA — Tecnología, hogar, gym y belleza" },
-      { name: "description", content: "Tienda online de tecnología, electrónica, gym, hogar, belleza y joyería moderna. Envíos a todo el país." },
-      { property: "og:title", content: "NEIBA — Tu tienda de productos modernos" },
-      { property: "og:description", content: "Fundas, auriculares, smartwatches, electrodomésticos y mucho más." },
+      { title: "NEIBA — Marketplace futurista" },
+      { name: "description", content: "Tecnología, hogar, belleza y más con compras grupales y personalización IA." },
     ],
   }),
-  component: Index,
+  component: Home,
 });
 
-const categories = [
-  { name: "Tecnología", emoji: "📱", tag: "tech" },
-  { name: "Audio", emoji: "🎧", tag: "audio" },
-  { name: "Smartwatch", emoji: "⌚", tag: "smartwatch" },
-  { name: "Hogar", emoji: "🏠", tag: "hogar" },
-  { name: "Gym", emoji: "💪", tag: "gym" },
-  { name: "Belleza", emoji: "💄", tag: "belleza" },
-  { name: "Joyería", emoji: "💍", tag: "joyeria" },
-  { name: "Gamer", emoji: "🎮", tag: "gamer" },
-];
-
-function Index() {
+function Home() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <MobileShell>
+      {/* Top bar */}
+      <header className="sticky top-0 z-30 px-5 pb-3 pt-4 backdrop-blur-xl" style={{ background: "oklch(0.13 0.02 295 / 0.85)" }}>
+        <div className="flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <span className="grid h-9 w-9 place-items-center rounded-xl text-base font-black text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>N</span>
+            <div>
+              <p className="font-display text-lg leading-none">NEIBA</p>
+              <p className="text-[10px] text-muted-foreground">Buenos Aires, AR</p>
+            </div>
+          </Link>
+          <button className="relative grid h-10 w-10 place-items-center rounded-full bg-card">
+            <Bell className="h-4 w-4" />
+            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary pulse-ring" />
+          </button>
+        </div>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 -z-10 opacity-40" style={{ background: "var(--gradient-warm)" }} />
-        <div className="absolute -right-32 -top-32 -z-10 h-[500px] w-[500px] rounded-full opacity-20 blur-3xl" style={{ background: "var(--gradient-primary)" }} />
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[1.2fr_1fr] md:py-24">
-          <div className="flex flex-col justify-center">
-            <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-              <Sparkles className="h-3 w-3" /> Nuevos drops cada semana
+        <div className="mt-3 flex items-center gap-2 rounded-2xl bg-card px-4 py-3">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          <input placeholder="Buscar productos, marcas..." className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
+          <span className="rounded-lg bg-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary">IA</span>
+        </div>
+      </header>
+
+      <main className="space-y-7 px-5 pt-4">
+        {/* Live ticker */}
+        <div className="overflow-hidden rounded-2xl border border-border bg-card/50">
+          <div className="flex items-center gap-2 border-b border-border px-3 py-1.5">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-success" />
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-success">En vivo</span>
+            <span className="text-[11px] text-muted-foreground">142 personas comprando ahora</span>
+          </div>
+          <div className="relative h-7 overflow-hidden">
+            <div className="absolute inset-0 flex animate-[shimmer_25s_linear_infinite] items-center gap-8 whitespace-nowrap px-4 text-[11px] text-foreground/80" style={{ animation: "none" }}>
+              {LIVE_FEED.map((m, i) => <span key={i}>{m}</span>)}
+            </div>
+          </div>
+        </div>
+
+        {/* Hero banner */}
+        <Link to="/products/$slug" params={{ slug: "funda-iphone-15-pro" }} className="block">
+          <div className="relative overflow-hidden rounded-3xl p-5" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
+              <Flame className="h-3 w-3" /> Group Drop
             </span>
-            <h1 className="font-display text-5xl leading-[0.95] md:text-7xl">
-              Tecnología <br />
-              <span className="text-primary">que se siente moderna.</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-              Fundas, auriculares, smartwatches, electrodomésticos, gym, hogar y joyería. Productos curados, listos para tu día a día.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                <Link to="/products">Ver catálogo <ArrowRight className="ml-1 h-4 w-4" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href="#categorias">Explorar categorías</a>
-              </Button>
+            <h2 className="mt-3 max-w-[70%] font-display text-2xl leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
+            <p className="mt-1 text-xs text-white/80">Sumate al próximo drop que cierra en 1h 29m</p>
+            <div className="mt-4 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-primary">
+              Unirme ahora <ChevronRight className="h-3 w-3" />
             </div>
-            <div className="mt-10 flex flex-wrap gap-6 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-2"><Truck className="h-4 w-4 text-primary" /> Envíos a todo el país</span>
-              <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Garantía en todos los productos</span>
-            </div>
+            <div className="absolute right-3 bottom-3 text-6xl">📱</div>
           </div>
-          <div className="relative hidden md:block">
-            <div className="absolute inset-0 rounded-3xl" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }} />
-            <div className="relative grid h-full grid-cols-2 gap-3 p-6">
-              {["📱","🎧","⌚","💄","💍","🎮"].map((e, i) => (
-                <div key={i} className="grid place-items-center rounded-2xl bg-background/95 text-5xl shadow-lg backdrop-blur" style={{ aspectRatio: i % 3 === 0 ? "1/1.2" : "1/1" }}>
-                  {e}
+        </Link>
+
+        {/* Categories */}
+        <section>
+          <SectionHeader title="Categorías" link="/categorias" />
+          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 scrollbar-hide">
+            {CATEGORIES.map((c) => (
+              <Link key={c.id} to="/categorias" className="group flex shrink-0 flex-col items-center gap-2">
+                <span className="grid h-16 w-16 place-items-center rounded-2xl bg-card text-2xl transition-transform group-active:scale-95 border border-border">{c.emoji}</span>
+                <span className="text-[11px] font-medium text-foreground/90">{c.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Flash deals */}
+        <section>
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4 text-warning" />
+                <h3 className="font-display text-lg">Flash Deals</h3>
+              </div>
+              <p className="text-[11px] text-muted-foreground">Termina en 02:14:38</p>
+            </div>
+            <Link to="/categorias" className="text-xs text-primary">Ver todo</Link>
+          </div>
+          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+            {FLASH_DEALS.map((p) => (
+              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[160px] shrink-0">
+                <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
+                  <span>{p.emoji}</span>
+                  <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">-{Math.round((1 - p.price.group / p.price.individual) * 100)}%</span>
                 </div>
-              ))}
-            </div>
+                <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-sm font-bold text-primary">{formatARS(p.price.group)}</span>
+                  <span className="text-[10px] text-muted-foreground line-through">{formatARS(p.price.individual)}</span>
+                </div>
+              </Link>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Categorías */}
-      <section id="categorias" className="mx-auto max-w-7xl px-5 py-16">
-        <div className="mb-8 flex items-end justify-between">
-          <h2 className="font-display text-3xl md:text-4xl">Categorías</h2>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-          {categories.map((c) => (
-            <Link
-              key={c.name}
-              to="/products"
-              search={{ tag: c.tag }}
-              className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 transition-all hover:-translate-y-1 hover:border-primary hover:shadow-[var(--shadow-card)]"
-            >
-              <span className="text-3xl transition-transform group-hover:scale-110">{c.emoji}</span>
-              <span className="text-sm font-semibold">{c.name}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured products */}
-      <section className="mx-auto max-w-7xl px-5 pb-20">
-        <div className="mb-8 flex items-end justify-between">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">Destacados</span>
-            <h2 className="font-display text-3xl md:text-4xl">Lo más nuevo</h2>
+        {/* Group deals (live) */}
+        <section>
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4 text-primary" />
+            <h3 className="font-display text-lg">Compras grupales en vivo</h3>
           </div>
-          <Button asChild variant="ghost">
-            <Link to="/products">Ver todo <ArrowRight className="ml-1 h-4 w-4" /></Link>
-          </Button>
-        </div>
-        <ProductGrid first={8} />
-      </section>
+          <div className="mt-3 space-y-3">
+            {MOCK_PRODUCTS.slice(0, 3).map((p) => {
+              const pct = (p.groupJoined / p.groupTarget) * 100;
+              return (
+                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="block">
+                  <div className="flex gap-3 rounded-2xl border border-border bg-card p-3">
+                    <div className="grid h-20 w-20 shrink-0 place-items-center rounded-xl text-3xl" style={{ background: p.gradient }}>{p.emoji}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="line-clamp-1 text-sm font-semibold">{p.title}</p>
+                        <span className="shrink-0 rounded-md bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary">GRUPO</span>
+                      </div>
+                      <div className="mt-1 flex items-baseline gap-1.5">
+                        <span className="text-base font-bold text-primary">{formatARS(p.price.group)}</span>
+                        <span className="text-[10px] text-muted-foreground line-through">{formatARS(p.price.individual)}</span>
+                      </div>
+                      <div className="mt-2">
+                        <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
+                          <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--gradient-primary)" }} />
+                        </div>
+                        <div className="mt-1 flex items-center justify-between text-[10px] text-muted-foreground">
+                          <span>{p.groupJoined}/{p.groupTarget} unidos</span>
+                          <span className="inline-flex items-center gap-1"><Clock className="h-2.5 w-2.5" />{p.groupTimeLeft}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
-      <footer className="border-t border-border bg-card">
-        <div className="mx-auto max-w-7xl px-5 py-8 text-sm text-muted-foreground">
-          © {new Date().getFullYear()} NEIBA. Todos los derechos reservados.
-        </div>
-      </footer>
+        {/* Trending */}
+        <section>
+          <SectionHeader title="Trending ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} link="/categorias" />
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            {TRENDING.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
+          </div>
+        </section>
+
+        {/* Viral / TikTok style */}
+        <section>
+          <SectionHeader title="Viral en TikTok" icon={<Sparkles className="h-4 w-4 text-neon" />} />
+          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+            {VIRAL.map((p) => (
+              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="relative aspect-[9/14] w-[180px] shrink-0 overflow-hidden rounded-2xl" style={{ background: p.gradient }}>
+                <div className="absolute inset-0 grid place-items-center text-7xl">{p.emoji}</div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                  <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[9px] font-bold backdrop-blur">{p.badge ?? "TRENDING"}</span>
+                  <p className="mt-1.5 line-clamp-2 text-xs font-semibold">{p.title}</p>
+                  <p className="mt-0.5 text-sm font-black">{formatARS(p.price.group)}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Recomendados */}
+        <section>
+          <SectionHeader title="Para vos" icon={<Sparkles className="h-4 w-4 text-primary" />} />
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            {MOCK_PRODUCTS.map((p) => <ProductCard key={p.id} product={p} />)}
+          </div>
+        </section>
+
+        <Link to="/admin" className="block rounded-2xl border border-border bg-card p-4 text-center text-xs text-muted-foreground">
+          🛠 Acceder al panel admin
+        </Link>
+      </main>
+    </MobileShell>
+  );
+}
+
+function SectionHeader({ title, link, icon }: { title: string; link?: string; icon?: React.ReactNode }) {
+  return (
+    <div className="flex items-end justify-between">
+      <div className="flex items-center gap-2">
+        {icon}
+        <h3 className="font-display text-lg">{title}</h3>
+      </div>
+      {link && <Link to={link} className="text-xs text-primary">Ver todo</Link>}
     </div>
+  );
+}
+
+function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) {
+  return (
+    <Link to="/products/$slug" params={{ slug: p.slug }} className="group">
+      <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
+        <span>{p.emoji}</span>
+        {p.badge && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{p.badge}</span>}
+        {p.customizable && <span className="absolute right-2 top-2 rounded-md bg-primary px-1.5 py-0.5 text-[9px] font-bold text-primary-foreground">CUSTOM 🔥</span>}
+      </div>
+      <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-bold">{formatARS(p.price.individual)}</span>
+        <span className="text-[10px] text-muted-foreground">⭐ {p.rating}</span>
+      </div>
+      <p className="text-[10px] text-success">Grupo desde {formatARS(p.price.group)}</p>
+    </Link>
   );
 }
