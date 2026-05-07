@@ -110,6 +110,32 @@ function Admin() {
           </div>
         </section>
 
+        {/* Marcas registradas */}
+        <section>
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-primary" />
+            <p className="font-display text-base">Marcas registradas</p>
+            <span className="rounded-md bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary">{brands.length}</span>
+          </div>
+          <div className="mt-3 space-y-2">
+            {brands.map((b) => (
+              <div key={b.id} className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary">
+                  <ShieldCheck className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold">{b.name}</p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {b.owner} · {new Date(b.registeredAt).toLocaleDateString("es-AR")}
+                    {b.logoName && ` · 🖼 ${b.logoName}`}
+                  </p>
+                </div>
+                <span className="rounded-full bg-success/15 px-2 py-0.5 text-[9px] font-bold text-success">PROTEGIDA</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* AI suggestions */}
         <div className="rounded-3xl border border-primary/40 p-4" style={{ background: "var(--gradient-violet)" }}>
           <div className="flex items-center gap-2 text-white">
