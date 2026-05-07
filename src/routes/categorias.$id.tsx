@@ -1,7 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Search, Flame, Users, Sparkles, Eye } from "lucide-react";
 import { CATEGORY_THEMES } from "@/lib/categoryThemes";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
+import { useUserPrefs } from "@/stores/userPrefs";
 import { CategoryHero } from "@/components/CategoryHero";
 import { CategoryAmbient } from "@/components/CategoryAmbient";
 
