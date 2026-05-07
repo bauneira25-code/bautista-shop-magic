@@ -20,7 +20,7 @@ function Categorias() {
       </header>
 
       <main className="px-5 pt-4 pb-8">
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           {CATEGORY_LIST.map((c) => {
             const Icon = c.icon;
             return (
@@ -28,11 +28,11 @@ function Categorias() {
                 key={c.id}
                 to="/categorias/$id"
                 params={{ id: c.id }}
-                className="relative block overflow-hidden rounded-3xl border"
+                className="relative block aspect-square overflow-hidden rounded-3xl border"
                 style={{
                   background: c.bg,
-                  borderColor: `${c.accent}44`,
-                  boxShadow: `0 20px 60px -25px ${c.accent}88`,
+                  borderColor: `${c.accent}55`,
+                  boxShadow: `0 18px 50px -25px ${c.accent}99`,
                 }}
               >
                 <div className={`absolute inset-0 opacity-50 ${
@@ -43,23 +43,25 @@ function Categorias() {
                   c.pattern === "scan" ? "pat-scan" :
                   c.pattern === "shine" ? "pat-shine" :
                   c.pattern === "dots" ? "pat-dots" : "pat-grid"
-                }`} style={{ ["--pat-color" as never]: `${c.accent}30` }} />
-                <div className="absolute -right-6 -bottom-6 h-32 w-32 rounded-full blur-2xl" style={{ background: c.accent, opacity: 0.4 }} />
+                }`} style={{ ["--pat-color" as never]: `${c.accent}40` }} />
+                <div className="absolute -right-6 -bottom-6 h-32 w-32 rounded-full blur-2xl" style={{ background: c.accent, opacity: 0.45 }} />
 
-                <div className="relative flex items-center gap-4 p-5">
-                  <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl" style={{ background: c.accent }}>
-                    <Icon className="h-7 w-7" style={{ color: c.textOn }} />
+                <div className="relative flex h-full flex-col justify-between p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="grid h-11 w-11 place-items-center rounded-2xl" style={{ background: c.accent }}>
+                      <Icon className="h-5 w-5" style={{ color: c.textOn }} />
+                    </div>
+                    <ArrowRight className="h-4 w-4" style={{ color: c.accent }} />
                   </div>
-                  <div className="flex-1">
-                    <p className={`text-[10px] uppercase tracking-[0.25em] ${c.font}`} style={{ color: c.accent }}>
+                  <div>
+                    <p className={`text-[9px] uppercase tracking-[0.25em] ${c.font}`} style={{ color: c.accent }}>
                       {c.vibe}
                     </p>
-                    <p className={`text-2xl ${c.font === "font-mono" ? "font-orbitron" : c.font} text-white`}>
+                    <p className={`text-xl ${c.font === "font-mono" ? "font-orbitron" : c.font} text-white leading-tight`}>
                       {c.name}
                     </p>
-                    <p className="mt-0.5 text-xs text-white/60">{c.tagline}</p>
+                    <p className="mt-0.5 line-clamp-1 text-[10px] text-white/55">{c.tagline}</p>
                   </div>
-                  <ArrowRight className="h-5 w-5" style={{ color: c.accent }} />
                 </div>
               </Link>
             );
