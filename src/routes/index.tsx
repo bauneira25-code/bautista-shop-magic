@@ -33,10 +33,8 @@ function Home() {
           </button>
         </div>
 
-        <div className="mt-3 flex items-center gap-2 rounded-2xl bg-card px-4 py-3">
-          <Search className="h-4 w-4 text-muted-foreground" />
-          <input placeholder="Buscar productos, marcas..." className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
-          <span className="rounded-lg bg-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary">IA</span>
+        <div className="mt-3">
+          <SmartSearch />
         </div>
       </header>
 
