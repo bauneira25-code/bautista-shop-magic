@@ -1,173 +1,244 @@
-// Ambient side decorations that immerse the user in each category's world.
-// Renders fixed/absolute decorative elements alongside the product list:
-//   - tech: floating chips, code lines, AI orbs
-//   - hogar: zen candles, plants, soft light beams
-//   - audio: wave bars
-//   - belleza: floating sparkles & flowers
-//   - gym: scan lines & dumbbell silhouettes
-//   - joyeria: gold shine sparkles
-//   - gamer: pixel arcade
-//   - smart: connected nodes
+// Immersive ambient world for each category — visible decorations on both sides
+// of the product list so the user feels they entered a different universe.
 import type { CategoryTheme } from "@/lib/categoryThemes";
 
 export function CategoryAmbient({ theme }: { theme: CategoryTheme }) {
   switch (theme.id) {
-    case "tech":
-      return <TechAmbient theme={theme} />;
-    case "hogar":
-      return <HogarAmbient theme={theme} />;
-    case "audio":
-      return <AudioAmbient theme={theme} />;
-    case "belleza":
-      return <BellezaAmbient theme={theme} />;
-    case "gym":
-      return <GymAmbient theme={theme} />;
-    case "joyeria":
-      return <JoyeriaAmbient theme={theme} />;
-    case "gamer":
-      return <GamerAmbient theme={theme} />;
-    case "smart":
-      return <SmartAmbient theme={theme} />;
-    default:
-      return null;
+    case "tech": return <TechAmbient theme={theme} />;
+    case "hogar": return <HogarAmbient theme={theme} />;
+    case "audio": return <AudioAmbient theme={theme} />;
+    case "belleza": return <BellezaAmbient theme={theme} />;
+    case "gym": return <GymAmbient theme={theme} />;
+    case "joyeria": return <JoyeriaAmbient theme={theme} />;
+    case "gamer": return <GamerAmbient theme={theme} />;
+    case "smart": return <SmartAmbient theme={theme} />;
+    default: return null;
   }
 }
 
+/* =================== TECH — IA / circuitos / código =================== */
 function TechAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Floating circuit chips */}
-      <div className="absolute left-2 top-[20%] rotate-[8deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}55`, color: theme.accent, background: "rgba(0,0,0,0.4)" }}>
-        ▷ ai.boot()
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      {/* full circuit grid background */}
+      <div className="absolute inset-0 opacity-[0.18] pat-circuit" style={{ ["--pat-color" as never]: theme.accent }} />
+      {/* glowing AI orbs */}
+      <div className="absolute -left-20 top-[30%] h-56 w-56 rounded-full opacity-50 blur-3xl" style={{ background: theme.accent }} />
+      <div className="absolute -right-24 top-[60%] h-60 w-60 rounded-full opacity-40 blur-3xl" style={{ background: theme.accent2 }} />
+
+      {/* Floating chips - LEFT */}
+      <div className="absolute left-1 top-[25%] -rotate-[8deg] rounded-md border-2 px-2 py-1 font-mono text-[9px] backdrop-blur shadow-lg" style={{ borderColor: theme.accent, color: theme.accent, background: "rgba(0,0,0,0.6)" }}>
+        <div>▷ AI.boot()</div>
+        <div className="opacity-70">{">"} loading...</div>
       </div>
-      <div className="absolute right-2 top-[35%] -rotate-[6deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent2}55`, color: theme.accent2, background: "rgba(0,0,0,0.4)" }}>
+      <div className="absolute left-2 top-[48%] rotate-[5deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>
+        ●●● LIVE
+      </div>
+      <div className="absolute left-1 top-[68%] -rotate-[4deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.5)" }}>
+        chip-x9 · 5G
+      </div>
+      <div className="absolute left-2 top-[85%] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>
+        ⚡ 240Hz
+      </div>
+
+      {/* Floating chips - RIGHT */}
+      <div className="absolute right-1 top-[28%] rotate-[6deg] rounded-md border-2 px-2 py-1 font-mono text-[9px] backdrop-blur shadow-lg" style={{ borderColor: theme.accent2, color: theme.accent2, background: "rgba(0,0,0,0.6)" }}>
+        <div>NEURAL</div>
+        <div className="opacity-70">v3.1</div>
+      </div>
+      <div className="absolute right-2 top-[45%] -rotate-[6deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>
         100% UP
       </div>
-      <div className="absolute left-1 top-[55%] rounded-md border px-2 py-1 font-mono text-[8px]" style={{ borderColor: `${theme.accent}55`, color: theme.accent, background: "rgba(0,0,0,0.4)" }}>
-        chip-x9
+      <div className="absolute right-1 top-[60%] rotate-[3deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.5)" }}>
+        BIONIC
       </div>
-      <div className="absolute right-1 top-[68%] rotate-[10deg] rounded-md border px-2 py-1 font-mono text-[8px]" style={{ borderColor: `${theme.accent}55`, color: theme.accent, background: "rgba(0,0,0,0.4)" }}>
-        5G · LIVE
+      <div className="absolute right-2 top-[78%] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>
+        AR · VR
       </div>
-      {/* AI orbs */}
-      <div className="absolute right-[-30px] top-[15%] h-32 w-32 rounded-full opacity-30 blur-2xl pulse-ring" style={{ background: theme.accent }} />
-      <div className="absolute left-[-30px] top-[45%] h-28 w-28 rounded-full opacity-25 blur-2xl" style={{ background: theme.accent2 }} />
-      {/* Vertical scanline */}
-      <div className="absolute left-1/2 top-0 h-full w-px opacity-20" style={{ background: `linear-gradient(180deg, transparent, ${theme.accent}, transparent)` }} />
+
+      {/* Vertical scan line */}
+      <div className="absolute left-1/2 top-0 h-full w-px opacity-30 ticker" style={{ background: `linear-gradient(180deg, transparent, ${theme.accent}, transparent)` }} />
     </div>
   );
 }
 
+/* =================== HOGAR — Zen / velas / plantas =================== */
 function HogarAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Soft warm light beams */}
-      <div className="absolute -top-10 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
-      {/* Candles */}
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      {/* warm light beams */}
+      <div className="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full opacity-25 blur-3xl" style={{ background: theme.accent }} />
+      <div className="absolute -bottom-20 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-20 blur-3xl" style={{ background: theme.accent2 }} />
+
+      {/* LEFT side — candles & nature */}
       <div className="absolute left-1 top-[22%] flex flex-col items-center">
-        <span className="text-2xl">🕯️</span>
-        <span className="mt-0.5 text-[8px] tracking-widest text-amber-200/70">ZEN</span>
+        <span className="text-3xl drop-shadow-[0_0_15px_rgba(245,158,11,0.6)] animate-pulse">🕯️</span>
+        <span className="mt-1 font-serif text-[9px] tracking-[0.3em] text-amber-200/80">ZEN</span>
       </div>
-      <div className="absolute right-1 top-[34%] flex flex-col items-center">
-        <span className="text-xl">🌿</span>
+      <div className="absolute left-2 top-[40%] text-3xl rotate-[-8deg]">🌿</div>
+      <div className="absolute left-1 top-[55%] text-4xl">🪴</div>
+      <div className="absolute left-2 top-[72%] flex flex-col items-center">
+        <span className="text-2xl">☕</span>
+        <span className="mt-0.5 font-serif text-[8px] italic text-amber-100/60">cozy</span>
       </div>
-      <div className="absolute left-2 top-[50%] flex flex-col items-center">
-        <span className="text-2xl">🪴</span>
-      </div>
-      <div className="absolute right-1 top-[62%] flex flex-col items-center">
-        <span className="text-xl">🕯️</span>
-      </div>
-      <div className="absolute left-1 top-[76%] flex flex-col items-center">
-        <span className="text-lg">☕</span>
-      </div>
-      <div className="absolute right-2 top-[85%] text-lg">🌸</div>
-      {/* Quote */}
-      <div className="absolute right-2 top-[10%] max-w-[80px] -rotate-[4deg] font-serif text-[9px] italic leading-tight text-amber-100/70">
+      <div className="absolute left-1 top-[88%] text-2xl">🌸</div>
+
+      {/* RIGHT side — calm & decorative */}
+      <div className="absolute right-1 top-[18%] max-w-[100px] -rotate-[3deg] font-serif text-[10px] italic leading-tight text-amber-100/70">
         "tu casa, tu calma"
       </div>
+      <div className="absolute right-2 top-[32%] flex flex-col items-center">
+        <span className="text-3xl drop-shadow-[0_0_15px_rgba(245,158,11,0.6)] animate-pulse" style={{ animationDelay: "0.6s" }}>🕯️</span>
+      </div>
+      <div className="absolute right-1 top-[48%] text-3xl">🌷</div>
+      <div className="absolute right-2 top-[62%] text-2xl">🍃</div>
+      <div className="absolute right-1 top-[78%] flex flex-col items-center">
+        <span className="text-2xl">🛋️</span>
+        <span className="mt-0.5 font-serif text-[8px] italic text-amber-100/60">home</span>
+      </div>
+      <div className="absolute right-2 top-[92%] text-2xl">🌙</div>
     </div>
   );
 }
 
+/* =================== AUDIO — equalizers & beats =================== */
 function AudioAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute left-0 top-[20%] flex h-20 items-end gap-0.5 opacity-50">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <span key={i} className="eq-bar w-1 rounded-full" style={{ height: `${30 + i * 7}%`, background: i % 2 ? theme.accent : theme.accent2, animationDelay: `${i * 0.1}s` }} />
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <div className="absolute -left-20 top-[25%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
+      <div className="absolute -right-20 top-[65%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent2 }} />
+
+      {/* Vertical EQs left */}
+      <div className="absolute left-2 top-[20%] flex h-32 items-end gap-0.5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <span key={i} className="eq-bar w-1.5 rounded-full" style={{ height: `${30 + ((i * 23) % 70)}%`, background: i % 2 ? theme.accent : theme.accent2, animationDelay: `${i * 0.1}s` }} />
         ))}
       </div>
-      <div className="absolute right-0 top-[55%] flex h-20 items-end gap-0.5 opacity-50">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <span key={i} className="eq-bar w-1 rounded-full" style={{ height: `${20 + ((i * 13) % 70)}%`, background: i % 2 ? theme.accent2 : theme.accent, animationDelay: `${i * 0.13}s` }} />
+      <div className="absolute left-2 top-[60%] flex h-32 items-end gap-0.5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <span key={i} className="eq-bar w-1.5 rounded-full" style={{ height: `${20 + ((i * 17) % 75)}%`, background: i % 2 ? theme.accent2 : theme.accent, animationDelay: `${i * 0.15}s` }} />
         ))}
       </div>
-      <div className="absolute right-2 top-[15%] text-2xl opacity-60">♪</div>
-      <div className="absolute left-2 top-[78%] text-2xl opacity-60">♫</div>
+      {/* Right */}
+      <div className="absolute right-2 top-[35%] flex h-32 items-end gap-0.5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <span key={i} className="eq-bar w-1.5 rounded-full" style={{ height: `${25 + ((i * 19) % 65)}%`, background: i % 2 ? theme.accent : theme.accent2, animationDelay: `${i * 0.12}s` }} />
+        ))}
+      </div>
+      <div className="absolute right-2 top-[80%] flex h-24 items-end gap-0.5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <span key={i} className="eq-bar w-1.5 rounded-full" style={{ height: `${20 + ((i * 31) % 70)}%`, background: theme.accent2, animationDelay: `${i * 0.18}s` }} />
+        ))}
+      </div>
+      {/* Notes */}
+      <div className="absolute left-3 top-[45%] text-2xl opacity-70" style={{ color: theme.accent }}>♪</div>
+      <div className="absolute right-3 top-[15%] text-3xl opacity-70" style={{ color: theme.accent }}>♫</div>
+      <div className="absolute right-4 top-[68%] text-2xl opacity-70" style={{ color: theme.accent2 }}>♩</div>
     </div>
   );
 }
 
+/* =================== BELLEZA — sparkles & flowers =================== */
 function BellezaAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className={`absolute inset-0 pat-sparkle opacity-30`} style={{ ["--pat-color" as never]: theme.accent }} />
-      <div className="absolute left-1 top-[20%] text-2xl">✨</div>
-      <div className="absolute right-2 top-[30%] text-xl">💗</div>
-      <div className="absolute left-2 top-[45%] text-xl">🌷</div>
-      <div className="absolute right-1 top-[58%] text-2xl">✨</div>
-      <div className="absolute left-1 top-[72%] text-xl">🌸</div>
-      <div className="absolute right-2 top-[85%] text-xl">💄</div>
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <div className="absolute inset-0 opacity-40 pat-sparkle" style={{ ["--pat-color" as never]: theme.accent }} />
+      <div className="absolute -left-20 top-[20%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
+      <div className="absolute -right-20 top-[70%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent2 }} />
+
+      <div className="absolute left-1 top-[20%] text-3xl animate-pulse">✨</div>
+      <div className="absolute left-2 top-[36%] text-2xl">💗</div>
+      <div className="absolute left-1 top-[52%] text-3xl">🌷</div>
+      <div className="absolute left-2 top-[68%] text-2xl animate-pulse" style={{ animationDelay: "0.5s" }}>✨</div>
+      <div className="absolute left-1 top-[84%] text-2xl">🌸</div>
+
+      <div className="absolute right-1 top-[15%] text-3xl">💄</div>
+      <div className="absolute right-2 top-[32%] text-2xl animate-pulse" style={{ animationDelay: "0.3s" }}>✨</div>
+      <div className="absolute right-1 top-[48%] text-2xl">💅</div>
+      <div className="absolute right-2 top-[64%] text-3xl">🌺</div>
+      <div className="absolute right-1 top-[80%] text-2xl">💗</div>
+      <div className="absolute right-2 top-[10%] max-w-[90px] -rotate-[3deg] font-display text-[10px] italic text-pink-200/80">"glow infinito"</div>
     </div>
   );
 }
 
+/* =================== GYM — scan / strong text =================== */
 function GymAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className={`absolute inset-0 pat-scan opacity-30`} style={{ ["--pat-color" as never]: theme.accent }} />
-      <div className="absolute left-0 top-[18%] -rotate-90 origin-top-left translate-y-12 font-bebas text-3xl tracking-widest opacity-30" style={{ color: theme.accent }}>NO PAIN</div>
-      <div className="absolute right-0 top-[55%] rotate-90 origin-top-right -translate-y-2 font-bebas text-3xl tracking-widest opacity-30" style={{ color: theme.accent }}>NO GAIN</div>
-      <div className="absolute left-2 top-[35%] text-xl">🏋️</div>
-      <div className="absolute right-2 top-[70%] text-xl">💪</div>
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <div className="absolute inset-0 opacity-25 pat-scan" style={{ ["--pat-color" as never]: theme.accent }} />
+      {/* Vertical text */}
+      <div className="absolute left-2 top-[25%] -rotate-90 origin-top-left translate-y-24 font-bebas text-4xl tracking-widest opacity-40" style={{ color: theme.accent }}>NO PAIN</div>
+      <div className="absolute right-2 top-[55%] rotate-90 origin-top-right translate-y-2 font-bebas text-4xl tracking-widest opacity-40" style={{ color: theme.accent }}>NO GAIN</div>
+      <div className="absolute left-2 top-[35%] text-3xl">🏋️</div>
+      <div className="absolute right-2 top-[28%] text-2xl">💪</div>
+      <div className="absolute left-3 top-[65%] text-2xl">🥇</div>
+      <div className="absolute right-3 top-[78%] text-3xl">🔥</div>
+      <div className="absolute left-2 top-[88%] font-bebas text-2xl tracking-wider" style={{ color: theme.accent2 }}>+24 KG</div>
+      <div className="absolute right-2 top-[10%] font-bebas text-xl tracking-wider" style={{ color: theme.accent }}>BEAST</div>
     </div>
   );
 }
 
+/* =================== JOYERIA — gold shine =================== */
 function JoyeriaAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 pat-shine opacity-40" style={{ ["--pat-color" as never]: `${theme.accent}55` }} />
-      <div className="absolute left-1 top-[20%] text-xl opacity-80">✦</div>
-      <div className="absolute right-2 top-[35%] text-2xl opacity-80">✧</div>
-      <div className="absolute left-2 top-[55%] text-xl opacity-80">✦</div>
-      <div className="absolute right-1 top-[72%] text-2xl opacity-80">✧</div>
-      <div className="absolute right-2 top-[12%] max-w-[90px] font-serif text-[10px] italic leading-tight" style={{ color: theme.accent }}>
-        "Para siempre"
-      </div>
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <div className="absolute inset-0 pat-shine opacity-50" style={{ ["--pat-color" as never]: `${theme.accent}77` }} />
+      <div className="absolute -left-20 top-[30%] h-48 w-48 rounded-full opacity-25 blur-3xl" style={{ background: theme.accent }} />
+      <div className="absolute -right-20 top-[70%] h-48 w-48 rounded-full opacity-20 blur-3xl" style={{ background: theme.accent2 }} />
+
+      <div className="absolute left-2 top-[20%] text-3xl opacity-80" style={{ color: theme.accent }}>✦</div>
+      <div className="absolute left-1 top-[40%] text-2xl">💍</div>
+      <div className="absolute left-2 top-[58%] text-2xl opacity-80" style={{ color: theme.accent }}>✧</div>
+      <div className="absolute left-1 top-[78%] text-2xl">💎</div>
+
+      <div className="absolute right-2 top-[15%] max-w-[90px] font-serif text-[11px] italic leading-tight" style={{ color: theme.accent }}>"para siempre"</div>
+      <div className="absolute right-1 top-[35%] text-3xl opacity-80" style={{ color: theme.accent }}>✧</div>
+      <div className="absolute right-2 top-[52%] text-2xl">💎</div>
+      <div className="absolute right-1 top-[70%] text-3xl opacity-80" style={{ color: theme.accent2 }}>✦</div>
+      <div className="absolute right-2 top-[88%] text-2xl">💍</div>
     </div>
   );
 }
 
+/* =================== GAMER — pixel arcade =================== */
 function GamerAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute left-1 top-[18%] rounded-md border-2 px-1.5 py-0.5 font-mono text-[8px]" style={{ borderColor: theme.accent, color: theme.accent }}>P1 ♥♥♥</div>
-      <div className="absolute right-1 top-[30%] rounded-md border-2 px-1.5 py-0.5 font-mono text-[8px]" style={{ borderColor: theme.accent2, color: theme.accent2 }}>x99</div>
-      <div className="absolute left-2 top-[50%] font-mono text-[8px]" style={{ color: theme.accent }}>{">_"} READY</div>
-      <div className="absolute right-2 top-[68%] text-xl">🕹️</div>
-      <div className="absolute left-1 top-[80%] font-mono text-[8px]" style={{ color: theme.accent2 }}>1UP</div>
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <div className="absolute inset-0 opacity-20 pat-pixels" style={{ ["--pat-color" as never]: theme.accent }} />
+      <div className="absolute left-1 top-[18%] rounded-md border-2 px-2 py-1 font-mono text-[9px] shadow-lg" style={{ borderColor: theme.accent, color: theme.accent, background: "rgba(0,0,0,0.7)" }}>P1 ♥♥♥</div>
+      <div className="absolute left-2 top-[35%] font-mono text-[10px] animate-pulse" style={{ color: theme.accent }}>{">_"} READY</div>
+      <div className="absolute left-1 top-[55%] rounded-md border-2 px-2 py-1 font-mono text-[9px]" style={{ borderColor: theme.accent2, color: theme.accent2, background: "rgba(0,0,0,0.7)" }}>x99 ⚔</div>
+      <div className="absolute left-2 top-[75%] text-2xl">🕹️</div>
+      <div className="absolute left-1 top-[90%] font-mono text-[9px]" style={{ color: theme.accent }}>1UP</div>
+
+      <div className="absolute right-1 top-[20%] rounded-md border-2 px-2 py-1 font-mono text-[9px] shadow-lg" style={{ borderColor: theme.accent2, color: theme.accent2, background: "rgba(0,0,0,0.7)" }}>HI 99,999</div>
+      <div className="absolute right-2 top-[40%] font-mono text-[10px]" style={{ color: theme.accent }}>● COMBO x12</div>
+      <div className="absolute right-1 top-[58%] text-2xl">🎮</div>
+      <div className="absolute right-2 top-[75%] rounded-md border-2 px-2 py-1 font-mono text-[9px]" style={{ borderColor: theme.accent, color: theme.accent, background: "rgba(0,0,0,0.7)" }}>RGB ⚡</div>
+      <div className="absolute right-1 top-[92%] font-mono text-[9px] animate-pulse" style={{ color: theme.accent2 }}>BOSS</div>
     </div>
   );
 }
 
+/* =================== SMART — connected nodes =================== */
 function SmartAmbient({ theme }: { theme: CategoryTheme }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute left-1 top-[22%] rounded-full border px-2 py-0.5 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.4)" }}>● WIFI</div>
-      <div className="absolute right-1 top-[35%] rounded-full border px-2 py-0.5 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.4)" }}>● AUTO</div>
-      <div className="absolute left-2 top-[55%] rounded-full border px-2 py-0.5 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.4)" }}>● 22°C</div>
-      <div className="absolute right-1 top-[72%] rounded-full border px-2 py-0.5 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.4)" }}>● ON</div>
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <div className="absolute inset-0 opacity-15 pat-grid" style={{ ["--pat-color" as never]: theme.accent }} />
+      <div className="absolute -left-20 top-[40%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
+      <div className="absolute -right-20 top-[20%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent2 }} />
+
+      <div className="absolute left-1 top-[22%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur shadow" style={{ borderColor: theme.accent, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>● WIFI</div>
+      <div className="absolute left-2 top-[40%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>● 22°C</div>
+      <div className="absolute left-1 top-[58%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.5)" }}>● ALEXA</div>
+      <div className="absolute left-2 top-[78%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>● ON</div>
+
+      <div className="absolute right-1 top-[28%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.5)" }}>● AUTO</div>
+      <div className="absolute right-2 top-[48%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>● CAM 4K</div>
+      <div className="absolute right-1 top-[68%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur shadow" style={{ borderColor: theme.accent, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>● LIGHTS</div>
+      <div className="absolute right-2 top-[88%] rounded-full border px-2.5 py-1 font-mono text-[9px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.5)" }}>● LOCK</div>
     </div>
   );
 }
