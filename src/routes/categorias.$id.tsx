@@ -26,6 +26,8 @@ function CategoryPage() {
   const { id } = Route.useParams();
   const theme = CATEGORY_THEMES[id];
   if (!theme) throw notFound();
+  const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
+  const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
 
   // Filtros especiales para categorías agregadoras
   const products =
@@ -44,9 +46,9 @@ function CategoryPage() {
 
       {/* Live viewers chip */}
       <div className="px-5 pt-3">
-        <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: "rgba(0,0,0,0.4)" }}>
+        <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.4)" }}>
           <Eye className="h-3 w-3" style={{ color: theme.accent }} />
-          <span className="text-[11px] font-bold text-white">{(1240 + Math.floor(Math.random() * 800)).toLocaleString("es-AR")} viendo {theme.name.toLowerCase()} ahora</span>
+          <span className="text-[11px] font-bold" style={{ color: TXT }}>{(1240 + Math.floor(Math.random() * 800)).toLocaleString("es-AR")} viendo {theme.name.toLowerCase()} ahora</span>
         </div>
       </div>
 
@@ -54,12 +56,13 @@ function CategoryPage() {
       <div className="px-5 pt-5">
         <div
           className="flex items-center gap-2 rounded-2xl px-4 py-3"
-          style={{ background: "rgba(0,0,0,0.45)", border: `1px solid ${theme.accent}33` }}
+          style={{ background: theme.isLight ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.45)", border: `1px solid ${theme.accent}33` }}
         >
           <Search className="h-4 w-4" style={{ color: theme.accent }} />
           <input
             placeholder={`Buscar en ${theme.name}...`}
-            className={`flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40 ${theme.font}`}
+            className={`flex-1 bg-transparent text-sm outline-none ${theme.font}`}
+            style={{ color: TXT }}
           />
         </div>
       </div>
@@ -78,8 +81,8 @@ function CategoryPage() {
       </div>
 
       {/* Live ticker — feels alive */}
-      <div className="mt-5 overflow-hidden border-y py-2" style={{ borderColor: `${theme.accent}33`, background: "rgba(0,0,0,0.3)" }}>
-        <div className="ticker flex whitespace-nowrap gap-8 text-xs text-white/70">
+      <div className="mt-5 overflow-hidden border-y py-2" style={{ borderColor: `${theme.accent}33`, background: theme.isLight ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.3)" }}>
+        <div className="ticker flex whitespace-nowrap gap-8 text-xs" style={{ color: TXT_MUTED }}>
           {[...Array(2)].flatMap((_, k) =>
             all.map((p, i) => (
               <span key={`${k}-${i}`} className={`flex items-center gap-2 ${theme.font}`}>
@@ -102,11 +105,11 @@ function CategoryPage() {
       {/* Group buying section */}
       <section className="px-5 pt-7">
         <div className="flex items-center justify-between">
-          <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font} text-white`}>
+          <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font}`} style={{ color: TXT }}>
             <Users className="mr-2 inline h-4 w-4" style={{ color: theme.accent }} />
             Grupos activos
           </h2>
-          <span className="text-[10px] text-white/50">{all.length} en vivo</span>
+          <span className="text-[10px]" style={{ color: TXT_MUTED }}>{all.length} en vivo</span>
         </div>
         <div className="mt-3 space-y-3">
           {all.slice(0, 3).map((p) => (
@@ -117,7 +120,7 @@ function CategoryPage() {
 
       {/* Product grid in theme */}
       <section className="px-5 pt-7">
-        <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font} text-white`}>
+        <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font}`} style={{ color: TXT }}>
           Todo en {theme.name}
         </h2>
         <div className="mt-3 grid grid-cols-2 gap-3">
@@ -127,13 +130,14 @@ function CategoryPage() {
                 className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center transition-transform group-active:scale-95"
                 style={{
                   background: theme.surface,
-                  border: `1px solid ${theme.accent}33`,
+                  border: `1px solid ${theme.accent}44`,
+                  boxShadow: theme.isLight ? `0 8px 24px -10px ${theme.accent}55` : "none",
                 }}
               >
                 <span>{p.emoji}</span>
                 <span
                   className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-bold ${theme.font}`}
-                  style={{ background: theme.accent, color: theme.textOn }}
+                  style={{ background: theme.accent, color: "#fff" }}
                 >
                   {p.customizable ? "CUSTOM" : "−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
                 </span>
@@ -141,13 +145,13 @@ function CategoryPage() {
                   <Sparkles className="absolute right-2 top-2 h-4 w-4" style={{ color: theme.accent }} />
                 )}
               </div>
-              <p className={`mt-2 line-clamp-1 text-xs font-medium text-white ${theme.font === "font-mono" ? "font-mono" : ""}`}>
+              <p className={`mt-2 line-clamp-1 text-xs font-medium ${theme.font === "font-mono" ? "font-mono" : ""}`} style={{ color: TXT }}>
                 {p.title}
               </p>
               <p className={`text-sm font-bold ${theme.font}`} style={{ color: theme.accent }}>
                 {formatARS(p.price.group)}
               </p>
-              <p className="text-[10px] text-white/40 line-through">{formatARS(p.price.individual)}</p>
+              <p className="text-[10px] line-through" style={{ color: TXT_MUTED }}>{formatARS(p.price.individual)}</p>
             </Link>
           ))}
         </div>
@@ -159,7 +163,7 @@ function CategoryPage() {
         <Link
           to="/categorias"
           className={`flex items-center justify-center rounded-2xl py-4 text-sm font-bold shadow-2xl ${theme.font}`}
-          style={{ background: theme.accent, color: theme.textOn, boxShadow: `0 20px 60px -10px ${theme.accent}88` }}
+          style={{ background: theme.accent, color: "#ffffff", boxShadow: `0 20px 60px -10px ${theme.accent}88` }}
         >
           {theme.cta}
         </Link>
@@ -169,13 +173,15 @@ function CategoryPage() {
 }
 
 function FeaturedCard({ theme, product }: { theme: typeof CATEGORY_THEMES[string]; product: typeof MOCK_PRODUCTS[number] }) {
+  const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
+  const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.6)" : "rgba(255,255,255,0.6)";
   return (
     <Link
       to="/products/$slug"
       params={{ slug: product.slug }}
       className="mt-3 block overflow-hidden rounded-3xl border"
       style={{
-        background: theme.surface,
+        background: theme.isLight ? "#ffffff" : theme.surface,
         borderColor: `${theme.accent}55`,
         boxShadow: `0 25px 60px -25px ${theme.accent}99`,
       }}
@@ -185,20 +191,20 @@ function FeaturedCard({ theme, product }: { theme: typeof CATEGORY_THEMES[string
         <span className="relative">{product.emoji}</span>
         <span
           className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold ${theme.font}`}
-          style={{ background: theme.accent, color: theme.textOn }}
+          style={{ background: theme.accent, color: "#fff" }}
         >
           {product.badge ?? "TOP"}
         </span>
       </div>
       <div className="p-4">
-        <p className={`text-base text-white ${theme.font === "font-mono" ? "font-mono" : "font-display"}`}>{product.title}</p>
-        <p className="mt-1 text-xs text-white/60 line-clamp-2">{product.description}</p>
+        <p className={`text-base ${theme.font === "font-mono" ? "font-mono" : "font-display"}`} style={{ color: TXT }}>{product.title}</p>
+        <p className="mt-1 text-xs line-clamp-2" style={{ color: TXT_MUTED }}>{product.description}</p>
         <div className="mt-3 flex items-end justify-between">
           <div>
             <p className={`text-2xl font-bold ${theme.font}`} style={{ color: theme.accent }}>
               {formatARS(product.price.group)}
             </p>
-            <p className="text-[10px] text-white/40 line-through">{formatARS(product.price.individual)}</p>
+            <p className="text-[10px] line-through" style={{ color: TXT_MUTED }}>{formatARS(product.price.individual)}</p>
           </div>
           <span
             className="rounded-full px-3 py-1.5 text-[10px] font-bold"
@@ -214,19 +220,20 @@ function FeaturedCard({ theme, product }: { theme: typeof CATEGORY_THEMES[string
 
 function GroupRow({ theme, product }: { theme: typeof CATEGORY_THEMES[string]; product: typeof MOCK_PRODUCTS[number] }) {
   const pct = Math.round((product.groupJoined / product.groupTarget) * 100);
+  const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
   return (
     <Link
       to="/group/$slug"
       params={{ slug: product.slug }}
       className="flex items-center gap-3 rounded-2xl p-3"
-      style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${theme.accent}22` }}
+      style={{ background: theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.04)", border: `1px solid ${theme.accent}33` }}
     >
       <div className="grid h-14 w-14 shrink-0 place-items-center rounded-xl text-3xl" style={{ background: theme.surface }}>
         {product.emoji}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="line-clamp-1 text-sm text-white">{product.title}</p>
-        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10">
+        <p className="line-clamp-1 text-sm" style={{ color: TXT }}>{product.title}</p>
+        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full" style={{ background: theme.isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)" }}>
           <div className="h-full rounded-full" style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }} />
         </div>
         <div className={`mt-1 flex justify-between text-[10px] ${theme.font}`} style={{ color: theme.accent }}>

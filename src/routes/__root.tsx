@@ -29,7 +29,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { name: "theme-color", content: "#1a0b2e" },
+      { name: "theme-color", content: "#ff5722" },
       { title: "NEIBA — Marketplace futurista" },
       { name: "description", content: "Compras grupales, mayoristas y productos personalizables con IA." },
     ],
@@ -42,7 +42,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es">
       <head><HeadContent /></head>
       <body>
         {children}
@@ -57,7 +57,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
-      <Toaster richColors position="top-center" theme="dark" />
+      <Toaster richColors position="top-center" theme="light" />
     </QueryClientProvider>
   );
 }

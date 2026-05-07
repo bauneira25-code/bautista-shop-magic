@@ -15,6 +15,9 @@ const PATTERN_CLASS: Record<CategoryTheme["pattern"], string> = {
 
 export function CategoryHero({ theme }: { theme: CategoryTheme }) {
   const Icon = theme.icon;
+  const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
+  const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.7)";
+  const CHIP_BG = theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.35)";
   return (
     <header className="relative overflow-hidden" style={{ background: theme.bg }}>
       <div className={`absolute inset-0 opacity-60 ${PATTERN_CLASS[theme.pattern]}`} style={{ ["--pat-color" as never]: `${theme.accent}30` }} />
@@ -29,17 +32,17 @@ export function CategoryHero({ theme }: { theme: CategoryTheme }) {
 
       <div className="relative px-5 pb-6 pt-5">
         <div className="flex items-center justify-between">
-          <Link to="/categorias" className="grid h-9 w-9 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <ArrowLeft className="h-4 w-4 text-white" />
+          <Link to="/categorias" className="grid h-9 w-9 place-items-center rounded-full backdrop-blur" style={{ background: CHIP_BG }}>
+            <ArrowLeft className="h-4 w-4" style={{ color: TXT }} />
           </Link>
           <span
             className={`rounded-full border px-3 py-1 text-[10px] uppercase tracking-widest ${theme.font}`}
-            style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.35)" }}
+            style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: CHIP_BG }}
           >
             {theme.vibe}
           </span>
           <div className="grid h-9 w-9 place-items-center rounded-full" style={{ background: theme.accent }}>
-            <Icon className="h-4 w-4" style={{ color: theme.textOn }} />
+            <Icon className="h-4 w-4" style={{ color: "#fff" }} />
           </div>
         </div>
 
@@ -49,11 +52,11 @@ export function CategoryHero({ theme }: { theme: CategoryTheme }) {
           </p>
           <h1
             className={`mt-2 text-5xl leading-[0.95] ${theme.font === "font-bebas" ? "font-bebas" : theme.font === "font-mono" ? "font-orbitron" : theme.font}`}
-            style={{ color: "white" }}
+            style={{ color: TXT }}
           >
             {theme.name.toUpperCase()}
           </h1>
-          <p className="mt-2 max-w-[280px] text-sm text-white/70">{theme.tagline}</p>
+          <p className="mt-2 max-w-[280px] text-sm" style={{ color: TXT_MUTED }}>{theme.tagline}</p>
         </div>
 
         {/* Decorative widget per pattern */}
