@@ -1,5 +1,5 @@
 // Per-category visual themes — each category feels like its own world.
-import type { ComponentType } from "react";
+import type { ComponentType, CSSProperties } from "react";
 import {
   Cpu, Headphones, Home, Sparkles, Dumbbell, Gem, Gamepad2, Bot,
 } from "lucide-react";
@@ -9,7 +9,7 @@ export type CategoryTheme = {
   name: string;
   tagline: string;
   emoji: string;
-  icon: ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string; style?: CSSProperties }>;
   // Visual identity
   bg: string;            // page background gradient
   surface: string;       // card surface
