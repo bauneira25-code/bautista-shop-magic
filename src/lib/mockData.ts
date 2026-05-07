@@ -195,6 +195,13 @@ const _RAW: MockProduct[] = [
   make("joyeria", "Cadena cubana plata", "🔗", 48000, 0.20, ["#1a1410", "#c0c0c0"]),
 ];
 
+// Aplicamos lista oficial de personalizables (fuerza customizable: true a los del listado)
+export const MOCK_PRODUCTS: MockProduct[] = _RAW.map((p) => ({
+  ...p,
+  customizable: p.customizable || isCustomizable(p.title),
+  badge: p.badge ?? (isCustomizable(p.title) ? "Personalizable" : undefined),
+}));
+
 export const CATEGORIES = [
   { id: "tech", name: "Tecnología", emoji: "📱" },
   { id: "electronica", name: "Electrónica", emoji: "🍳" },
