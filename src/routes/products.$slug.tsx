@@ -44,11 +44,7 @@ function ProductPage() {
       ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "SUMARME AL GRUPO")
       : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
-  const handleCta = () => {
-    if (mode === "group" && !groupSolo) {
-      navigate({ to: "/group/$slug", params: { slug: product.slug } });
-      return;
-    }
+  const doAdd = () => {
     const customization = customText || customImage
       ? { text: customText || undefined, style: customStyle, imageName: customImage || undefined }
       : undefined;
@@ -66,10 +62,23 @@ function ProductPage() {
       color: product.colors?.[color],
       customization,
     });
+  };
+
+  const handleCta = () => {
+    if (mode === "group" && !groupSolo) {
+      navigate({ to: "/group/$slug", params: { slug: product.slug } });
+      return;
+    }
+    doAdd();
     toast.success("Agregado al carrito 🛒", {
       description: `${qty} × ${product.title} · ${formatARS(price * qty)}`,
       action: { label: "Ver carrito", onClick: () => navigate({ to: "/cart" }) },
     });
+  };
+
+  const handleBuyNow = () => {
+    doAdd();
+    navigate({ to: "/cart" });
   };
 
   const onPickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
