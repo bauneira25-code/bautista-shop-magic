@@ -40,6 +40,7 @@ export const CATEGORY_THEMES: Record<string, CategoryTheme> = {
     vibe: "★ INICIO",
     badges: ["DESTACADOS", "VIRALES", "OFERTAS", "GRUPOS"],
     cta: "Explorar todo →",
+    isLight: true,
   },
   tech: {
     id: "tech",
@@ -57,6 +58,7 @@ export const CATEGORY_THEMES: Record<string, CategoryTheme> = {
     vibe: "// AI · SYSTEM ONLINE",
     badges: ["IA READY", "NEW DROP", "5G", "PRO"],
     cta: "Comprar ahora →",
+    isLight: true,
   },
   hogar: {
     id: "hogar",
@@ -74,6 +76,7 @@ export const CATEGORY_THEMES: Record<string, CategoryTheme> = {
     vibe: "✦ Cozy mode · velas",
     badges: ["BEST SELLER", "ZEN", "CÁLIDO", "ENVÍO GRATIS"],
     cta: "Llevarlo a casa",
+    isLight: true,
   },
   gamer: {
     id: "gamer",
@@ -108,6 +111,7 @@ export const CATEGORY_THEMES: Record<string, CategoryTheme> = {
     vibe: "✨ glow up",
     badges: ["VIRAL", "K-BEAUTY", "SKIN+", "PREMIUM"],
     cta: "Brillar ✨",
+    isLight: true,
   },
   deporte: {
     id: "deporte",
@@ -159,6 +163,7 @@ export const CATEGORY_THEMES: Record<string, CategoryTheme> = {
     vibe: "CREATE · DESIGN · WEAR",
     badges: ["ÚNICO", "TU DISEÑO", "IA", "MOCKUP"],
     cta: "Diseñar ahora 🎨",
+    isLight: true,
   },
   tendencias: {
     id: "tendencias",
