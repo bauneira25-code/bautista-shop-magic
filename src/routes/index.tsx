@@ -17,8 +17,27 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { gender, views } = useUserPrefs();
+  // Bias: orden de categorías priorizadas según género o vistas más altas
+  const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
+  const biasOrder = viewedTop.length > 0
+    ? [...new Set([...viewedTop, ...(gender ? GENDER_BIAS[gender] : [])])]
+    : (gender ? GENDER_BIAS[gender] : []);
+  const score = (cat: string) => {
+    const idx = biasOrder.indexOf(cat);
+    return idx === -1 ? 99 : idx;
+  };
+  const trendingFor = [...MOCK_PRODUCTS]
+    .filter((p) => !!p.badge)
+    .sort((a, b) => score(a.category) - score(b.category))
+    .slice(0, 8);
+  const forYou = [...MOCK_PRODUCTS]
+    .sort((a, b) => score(a.category) - score(b.category))
+    .slice(0, 10);
+
   return (
     <MobileShell>
+      <OnboardingGender />
       {/* Top bar */}
       <header className="sticky top-0 z-30 px-5 pb-3 pt-4 backdrop-blur-xl" style={{ background: "oklch(0.13 0.02 295 / 0.85)" }}>
         <div className="flex items-center justify-between">
