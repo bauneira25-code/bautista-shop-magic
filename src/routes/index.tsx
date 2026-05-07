@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye } from "lucide-react";
+import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye, ShieldCheck } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
-import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, TRENDING, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
+import { OnboardingGender } from "@/components/OnboardingGender";
+import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
+import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
 
 export const Route = createFileRoute("/")({
   head: () => ({
