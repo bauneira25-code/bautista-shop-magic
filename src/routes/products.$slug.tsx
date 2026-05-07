@@ -100,8 +100,8 @@ function ProductPage() {
           <span className="h-2 w-2 animate-pulse rounded-full bg-success" />
           <span className="text-[11px] text-white">{product.liveActivity[0]?.name} {product.liveActivity[0]?.action}</span>
         </div>
-        <div className="absolute right-4 bottom-4 rounded-full bg-black/50 px-2.5 py-1 text-[11px] text-white backdrop-blur">
-          {product.sold.toLocaleString()} vendidos
+        <div className="absolute right-4 bottom-4 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
+          {stockLabel(product.stock).label}
         </div>
       </div>
 
