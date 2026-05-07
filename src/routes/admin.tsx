@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, TrendingUp, AlertTriangle, Package, DollarSign, Users, Truck, Sparkles, ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowLeft, TrendingUp, AlertTriangle, Package, DollarSign, Users, Truck, Sparkles, ArrowUp, ArrowDown, ShieldCheck } from "lucide-react";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
+import { useBrands } from "@/stores/brands";
 
 export const Route = createFileRoute("/admin")({
   component: Admin,
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/admin")({
 function Admin() {
   const lowStock = MOCK_PRODUCTS.filter((p) => p.stock < 15);
   const topSellers = [...MOCK_PRODUCTS].sort((a, b) => b.sold - a.sold).slice(0, 4);
+  const brands = useBrands((s) => s.brands);
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-[480px] pb-10">
@@ -103,6 +105,32 @@ function Admin() {
                   <div className="h-full" style={{ width: `${c.pct}%`, background: "var(--gradient-primary)" }} />
                 </div>
                 <p className="mt-1 text-[10px] text-muted-foreground">{c.status}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Marcas registradas */}
+        <section>
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-primary" />
+            <p className="font-display text-base">Marcas registradas</p>
+            <span className="rounded-md bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary">{brands.length}</span>
+          </div>
+          <div className="mt-3 space-y-2">
+            {brands.map((b) => (
+              <div key={b.id} className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary">
+                  <ShieldCheck className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold">{b.name}</p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {b.owner} · {new Date(b.registeredAt).toLocaleDateString("es-AR")}
+                    {b.logoName && ` · 🖼 ${b.logoName}`}
+                  </p>
+                </div>
+                <span className="rounded-full bg-success/15 px-2 py-0.5 text-[9px] font-bold text-success">PROTEGIDA</span>
               </div>
             ))}
           </div>

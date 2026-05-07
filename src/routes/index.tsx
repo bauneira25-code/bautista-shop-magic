@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye } from "lucide-react";
+import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye, ShieldCheck } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
-import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, TRENDING, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
+import { OnboardingGender } from "@/components/OnboardingGender";
+import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
+import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -15,8 +17,27 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { gender, views } = useUserPrefs();
+  // Bias: orden de categorías priorizadas según género o vistas más altas
+  const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
+  const biasOrder = viewedTop.length > 0
+    ? [...new Set([...viewedTop, ...(gender ? GENDER_BIAS[gender] : [])])]
+    : (gender ? GENDER_BIAS[gender] : []);
+  const score = (cat: string) => {
+    const idx = biasOrder.indexOf(cat);
+    return idx === -1 ? 99 : idx;
+  };
+  const trendingFor = [...MOCK_PRODUCTS]
+    .filter((p) => !!p.badge)
+    .sort((a, b) => score(a.category) - score(b.category))
+    .slice(0, 8);
+  const forYou = [...MOCK_PRODUCTS]
+    .sort((a, b) => score(a.category) - score(b.category))
+    .slice(0, 10);
+
   return (
     <MobileShell>
+      <OnboardingGender />
       {/* Top bar */}
       <header className="sticky top-0 z-30 px-5 pb-3 pt-4 backdrop-blur-xl" style={{ background: "oklch(0.13 0.02 295 / 0.85)" }}>
         <div className="flex items-center justify-between">
@@ -54,18 +75,18 @@ function Home() {
         </div>
 
         {/* Hero banner */}
-        <Link to="/products/$slug" params={{ slug: "funda-iphone-15-pro" }} className="block">
+        <Link to="/grupos" className="block">
           <div className="relative overflow-hidden rounded-3xl p-5" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
             <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
               <Flame className="h-3 w-3" /> Drop grupal
             </span>
             <h2 className="mt-3 max-w-[70%] font-display text-2xl leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
-            <p className="mt-1 text-xs text-white/80">Sumate al próximo drop que cierra en 1h 29m</p>
+            <p className="mt-1 text-xs text-white/80">Elegí un grupo y sumate antes de que cierre</p>
             <div className="mt-4 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-primary">
-              Unirme ahora <ChevronRight className="h-3 w-3" />
+              Ver grupos activos <ChevronRight className="h-3 w-3" />
             </div>
-            <div className="absolute right-3 bottom-3 text-6xl">📱</div>
+            <div className="absolute right-3 bottom-3 text-6xl">👥</div>
           </div>
         </Link>
 
@@ -184,7 +205,7 @@ function Home() {
         <section>
           <SectionHeader title="Tendencias ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} />
           <div className="mt-3 grid grid-cols-2 gap-3">
-            {TRENDING.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
+            {trendingFor.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
 
@@ -227,9 +248,23 @@ function Home() {
         <section>
           <SectionHeader title="Para vos" icon={<Sparkles className="h-4 w-4 text-primary" />} />
           <div className="mt-3 grid grid-cols-2 gap-3">
-            {MOCK_PRODUCTS.map((p) => <ProductCard key={p.id} product={p} />)}
+            {forYou.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
+
+        {/* Para emprendedores — discreto */}
+        <Link to="/registrar-marca" className="block rounded-2xl border border-border bg-card p-3.5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary">
+              <ShieldCheck className="h-4 w-4" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold">Registrá tu marca con NEIBA</p>
+              <p className="text-[10px] text-muted-foreground">Para emprendedores · protegé tu logo y nombre</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </Link>
 
         <Link to="/admin" className="block rounded-2xl border border-border bg-card p-4 text-center text-xs text-muted-foreground">
           🛠 Acceder al panel admin

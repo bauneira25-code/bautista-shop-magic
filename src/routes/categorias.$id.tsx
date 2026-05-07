@@ -1,7 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Search, Flame, Users, Sparkles, Eye } from "lucide-react";
 import { CATEGORY_THEMES } from "@/lib/categoryThemes";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
+import { useUserPrefs } from "@/stores/userPrefs";
 import { CategoryHero } from "@/components/CategoryHero";
 import { CategoryAmbient } from "@/components/CategoryAmbient";
 
@@ -25,6 +27,8 @@ export const Route = createFileRoute("/categorias/$id")({
 function CategoryPage() {
   const { id } = Route.useParams();
   const theme = CATEGORY_THEMES[id];
+  const trackView = useUserPrefs((s) => s.trackView);
+  useEffect(() => { if (theme) trackView(id); }, [id, theme, trackView]);
   if (!theme) throw notFound();
   const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
   const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";

@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import { Sparkles, Type, Image as ImageIcon, Wand2, ShoppingBag, Zap, Trash2, Move } from "lucide-react";
+import { Sparkles, Type, Image as ImageIcon, Wand2, ShoppingBag, Zap, Trash2, Move, ShieldCheck, AlertCircle } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { AI_STYLES, MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
+import { useBrands } from "@/stores/brands";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/customize")({
@@ -270,6 +271,7 @@ function Customize() {
               placeholder="Tu nombre, marca, frase…"
               className="mt-2 w-full rounded-xl bg-secondary px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
             />
+            <BrandWarning text={logo.text} />
           </div>
         )}
 
@@ -336,5 +338,30 @@ function Customize() {
         </div>
       </main>
     </MobileShell>
+  );
+}
+
+function BrandWarning({ text }: { text: string }) {
+  const isTaken = useBrands((s) => s.isTaken);
+  const t = text.trim();
+  if (t.length < 3) return null;
+  const taken = isTaken(t);
+  if (!taken) {
+    return (
+      <p className="mt-2 inline-flex items-center gap-1 text-[11px] text-emerald-600">
+        <ShieldCheck className="h-3 w-3" /> Disponible. Podés registrarla con NEIBA.
+      </p>
+    );
+  }
+  return (
+    <div className="mt-2 rounded-xl border border-rose-300 bg-rose-50 p-2.5">
+      <p className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600">
+        <AlertCircle className="h-3 w-3" /> "{t}" está registrada por otra persona en NEIBA.
+      </p>
+      <p className="mt-0.5 text-[10px] text-rose-500">Modificá tu diseño para continuar.</p>
+      <Link to="/registrar-marca" className="mt-1 inline-block text-[10px] font-bold text-primary underline">
+        Registrá la tuya →
+      </Link>
+    </div>
   );
 }
