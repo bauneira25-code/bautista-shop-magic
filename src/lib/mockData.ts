@@ -75,7 +75,31 @@ const make = (
   };
 };
 
-export const MOCK_PRODUCTS: MockProduct[] = [
+// Lista oficial de productos personalizables (regex parcial sobre title.toLowerCase())
+const CUSTOMIZABLE_PATTERNS = [
+  // Tecnología
+  "funda iphone", "funda samsung", "mousepad", "smart glasses", "parlante",
+  "auriculares", "cargador", "soporte celular", "tira led", "proyector",
+  // Gamer (mousepad ya cubierto)
+  "silla gamer", "teclado", "ratón gamer", "mouse gamer",
+  // Hogar
+  "cuadro", "vela", "difusor", "toalla", "vajilla", "caja organizadora",
+  "lámpara puesta de sol", "proyector estrellas",
+  // Gym
+  "pelota", "banda elástica", "soga", "cono", "guantes boxeo", "botella",
+  // Belleza
+  "neceser", "botella rocia", "brocha", "vincha", "skincare", "uñas",
+  "máscara led", "masajeador",
+  // Joyería
+  "anillo", "pulsera", "collar", "dije", "reloj", "lentes", "caja de joyería",
+];
+
+const isCustomizable = (title: string) => {
+  const t = title.toLowerCase();
+  return CUSTOMIZABLE_PATTERNS.some((p) => t.includes(p));
+};
+
+const _RAW: MockProduct[] = [
   // ============ TECNOLOGÍA ============
   make("tech", "Funda iPhone Magsafe", "📱", 14000, 0.22, ["#0a1530", "#38bdf8"], { customizable: true, badge: "🔥 Viral", variants: ["iPhone 13", "iPhone 14", "iPhone 15", "iPhone 15 Pro", "iPhone 16"], colors: ["#000", "#7c3aed", "#ec4899"] }),
   make("tech", "Auriculares Pro ANC", "🎧", 45000, 0.20, ["#0a1530", "#3b82f6"], { badge: "Nuevo" }),
