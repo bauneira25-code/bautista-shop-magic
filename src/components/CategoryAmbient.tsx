@@ -169,7 +169,7 @@ function BellezaAmbient({ theme }: { theme: CategoryTheme }) {
 }
 
 /* =================== GYM — scan / strong text =================== */
-function GymAmbient({ theme }: { theme: CategoryTheme }) {
+function DeporteAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
       <div className="absolute inset-0 opacity-25 pat-scan" style={{ ["--pat-color" as never]: theme.accent }} />
@@ -187,7 +187,7 @@ function GymAmbient({ theme }: { theme: CategoryTheme }) {
 }
 
 /* =================== JOYERIA — gold shine =================== */
-function JoyeriaAmbient({ theme }: { theme: CategoryTheme }) {
+function PersonalizadosAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
       <div className="absolute inset-0 pat-shine opacity-50" style={{ ["--pat-color" as never]: `${theme.accent}77` }} />
