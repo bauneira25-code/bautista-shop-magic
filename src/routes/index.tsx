@@ -252,6 +252,20 @@ function Home() {
           </div>
         </section>
 
+        {/* Para emprendedores — discreto */}
+        <Link to="/registrar-marca" className="block rounded-2xl border border-border bg-card p-3.5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary">
+              <ShieldCheck className="h-4 w-4" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold">Registrá tu marca con NEIBA</p>
+              <p className="text-[10px] text-muted-foreground">Para emprendedores · protegé tu logo y nombre</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </Link>
+
         <Link to="/admin" className="block rounded-2xl border border-border bg-card p-4 text-center text-xs text-muted-foreground">
           🛠 Acceder al panel admin
         </Link>
