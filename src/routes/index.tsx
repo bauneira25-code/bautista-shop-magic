@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight } from "lucide-react";
+import { Search, Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, TRENDING, VIRAL, LIVE_FEED, formatARS } from "@/lib/mockData";
 
