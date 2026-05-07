@@ -205,7 +205,7 @@ function Home() {
         <section>
           <SectionHeader title="Tendencias ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} />
           <div className="mt-3 grid grid-cols-2 gap-3">
-            {TRENDING.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
+            {trendingFor.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
 
@@ -248,7 +248,7 @@ function Home() {
         <section>
           <SectionHeader title="Para vos" icon={<Sparkles className="h-4 w-4 text-primary" />} />
           <div className="mt-3 grid grid-cols-2 gap-3">
-            {MOCK_PRODUCTS.map((p) => <ProductCard key={p.id} product={p} />)}
+            {forYou.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
 
