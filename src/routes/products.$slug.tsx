@@ -38,11 +38,14 @@ function ProductPage() {
   const savings = product.price.individual - price;
   const groupPct = (product.groupJoined / product.groupTarget) * 100;
 
+  const groupSolo = mode === "group" && qty >= product.groupTarget;
   const cta =
-    mode === "group" ? "SUMARME AL GRUPO" : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
+    mode === "group"
+      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "SUMARME AL GRUPO")
+      : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const handleCta = () => {
-    if (mode === "group") {
+    if (mode === "group" && !groupSolo) {
       navigate({ to: "/group/$slug", params: { slug: product.slug } });
       return;
     }
