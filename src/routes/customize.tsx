@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Sparkles, Type, Image as ImageIcon, Smile, Wand2, Layers, Download, Heart, Eye, Bookmark, Box } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useRef, useState } from "react";
+import { Sparkles, Type, Image as ImageIcon, Wand2, ShoppingBag, Zap, Trash2, Move } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
-import { AI_STYLES, MOCK_PRODUCTS } from "@/lib/mockData";
+import { AI_STYLES, MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
+import { useLocalCart } from "@/stores/localCart";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/customize")({
@@ -11,174 +12,328 @@ export const Route = createFileRoute("/customize")({
 
 const customizableProducts = MOCK_PRODUCTS.filter((p) => p.customizable);
 
-function Customize() {
-  const [product, setProduct] = useState(customizableProducts[0]);
-  const [text, setText] = useState("NEIBA");
-  const [style, setStyle] = useState(AI_STYLES[0].id);
-  const [prompt, setPrompt] = useState("minimal black mountain design");
-  const [generated, setGenerated] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+type LogoState = {
+  src: string | null;
+  text: string;
+  x: number; // % position
+  y: number;
+  scale: number;
+};
 
-  const generate = () => {
-    setLoading(true);
+function Customize() {
+  const navigate = useNavigate();
+  const add = useLocalCart((s) => s.add);
+
+  const [product, setProduct] = useState(customizableProducts[0]);
+  const [variant, setVariant] = useState(product.variants?.[0] ?? "");
+  const [caseColor, setCaseColor] = useState(product.colors?.[0] ?? "#000000");
+  const [logo, setLogo] = useState<LogoState>({ src: null, text: "TU LOGO", x: 50, y: 50, scale: 1 });
+  const [tab, setTab] = useState<"logo" | "texto" | "ia">("logo");
+  const [aiStyle, setAiStyle] = useState(AI_STYLES[0].id);
+  const [aiPrompt, setAiPrompt] = useState("logo minimal blanco sobre negro");
+  const [generating, setGenerating] = useState(false);
+
+  const fileRef = useRef<HTMLInputElement>(null);
+  const dragRef = useRef<HTMLDivElement>(null);
+
+  const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    setLogo((l) => ({ ...l, src: url }));
+    toast.success("Logo cargado ✨");
+  };
+
+  const onDrag = (e: React.PointerEvent) => {
+    if (e.buttons !== 1 || !dragRef.current) return;
+    const r = dragRef.current.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width) * 100;
+    const y = ((e.clientY - r.top) / r.height) * 100;
+    setLogo((l) => ({ ...l, x: Math.max(10, Math.min(90, x)), y: Math.max(10, Math.min(90, y)) }));
+  };
+
+  const generateAI = () => {
+    setGenerating(true);
     setTimeout(() => {
-      setGenerated(["🌄", "⛰️", "🏔️", "🗻"]);
-      setLoading(false);
-      toast.success("4 diseños generados con IA ✨");
-    }, 1100);
+      setLogo((l) => ({ ...l, src: null, text: aiPrompt.slice(0, 14).toUpperCase() }));
+      setGenerating(false);
+      toast.success("Diseño IA aplicado ✨");
+    }, 900);
+  };
+
+  const buildCartItem = () => ({
+    id: `${product.slug}-custom-${Date.now()}`,
+    slug: product.slug,
+    title: `${product.title} · Custom`,
+    emoji: product.emoji,
+    gradient: product.gradient,
+    mode: "individual" as const,
+    unitPrice: product.price.individual,
+    quantity: 1,
+    variant,
+    color: caseColor,
+    customization: {
+      text: logo.text,
+      style: aiStyle,
+      imageName: logo.src ? "logo-cliente" : undefined,
+    },
+  });
+
+  const addToCart = () => {
+    add(buildCartItem());
+    toast.success("Agregado al carrito 🛒");
+  };
+
+  const payNow = () => {
+    add(buildCartItem());
+    navigate({ to: "/cart" });
   };
 
   return (
     <MobileShell>
       <header className="px-5 pb-3 pt-5">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Studio</p>
-        <h1 className="font-display text-3xl">Customize 🔥</h1>
-        <p className="mt-1 text-xs text-muted-foreground">Diseñá tu producto con IA en tiempo real</p>
+        <h1 className="font-display text-3xl">Personalizar 🔥</h1>
+        <p className="mt-1 text-xs text-muted-foreground">Subí tu logo y vé cómo queda en el producto</p>
       </header>
 
-      <main className="space-y-6 px-5">
-        {/* Product picker */}
+      <main className="space-y-5 px-5">
+        {/* Producto */}
         <div className="-mx-5 flex gap-3 overflow-x-auto px-5 scrollbar-hide">
           {customizableProducts.map((p) => (
-            <button key={p.id} onClick={() => setProduct(p)} className={`flex shrink-0 flex-col items-center gap-1.5 ${product.id === p.id ? "" : "opacity-60"}`}>
-              <span className={`grid h-16 w-16 place-items-center rounded-2xl text-3xl border-2 transition ${product.id === p.id ? "border-primary" : "border-transparent"}`} style={{ background: p.gradient }}>{p.emoji}</span>
+            <button
+              key={p.id}
+              onClick={() => {
+                setProduct(p);
+                setVariant(p.variants?.[0] ?? "");
+                setCaseColor(p.colors?.[0] ?? "#000000");
+              }}
+              className={`flex shrink-0 flex-col items-center gap-1.5 ${product.id === p.id ? "" : "opacity-50"}`}
+            >
+              <span
+                className={`grid h-16 w-16 place-items-center rounded-2xl text-3xl border-2 transition ${product.id === p.id ? "border-primary" : "border-transparent"}`}
+                style={{ background: p.gradient }}
+              >
+                {p.emoji}
+              </span>
               <span className="text-[10px] font-medium">{p.title.split(" ")[0]}</span>
             </button>
           ))}
         </div>
 
-        {/* Live preview */}
-        <div className="relative aspect-square overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
-          <div className="absolute inset-0 grid place-items-center text-[10rem]">{product.emoji}</div>
-          <div className="absolute inset-x-6 bottom-12 grid place-items-center">
-            <div className="rounded-2xl bg-black/40 px-4 py-2 backdrop-blur">
-              <p className="font-display text-2xl text-white tracking-wider">{text}</p>
+        {/* MOCKUP de funda con logo */}
+        <div className="relative mx-auto aspect-[3/4] w-full max-w-[320px] overflow-hidden rounded-[40px] border border-white/10 shadow-[0_30px_80px_-15px_rgba(0,0,0,0.6)]" style={{ background: "linear-gradient(180deg,#1a1a1a,#0a0a0a)" }}>
+          {/* Fondo escenario */}
+          <div className="absolute inset-0 opacity-40" style={{ background: product.gradient }} />
+
+          {/* Funda */}
+          <div
+            ref={dragRef}
+            onPointerMove={onDrag}
+            onPointerDown={onDrag}
+            className="absolute left-1/2 top-1/2 h-[78%] w-[58%] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-[34px] border border-white/20 shadow-[inset_0_2px_20px_rgba(255,255,255,0.08),0_20px_40px_rgba(0,0,0,0.5)]"
+            style={{ background: caseColor }}
+          >
+            {/* Cámaras */}
+            <div className="absolute left-4 top-4 grid h-16 w-16 grid-cols-2 grid-rows-2 gap-1 rounded-2xl bg-black/40 p-1.5">
+              <div className="rounded-full bg-black/80 ring-2 ring-white/10" />
+              <div className="rounded-full bg-black/80 ring-2 ring-white/10" />
+              <div className="rounded-full bg-black/80 ring-2 ring-white/10" />
+              <div className="grid place-items-center text-[8px] text-white/60">flash</div>
             </div>
+
+            {/* Zona del logo */}
+            <div
+              className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${logo.x}%`, top: `${logo.y}%`, transform: `translate(-50%,-50%) scale(${logo.scale})` }}
+            >
+              {logo.src ? (
+                <img src={logo.src} alt="logo" className="max-h-28 max-w-28 object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]" />
+              ) : (
+                <div className="rounded-xl border border-dashed border-white/40 bg-black/30 px-3 py-2 text-center backdrop-blur">
+                  <p className="font-display text-base font-black tracking-wider text-white">{logo.text || "TU LOGO"}</p>
+                  <p className="text-[8px] text-white/50">arrastrá para mover</p>
+                </div>
+              )}
+            </div>
+
+            {/* MagSafe */}
+            <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/5 opacity-30" />
           </div>
-          <span className="absolute left-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase text-white backdrop-blur">Vista en vivo</span>
-          <span className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-black/40 text-white backdrop-blur"><Layers className="h-4 w-4" /></span>
+
+          {/* Etiqueta */}
+          <span className="absolute left-3 top-3 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase text-white backdrop-blur">
+            Vista previa
+          </span>
+          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/50 px-2.5 py-1 text-[10px] text-white backdrop-blur">
+            <Move className="h-3 w-3" /> arrastrá
+          </span>
+
+          {/* Modelo */}
+          {variant && (
+            <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-medium text-white backdrop-blur">
+              {variant}
+            </span>
+          )}
         </div>
 
-        {/* Tools */}
-        <div className="grid grid-cols-4 gap-2">
+        {/* Variante / color */}
+        {product.variants && (
+          <div>
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Modelo</p>
+            <div className="flex flex-wrap gap-2">
+              {product.variants.map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setVariant(v)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${variant === v ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {product.colors && (
+          <div>
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Color de la funda</p>
+            <div className="flex gap-2">
+              {product.colors.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCaseColor(c)}
+                  className={`h-9 w-9 rounded-full border-2 transition ${caseColor === c ? "border-primary scale-110" : "border-white/20"}`}
+                  style={{ background: c }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Tabs herramientas */}
+        <div className="grid grid-cols-3 gap-2 rounded-2xl bg-secondary p-1">
           {[
-            { icon: Type, label: "Texto" },
-            { icon: ImageIcon, label: "Imagen" },
-            { icon: Smile, label: "Sticker" },
-            { icon: Wand2, label: "Efectos" },
+            { id: "logo" as const, label: "Logo", icon: ImageIcon },
+            { id: "texto" as const, label: "Texto", icon: Type },
+            { id: "ia" as const, label: "IA", icon: Wand2 },
           ].map((t) => (
-            <button key={t.label} className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card py-3 text-xs">
-              <t.icon className="h-4 w-4 text-primary" />
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-medium transition ${tab === t.id ? "bg-card shadow" : "text-muted-foreground"}`}
+            >
+              <t.icon className="h-3.5 w-3.5" />
               {t.label}
             </button>
           ))}
         </div>
 
-        {/* Text input */}
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tu texto</p>
-          <input value={text} onChange={(e) => setText(e.target.value)} className="mt-2 w-full rounded-xl bg-secondary px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" />
-        </div>
-
-        {/* AI Generation */}
-        <div className="rounded-3xl border border-primary/30 p-4" style={{ background: "var(--gradient-violet)" }}>
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-neon" />
-            <p className="font-display text-base">AI Studio</p>
-            <span className="rounded-md bg-neon/20 px-1.5 py-0.5 text-[9px] font-bold text-neon">BETA</span>
-          </div>
-          <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={2} className="mt-3 w-full resize-none rounded-xl bg-black/30 px-3 py-2 text-sm text-white outline-none placeholder:text-white/50" placeholder="Describí el diseño que querés..." />
-
-          <p className="mt-3 text-[10px] uppercase tracking-wider text-white/70">Estilo</p>
-          <div className="-mx-1 mt-1 flex gap-2 overflow-x-auto px-1 scrollbar-hide">
-            {AI_STYLES.map((s) => (
-              <button key={s.id} onClick={() => setStyle(s.id)} className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-medium transition ${style === s.id ? "border-white bg-white text-primary" : "border-white/30 text-white"}`}>
-                {s.emoji} {s.name}
+        {tab === "logo" && (
+          <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
+            <input ref={fileRef} type="file" accept="image/*" onChange={onUpload} className="hidden" />
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/40 bg-primary/5 py-6 text-sm font-medium text-primary"
+            >
+              <ImageIcon className="h-4 w-4" />
+              {logo.src ? "Cambiar logo" : "Subir tu logo (PNG/JPG)"}
+            </button>
+            {logo.src && (
+              <button
+                onClick={() => setLogo((l) => ({ ...l, src: null }))}
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground"
+              >
+                <Trash2 className="h-3 w-3" /> Quitar logo
               </button>
-            ))}
+            )}
+            <div>
+              <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Tamaño</p>
+              <input
+                type="range"
+                min={0.5}
+                max={2}
+                step={0.05}
+                value={logo.scale}
+                onChange={(e) => setLogo((l) => ({ ...l, scale: parseFloat(e.target.value) }))}
+                className="w-full"
+              />
+            </div>
           </div>
+        )}
 
-          <button onClick={generate} disabled={loading} className="mt-4 w-full rounded-2xl bg-white py-3 font-display text-sm text-primary disabled:opacity-50">
-            {loading ? "Generando..." : "✨ Generar diseños"}
-          </button>
+        {tab === "texto" && (
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Texto sobre la funda</p>
+            <input
+              value={logo.text}
+              onChange={(e) => setLogo((l) => ({ ...l, text: e.target.value }))}
+              placeholder="Tu nombre, marca, frase…"
+              className="mt-2 w-full rounded-xl bg-secondary px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+        )}
 
-          {generated.length > 0 && (
-            <div className="mt-4 grid grid-cols-4 gap-2">
-              {generated.map((g, i) => (
-                <button key={i} className="aspect-square rounded-xl bg-black/40 text-3xl">{g}</button>
+        {tab === "ia" && (
+          <div className="rounded-3xl border border-primary/30 p-4" style={{ background: "var(--gradient-violet, linear-gradient(135deg,#7c3aed,#ec4899))" }}>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-white" />
+              <p className="font-display text-base text-white">AI Studio</p>
+            </div>
+            <textarea
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              rows={2}
+              className="mt-3 w-full resize-none rounded-xl bg-black/30 px-3 py-2 text-sm text-white outline-none placeholder:text-white/50"
+              placeholder="Describí el logo que querés..."
+            />
+            <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-hide">
+              {AI_STYLES.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => setAiStyle(s.id)}
+                  className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-medium transition ${aiStyle === s.id ? "border-white bg-white text-primary" : "border-white/30 text-white"}`}
+                >
+                  {s.emoji} {s.name}
+                </button>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* 3D preview teaser */}
-        <div className="rounded-3xl border border-border bg-card p-4">
-          <div className="flex items-center justify-between">
-            <p className="font-display text-base"><Box className="mr-1 inline h-4 w-4 text-neon" /> Preview 3D</p>
-            <span className="rounded-md bg-neon/20 px-1.5 py-0.5 text-[9px] font-bold text-neon">NEW</span>
+            <button
+              onClick={generateAI}
+              disabled={generating}
+              className="mt-4 w-full rounded-2xl bg-white py-3 font-display text-sm text-primary disabled:opacity-50"
+            >
+              {generating ? "Generando…" : "✨ Generar diseño"}
+            </button>
           </div>
-          <div className="mt-3 grid h-32 place-items-center rounded-2xl text-5xl" style={{ background: "var(--gradient-violet)" }}>
-            <span className="animate-pulse">{product.emoji}</span>
-          </div>
-          <p className="mt-2 text-center text-[10px] text-muted-foreground">Girá el producto y vé tu diseño en 360°</p>
-        </div>
+        )}
 
-        {/* Community designs */}
-        <div>
-          <div className="flex items-end justify-between">
+        {/* CTAs finales */}
+        <div className="sticky bottom-24 z-20 -mx-5 mt-4 space-y-2 bg-gradient-to-t from-background via-background to-transparent px-5 pt-4">
+          <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-2.5">
             <div>
-              <p className="font-display text-lg">🔥 Diseños virales</p>
-              <p className="text-[10px] text-muted-foreground">Lo que está usando la comunidad</p>
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Total</p>
+              <p className="font-display text-xl">{formatARS(product.price.individual)}</p>
             </div>
-            <button className="text-xs text-primary">Ver todo</button>
+            <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary">
+              Personalización incluida
+            </span>
           </div>
-          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
-            {[
-              { e: "🌄", a: "Mica", l: "12.4k", v: "89k" },
-              { e: "🐉", a: "Joaco", l: "9.1k", v: "65k" },
-              { e: "🌸", a: "Pili", l: "7.8k", v: "54k" },
-              { e: "👽", a: "Iván", l: "6.2k", v: "41k" },
-              { e: "🦋", a: "Vale", l: "5.4k", v: "38k" },
-            ].map((d, i) => (
-              <div key={i} className="w-[140px] shrink-0">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: `linear-gradient(135deg, hsl(${i * 60} 70% 35%), hsl(${i * 60 + 60} 70% 25%))` }}>
-                  <span>{d.e}</span>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                    <p className="text-[10px] font-bold text-white">@{d.a}</p>
-                    <div className="mt-0.5 flex items-center gap-2 text-[9px] text-white/80">
-                      <span className="inline-flex items-center gap-0.5"><Heart className="h-2.5 w-2.5" />{d.l}</span>
-                      <span className="inline-flex items-center gap-0.5"><Eye className="h-2.5 w-2.5" />{d.v}</span>
-                    </div>
-                  </div>
-                  <button className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-black/50 backdrop-blur"><Bookmark className="h-3 w-3 text-white" /></button>
-                </div>
-                <button className="mt-2 w-full rounded-xl bg-card py-1.5 text-[10px] font-bold text-primary">Usar diseño</button>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={addToCart}
+              className="flex items-center justify-center gap-1.5 rounded-2xl border border-border bg-card py-3.5 text-sm font-bold"
+            >
+              <ShoppingBag className="h-4 w-4" /> Al carrito
+            </button>
+            <button
+              onClick={payNow}
+              className="flex items-center justify-center gap-1.5 rounded-2xl py-3.5 text-sm font-bold text-white shadow-[0_15px_40px_-10px_rgba(168,85,247,0.6)]"
+              style={{ background: "linear-gradient(135deg,#a855f7,#ec4899)" }}
+            >
+              <Zap className="h-4 w-4" /> Pagar ahora
+            </button>
           </div>
         </div>
-
-        {/* TikTok templates */}
-        <div className="rounded-3xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-4">
-          <p className="font-display text-base text-white">📱 Templates TikTok</p>
-          <p className="text-[10px] text-white/60">Los formatos que más están explotando</p>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {["#GRWM", "#FYP", "#aesthetic"].map((t) => (
-              <button key={t} className="rounded-xl border border-pink-400/40 bg-black/40 py-2 text-[10px] font-bold text-pink-200">{t}</button>
-            ))}
-          </div>
-        </div>
-
-        {/* HUGE protagonist CTA */}
-        <button className="group relative mb-8 flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-[28px] py-7 text-white shadow-[0_30px_80px_-15px_rgba(168,85,247,0.8)]" style={{ background: "linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f59e0b 100%)" }}>
-          <span className="relative z-10 flex items-center gap-2 font-display text-2xl font-black tracking-wider">
-            <Sparkles className="h-6 w-6" /> PERSONALIZAR 🔥
-          </span>
-          <span className="relative z-10 inline-flex items-center gap-1 text-[11px] font-medium text-white/80">
-            <Download className="h-3 w-3" /> Guardar y sumar al carrito · envío gratis
-          </span>
-          <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-700 group-hover:translate-x-full" />
-        </button>
       </main>
     </MobileShell>
   );
