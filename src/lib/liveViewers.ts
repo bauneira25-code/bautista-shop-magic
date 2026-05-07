@@ -48,7 +48,8 @@ export function computeLiveViewers(seed = "global", now = new Date()) {
 }
 
 export function useLiveViewers(seed = "global", intervalMs = 4000) {
-  const [n, setN] = useState(() => computeLiveViewers(seed));
+  // Inicia en MIN para evitar mismatch de hidratación (server vs client time)
+  const [n, setN] = useState<number>(MIN);
   useEffect(() => {
     setN(computeLiveViewers(seed));
     const id = setInterval(() => setN(computeLiveViewers(seed)), intervalMs);
