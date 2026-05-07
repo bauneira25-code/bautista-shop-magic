@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight } from "lucide-react";
+import { Search, Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, TRENDING, VIRAL, LIVE_FEED, formatARS } from "@/lib/mockData";
 
@@ -117,30 +117,39 @@ function Home() {
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-primary" />
             <h3 className="font-display text-lg">Compras grupales en vivo</h3>
+            <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-success" /> 3 activos
+            </span>
           </div>
           <div className="mt-3 space-y-3">
             {MOCK_PRODUCTS.slice(0, 3).map((p) => {
               const pct = (p.groupJoined / p.groupTarget) * 100;
+              const missing = p.groupTarget - p.groupJoined;
+              const almost = pct >= 70;
               return (
-                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="block">
-                  <div className="flex gap-3 rounded-2xl border border-border bg-card p-3">
+                <Link key={p.id} to="/group/$slug" params={{ slug: p.slug }} className="block">
+                  <div className="relative flex gap-3 overflow-hidden rounded-2xl border border-border bg-card p-3">
+                    {almost && <span className="absolute right-2 top-2 rounded-full bg-rose-500 px-2 py-0.5 text-[9px] font-black uppercase text-white animate-pulse">Casi completo</span>}
                     <div className="grid h-20 w-20 shrink-0 place-items-center rounded-xl text-3xl" style={{ background: p.gradient }}>{p.emoji}</div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="line-clamp-1 text-sm font-semibold">{p.title}</p>
-                        <span className="shrink-0 rounded-md bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary">GRUPO</span>
-                      </div>
-                      <div className="mt-1 flex items-baseline gap-1.5">
-                        <span className="text-base font-bold text-primary">{formatARS(p.price.group)}</span>
+                      <p className="line-clamp-1 text-sm font-semibold">{p.title}</p>
+                      <div className="mt-0.5 flex items-baseline gap-1.5">
+                        <span className="text-base font-black text-primary">{formatARS(p.price.group)}</span>
                         <span className="text-[10px] text-muted-foreground line-through">{formatARS(p.price.individual)}</span>
                       </div>
                       <div className="mt-2">
-                        <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
-                          <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--gradient-primary)" }} />
+                        <div className="flex items-baseline justify-between">
+                          <p className="font-display text-lg font-black leading-none">
+                            <span className="text-primary">{p.groupJoined}</span><span className="text-muted-foreground">/{p.groupTarget}</span>
+                          </p>
+                          <span className="text-[10px] font-bold text-rose-400">faltan {missing}</span>
+                        </div>
+                        <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
+                          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: "linear-gradient(90deg,#a855f7,#ec4899)" }} />
                         </div>
                         <div className="mt-1 flex items-center justify-between text-[10px] text-muted-foreground">
-                          <span>{p.groupJoined}/{p.groupTarget} unidos</span>
-                          <span className="inline-flex items-center gap-1"><Clock className="h-2.5 w-2.5" />{p.groupTimeLeft}</span>
+                          <span className="inline-flex items-center gap-1"><Eye className="h-2.5 w-2.5" />{(180 + p.groupJoined * 27)} mirando</span>
+                          <span className="inline-flex items-center gap-1 text-rose-400"><Clock className="h-2.5 w-2.5" />cierra {p.groupTimeLeft}</span>
                         </div>
                       </div>
                     </div>
@@ -148,6 +157,25 @@ function Home() {
                 </Link>
               );
             })}
+          </div>
+        </section>
+
+        {/* Se está agotando */}
+        <section>
+          <SectionHeader title="🚨 Se está agotando" icon={<Flame className="h-4 w-4 text-rose-400" />} />
+          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+            {MOCK_PRODUCTS.slice(2, 7).map((p) => (
+              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">
+                <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
+                  <span>{p.emoji}</span>
+                  <span className="absolute left-2 top-2 rounded-md bg-rose-500 px-1.5 py-0.5 text-[9px] font-black text-white">{p.stock} left</span>
+                </div>
+                <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
+                <div className="mt-1 h-1 overflow-hidden rounded-full bg-secondary">
+                  <div className="h-full bg-rose-500" style={{ width: `${Math.min(100, 100 - p.stock * 3)}%` }} />
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
 
