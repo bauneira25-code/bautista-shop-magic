@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import { Sparkles, Type, Image as ImageIcon, Wand2, ShoppingBag, Zap, Trash2, Move } from "lucide-react";
+import { Sparkles, Type, Image as ImageIcon, Wand2, ShoppingBag, Zap, Trash2, Move, ShieldCheck, AlertCircle } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { AI_STYLES, MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
+import { useBrands } from "@/stores/brands";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/customize")({
