@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, TrendingUp, AlertTriangle, Package, DollarSign, Users, Truck, Sparkles, ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowLeft, TrendingUp, AlertTriangle, Package, DollarSign, Users, Truck, Sparkles, ArrowUp, ArrowDown, ShieldCheck } from "lucide-react";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
+import { useBrands } from "@/stores/brands";
 
 export const Route = createFileRoute("/admin")({
   component: Admin,
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/admin")({
 function Admin() {
   const lowStock = MOCK_PRODUCTS.filter((p) => p.stock < 15);
   const topSellers = [...MOCK_PRODUCTS].sort((a, b) => b.sold - a.sold).slice(0, 4);
+  const brands = useBrands((s) => s.brands);
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-[480px] pb-10">
