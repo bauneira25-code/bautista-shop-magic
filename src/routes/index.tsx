@@ -19,6 +19,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { gender, views } = useUserPrefs();
+  const liveNow = useLiveViewers("home");
   // Bias: orden de categorías priorizadas según género o vistas más altas
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
   const biasOrder = viewedTop.length > 0
