@@ -75,18 +75,18 @@ function Home() {
         </div>
 
         {/* Hero banner */}
-        <Link to="/products/$slug" params={{ slug: "funda-iphone-15-pro" }} className="block">
+        <Link to="/grupos" className="block">
           <div className="relative overflow-hidden rounded-3xl p-5" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
             <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
               <Flame className="h-3 w-3" /> Drop grupal
             </span>
             <h2 className="mt-3 max-w-[70%] font-display text-2xl leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
-            <p className="mt-1 text-xs text-white/80">Sumate al próximo drop que cierra en 1h 29m</p>
+            <p className="mt-1 text-xs text-white/80">Elegí un grupo y sumate antes de que cierre</p>
             <div className="mt-4 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-primary">
-              Unirme ahora <ChevronRight className="h-3 w-3" />
+              Ver grupos activos <ChevronRight className="h-3 w-3" />
             </div>
-            <div className="absolute right-3 bottom-3 text-6xl">📱</div>
+            <div className="absolute right-3 bottom-3 text-6xl">👥</div>
           </div>
         </Link>
 
