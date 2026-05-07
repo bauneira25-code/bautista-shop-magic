@@ -126,7 +126,7 @@ function ProductPage() {
         ))}
       </div>
 
-      <div className="space-y-5 px-5 pt-5">
+      <div className="space-y-4 px-4 pt-4">
         {/* Title */}
         <div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
