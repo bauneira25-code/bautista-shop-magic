@@ -137,7 +137,7 @@ function ProductPage() {
             <ModeCard
               active={mode === "group"} onClick={() => setMode("group")}
               title="Grupal" icon="👥" price={product.price.group}
-              sub={`Sumate a ${product.groupTarget - product.groupJoined} personas más`}
+              sub={`Desde ${product.groupTarget} unidades · sumate o llevalas vos solo`}
               highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
               compareAt={product.price.individual}
             />
@@ -150,16 +150,29 @@ function ProductPage() {
           </div>
         </div>
 
-        {/* Group progress */}
+        {/* Group simple explainer */}
         {mode === "group" && (
-          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 float-up">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-primary"><Users className="mr-1 inline h-3 w-3" />{product.groupJoined}/{product.groupTarget} unidos</span>
-              <span className="inline-flex items-center gap-1 text-warning"><Clock className="h-3 w-3" /> {product.groupTimeLeft}</span>
+          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 float-up space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-bold text-primary"><Users className="mr-1 inline h-4 w-4" />Compra grupal desde {product.groupTarget} unidades</p>
+              <span className="inline-flex items-center gap-1 text-[10px] text-warning"><Clock className="h-3 w-3" />{product.groupTimeLeft}</span>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-secondary">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Sumate al grupo y pagás <b className="text-primary">{formatARS(product.price.group)}</b> por unidad,
+              o llevate las <b>{product.groupTarget} unidades</b> vos solo y desbloqueás el precio al instante.
+            </p>
+            <div className="flex gap-2">
+              <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition ${qty < product.groupTarget ? "border-primary bg-primary/15 text-primary" : "border-border"}`}>
+                Sumarme con 1
+              </button>
+              <button onClick={() => setQty(product.groupTarget)} className={`flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition ${qty >= product.groupTarget ? "border-primary bg-primary/15 text-primary" : "border-border"}`}>
+                Llevar las {product.groupTarget}
+              </button>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
               <div className="h-full" style={{ width: `${groupPct}%`, background: "var(--gradient-primary)" }} />
             </div>
+            <p className="text-[10px] text-muted-foreground">{product.groupJoined}/{product.groupTarget} ya se sumaron</p>
           </div>
         )}
 
