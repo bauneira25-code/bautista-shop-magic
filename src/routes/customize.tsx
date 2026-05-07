@@ -111,8 +111,73 @@ function Customize() {
           )}
         </div>
 
-        <button className="mb-8 flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-display text-sm text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
-          <Download className="h-4 w-4" /> Guardar diseño y agregar al carrito
+        {/* 3D preview teaser */}
+        <div className="rounded-3xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between">
+            <p className="font-display text-base"><Box className="mr-1 inline h-4 w-4 text-neon" /> Preview 3D</p>
+            <span className="rounded-md bg-neon/20 px-1.5 py-0.5 text-[9px] font-bold text-neon">NEW</span>
+          </div>
+          <div className="mt-3 grid h-32 place-items-center rounded-2xl text-5xl" style={{ background: "var(--gradient-violet)" }}>
+            <span className="animate-pulse">{product.emoji}</span>
+          </div>
+          <p className="mt-2 text-center text-[10px] text-muted-foreground">Girá el producto y vé tu diseño en 360°</p>
+        </div>
+
+        {/* Community designs */}
+        <div>
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="font-display text-lg">🔥 Diseños virales</p>
+              <p className="text-[10px] text-muted-foreground">Lo que está usando la comunidad</p>
+            </div>
+            <button className="text-xs text-primary">Ver todo</button>
+          </div>
+          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+            {[
+              { e: "🌄", a: "Mica", l: "12.4k", v: "89k" },
+              { e: "🐉", a: "Joaco", l: "9.1k", v: "65k" },
+              { e: "🌸", a: "Pili", l: "7.8k", v: "54k" },
+              { e: "👽", a: "Iván", l: "6.2k", v: "41k" },
+              { e: "🦋", a: "Vale", l: "5.4k", v: "38k" },
+            ].map((d, i) => (
+              <div key={i} className="w-[140px] shrink-0">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: `linear-gradient(135deg, hsl(${i * 60} 70% 35%), hsl(${i * 60 + 60} 70% 25%))` }}>
+                  <span>{d.e}</span>
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                    <p className="text-[10px] font-bold text-white">@{d.a}</p>
+                    <div className="mt-0.5 flex items-center gap-2 text-[9px] text-white/80">
+                      <span className="inline-flex items-center gap-0.5"><Heart className="h-2.5 w-2.5" />{d.l}</span>
+                      <span className="inline-flex items-center gap-0.5"><Eye className="h-2.5 w-2.5" />{d.v}</span>
+                    </div>
+                  </div>
+                  <button className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-black/50 backdrop-blur"><Bookmark className="h-3 w-3 text-white" /></button>
+                </div>
+                <button className="mt-2 w-full rounded-xl bg-card py-1.5 text-[10px] font-bold text-primary">Usar diseño</button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* TikTok templates */}
+        <div className="rounded-3xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-4">
+          <p className="font-display text-base text-white">📱 Templates TikTok</p>
+          <p className="text-[10px] text-white/60">Los formatos que más están explotando</p>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {["#GRWM", "#FYP", "#aesthetic"].map((t) => (
+              <button key={t} className="rounded-xl border border-pink-400/40 bg-black/40 py-2 text-[10px] font-bold text-pink-200">{t}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* HUGE protagonist CTA */}
+        <button className="group relative mb-8 flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-[28px] py-7 text-white shadow-[0_30px_80px_-15px_rgba(168,85,247,0.8)]" style={{ background: "linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f59e0b 100%)" }}>
+          <span className="relative z-10 flex items-center gap-2 font-display text-2xl font-black tracking-wider">
+            <Sparkles className="h-6 w-6" /> PERSONALIZAR 🔥
+          </span>
+          <span className="relative z-10 inline-flex items-center gap-1 text-[11px] font-medium text-white/80">
+            <Download className="h-3 w-3" /> Guardar y sumar al carrito · envío gratis
+          </span>
+          <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-700 group-hover:translate-x-full" />
         </button>
       </main>
     </MobileShell>
