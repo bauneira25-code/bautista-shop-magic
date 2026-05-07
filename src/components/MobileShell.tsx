@@ -1,18 +1,20 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, LayoutGrid, Sparkles, Package, User } from "lucide-react";
+import { Home, LayoutGrid, ShoppingBag, Package, User } from "lucide-react";
 import type { ReactNode } from "react";
+import { useLocalCart } from "@/stores/localCart";
 
 type NavItem = { to: string; label: string; icon: typeof Home; highlight?: boolean };
 const navItems: NavItem[] = [
   { to: "/", label: "Inicio", icon: Home },
   { to: "/categorias", label: "Categorías", icon: LayoutGrid },
-  { to: "/customize", label: "Customize", icon: Sparkles, highlight: true },
+  { to: "/cart", label: "Carrito", icon: ShoppingBag, highlight: true },
   { to: "/orders", label: "Pedidos", icon: Package },
   { to: "/profile", label: "Perfil", icon: User },
 ];
 
 export function MobileShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
+  const count = useLocalCart((s) => s.items.reduce((a, i) => a + i.quantity, 0));
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] pb-24">
       {children}
@@ -25,10 +27,15 @@ export function MobileShell({ children }: { children: ReactNode }) {
               return (
                 <Link key={item.to} to={item.to} className="-mt-7 flex flex-col items-center">
                   <span
-                    className="grid h-14 w-14 place-items-center rounded-2xl text-primary-foreground shadow-[var(--shadow-glow)]"
+                    className="relative grid h-14 w-14 place-items-center rounded-2xl text-primary-foreground shadow-[var(--shadow-glow)]"
                     style={{ background: "var(--gradient-primary)" }}
                   >
                     <Icon className="h-6 w-6" />
+                    {count > 0 && (
+                      <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-warning px-1 text-[10px] font-black text-background">
+                        {count}
+                      </span>
+                    )}
                   </span>
                   <span className="mt-1 text-[10px] font-semibold text-foreground">{item.label}</span>
                 </Link>
