@@ -161,20 +161,22 @@ function Home() {
 
         {/* Se está agotando */}
         <section>
-          <SectionHeader title="🚨 Se está agotando" icon={<Flame className="h-4 w-4 text-rose-400" />} />
+          <SectionHeader title="🚨 Se está vendiendo rápido" icon={<Flame className="h-4 w-4 text-rose-400" />} />
           <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
-            {MOCK_PRODUCTS.slice(2, 7).map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">
-                <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
-                  <span>{p.emoji}</span>
-                  <span className="absolute left-2 top-2 rounded-md bg-rose-500 px-1.5 py-0.5 text-[9px] font-black text-white">{p.stock} left</span>
-                </div>
-                <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
-                <div className="mt-1 h-1 overflow-hidden rounded-full bg-secondary">
-                  <div className="h-full bg-rose-500" style={{ width: `${Math.min(100, 100 - p.stock * 3)}%` }} />
-                </div>
-              </Link>
-            ))}
+            {MOCK_PRODUCTS.slice(2, 7).map((p) => {
+              const sl = stockLabel(p.stock);
+              const tone = sl.tone === "low" ? "bg-rose-500" : sl.tone === "mid" ? "bg-amber-500" : "bg-emerald-500";
+              return (
+                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">
+                  <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
+                    <span>{p.emoji}</span>
+                    <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-black text-white ${tone}`}>{sl.label}</span>
+                  </div>
+                  <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
+                  <p className="text-[10px] text-muted-foreground">Desde {formatARS(p.price.group)}</p>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
