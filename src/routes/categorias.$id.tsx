@@ -27,7 +27,12 @@ function CategoryPage() {
   const theme = CATEGORY_THEMES[id];
   if (!theme) throw notFound();
 
-  const products = MOCK_PRODUCTS.filter((p) => p.category === id);
+  // Filtros especiales para categorías agregadoras
+  const products =
+    id === "todo" ? MOCK_PRODUCTS :
+    id === "personalizados" ? MOCK_PRODUCTS.filter((p) => p.customizable) :
+    id === "tendencias" ? MOCK_PRODUCTS.filter((p) => !!p.badge) :
+    MOCK_PRODUCTS.filter((p) => p.category === id);
   const all = products.length ? products : MOCK_PRODUCTS;
 
   return (
