@@ -163,7 +163,7 @@ function CategoryPage() {
         <Link
           to="/categorias"
           className={`flex items-center justify-center rounded-2xl py-4 text-sm font-bold shadow-2xl ${theme.font}`}
-          style={{ background: theme.accent, color: theme.textOn, boxShadow: `0 20px 60px -10px ${theme.accent}88` }}
+          style={{ background: theme.accent, color: "#ffffff", boxShadow: `0 20px 60px -10px ${theme.accent}88` }}
         >
           {theme.cta}
         </Link>
