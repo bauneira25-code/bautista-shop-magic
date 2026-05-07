@@ -361,6 +361,26 @@ function ProductPage() {
             ))}
           </div>
         </div>
+
+        {/* También te puede gustar */}
+        <div>
+          <div className="mb-3 flex items-end justify-between">
+            <p className="font-display text-base">También te puede gustar</p>
+            <span className="text-[10px] text-muted-foreground">curado para vos</span>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {relatedProducts(product.slug, 4).map((r) => (
+              <Link key={r.id} to="/products/$slug" params={{ slug: r.slug }} className="group">
+                <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center transition-transform group-active:scale-95" style={{ background: r.gradient }}>
+                  <span>{r.emoji}</span>
+                  {r.badge && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{r.badge}</span>}
+                </div>
+                <p className="mt-2 line-clamp-1 text-xs font-medium">{r.title}</p>
+                <p className="text-xs font-bold text-primary">{formatARS(r.price.group)}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Sticky CTA */}
