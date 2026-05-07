@@ -46,9 +46,9 @@ function CategoryPage() {
 
       {/* Live viewers chip */}
       <div className="px-5 pt-3">
-        <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: "rgba(0,0,0,0.4)" }}>
+        <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.4)" }}>
           <Eye className="h-3 w-3" style={{ color: theme.accent }} />
-          <span className="text-[11px] font-bold text-white">{(1240 + Math.floor(Math.random() * 800)).toLocaleString("es-AR")} viendo {theme.name.toLowerCase()} ahora</span>
+          <span className="text-[11px] font-bold" style={{ color: TXT }}>{(1240 + Math.floor(Math.random() * 800)).toLocaleString("es-AR")} viendo {theme.name.toLowerCase()} ahora</span>
         </div>
       </div>
 
@@ -56,12 +56,13 @@ function CategoryPage() {
       <div className="px-5 pt-5">
         <div
           className="flex items-center gap-2 rounded-2xl px-4 py-3"
-          style={{ background: "rgba(0,0,0,0.45)", border: `1px solid ${theme.accent}33` }}
+          style={{ background: theme.isLight ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.45)", border: `1px solid ${theme.accent}33` }}
         >
           <Search className="h-4 w-4" style={{ color: theme.accent }} />
           <input
             placeholder={`Buscar en ${theme.name}...`}
-            className={`flex-1 bg-transparent text-sm text-white outline-none placeholder:text-foreground/40 dark:text-white/40 ${theme.font}`}
+            className={`flex-1 bg-transparent text-sm outline-none ${theme.font}`}
+            style={{ color: TXT }}
           />
         </div>
       </div>
@@ -80,8 +81,8 @@ function CategoryPage() {
       </div>
 
       {/* Live ticker — feels alive */}
-      <div className="mt-5 overflow-hidden border-y py-2" style={{ borderColor: `${theme.accent}33`, background: "rgba(0,0,0,0.3)" }}>
-        <div className="ticker flex whitespace-nowrap gap-8 text-xs text-white/70">
+      <div className="mt-5 overflow-hidden border-y py-2" style={{ borderColor: `${theme.accent}33`, background: theme.isLight ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.3)" }}>
+        <div className="ticker flex whitespace-nowrap gap-8 text-xs" style={{ color: TXT_MUTED }}>
           {[...Array(2)].flatMap((_, k) =>
             all.map((p, i) => (
               <span key={`${k}-${i}`} className={`flex items-center gap-2 ${theme.font}`}>
@@ -104,11 +105,11 @@ function CategoryPage() {
       {/* Group buying section */}
       <section className="px-5 pt-7">
         <div className="flex items-center justify-between">
-          <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font} text-white`}>
+          <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font}`} style={{ color: TXT }}>
             <Users className="mr-2 inline h-4 w-4" style={{ color: theme.accent }} />
             Grupos activos
           </h2>
-          <span className="text-[10px] text-white/50">{all.length} en vivo</span>
+          <span className="text-[10px]" style={{ color: TXT_MUTED }}>{all.length} en vivo</span>
         </div>
         <div className="mt-3 space-y-3">
           {all.slice(0, 3).map((p) => (
@@ -119,7 +120,7 @@ function CategoryPage() {
 
       {/* Product grid in theme */}
       <section className="px-5 pt-7">
-        <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font} text-white`}>
+        <h2 className={`text-lg ${theme.font === "font-mono" ? "font-orbitron" : theme.font}`} style={{ color: TXT }}>
           Todo en {theme.name}
         </h2>
         <div className="mt-3 grid grid-cols-2 gap-3">
@@ -129,13 +130,14 @@ function CategoryPage() {
                 className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center transition-transform group-active:scale-95"
                 style={{
                   background: theme.surface,
-                  border: `1px solid ${theme.accent}33`,
+                  border: `1px solid ${theme.accent}44`,
+                  boxShadow: theme.isLight ? `0 8px 24px -10px ${theme.accent}55` : "none",
                 }}
               >
                 <span>{p.emoji}</span>
                 <span
                   className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-bold ${theme.font}`}
-                  style={{ background: theme.accent, color: theme.textOn }}
+                  style={{ background: theme.accent, color: "#fff" }}
                 >
                   {p.customizable ? "CUSTOM" : "−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
                 </span>
@@ -143,13 +145,13 @@ function CategoryPage() {
                   <Sparkles className="absolute right-2 top-2 h-4 w-4" style={{ color: theme.accent }} />
                 )}
               </div>
-              <p className={`mt-2 line-clamp-1 text-xs font-medium text-white ${theme.font === "font-mono" ? "font-mono" : ""}`}>
+              <p className={`mt-2 line-clamp-1 text-xs font-medium ${theme.font === "font-mono" ? "font-mono" : ""}`} style={{ color: TXT }}>
                 {p.title}
               </p>
               <p className={`text-sm font-bold ${theme.font}`} style={{ color: theme.accent }}>
                 {formatARS(p.price.group)}
               </p>
-              <p className="text-[10px] text-foreground/40 dark:text-white/40 line-through">{formatARS(p.price.individual)}</p>
+              <p className="text-[10px] line-through" style={{ color: TXT_MUTED }}>{formatARS(p.price.individual)}</p>
             </Link>
           ))}
         </div>
