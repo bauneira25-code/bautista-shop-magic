@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sparkles, Type, Image as ImageIcon, Smile, Wand2, Layers, Download } from "lucide-react";
+import { Sparkles, Type, Image as ImageIcon, Smile, Wand2, Layers, Download, Heart, Eye, Bookmark, Box } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { AI_STYLES, MOCK_PRODUCTS } from "@/lib/mockData";
 import { toast } from "sonner";
