@@ -92,19 +92,19 @@
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
 
-  --chart-1: oklch(0.62 0.26 305);
-  --chart-2: oklch(0.7 0.22 280);
-  --chart-3: oklch(0.78 0.22 320);
-  --chart-4: oklch(0.72 0.18 155);
-  --chart-5: oklch(0.78 0.18 75);
-  --sidebar: oklch(0.16 0.025 295);
-  --sidebar-foreground: oklch(0.97 0.01 290);
-  --sidebar-primary: oklch(0.62 0.26 305);
-  --sidebar-primary-foreground: oklch(0.99 0.005 290);
-  --sidebar-accent: oklch(0.22 0.04 295);
-  --sidebar-accent-foreground: oklch(0.97 0.01 290);
-  --sidebar-border: oklch(0.27 0.04 295);
-  --sidebar-ring: oklch(0.62 0.26 305);
+  --chart-1: oklch(0.65 0.22 32);
+  --chart-2: oklch(0.7 0.2 50);
+  --chart-3: oklch(0.78 0.18 75);
+  --chart-4: oklch(0.6 0.25 22);
+  --chart-5: oklch(0.72 0.18 150);
+  --sidebar: oklch(0.99 0.005 50);
+  --sidebar-foreground: oklch(0.18 0.05 30);
+  --sidebar-primary: oklch(0.65 0.22 32);
+  --sidebar-primary-foreground: oklch(0.99 0.005 50);
+  --sidebar-accent: oklch(0.95 0.02 40);
+  --sidebar-accent-foreground: oklch(0.25 0.06 30);
+  --sidebar-border: oklch(0.9 0.02 40);
+  --sidebar-ring: oklch(0.65 0.22 32);
 }
 
 .dark { color-scheme: dark; }
