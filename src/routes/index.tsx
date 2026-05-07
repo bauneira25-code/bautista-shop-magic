@@ -5,6 +5,7 @@ import { SmartSearch } from "@/components/SmartSearch";
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
+import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
 
 export const Route = createFileRoute("/")({
   head: () => ({
