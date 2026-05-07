@@ -283,3 +283,30 @@ export const formatARS = (n: number) =>
   new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
 
 export const findProduct = (slug: string) => MOCK_PRODUCTS.find((p) => p.slug === slug);
+
+// Convertir stock numérico a etiqueta cualitativa (más premium)
+export const stockLabel = (stock: number): { label: string; tone: "low" | "mid" | "ok" } => {
+  if (stock <= 6) return { label: "Últimas unidades", tone: "low" };
+  if (stock <= 15) return { label: "Alta demanda", tone: "mid" };
+  return { label: "Disponible", tone: "ok" };
+};
+
+// Productos relacionados (misma categoría, distinto slug)
+export const relatedProducts = (slug: string, limit = 4) => {
+  const current = findProduct(slug);
+  if (!current) return [];
+  const same = MOCK_PRODUCTS.filter((p) => p.slug !== slug && p.category === current.category);
+  const fill = MOCK_PRODUCTS.filter((p) => p.slug !== slug && p.category !== current.category);
+  return [...same, ...fill].slice(0, limit);
+};
+
+// Búsqueda fuzzy sencilla para sugerencias en vivo
+export const searchProducts = (q: string, limit = 6) => {
+  const query = q.trim().toLowerCase();
+  if (!query) return [];
+  return MOCK_PRODUCTS.filter((p) =>
+    p.title.toLowerCase().includes(query) ||
+    p.category.toLowerCase().includes(query) ||
+    p.description.toLowerCase().includes(query),
+  ).slice(0, limit);
+};

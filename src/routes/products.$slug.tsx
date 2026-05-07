@@ -4,7 +4,7 @@ import {
   ArrowLeft, Heart, Share2, Star, Users, Clock, Truck, ShieldCheck, Sparkles,
   Plus, Minus, Type, Image as ImageIcon, Smile, Wand2, ChevronDown,
 } from "lucide-react";
-import { findProduct, formatARS, AI_STYLES, type PurchaseMode } from "@/lib/mockData";
+import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
 import { toast } from "sonner";
 
@@ -38,11 +38,14 @@ function ProductPage() {
   const savings = product.price.individual - price;
   const groupPct = (product.groupJoined / product.groupTarget) * 100;
 
+  const groupSolo = mode === "group" && qty >= product.groupTarget;
   const cta =
-    mode === "group" ? "SUMARME AL GRUPO" : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
+    mode === "group"
+      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "SUMARME AL GRUPO")
+      : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const handleCta = () => {
-    if (mode === "group") {
+    if (mode === "group" && !groupSolo) {
       navigate({ to: "/group/$slug", params: { slug: product.slug } });
       return;
     }
@@ -100,8 +103,8 @@ function ProductPage() {
           <span className="h-2 w-2 animate-pulse rounded-full bg-success" />
           <span className="text-[11px] text-white">{product.liveActivity[0]?.name} {product.liveActivity[0]?.action}</span>
         </div>
-        <div className="absolute right-4 bottom-4 rounded-full bg-black/50 px-2.5 py-1 text-[11px] text-white backdrop-blur">
-          {product.sold.toLocaleString()} vendidos
+        <div className="absolute right-4 bottom-4 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
+          {stockLabel(product.stock).label}
         </div>
       </div>
 
@@ -137,7 +140,7 @@ function ProductPage() {
             <ModeCard
               active={mode === "group"} onClick={() => setMode("group")}
               title="Grupal" icon="👥" price={product.price.group}
-              sub={`Sumate a ${product.groupTarget - product.groupJoined} personas más`}
+              sub={`Desde ${product.groupTarget} unidades · sumate o llevalas vos solo`}
               highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
               compareAt={product.price.individual}
             />
@@ -150,16 +153,29 @@ function ProductPage() {
           </div>
         </div>
 
-        {/* Group progress */}
+        {/* Group simple explainer */}
         {mode === "group" && (
-          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 float-up">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-primary"><Users className="mr-1 inline h-3 w-3" />{product.groupJoined}/{product.groupTarget} unidos</span>
-              <span className="inline-flex items-center gap-1 text-warning"><Clock className="h-3 w-3" /> {product.groupTimeLeft}</span>
+          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 float-up space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-bold text-primary"><Users className="mr-1 inline h-4 w-4" />Compra grupal desde {product.groupTarget} unidades</p>
+              <span className="inline-flex items-center gap-1 text-[10px] text-warning"><Clock className="h-3 w-3" />{product.groupTimeLeft}</span>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-secondary">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Sumate al grupo y pagás <b className="text-primary">{formatARS(product.price.group)}</b> por unidad,
+              o llevate las <b>{product.groupTarget} unidades</b> vos solo y desbloqueás el precio al instante.
+            </p>
+            <div className="flex gap-2">
+              <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition ${qty < product.groupTarget ? "border-primary bg-primary/15 text-primary" : "border-border"}`}>
+                Sumarme con 1
+              </button>
+              <button onClick={() => setQty(product.groupTarget)} className={`flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition ${qty >= product.groupTarget ? "border-primary bg-primary/15 text-primary" : "border-border"}`}>
+                Llevar las {product.groupTarget}
+              </button>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
               <div className="h-full" style={{ width: `${groupPct}%`, background: "var(--gradient-primary)" }} />
             </div>
+            <p className="text-[10px] text-muted-foreground">{product.groupJoined}/{product.groupTarget} ya se sumaron</p>
           </div>
         )}
 
@@ -342,6 +358,26 @@ function ProductPage() {
                   <p className="text-xs text-muted-foreground">{r.t}</p>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* También te puede gustar */}
+        <div>
+          <div className="mb-3 flex items-end justify-between">
+            <p className="font-display text-base">También te puede gustar</p>
+            <span className="text-[10px] text-muted-foreground">curado para vos</span>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {relatedProducts(product.slug, 4).map((r) => (
+              <Link key={r.id} to="/products/$slug" params={{ slug: r.slug }} className="group">
+                <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center transition-transform group-active:scale-95" style={{ background: r.gradient }}>
+                  <span>{r.emoji}</span>
+                  {r.badge && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{r.badge}</span>}
+                </div>
+                <p className="mt-2 line-clamp-1 text-xs font-medium">{r.title}</p>
+                <p className="text-xs font-bold text-primary">{formatARS(r.price.group)}</p>
+              </Link>
             ))}
           </div>
         </div>
