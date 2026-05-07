@@ -4,7 +4,7 @@ import {
   ArrowLeft, Heart, Share2, Star, Users, Clock, Truck, ShieldCheck, Sparkles,
   Plus, Minus, Type, Image as ImageIcon, Smile, Wand2, ChevronDown,
 } from "lucide-react";
-import { findProduct, formatARS, AI_STYLES, type PurchaseMode } from "@/lib/mockData";
+import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
 import { toast } from "sonner";
 
