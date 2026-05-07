@@ -7,7 +7,7 @@ export interface MockProduct {
   slug: string;
   title: string;
   emoji: string;
-  category: string;
+  category: string; // tech | electronica | hogar | gym | belleza | joyeria
   price: { individual: number; group: number; wholesale: number };
   groupTarget: number;
   groupJoined: number;
@@ -27,303 +27,165 @@ export interface MockProduct {
 
 const grad = (a: string, b: string) => `linear-gradient(135deg, ${a}, ${b})`;
 
-export const MOCK_PRODUCTS: MockProduct[] = [
-  {
-    id: "p1",
-    slug: "funda-iphone-15-pro",
-    title: "Funda iPhone 15 Pro Magsafe",
-    emoji: "📱",
-    category: "tech",
-    price: { individual: 14000, group: 11000, wholesale: 8000 },
-    groupTarget: 10,
-    groupJoined: 7,
-    groupTimeLeft: "01:29:45",
-    rating: 4.9,
-    reviews: 2412,
-    sold: 8230,
-    stock: 12,
-    customizable: true,
-    badge: "🔥 Viral",
-    colors: ["#000000", "#7c3aed", "#ec4899", "#f59e0b"],
-    variants: ["iPhone 14", "iPhone 15", "iPhone 15 Pro", "iPhone 16"],
-    gradient: grad("#7c3aed", "#ec4899"),
-    description: "Funda magsafe ultra resistente con acabado mate premium. Personalizable.",
+let _id = 0;
+const make = (
+  category: string,
+  title: string,
+  emoji: string,
+  individual: number,
+  groupPct: number,
+  gradColors: [string, string],
+  opts: Partial<MockProduct> = {},
+): MockProduct => {
+  _id += 1;
+  const slug = title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  const group = Math.round(individual * (1 - groupPct));
+  const wholesale = Math.round(individual * (1 - groupPct - 0.15));
+  const target = 10 + ((_id * 3) % 16);
+  const joined = Math.max(1, Math.floor(target * (0.3 + ((_id * 17) % 50) / 100)));
+  return {
+    id: `p${_id}`,
+    slug,
+    title,
+    emoji,
+    category,
+    price: { individual, group, wholesale },
+    groupTarget: target,
+    groupJoined: joined,
+    groupTimeLeft: `0${1 + (_id % 5)}:${10 + (_id % 50)}:00`.slice(0, 8),
+    rating: 4.5 + ((_id * 7) % 5) / 10,
+    reviews: 200 + _id * 73,
+    sold: 800 + _id * 211,
+    stock: 5 + (_id % 30),
+    customizable: opts.customizable ?? false,
+    badge: opts.badge,
+    colors: opts.colors,
+    variants: opts.variants,
+    gradient: grad(gradColors[0], gradColors[1]),
+    description: opts.description ?? `${title} — calidad premium con envío rápido.`,
     liveActivity: [
       { name: "Lucas", action: "se unió al grupo", time: "hace 2 min" },
       { name: "Mica", action: "compró 1 unidad", time: "hace 4 min" },
-      { name: "Tomás", action: "se unió al grupo", time: "hace 7 min" },
     ],
-  },
-  {
-    id: "p2",
-    slug: "auriculares-pro-anc",
-    title: "Auriculares Pro ANC",
-    emoji: "🎧",
-    category: "tech",
-    price: { individual: 45000, group: 36000, wholesale: 28000 },
-    groupTarget: 15,
-    groupJoined: 11,
-    groupTimeLeft: "03:12:08",
-    rating: 4.8,
-    reviews: 1820,
-    sold: 4500,
-    stock: 28,
-    customizable: false,
-    badge: "Trending",
-    colors: ["#000000", "#ffffff", "#7c3aed"],
-    gradient: grad("#1e1b4b", "#7c3aed"),
-    description: "Cancelación activa de ruido, 40h de batería, sonido Hi-Fi.",
-    liveActivity: [
-      { name: "Sofi", action: "se unió al grupo", time: "hace 1 min" },
-      { name: "Juan", action: "compró 1 unidad", time: "hace 6 min" },
-    ],
-  },
-  {
-    id: "p3",
-    slug: "smartwatch-x9",
-    title: "Smartwatch X9 AMOLED",
-    emoji: "⌚",
-    category: "tech",
-    price: { individual: 38000, group: 30000, wholesale: 22000 },
-    groupTarget: 20,
-    groupJoined: 14,
-    groupTimeLeft: "00:45:22",
-    rating: 4.7,
-    reviews: 980,
-    sold: 3200,
-    stock: 5,
-    customizable: false,
-    badge: "Stock bajo",
-    colors: ["#000000", "#c0c0c0", "#ec4899"],
-    gradient: grad("#312e81", "#a78bfa"),
-    description: "Pantalla AMOLED 2.1\", llamadas, GPS, oxígeno en sangre.",
-    liveActivity: [
-      { name: "Naza", action: "se unió al grupo", time: "ahora" },
-    ],
-  },
-  {
-    id: "p4",
-    slug: "freidora-aire-6l",
-    title: "Freidora de aire 6L",
-    emoji: "🍳",
-    category: "hogar",
-    price: { individual: 65000, group: 52000, wholesale: 38000 },
-    groupTarget: 12,
-    groupJoined: 4,
-    groupTimeLeft: "12:00:00",
-    rating: 4.9,
-    reviews: 3210,
-    sold: 5400,
-    stock: 22,
-    customizable: false,
-    badge: "Best seller",
-    colors: ["#000000"],
-    gradient: grad("#3b0764", "#7c3aed"),
-    description: "6 litros, panel digital, 8 programas, sin aceite.",
-    liveActivity: [
-      { name: "Ailen", action: "compró 1 unidad", time: "hace 12 min" },
-    ],
-  },
-  {
-    id: "p5",
-    slug: "mascara-led-7-colores",
-    title: "Máscara LED 7 colores",
-    emoji: "💆",
-    category: "belleza",
-    price: { individual: 75000, group: 58000, wholesale: 42000 },
-    groupTarget: 10,
-    groupJoined: 9,
-    groupTimeLeft: "00:18:40",
-    rating: 4.6,
-    reviews: 740,
-    sold: 1800,
-    stock: 8,
-    customizable: false,
-    badge: "Casi completo",
-    gradient: grad("#9d174d", "#7c3aed"),
-    description: "Terapia lumínica facial profesional, 7 colores, anti-edad.",
-    liveActivity: [
-      { name: "Rocio", action: "se unió al grupo", time: "hace 30 seg" },
-      { name: "Carla", action: "se unió al grupo", time: "hace 2 min" },
-    ],
-  },
-  {
-    id: "p6",
-    slug: "mancuernas-ajustables-24kg",
-    title: "Mancuernas ajustables 24kg",
-    emoji: "🏋️",
-    category: "deporte",
-    price: { individual: 95000, group: 78000, wholesale: 60000 },
-    groupTarget: 8,
-    groupJoined: 3,
-    groupTimeLeft: "08:30:00",
-    rating: 4.8,
-    reviews: 420,
-    sold: 980,
-    stock: 14,
-    customizable: false,
-    gradient: grad("#1e293b", "#7c3aed"),
-    description: "Par de mancuernas ajustables 5-24kg cada una.",
-    liveActivity: [
-      { name: "Bruno", action: "compró 1 unidad", time: "hace 20 min" },
-    ],
-  },
-  {
-    id: "p7",
-    slug: "collar-acero-minimalista",
-    title: "Collar acero minimalista",
-    emoji: "💍",
-    category: "personalizados",
-    price: { individual: 12000, group: 9500, wholesale: 6500 },
-    groupTarget: 25,
-    groupJoined: 18,
-    groupTimeLeft: "05:45:10",
-    rating: 4.9,
-    reviews: 1240,
-    sold: 4100,
-    stock: 60,
-    customizable: true,
-    badge: "Personalizable",
-    colors: ["#c0c0c0", "#ffd700", "#000000"],
-    gradient: grad("#0c0a09", "#a78bfa"),
-    description: "Acero quirúrgico, hipoalergénico, grabado láser disponible.",
-    liveActivity: [
-      { name: "Vale", action: "se unió al grupo", time: "hace 1 min" },
-    ],
-  },
-  {
-    id: "p8",
-    slug: "lampara-puesta-sol",
-    title: "Lámpara puesta de sol",
-    emoji: "🌅",
-    category: "hogar",
-    price: { individual: 18000, group: 14000, wholesale: 9500 },
-    groupTarget: 15,
-    groupJoined: 12,
-    groupTimeLeft: "02:10:00",
-    rating: 4.8,
-    reviews: 2100,
-    sold: 6700,
-    stock: 30,
-    customizable: false,
-    badge: "TikTok viral",
-    gradient: grad("#ea580c", "#7c3aed"),
-    description: "Proyector LED ambiente, 16 colores, control remoto.",
-    liveActivity: [
-      { name: "Flor", action: "se unió al grupo", time: "hace 5 min" },
-    ],
-  },
+  };
+};
+
+export const MOCK_PRODUCTS: MockProduct[] = [
+  // ============ TECNOLOGÍA ============
+  make("tech", "Funda iPhone Magsafe", "📱", 14000, 0.22, ["#0a1530", "#38bdf8"], { customizable: true, badge: "🔥 Viral", variants: ["iPhone 13", "iPhone 14", "iPhone 15", "iPhone 15 Pro", "iPhone 16"], colors: ["#000", "#7c3aed", "#ec4899"] }),
+  make("tech", "Auriculares Pro ANC", "🎧", 45000, 0.20, ["#0a1530", "#3b82f6"], { badge: "Nuevo" }),
+  make("tech", "Smartwatch X9 AMOLED", "⌚", 38000, 0.21, ["#05060a", "#38bdf8"], { badge: "Stock bajo" }),
+  make("tech", "Parlante Bluetooth 360°", "🔊", 22000, 0.23, ["#0a1530", "#c0c8d4"]),
+  make("tech", "Cámara Mirrorless 4K", "📷", 280000, 0.18, ["#05060a", "#38bdf8"], { badge: "PRO" }),
+  make("tech", "Mini robot IA de escritorio", "🤖", 65000, 0.25, ["#05060a", "#38bdf8"], { badge: "IA" }),
+  make("tech", "Monitor 27\" 144Hz", "🖥️", 320000, 0.18, ["#0a1530", "#3b82f6"]),
+  make("tech", "Setup gamer combo", "🎮", 120000, 0.22, ["#03000f", "#38bdf8"], { badge: "Gamer" }),
+  make("tech", "Drone 4K plegable", "🛸", 145000, 0.20, ["#05060a", "#c0c8d4"]),
+  make("tech", "Smart Glasses IA", "🕶️", 195000, 0.19, ["#05060a", "#38bdf8"], { badge: "IA" }),
+  make("tech", "Micrófono USB-C streamer", "🎙️", 35000, 0.22, ["#0a1530", "#3b82f6"]),
+  make("tech", "Proyector portátil HD", "📽️", 89000, 0.21, ["#05060a", "#38bdf8"]),
+  make("tech", "Cargador 65W GaN", "🔌", 18000, 0.24, ["#0a1530", "#c0c8d4"]),
+  make("tech", "Tira LED RGB Wi-Fi 5m", "💡", 12000, 0.25, ["#0a1530", "#38bdf8"], { badge: "Viral" }),
+  make("tech", "Soporte celular magnético", "📲", 8500, 0.24, ["#0a1530", "#c0c8d4"]),
+
+  // ============ ELECTRÓNICA ============
+  make("electronica", "Cafetera espresso automática", "☕", 145000, 0.20, ["#e2e8f0", "#0ea5e9"], { badge: "Best seller" }),
+  make("electronica", "Freidora de aire 6L", "🍳", 65000, 0.20, ["#f1f5f9", "#475569"]),
+  make("electronica", "Licuadora 1200W", "🥤", 42000, 0.22, ["#e2e8f0", "#0ea5e9"]),
+  make("electronica", "Batidora de pie pro", "🍰", 95000, 0.20, ["#f1f5f9", "#475569"]),
+  make("electronica", "Exprimidor cítricos", "🍊", 18000, 0.23, ["#e2e8f0", "#f59e0b"]),
+  make("electronica", "Wafflera doble", "🧇", 28000, 0.22, ["#f1f5f9", "#0ea5e9"]),
+  make("electronica", "Pochoclera retro", "🍿", 22000, 0.24, ["#e2e8f0", "#ef4444"], { badge: "Trending" }),
+  make("electronica", "Espumador de leche", "🥛", 14000, 0.22, ["#f1f5f9", "#475569"]),
+  make("electronica", "Aspiradora robot IA", "🤖", 230000, 0.18, ["#e2e8f0", "#0ea5e9"], { badge: "IA" }),
+  make("electronica", "Aspiradora de mano", "🧹", 38000, 0.22, ["#f1f5f9", "#475569"]),
+  make("electronica", "Robot limpia vidrios", "🪟", 95000, 0.20, ["#e2e8f0", "#0ea5e9"]),
+  make("electronica", "Afeitadora premium", "🪒", 32000, 0.23, ["#f1f5f9", "#475569"]),
+  make("electronica", "Máquina de hielo express", "🧊", 110000, 0.20, ["#e2e8f0", "#38bdf8"]),
+  make("electronica", "Aire acondicionado IA", "❄️", 480000, 0.16, ["#f1f5f9", "#0ea5e9"], { badge: "IA" }),
+
+  // ============ HOGAR ============
+  make("hogar", "Vajilla cerámica 16 pzas", "🍽️", 48000, 0.20, ["#fde8b4", "#d97706"], { badge: "Cozy" }),
+  make("hogar", "Set utensilios cocina", "🥄", 22000, 0.22, ["#fff8e1", "#f59e0b"]),
+  make("hogar", "Cuadro decorativo abstracto", "🖼️", 18000, 0.25, ["#fde8b4", "#d97706"]),
+  make("hogar", "Lámpara mesa cálida", "💡", 24000, 0.22, ["#fff8e1", "#f59e0b"]),
+  make("hogar", "Espejo redondo arco", "🪞", 38000, 0.20, ["#fde8b4", "#d97706"]),
+  make("hogar", "Set 3 velas aromáticas", "🕯️", 14000, 0.25, ["#fff8e1", "#f59e0b"], { badge: "Zen" }),
+  make("hogar", "Difusor aroma ultrasónico", "🌬️", 18000, 0.24, ["#fde8b4", "#d97706"]),
+  make("hogar", "Canasto fibra natural", "🧺", 12000, 0.25, ["#fff8e1", "#d97706"]),
+  make("hogar", "Set 3 toallas premium", "🛁", 22000, 0.22, ["#fde8b4", "#f59e0b"]),
+  make("hogar", "Caja organizadora bambú", "📦", 9500, 0.25, ["#fff8e1", "#d97706"]),
+  make("hogar", "Lámpara puesta de sol", "🌅", 18000, 0.22, ["#fde8b4", "#f59e0b"], { badge: "TikTok viral" }),
+  make("hogar", "Proyector estrellas IA", "✨", 28000, 0.24, ["#fde8b4", "#d97706"], { badge: "IA" }),
+
+  // ============ GYM ============
+  make("gym", "Mancuernas ajustables 24kg", "🏋️", 95000, 0.18, ["#0a0f08", "#a3e635"]),
+  make("gym", "Set pesas hexagonales", "💪", 65000, 0.20, ["#0a0f08", "#fb923c"]),
+  make("gym", "Barra olímpica 20kg", "🏋️", 110000, 0.20, ["#0a0f08", "#a3e635"]),
+  make("gym", "Pelota fútbol pro", "⚽", 18000, 0.22, ["#0a0f08", "#a3e635"]),
+  make("gym", "Guantes boxeo 14oz", "🥊", 28000, 0.22, ["#0a0f08", "#fb923c"]),
+  make("gym", "Pelota básquet outdoor", "🏀", 22000, 0.22, ["#0a0f08", "#fb923c"]),
+  make("gym", "Pelota rugby match", "🏉", 25000, 0.22, ["#0a0f08", "#a3e635"]),
+  make("gym", "Stick hockey pro", "🏒", 42000, 0.20, ["#0a0f08", "#fb923c"]),
+  make("gym", "Tabla snowboard 155cm", "🏂", 280000, 0.18, ["#0a0f08", "#a3e635"]),
+  make("gym", "Set 5 bandas elásticas", "💪", 11000, 0.23, ["#0a0f08", "#fb923c"]),
+  make("gym", "Set 6 conos entrenamiento", "🔶", 8500, 0.25, ["#0a0f08", "#a3e635"]),
+  make("gym", "Soga saltar pro", "🪢", 9500, 0.24, ["#0a0f08", "#fb923c"]),
+  make("gym", "Rueda abdominal doble", "⚙️", 12000, 0.24, ["#0a0f08", "#a3e635"]),
+  make("gym", "Botella deportiva 1L", "💧", 9500, 0.26, ["#0a0f08", "#a3e635"], { customizable: true, badge: "Personalizable" }),
+  make("gym", "Toalla microfibra gym", "🧖", 7500, 0.25, ["#0a0f08", "#fb923c"]),
+
+  // ============ BELLEZA ============
+  make("belleza", "Mascarilla coreana x10", "🌸", 18000, 0.24, ["#ffe0ee", "#ec4899"], { badge: "K-Beauty" }),
+  make("belleza", "Máscara LED 7 colores", "💆", 75000, 0.20, ["#ffe0ee", "#f472b6"], { badge: "Casi completo" }),
+  make("belleza", "Masajeador facial Y", "✨", 14000, 0.25, ["#ffe0ee", "#ec4899"]),
+  make("belleza", "Set uñas press-on", "💅", 9500, 0.25, ["#ffe0ee", "#f472b6"]),
+  make("belleza", "Esmaltes gel pack 6", "💗", 12000, 0.24, ["#ffe0ee", "#ec4899"]),
+  make("belleza", "Limpieza poros eléctrica", "🫧", 22000, 0.23, ["#ffe0ee", "#f472b6"]),
+  make("belleza", "Serum rejuvenecedor", "🧴", 28000, 0.22, ["#ffe0ee", "#ec4899"], { badge: "Premium" }),
+  make("belleza", "Set brochas profesional", "🖌️", 18000, 0.24, ["#ffe0ee", "#f472b6"]),
+  make("belleza", "Skincare kit completo", "🌷", 45000, 0.22, ["#ffe0ee", "#ec4899"]),
+  make("belleza", "Planchita iónica", "💇", 32000, 0.22, ["#ffe0ee", "#f472b6"]),
+  make("belleza", "Secador profesional 2200W", "💨", 38000, 0.22, ["#ffe0ee", "#ec4899"]),
+  make("belleza", "Rizadora automática", "💁", 42000, 0.22, ["#ffe0ee", "#f472b6"]),
+  make("belleza", "Lámpara UV uñas 48W", "💡", 22000, 0.23, ["#ffe0ee", "#ec4899"]),
+  make("belleza", "Set vinchas spa", "🎀", 6500, 0.26, ["#ffe0ee", "#f472b6"]),
+  make("belleza", "Parches granitos x36", "🩹", 7500, 0.25, ["#ffe0ee", "#ec4899"], { badge: "Viral" }),
+  make("belleza", "Depilador láser IPL", "✨", 95000, 0.20, ["#ffe0ee", "#f472b6"], { badge: "Premium" }),
+
+  // ============ JOYERÍA ============
+  make("joyeria", "Anillo oro 18k minimalista", "💍", 65000, 0.18, ["#1a1410", "#d4af37"], { badge: "Premium" }),
+  make("joyeria", "Pulsera plata 925", "📿", 28000, 0.22, ["#1a1410", "#c0c0c0"], { customizable: true, badge: "Grabable" }),
+  make("joyeria", "Collar acero minimalista", "🔗", 18000, 0.22, ["#0a0a0a", "#d4af37"], { customizable: true, badge: "Grabable" }),
+  make("joyeria", "Aros argollas oro", "💫", 32000, 0.22, ["#1a1410", "#d4af37"]),
+  make("joyeria", "Reloj clásico cuero", "⌚", 85000, 0.20, ["#0a0a0a", "#d4af37"], { badge: "Premium" }),
+  make("joyeria", "Lentes sol polarizados", "🕶️", 28000, 0.22, ["#1a1410", "#c0c0c0"]),
+  make("joyeria", "Dije inicial personalizada", "✨", 14000, 0.24, ["#0a0a0a", "#d4af37"], { customizable: true, badge: "Personalizable" }),
+  make("joyeria", "Set anillos apilables", "💍", 22000, 0.24, ["#1a1410", "#d4af37"]),
+  make("joyeria", "Pulsera cuero grabada", "🪢", 12000, 0.25, ["#0a0a0a", "#c0c0c0"], { customizable: true, badge: "Grabable" }),
+  make("joyeria", "Cadena cubana plata", "🔗", 48000, 0.20, ["#1a1410", "#c0c0c0"]),
 ];
 
 export const CATEGORIES = [
-  { id: "todo", name: "Todo", emoji: "✨", count: 980 },
-  { id: "tech", name: "Tecnología", emoji: "📱", count: 248 },
-  { id: "hogar", name: "Hogar", emoji: "🏠", count: 312 },
-  { id: "gamer", name: "Gamer", emoji: "🎮", count: 64 },
-  { id: "belleza", name: "Belleza", emoji: "💄", count: 154 },
-  { id: "deporte", name: "Deporte", emoji: "🏃", count: 92 },
-  { id: "auto", name: "Auto", emoji: "🚗", count: 76 },
-  { id: "personalizados", name: "Personalizados", emoji: "🎨", count: 120 },
-  { id: "tendencias", name: "Tendencias", emoji: "🔥", count: 48 },
+  { id: "tech", name: "Tecnología", emoji: "📱" },
+  { id: "electronica", name: "Electrónica", emoji: "🍳" },
+  { id: "hogar", name: "Hogar", emoji: "🏠" },
+  { id: "gym", name: "Gym", emoji: "🏋️" },
+  { id: "belleza", name: "Belleza", emoji: "💄" },
+  { id: "joyeria", name: "Joyería", emoji: "💍" },
 ];
 
-// Extra mock products to populate new categories (auto, deporte, personalizados, gamer)
-const extraProducts: MockProduct[] = [
-  {
-    id: "p9", slug: "soporte-celular-auto", title: "Soporte celular magnético auto",
-    emoji: "🚗", category: "auto",
-    price: { individual: 8500, group: 6500, wholesale: 4500 },
-    groupTarget: 15, groupJoined: 8, groupTimeLeft: "04:30:00",
-    rating: 4.8, reviews: 540, sold: 2100, stock: 24, customizable: false,
-    badge: "Top auto", colors: ["#000000"],
-    gradient: grad("#1a1a1a", "#ef4444"),
-    description: "Imán potente, rotación 360°, instalación en 10 segundos.",
-    liveActivity: [{ name: "Mati", action: "compró 1 unidad", time: "hace 8 min" }],
-  },
-  {
-    id: "p10", slug: "luces-led-interior-auto", title: "Luces LED RGB interior auto",
-    emoji: "💡", category: "auto",
-    price: { individual: 12000, group: 9000, wholesale: 6000 },
-    groupTarget: 20, groupJoined: 13, groupTimeLeft: "06:00:00",
-    rating: 4.7, reviews: 820, sold: 3400, stock: 18, customizable: false,
-    badge: "Viral TikTok",
-    gradient: grad("#0a0a0a", "#7c3aed"),
-    description: "Tira LED RGB con app, sincroniza con música. 4 piezas.",
-    liveActivity: [{ name: "Joaco", action: "se unió al grupo", time: "hace 3 min" }],
-  },
-  {
-    id: "p11", slug: "botella-deportiva-1l", title: "Botella deportiva 1L motivacional",
-    emoji: "💧", category: "deporte",
-    price: { individual: 9500, group: 7000, wholesale: 4800 },
-    groupTarget: 20, groupJoined: 15, groupTimeLeft: "02:00:00",
-    rating: 4.9, reviews: 1240, sold: 5600, stock: 32, customizable: true,
-    badge: "Personalizable", colors: ["#000000", "#a3e635", "#fb923c"],
-    gradient: grad("#0a1f0a", "#a3e635"),
-    description: "1L con marcas horarias, libre de BPA. Personalizá tu nombre.",
-    liveActivity: [{ name: "Cami", action: "personalizó la suya", time: "hace 1 min" }],
-  },
-  {
-    id: "p12", slug: "bandas-elasticas-set", title: "Set 5 bandas elásticas",
-    emoji: "💪", category: "deporte",
-    price: { individual: 11000, group: 8500, wholesale: 5500 },
-    groupTarget: 12, groupJoined: 4, groupTimeLeft: "10:00:00",
-    rating: 4.7, reviews: 680, sold: 1900, stock: 22, customizable: false,
-    gradient: grad("#0a1f0a", "#fb923c"),
-    description: "5 niveles de resistencia + bolso. Home gym total.",
-    liveActivity: [{ name: "Lu", action: "compró 1 unidad", time: "hace 12 min" }],
-  },
-  {
-    id: "p13", slug: "teclado-mecanico-rgb", title: "Teclado mecánico RGB switches azules",
-    emoji: "⌨️", category: "gamer",
-    price: { individual: 55000, group: 42000, wholesale: 30000 },
-    groupTarget: 10, groupJoined: 6, groupTimeLeft: "03:45:00",
-    rating: 4.9, reviews: 920, sold: 2400, stock: 9, customizable: false,
-    badge: "RGB", gradient: grad("#03000f", "#00ffaa"),
-    description: "Switches azules, RGB por tecla, anti-ghosting. PRO setup.",
-    liveActivity: [{ name: "Fran", action: "se unió al grupo", time: "hace 2 min" }],
-  },
-  {
-    id: "p14", slug: "mouse-gamer-rgb", title: "Mouse gamer 16000 DPI RGB",
-    emoji: "🖱️", category: "gamer",
-    price: { individual: 28000, group: 21000, wholesale: 15000 },
-    groupTarget: 15, groupJoined: 11, groupTimeLeft: "01:20:00",
-    rating: 4.8, reviews: 1340, sold: 4200, stock: 16, customizable: false,
-    badge: "Casi completo", gradient: grad("#03000f", "#ff00aa"),
-    description: "Sensor óptico 16K DPI, 7 botones programables.",
-    liveActivity: [{ name: "Theo", action: "se unió al grupo", time: "hace 30 seg" }],
-  },
-  {
-    id: "p15", slug: "taza-personalizada", title: "Taza personalizada con tu diseño",
-    emoji: "☕", category: "personalizados",
-    price: { individual: 6500, group: 4800, wholesale: 3200 },
-    groupTarget: 30, groupJoined: 22, groupTimeLeft: "05:00:00",
-    rating: 4.9, reviews: 2400, sold: 8800, stock: 50, customizable: true,
-    badge: "TU DISEÑO",
-    gradient: grad("#1a0a2e", "#ec4899"),
-    description: "Sublimación full color. Subí foto, agregá texto, listo.",
-    liveActivity: [{ name: "Vale", action: "diseñó la suya", time: "hace 1 min" }],
-  },
-  {
-    id: "p16", slug: "remera-personalizada", title: "Remera con tu diseño DTF",
-    emoji: "👕", category: "personalizados",
-    price: { individual: 14000, group: 10500, wholesale: 7000 },
-    groupTarget: 15, groupJoined: 9, groupTimeLeft: "08:00:00",
-    rating: 4.8, reviews: 1100, sold: 3400, stock: 40, customizable: true,
-    badge: "ÚNICO",
-    gradient: grad("#1a0a2e", "#22d3ee"),
-    description: "Algodón 180g, impresión DTF full color, lavable.",
-    liveActivity: [{ name: "Sol", action: "diseñó la suya", time: "hace 4 min" }],
-  },
-];
-
-MOCK_PRODUCTS.push(...extraProducts);
-
-export const FLASH_DEALS = MOCK_PRODUCTS.slice(0, 4);
-export const TRENDING = MOCK_PRODUCTS.slice(2, 8);
-export const VIRAL = [MOCK_PRODUCTS[0], MOCK_PRODUCTS[4], MOCK_PRODUCTS[7]];
+export const FLASH_DEALS = MOCK_PRODUCTS.slice(0, 6);
+export const TRENDING = MOCK_PRODUCTS.filter((p) => !!p.badge).slice(0, 8);
+export const VIRAL = MOCK_PRODUCTS.filter((p) => p.badge?.includes("Viral") || p.badge?.includes("TikTok")).slice(0, 6);
 
 export const LIVE_FEED = [
-  "🔥 Lucas se unió al grupo de Funda iPhone 15 Pro",
+  "🔥 Lucas se unió al grupo de Funda iPhone Magsafe",
   "⚡ Mica compró Auriculares Pro ANC",
   "✨ Sofi personalizó un collar minimalista",
   "🎯 Tomás se unió al grupo de Smartwatch X9",
@@ -333,12 +195,12 @@ export const LIVE_FEED = [
 export const AI_STYLES = [
   { id: "minimal", name: "Minimal", emoji: "⚪" },
   { id: "gamer", name: "Gamer", emoji: "🎮" },
-  { id: "luxury", name: "Luxury", emoji: "💎" },
+  { id: "luxury", name: "Premium", emoji: "💎" },
   { id: "vintage", name: "Vintage", emoji: "📷" },
   { id: "anime", name: "Anime", emoji: "🌸" },
   { id: "aesthetic", name: "Aesthetic", emoji: "🌙" },
   { id: "tiktok", name: "TikTok", emoji: "🎵" },
-  { id: "modern", name: "Modern", emoji: "✨" },
+  { id: "modern", name: "Moderno", emoji: "✨" },
 ];
 
 export const MOCK_ORDERS = [
@@ -353,7 +215,7 @@ export const MOCK_ORDERS = [
   },
   {
     id: "NB-10247",
-    product: MOCK_PRODUCTS[4],
+    product: MOCK_PRODUCTS[15],
     status: "customization" as const,
     progress: 35,
     eta: "Llega en 5 días",
@@ -362,7 +224,7 @@ export const MOCK_ORDERS = [
   },
   {
     id: "NB-10240",
-    product: MOCK_PRODUCTS[6],
+    product: MOCK_PRODUCTS[60],
     status: "delivered" as const,
     progress: 100,
     eta: "Entregado",
@@ -376,14 +238,12 @@ export const formatARS = (n: number) =>
 
 export const findProduct = (slug: string) => MOCK_PRODUCTS.find((p) => p.slug === slug);
 
-// Convertir stock numérico a etiqueta cualitativa (más premium)
 export const stockLabel = (stock: number): { label: string; tone: "low" | "mid" | "ok" } => {
   if (stock <= 6) return { label: "Últimas unidades", tone: "low" };
   if (stock <= 15) return { label: "Alta demanda", tone: "mid" };
   return { label: "Disponible", tone: "ok" };
 };
 
-// Productos relacionados (misma categoría, distinto slug)
 export const relatedProducts = (slug: string, limit = 4) => {
   const current = findProduct(slug);
   if (!current) return [];
@@ -392,7 +252,6 @@ export const relatedProducts = (slug: string, limit = 4) => {
   return [...same, ...fill].slice(0, limit);
 };
 
-// Búsqueda fuzzy sencilla para sugerencias en vivo
 export const searchProducts = (q: string, limit = 6) => {
   const query = q.trim().toLowerCase();
   if (!query) return [];

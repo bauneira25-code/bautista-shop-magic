@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as GruposRouteImport } from './routes/grupos'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as CartRouteImport } from './routes/cart'
@@ -28,6 +29,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GruposRoute = GruposRouteImport.update({
+  id: '/grupos',
+  path: '/grupos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomizeRoute = CustomizeRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
   '/categorias/$id': typeof CategoriasIdRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
   '/categorias/$id': typeof CategoriasIdRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
   '/categorias/$id': typeof CategoriasIdRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/grupos'
     | '/orders'
     | '/profile'
     | '/categorias/$id'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/grupos'
     | '/orders'
     | '/profile'
     | '/categorias/$id'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/grupos'
     | '/orders'
     | '/profile'
     | '/categorias/$id'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriasRoute: typeof CategoriasRouteWithChildren
   CustomizeRoute: typeof CustomizeRoute
+  GruposRoute: typeof GruposRoute
   OrdersRoute: typeof OrdersRoute
   ProfileRoute: typeof ProfileRoute
   GroupSlugRoute: typeof GroupSlugRoute
@@ -173,6 +186,13 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grupos': {
+      id: '/grupos'
+      path: '/grupos'
+      fullPath: '/grupos'
+      preLoaderRoute: typeof GruposRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customize': {
@@ -252,6 +272,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriasRoute: CategoriasRouteWithChildren,
   CustomizeRoute: CustomizeRoute,
+  GruposRoute: GruposRoute,
   OrdersRoute: OrdersRoute,
   ProfileRoute: ProfileRoute,
   GroupSlugRoute: GroupSlugRoute,
@@ -260,3 +281,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
