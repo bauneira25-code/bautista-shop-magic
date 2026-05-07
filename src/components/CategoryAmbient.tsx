@@ -5,21 +5,43 @@ import type { CategoryTheme } from "@/lib/categoryThemes";
 export function CategoryAmbient({ theme }: { theme: CategoryTheme }) {
   switch (theme.id) {
     case "tech": return <TechAmbient theme={theme} />;
+    case "electronica": return <SmartAmbient theme={theme} />;
     case "hogar": return <HogarAmbient theme={theme} />;
     case "belleza": return <BellezaAmbient theme={theme} />;
+    case "gym": return <DeporteAmbient theme={theme} />;
+    case "joyeria": return <JoyeriaAmbient theme={theme} />;
+    // legacy
     case "deporte": return <DeporteAmbient theme={theme} />;
-    case "gamer": return <GamerAmbient theme={theme} />;
+    case "gamer": return <TechAmbient theme={theme} />;
     case "auto": return <AutoAmbient theme={theme} />;
     case "personalizados": return <PersonalizadosAmbient theme={theme} />;
     case "tendencias": return <TendenciasAmbient theme={theme} />;
     case "todo": return <TodoAmbient theme={theme} />;
-    // legacy
-    case "audio": return <BellezaAmbient theme={theme} />;
-    case "gym": return <DeporteAmbient theme={theme} />;
-    case "joyeria": return <PersonalizadosAmbient theme={theme} />;
-    case "smart": return <TechAmbient theme={theme} />;
+    case "audio": return <AudioAmbient theme={theme} />;
+    case "smart": return <SmartAmbient theme={theme} />;
     default: return null;
   }
+}
+
+function JoyeriaAmbient({ theme }: { theme: CategoryTheme }) {
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <div className="absolute inset-0 opacity-30 pat-shine" style={{ ["--pat-color" as never]: theme.accent }} />
+      <div className="absolute -left-20 top-[20%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
+      <div className="absolute -right-20 top-[70%] h-56 w-56 rounded-full opacity-25 blur-3xl" style={{ background: theme.accent2 }} />
+      <div className="absolute left-1 top-[18%] text-3xl">💍</div>
+      <div className="absolute left-2 top-[36%] font-serif italic text-[11px]" style={{ color: theme.accent }}>oro · 18k</div>
+      <div className="absolute left-1 top-[52%] text-3xl">✨</div>
+      <div className="absolute left-2 top-[70%] font-serif italic text-[11px]" style={{ color: theme.accent2 }}>plata · 925</div>
+      <div className="absolute left-1 top-[88%] text-2xl">📿</div>
+
+      <div className="absolute right-1 top-[15%] font-serif italic text-[11px]" style={{ color: theme.accent }}>"hecho a mano"</div>
+      <div className="absolute right-2 top-[34%] text-3xl">⌚</div>
+      <div className="absolute right-1 top-[52%] text-2xl">💎</div>
+      <div className="absolute right-2 top-[70%] font-serif italic text-[10px]" style={{ color: theme.accent2 }}>grabado láser</div>
+      <div className="absolute right-1 top-[88%] text-2xl">🔗</div>
+    </div>
+  );
 }
 
 /* =================== TECH — IA / circuitos / código =================== */

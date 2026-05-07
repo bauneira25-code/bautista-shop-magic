@@ -116,10 +116,10 @@ export function CategoryHero({ theme }: { theme: CategoryTheme }) {
           </p>
         )}
 
-        {theme.pattern === "grid" && theme.id === "smart" && (
+        {theme.pattern === "grid" && theme.id === "electronica" && (
           <div className={`mt-5 grid grid-cols-3 gap-2 ${theme.font}`}>
-            {["WIFI", "AI", "AUTO"].map((t) => (
-              <div key={t} className="rounded-md border px-2 py-1.5 text-center text-[10px]" style={{ borderColor: `${theme.accent}55`, color: theme.accent, background: "rgba(0,0,0,0.4)" }}>
+            {["WIFI", "IA", "AUTO"].map((t) => (
+              <div key={t} className="rounded-md border px-2 py-1.5 text-center text-[10px]" style={{ borderColor: `${theme.accent}55`, color: theme.accent, background: "rgba(255,255,255,0.7)" }}>
                 ● {t}
               </div>
             ))}

@@ -58,7 +58,7 @@ function Home() {
           <div className="relative overflow-hidden rounded-3xl p-5" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
             <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
-              <Flame className="h-3 w-3" /> Group Drop
+              <Flame className="h-3 w-3" /> Drop grupal
             </span>
             <h2 className="mt-3 max-w-[70%] font-display text-2xl leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
             <p className="mt-1 text-xs text-white/80">Sumate al próximo drop que cierra en 1h 29m</p>
@@ -71,12 +71,12 @@ function Home() {
 
         {/* Categories */}
         <section>
-          <SectionHeader title="Categorías" link="/categorias" />
-          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 scrollbar-hide">
+          <SectionHeader title="Categorías" />
+          <div className="mt-3 grid grid-cols-3 gap-3">
             {CATEGORIES.map((c) => (
-              <Link key={c.id} to="/categorias/$id" params={{ id: c.id }} className="group flex shrink-0 flex-col items-center gap-2">
-                <span className="grid h-16 w-16 place-items-center rounded-2xl bg-card text-2xl transition-transform group-active:scale-95 border border-border">{c.emoji}</span>
-                <span className="text-[11px] font-medium text-foreground/90">{c.name}</span>
+              <Link key={c.id} to="/categorias/$id" params={{ id: c.id }} className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-3 transition-transform active:scale-95">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-2xl">{c.emoji}</span>
+                <span className="text-[11px] font-semibold text-foreground/90">{c.name}</span>
               </Link>
             ))}
           </div>
@@ -92,7 +92,7 @@ function Home() {
               </div>
               <p className="text-[11px] text-muted-foreground">Termina en 02:14:38</p>
             </div>
-            <Link to="/categorias" className="text-xs text-primary">Ver todo</Link>
+            <Link to="/grupos" className="text-xs text-primary">Ver todo</Link>
           </div>
           <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
             {FLASH_DEALS.map((p) => (
@@ -182,7 +182,7 @@ function Home() {
 
         {/* Trending */}
         <section>
-          <SectionHeader title="Trending ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} link="/categorias" />
+          <SectionHeader title="Tendencias ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} />
           <div className="mt-3 grid grid-cols-2 gap-3">
             {TRENDING.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
@@ -208,7 +208,7 @@ function Home() {
 
         {/* Personalizables */}
         <section>
-          <SectionHeader title="🎨 Personalizalo a tu manera" link="/categorias/personalizados" />
+          <SectionHeader title="🎨 Personalizalo a tu manera" />
           <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
             {MOCK_PRODUCTS.filter(p => p.customizable).map((p) => (
               <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">

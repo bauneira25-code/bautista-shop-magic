@@ -30,11 +30,7 @@ function CategoryPage() {
   const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
 
   // Filtros especiales para categorías agregadoras
-  const products =
-    id === "todo" ? MOCK_PRODUCTS :
-    id === "personalizados" ? MOCK_PRODUCTS.filter((p) => p.customizable) :
-    id === "tendencias" ? MOCK_PRODUCTS.filter((p) => !!p.badge) :
-    MOCK_PRODUCTS.filter((p) => p.category === id);
+  const products = MOCK_PRODUCTS.filter((p) => p.category === id);
   const all = products.length ? products : MOCK_PRODUCTS;
 
   return (
@@ -148,10 +144,14 @@ function CategoryPage() {
               <p className={`mt-2 line-clamp-1 text-xs font-medium ${theme.font === "font-mono" ? "font-mono" : ""}`} style={{ color: TXT }}>
                 {p.title}
               </p>
-              <p className={`text-sm font-bold ${theme.font}`} style={{ color: theme.accent }}>
-                {formatARS(p.price.group)}
-              </p>
-              <p className="text-[10px] line-through" style={{ color: TXT_MUTED }}>{formatARS(p.price.individual)}</p>
+              <div className="flex items-baseline gap-1.5">
+                <p className={`text-sm font-bold ${theme.font}`} style={{ color: theme.accent }}>{formatARS(p.price.group)}</p>
+                <p className="text-[9px] line-through" style={{ color: TXT_MUTED }}>{formatARS(p.price.individual)}</p>
+              </div>
+              <div className="mt-1 flex flex-wrap gap-1">
+                <span className="rounded-md px-1.5 py-0.5 text-[8px] font-bold" style={{ background: `${theme.accent}22`, color: theme.accent }}>Precio en grupo</span>
+                {p.customizable && <span className="rounded-md px-1.5 py-0.5 text-[8px] font-bold" style={{ background: `${theme.accent2}33`, color: theme.accent2 }}>Personalizable</span>}
+              </div>
             </Link>
           ))}
         </div>
@@ -161,7 +161,7 @@ function CategoryPage() {
       {/* Bottom CTA */}
       <div className="fixed bottom-3 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 px-5">
         <Link
-          to="/categorias"
+          to="/"
           className={`flex items-center justify-center rounded-2xl py-4 text-sm font-bold shadow-2xl ${theme.font}`}
           style={{ background: theme.accent, color: "#ffffff", boxShadow: `0 20px 60px -10px ${theme.accent}88` }}
         >
