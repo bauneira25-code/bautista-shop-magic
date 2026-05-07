@@ -49,9 +49,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ProductsRoute,
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const GroupSlugRoute = GroupSlugRouteImport.update({
   id: '/group/$slug',
@@ -131,6 +131,7 @@ export interface RootRouteChildren {
   OrdersRoute: typeof OrdersRoute
   ProfileRoute: typeof ProfileRoute
   GroupSlugRoute: typeof GroupSlugRoute
+  ProductsSlugRoute: typeof ProductsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -179,10 +180,10 @@ declare module '@tanstack/react-router' {
     }
     '/products/$slug': {
       id: '/products/$slug'
-      path: '/$slug'
+      path: '/products/$slug'
       fullPath: '/products/$slug'
       preLoaderRoute: typeof ProductsSlugRouteImport
-      parentRoute: typeof ProductsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/group/$slug': {
       id: '/group/$slug'
@@ -202,17 +203,8 @@ const rootRouteChildren: RootRouteChildren = {
   OrdersRoute: OrdersRoute,
   ProfileRoute: ProfileRoute,
   GroupSlugRoute: GroupSlugRoute,
+  ProductsSlugRoute: ProductsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
