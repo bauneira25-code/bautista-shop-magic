@@ -27,6 +27,8 @@ export const Route = createFileRoute("/categorias/$id")({
 function CategoryPage() {
   const { id } = Route.useParams();
   const theme = CATEGORY_THEMES[id];
+  const trackView = useUserPrefs((s) => s.trackView);
+  useEffect(() => { if (theme) trackView(id); }, [id, theme, trackView]);
   if (!theme) throw notFound();
   const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
   const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
