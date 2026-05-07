@@ -2,13 +2,14 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Home, LayoutGrid, Sparkles, Package, User } from "lucide-react";
 import type { ReactNode } from "react";
 
-const navItems = [
+type NavItem = { to: string; label: string; icon: typeof Home; highlight?: boolean };
+const navItems: NavItem[] = [
   { to: "/", label: "Inicio", icon: Home },
   { to: "/categorias", label: "Categorías", icon: LayoutGrid },
   { to: "/customize", label: "Customize", icon: Sparkles, highlight: true },
   { to: "/orders", label: "Pedidos", icon: Package },
   { to: "/profile", label: "Perfil", icon: User },
-] as const;
+];
 
 export function MobileShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
