@@ -245,3 +245,15 @@ function GroupRow({ theme, product }: { theme: typeof CATEGORY_THEMES[string]; p
     </Link>
   );
 }
+
+function LiveViewersChip({ theme, TXT }: { theme: typeof CATEGORY_THEMES[string]; TXT: string }) {
+  const n = useLiveViewers(`cat:${theme.id}`);
+  return (
+    <div className="px-5 pt-3">
+      <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.4)" }}>
+        <Eye className="h-3 w-3" style={{ color: theme.accent }} />
+        <span className="text-[11px] font-bold tabular-nums" style={{ color: TXT }}>{formatViewers(n)} viendo {theme.name.toLowerCase()} ahora</span>
+      </div>
+    </div>
+  );
+}
