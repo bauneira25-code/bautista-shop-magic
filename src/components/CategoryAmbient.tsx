@@ -186,27 +186,6 @@ function DeporteAmbient({ theme }: { theme: CategoryTheme }) {
   );
 }
 
-/* =================== JOYERIA — gold shine =================== */
-function PersonalizadosAmbient({ theme }: { theme: CategoryTheme }) {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
-      <div className="absolute inset-0 pat-shine opacity-50" style={{ ["--pat-color" as never]: `${theme.accent}77` }} />
-      <div className="absolute -left-20 top-[30%] h-48 w-48 rounded-full opacity-25 blur-3xl" style={{ background: theme.accent }} />
-      <div className="absolute -right-20 top-[70%] h-48 w-48 rounded-full opacity-20 blur-3xl" style={{ background: theme.accent2 }} />
-
-      <div className="absolute left-2 top-[20%] text-3xl opacity-80" style={{ color: theme.accent }}>✦</div>
-      <div className="absolute left-1 top-[40%] text-2xl">💍</div>
-      <div className="absolute left-2 top-[58%] text-2xl opacity-80" style={{ color: theme.accent }}>✧</div>
-      <div className="absolute left-1 top-[78%] text-2xl">💎</div>
-
-      <div className="absolute right-2 top-[15%] max-w-[90px] font-serif text-[11px] italic leading-tight" style={{ color: theme.accent }}>"para siempre"</div>
-      <div className="absolute right-1 top-[35%] text-3xl opacity-80" style={{ color: theme.accent }}>✧</div>
-      <div className="absolute right-2 top-[52%] text-2xl">💎</div>
-      <div className="absolute right-1 top-[70%] text-3xl opacity-80" style={{ color: theme.accent2 }}>✦</div>
-      <div className="absolute right-2 top-[88%] text-2xl">💍</div>
-    </div>
-  );
-}
 
 /* =================== GAMER — pixel arcade =================== */
 function GamerAmbient({ theme }: { theme: CategoryTheme }) {
