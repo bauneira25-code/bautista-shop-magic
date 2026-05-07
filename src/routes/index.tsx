@@ -5,6 +5,7 @@ import { SmartSearch } from "@/components/SmartSearch";
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
+import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { gender, views } = useUserPrefs();
+  const liveNow = useLiveViewers("home");
   // Bias: orden de categorías priorizadas según género o vistas más altas
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
   const biasOrder = viewedTop.length > 0
@@ -65,7 +67,7 @@ function Home() {
           <div className="flex items-center gap-2 border-b border-border px-3 py-1.5">
             <span className="h-2 w-2 animate-pulse rounded-full bg-success" />
             <span className="text-[11px] font-semibold uppercase tracking-wider text-success">En vivo</span>
-            <span className="text-[11px] text-muted-foreground">142 personas comprando ahora</span>
+            <span className="text-[11px] text-muted-foreground tabular-nums">{formatViewers(liveNow)} personas mirando ahora</span>
           </div>
           <div className="relative h-7 overflow-hidden">
             <div className="absolute inset-0 flex animate-[shimmer_25s_linear_infinite] items-center gap-8 whitespace-nowrap px-4 text-[11px] text-foreground/80" style={{ animation: "none" }}>

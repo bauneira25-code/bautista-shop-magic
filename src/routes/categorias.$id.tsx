@@ -4,6 +4,7 @@ import { Search, Flame, Users, Sparkles, Eye } from "lucide-react";
 import { CATEGORY_THEMES } from "@/lib/categoryThemes";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useUserPrefs } from "@/stores/userPrefs";
+import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
 import { CategoryHero } from "@/components/CategoryHero";
 import { CategoryAmbient } from "@/components/CategoryAmbient";
 
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/categorias/$id")({
     <div className="grid min-h-screen place-items-center bg-background text-foreground">
       <div className="text-center">
         <p className="text-2xl font-display">Categoría no encontrada</p>
-        <Link to="/categorias" className="mt-3 inline-block text-primary">← Ver todas</Link>
+        <Link to="/" className="mt-3 inline-block text-primary">← Volver al inicio</Link>
       </div>
     </div>
   ),
@@ -45,12 +46,8 @@ function CategoryPage() {
       <CategoryHero theme={theme} />
 
       {/* Live viewers chip */}
-      <div className="px-5 pt-3">
-        <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.4)" }}>
-          <Eye className="h-3 w-3" style={{ color: theme.accent }} />
-          <span className="text-[11px] font-bold" style={{ color: TXT }}>{(1240 + Math.floor(Math.random() * 800)).toLocaleString("es-AR")} viendo {theme.name.toLowerCase()} ahora</span>
-        </div>
-      </div>
+      <LiveViewersChip theme={theme} TXT={TXT} />
+
 
       {/* Search bar matching theme */}
       <div className="px-5 pt-5">
@@ -246,5 +243,17 @@ function GroupRow({ theme, product }: { theme: typeof CATEGORY_THEMES[string]; p
         </div>
       </div>
     </Link>
+  );
+}
+
+function LiveViewersChip({ theme, TXT }: { theme: typeof CATEGORY_THEMES[string]; TXT: string }) {
+  const n = useLiveViewers(`cat:${theme.id}`);
+  return (
+    <div className="px-5 pt-3">
+      <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur" style={{ borderColor: `${theme.accent}55`, background: theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.4)" }}>
+        <Eye className="h-3 w-3" style={{ color: theme.accent }} />
+        <span className="text-[11px] font-bold tabular-nums" style={{ color: TXT }}>{formatViewers(n)} viendo {theme.name.toLowerCase()} ahora</span>
+      </div>
+    </div>
   );
 }

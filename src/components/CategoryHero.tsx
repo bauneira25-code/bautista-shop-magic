@@ -32,7 +32,7 @@ export function CategoryHero({ theme }: { theme: CategoryTheme }) {
 
       <div className="relative px-5 pb-6 pt-5">
         <div className="flex items-center justify-between">
-          <Link to="/categorias" className="grid h-9 w-9 place-items-center rounded-full backdrop-blur" style={{ background: CHIP_BG }}>
+          <Link to="/" className="grid h-9 w-9 place-items-center rounded-full backdrop-blur" style={{ background: CHIP_BG }}>
             <ArrowLeft className="h-4 w-4" style={{ color: TXT }} />
           </Link>
           <span
