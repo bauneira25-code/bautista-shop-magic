@@ -14,7 +14,7 @@ export const Route = createFileRoute("/categorias/$id")({
     <div className="grid min-h-screen place-items-center bg-background text-foreground">
       <div className="text-center">
         <p className="text-2xl font-display">Categoría no encontrada</p>
-        <Link to="/categorias" className="mt-3 inline-block text-primary">← Ver todas</Link>
+        <Link to="/" className="mt-3 inline-block text-primary">← Volver al inicio</Link>
       </div>
     </div>
   ),
