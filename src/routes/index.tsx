@@ -76,38 +76,57 @@ function Home() {
           </div>
         </div>
 
-        {/* Hero banner */}
-        <Link to="/grupos" className="block">
-          <div className="relative overflow-hidden rounded-3xl p-5" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-            <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
-              <Flame className="h-3 w-3" /> Drop grupal
-            </span>
-            <h2 className="mt-3 max-w-[70%] font-display text-2xl leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
-            <p className="mt-1 text-xs text-white/80">Elegí un grupo y sumate antes de que cierre</p>
-            <div className="mt-4 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-primary">
-              Ver grupos activos <ChevronRight className="h-3 w-3" />
+        {/* Combo: Categorías + Hero grupo (izq)  /  Productos destacados (der) */}
+        <section className="grid grid-cols-5 gap-3">
+          <div className="col-span-2 flex flex-col gap-3">
+            <div className="grid grid-cols-2 gap-2">
+              {CATEGORIES.map((c) => {
+                const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
+                return (
+                  <Link
+                    key={c.id}
+                    to="/categorias/$id"
+                    params={{ id: c.id }}
+                    className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-2xl p-2 transition-transform active:scale-95"
+                    style={{ background: s.bg, border: `1px solid ${s.border}` }}
+                  >
+                    <span className="text-lg leading-none">{c.emoji}</span>
+                    <span className="text-[10px] font-bold leading-tight" style={{ color: s.text }}>{c.name}</span>
+                    <span className="pointer-events-none absolute -right-3 -bottom-3 h-10 w-10 rounded-full opacity-40 blur-xl" style={{ background: s.glow }} />
+                  </Link>
+                );
+              })}
             </div>
-            <div className="absolute right-3 bottom-3 text-6xl">👥</div>
-          </div>
-        </Link>
 
-        {/* Categories — scroll horizontal con bordes naranjas */}
-        <section>
-          <SectionHeader title="Categorías" />
-          <div className="relative mt-3">
-            <span className="pointer-events-none absolute left-0 top-1/2 z-10 h-12 w-[3px] -translate-y-1/2 rounded-full bg-gradient-to-b from-transparent via-primary to-transparent" />
-            <span className="pointer-events-none absolute right-0 top-1/2 z-10 h-12 w-[3px] -translate-y-1/2 rounded-full bg-gradient-to-b from-transparent via-primary to-transparent" />
-            <div className="-mx-5 flex gap-2 overflow-x-auto px-5 scrollbar-hide">
-              {CATEGORIES.map((c) => (
-                <Link
-                  key={c.id}
-                  to="/categorias/$id"
-                  params={{ id: c.id }}
-                  className="group flex w-[78px] shrink-0 flex-col items-center gap-1.5 rounded-2xl border border-primary/30 bg-card p-2 transition-transform active:scale-95"
-                >
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-xl">{c.emoji}</span>
-                  <span className="text-[10px] font-semibold text-foreground/90 text-center leading-tight">{c.name}</span>
+            <Link to="/grupos" className="block">
+              <div className="relative overflow-hidden rounded-2xl p-3" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
+                <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-2xl" />
+                <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white backdrop-blur">
+                  <Flame className="h-2.5 w-2.5" /> Drop grupal
+                </span>
+                <h2 className="mt-1.5 font-display text-sm leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
+                <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-primary">
+                  Ver grupos <ChevronRight className="h-2.5 w-2.5" />
+                </div>
+                <div className="absolute right-1 bottom-1 text-3xl">👥</div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="col-span-3">
+            <div className="mb-2 flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <h3 className="font-display text-sm">Destacados</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {forYou.slice(0, 6).map((p) => (
+                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
+                  <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
+                    <span>{p.emoji}</span>
+                    {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
+                  </div>
+                  <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
+                  <p className="text-[10px] font-bold text-primary leading-none">{formatARS(p.price.group)}</p>
                 </Link>
               ))}
             </div>
