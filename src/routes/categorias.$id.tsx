@@ -30,11 +30,7 @@ function CategoryPage() {
   const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
 
   // Filtros especiales para categorías agregadoras
-  const products =
-    id === "todo" ? MOCK_PRODUCTS :
-    id === "personalizados" ? MOCK_PRODUCTS.filter((p) => p.customizable) :
-    id === "tendencias" ? MOCK_PRODUCTS.filter((p) => !!p.badge) :
-    MOCK_PRODUCTS.filter((p) => p.category === id);
+  const products = MOCK_PRODUCTS.filter((p) => p.category === id);
   const all = products.length ? products : MOCK_PRODUCTS;
 
   return (
