@@ -182,7 +182,7 @@ function Home() {
 
         {/* Trending */}
         <section>
-          <SectionHeader title="Trending ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} link="/categorias" />
+          <SectionHeader title="Tendencias ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} />
           <div className="mt-3 grid grid-cols-2 gap-3">
             {TRENDING.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
