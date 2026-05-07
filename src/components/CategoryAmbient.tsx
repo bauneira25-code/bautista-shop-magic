@@ -6,12 +6,18 @@ export function CategoryAmbient({ theme }: { theme: CategoryTheme }) {
   switch (theme.id) {
     case "tech": return <TechAmbient theme={theme} />;
     case "hogar": return <HogarAmbient theme={theme} />;
-    case "audio": return <AudioAmbient theme={theme} />;
     case "belleza": return <BellezaAmbient theme={theme} />;
-    case "gym": return <GymAmbient theme={theme} />;
-    case "joyeria": return <JoyeriaAmbient theme={theme} />;
+    case "deporte": return <DeporteAmbient theme={theme} />;
     case "gamer": return <GamerAmbient theme={theme} />;
-    case "smart": return <SmartAmbient theme={theme} />;
+    case "auto": return <AutoAmbient theme={theme} />;
+    case "personalizados": return <PersonalizadosAmbient theme={theme} />;
+    case "tendencias": return <TendenciasAmbient theme={theme} />;
+    case "todo": return <TodoAmbient theme={theme} />;
+    // legacy
+    case "audio": return <BellezaAmbient theme={theme} />;
+    case "gym": return <DeporteAmbient theme={theme} />;
+    case "joyeria": return <PersonalizadosAmbient theme={theme} />;
+    case "smart": return <TechAmbient theme={theme} />;
     default: return null;
   }
 }
