@@ -20,6 +20,7 @@ export type CategoryTheme = {
   vibe: string;
   badges: string[];
   cta: string;
+  isLight?: boolean;
 };
 
 export const CATEGORY_THEMES: Record<string, CategoryTheme> = {
