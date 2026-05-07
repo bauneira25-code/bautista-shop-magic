@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as GruposRouteImport } from './routes/grupos'
@@ -21,6 +22,11 @@ import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as GroupSlugRouteImport } from './routes/group.$slug'
 import { Route as CategoriasIdRouteImport } from './routes/categorias.$id'
 
+const RegistrarMarcaRoute = RegistrarMarcaRouteImport.update({
+  id: '/registrar-marca',
+  path: '/registrar-marca',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
+  '/registrar-marca': typeof RegistrarMarcaRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
+  '/registrar-marca': typeof RegistrarMarcaRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
+  '/registrar-marca': typeof RegistrarMarcaRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/grupos'
     | '/orders'
     | '/profile'
+    | '/registrar-marca'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/grupos'
     | '/orders'
     | '/profile'
+    | '/registrar-marca'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/grupos'
     | '/orders'
     | '/profile'
+    | '/registrar-marca'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
@@ -168,12 +180,20 @@ export interface RootRouteChildren {
   GruposRoute: typeof GruposRoute
   OrdersRoute: typeof OrdersRoute
   ProfileRoute: typeof ProfileRoute
+  RegistrarMarcaRoute: typeof RegistrarMarcaRoute
   GroupSlugRoute: typeof GroupSlugRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/registrar-marca': {
+      id: '/registrar-marca'
+      path: '/registrar-marca'
+      fullPath: '/registrar-marca'
+      preLoaderRoute: typeof RegistrarMarcaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -275,9 +295,20 @@ const rootRouteChildren: RootRouteChildren = {
   GruposRoute: GruposRoute,
   OrdersRoute: OrdersRoute,
   ProfileRoute: ProfileRoute,
+  RegistrarMarcaRoute: RegistrarMarcaRoute,
   GroupSlugRoute: GroupSlugRoute,
   ProductsSlugRoute: ProductsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
