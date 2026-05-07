@@ -137,26 +137,26 @@ function ProductPage() {
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
         </div>
 
-        {/* 3 PURCHASE MODES — siempre visibles */}
+        {/* 3 PURCHASE MODES — uno al lado del otro */}
         <div>
-          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
-          <div className="space-y-2">
+          <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
+          <div className="grid grid-cols-3 gap-2">
             <ModeCard
               active={mode === "individual"} onClick={() => setMode("individual")}
               title="Individual" icon="🛍" price={product.price.individual}
-              sub="1 unidad · entrega rápida"
+              sub="1 unidad"
             />
             <ModeCard
               active={mode === "group"} onClick={() => setMode("group")}
               title="Grupal" icon="👥" price={product.price.group}
-              sub={`Desde ${product.groupTarget} unidades · sumate o llevalas vos solo`}
+              sub={`Desde ${product.groupTarget}`}
               highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
               compareAt={product.price.individual}
             />
             <ModeCard
               active={mode === "wholesale"} onClick={() => setMode("wholesale")}
               title="Mayorista" icon="📦" price={product.price.wholesale}
-              sub="Desde 100 unidades · packaging custom"
+              sub="Desde 100"
               compareAt={product.price.individual}
             />
           </div>
