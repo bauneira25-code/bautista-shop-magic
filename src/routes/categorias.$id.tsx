@@ -173,13 +173,15 @@ function CategoryPage() {
 }
 
 function FeaturedCard({ theme, product }: { theme: typeof CATEGORY_THEMES[string]; product: typeof MOCK_PRODUCTS[number] }) {
+  const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
+  const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.6)" : "rgba(255,255,255,0.6)";
   return (
     <Link
       to="/products/$slug"
       params={{ slug: product.slug }}
       className="mt-3 block overflow-hidden rounded-3xl border"
       style={{
-        background: theme.surface,
+        background: theme.isLight ? "#ffffff" : theme.surface,
         borderColor: `${theme.accent}55`,
         boxShadow: `0 25px 60px -25px ${theme.accent}99`,
       }}
@@ -189,20 +191,20 @@ function FeaturedCard({ theme, product }: { theme: typeof CATEGORY_THEMES[string
         <span className="relative">{product.emoji}</span>
         <span
           className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold ${theme.font}`}
-          style={{ background: theme.accent, color: theme.textOn }}
+          style={{ background: theme.accent, color: "#fff" }}
         >
           {product.badge ?? "TOP"}
         </span>
       </div>
       <div className="p-4">
-        <p className={`text-base text-white ${theme.font === "font-mono" ? "font-mono" : "font-display"}`}>{product.title}</p>
-        <p className="mt-1 text-xs text-white/60 line-clamp-2">{product.description}</p>
+        <p className={`text-base ${theme.font === "font-mono" ? "font-mono" : "font-display"}`} style={{ color: TXT }}>{product.title}</p>
+        <p className="mt-1 text-xs line-clamp-2" style={{ color: TXT_MUTED }}>{product.description}</p>
         <div className="mt-3 flex items-end justify-between">
           <div>
             <p className={`text-2xl font-bold ${theme.font}`} style={{ color: theme.accent }}>
               {formatARS(product.price.group)}
             </p>
-            <p className="text-[10px] text-foreground/40 dark:text-white/40 line-through">{formatARS(product.price.individual)}</p>
+            <p className="text-[10px] line-through" style={{ color: TXT_MUTED }}>{formatARS(product.price.individual)}</p>
           </div>
           <span
             className="rounded-full px-3 py-1.5 text-[10px] font-bold"
@@ -218,19 +220,20 @@ function FeaturedCard({ theme, product }: { theme: typeof CATEGORY_THEMES[string
 
 function GroupRow({ theme, product }: { theme: typeof CATEGORY_THEMES[string]; product: typeof MOCK_PRODUCTS[number] }) {
   const pct = Math.round((product.groupJoined / product.groupTarget) * 100);
+  const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
   return (
     <Link
       to="/group/$slug"
       params={{ slug: product.slug }}
       className="flex items-center gap-3 rounded-2xl p-3"
-      style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${theme.accent}22` }}
+      style={{ background: theme.isLight ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.04)", border: `1px solid ${theme.accent}33` }}
     >
       <div className="grid h-14 w-14 shrink-0 place-items-center rounded-xl text-3xl" style={{ background: theme.surface }}>
         {product.emoji}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="line-clamp-1 text-sm text-white">{product.title}</p>
-        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10">
+        <p className="line-clamp-1 text-sm" style={{ color: TXT }}>{product.title}</p>
+        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full" style={{ background: theme.isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)" }}>
           <div className="h-full rounded-full" style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }} />
         </div>
         <div className={`mt-1 flex justify-between text-[10px] ${theme.font}`} style={{ color: theme.accent }}>
