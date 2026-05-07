@@ -44,11 +44,7 @@ function ProductPage() {
       ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "SUMARME AL GRUPO")
       : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
-  const handleCta = () => {
-    if (mode === "group" && !groupSolo) {
-      navigate({ to: "/group/$slug", params: { slug: product.slug } });
-      return;
-    }
+  const doAdd = () => {
     const customization = customText || customImage
       ? { text: customText || undefined, style: customStyle, imageName: customImage || undefined }
       : undefined;
@@ -66,10 +62,23 @@ function ProductPage() {
       color: product.colors?.[color],
       customization,
     });
+  };
+
+  const handleCta = () => {
+    if (mode === "group" && !groupSolo) {
+      navigate({ to: "/group/$slug", params: { slug: product.slug } });
+      return;
+    }
+    doAdd();
     toast.success("Agregado al carrito 🛒", {
       description: `${qty} × ${product.title} · ${formatARS(price * qty)}`,
       action: { label: "Ver carrito", onClick: () => navigate({ to: "/cart" }) },
     });
+  };
+
+  const handleBuyNow = () => {
+    doAdd();
+    navigate({ to: "/cart" });
   };
 
   const onPickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +126,7 @@ function ProductPage() {
         ))}
       </div>
 
-      <div className="space-y-5 px-5 pt-5">
+      <div className="space-y-4 px-4 pt-4">
         {/* Title */}
         <div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -128,26 +137,26 @@ function ProductPage() {
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
         </div>
 
-        {/* 3 PURCHASE MODES — siempre visibles */}
+        {/* 3 PURCHASE MODES — uno al lado del otro */}
         <div>
-          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
-          <div className="space-y-2">
+          <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
+          <div className="grid grid-cols-3 gap-2">
             <ModeCard
               active={mode === "individual"} onClick={() => setMode("individual")}
               title="Individual" icon="🛍" price={product.price.individual}
-              sub="1 unidad · entrega rápida"
+              sub="1 unidad"
             />
             <ModeCard
               active={mode === "group"} onClick={() => setMode("group")}
               title="Grupal" icon="👥" price={product.price.group}
-              sub={`Desde ${product.groupTarget} unidades · sumate o llevalas vos solo`}
+              sub={`Desde ${product.groupTarget}`}
               highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
               compareAt={product.price.individual}
             />
             <ModeCard
               active={mode === "wholesale"} onClick={() => setMode("wholesale")}
               title="Mayorista" icon="📦" price={product.price.wholesale}
-              sub="Desde 100 unidades · packaging custom"
+              sub="Desde 100"
               compareAt={product.price.individual}
             />
           </div>
@@ -385,15 +394,28 @@ function ProductPage() {
 
       {/* Sticky CTA */}
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3 pb-3">
-        <div className="glass flex items-center gap-3 rounded-3xl p-3">
-          <div className="px-2">
-            <p className="text-[10px] uppercase text-muted-foreground">{mode === "group" ? "Precio grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
-            <p className="font-display text-xl text-primary">{formatARS(price * qty)}</p>
-            {savings > 0 && <p className="text-[10px] text-success">Ahorrás {formatARS(savings * qty)}</p>}
+        <div className="glass rounded-3xl p-2.5">
+          <div className="flex items-center gap-2">
+            <div className="px-1.5">
+              <p className="text-[9px] uppercase text-muted-foreground leading-none">{mode === "group" ? "Grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
+              <p className="font-display text-lg text-primary leading-tight">{formatARS(price * qty)}</p>
+              {savings > 0 && <p className="text-[9px] text-success leading-none">Ahorrás {formatARS(savings * qty)}</p>}
+            </div>
+            {mode === "individual" ? (
+              <div className="flex flex-1 flex-col gap-1.5">
+                <button onClick={handleBuyNow} className="rounded-2xl py-2.5 font-display text-[11px] tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
+                  COMPRAR AHORA
+                </button>
+                <button onClick={handleCta} className="rounded-2xl border border-primary/40 bg-primary/10 py-2 text-[11px] font-bold text-primary">
+                  AGREGAR AL CARRITO
+                </button>
+              </div>
+            ) : (
+              <button onClick={handleCta} className="flex-1 rounded-2xl py-3.5 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
+                {cta}
+              </button>
+            )}
           </div>
-          <button onClick={handleCta} className="flex-1 rounded-2xl py-3.5 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
-            {cta}
-          </button>
         </div>
       </div>
     </div>
@@ -406,20 +428,17 @@ function ModeCard({
   active: boolean; onClick: () => void; title: string; icon: string; price: number; sub: string; highlight?: boolean; badge?: string; compareAt?: number;
 }) {
   return (
-    <button onClick={onClick} className={`relative flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition ${active ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}>
-      {highlight && <span className="absolute -top-2 right-3 rounded-full bg-warning px-2 py-0.5 text-[9px] font-black uppercase text-background">⚡ Más elegida</span>}
-      <span className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-xl">{icon}</span>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-bold">{title}</p>
-          {badge && <span className="rounded-md bg-success/20 px-1.5 py-0.5 text-[9px] font-bold text-success">{badge}</span>}
-        </div>
-        <p className="text-[11px] text-muted-foreground">{sub}</p>
-      </div>
-      <div className="text-right">
-        <p className="font-display text-base">{formatARS(price)}</p>
-        {compareAt && compareAt > price && <p className="text-[10px] text-muted-foreground line-through">{formatARS(compareAt)}</p>}
-      </div>
+    <button onClick={onClick} className={`relative flex flex-col items-center gap-1 rounded-xl border p-2 text-center transition ${active ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}>
+      {highlight && <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 rounded-full bg-warning px-1.5 py-0.5 text-[8px] font-black uppercase text-background whitespace-nowrap">⚡ Top</span>}
+      <span className="text-lg leading-none mt-0.5">{icon}</span>
+      <p className="text-[11px] font-bold leading-tight">{title}</p>
+      <p className="font-display text-sm leading-none text-primary">{formatARS(price)}</p>
+      {compareAt && compareAt > price ? (
+        <p className="text-[9px] text-muted-foreground line-through leading-none">{formatARS(compareAt)}</p>
+      ) : (
+        <p className="text-[9px] text-muted-foreground leading-none">{sub}</p>
+      )}
+      {badge && <span className="rounded bg-success/20 px-1 py-0.5 text-[8px] font-bold text-success leading-none">{badge}</span>}
     </button>
   );
 }
