@@ -75,7 +75,7 @@ function Home() {
           <SectionHeader title="Categorías" link="/categorias" />
           <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 scrollbar-hide">
             {CATEGORIES.map((c) => (
-              <Link key={c.id} to="/categorias" className="group flex shrink-0 flex-col items-center gap-2">
+              <Link key={c.id} to="/categorias/$id" params={{ id: c.id }} className="group flex shrink-0 flex-col items-center gap-2">
                 <span className="grid h-16 w-16 place-items-center rounded-2xl bg-card text-2xl transition-transform group-active:scale-95 border border-border">{c.emoji}</span>
                 <span className="text-[11px] font-medium text-foreground/90">{c.name}</span>
               </Link>
