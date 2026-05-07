@@ -9,13 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ProductsRouteImport } from './routes/products'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as CustomizeRouteImport } from './routes/customize'
+import { Route as CategoriasRouteImport } from './routes/categorias'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProductsHandleRouteImport } from './routes/products.$handle'
+import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
+import { Route as GroupSlugRouteImport } from './routes/group.$slug'
 
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomizeRoute = CustomizeRouteImport.update({
+  id: '/customize',
+  path: '/customize',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriasRoute = CategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -23,48 +48,126 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProductsHandleRoute = ProductsHandleRouteImport.update({
-  id: '/$handle',
-  path: '/$handle',
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
   getParentRoute: () => ProductsRoute,
+} as any)
+const GroupSlugRoute = GroupSlugRouteImport.update({
+  id: '/group/$slug',
+  path: '/group/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/products': typeof ProductsRouteWithChildren
-  '/products/$handle': typeof ProductsHandleRoute
+  '/admin': typeof AdminRoute
+  '/categorias': typeof CategoriasRoute
+  '/customize': typeof CustomizeRoute
+  '/orders': typeof OrdersRoute
+  '/profile': typeof ProfileRoute
+  '/group/$slug': typeof GroupSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/products': typeof ProductsRouteWithChildren
-  '/products/$handle': typeof ProductsHandleRoute
+  '/admin': typeof AdminRoute
+  '/categorias': typeof CategoriasRoute
+  '/customize': typeof CustomizeRoute
+  '/orders': typeof OrdersRoute
+  '/profile': typeof ProfileRoute
+  '/group/$slug': typeof GroupSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/products': typeof ProductsRouteWithChildren
-  '/products/$handle': typeof ProductsHandleRoute
+  '/admin': typeof AdminRoute
+  '/categorias': typeof CategoriasRoute
+  '/customize': typeof CustomizeRoute
+  '/orders': typeof OrdersRoute
+  '/profile': typeof ProfileRoute
+  '/group/$slug': typeof GroupSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/products' | '/products/$handle'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/categorias'
+    | '/customize'
+    | '/orders'
+    | '/profile'
+    | '/group/$slug'
+    | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/products' | '/products/$handle'
-  id: '__root__' | '/' | '/products' | '/products/$handle'
+  to:
+    | '/'
+    | '/admin'
+    | '/categorias'
+    | '/customize'
+    | '/orders'
+    | '/profile'
+    | '/group/$slug'
+    | '/products/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/categorias'
+    | '/customize'
+    | '/orders'
+    | '/profile'
+    | '/group/$slug'
+    | '/products/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProductsRoute: typeof ProductsRouteWithChildren
+  AdminRoute: typeof AdminRoute
+  CategoriasRoute: typeof CategoriasRoute
+  CustomizeRoute: typeof CustomizeRoute
+  OrdersRoute: typeof OrdersRoute
+  ProfileRoute: typeof ProfileRoute
+  GroupSlugRoute: typeof GroupSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customize': {
+      id: '/customize'
+      path: '/customize'
+      fullPath: '/customize'
+      preLoaderRoute: typeof CustomizeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categorias': {
+      id: '/categorias'
+      path: '/categorias'
+      fullPath: '/categorias'
+      preLoaderRoute: typeof CategoriasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -74,32 +177,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/products/$handle': {
-      id: '/products/$handle'
-      path: '/$handle'
-      fullPath: '/products/$handle'
-      preLoaderRoute: typeof ProductsHandleRouteImport
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
       parentRoute: typeof ProductsRoute
+    }
+    '/group/$slug': {
+      id: '/group/$slug'
+      path: '/group/$slug'
+      fullPath: '/group/$slug'
+      preLoaderRoute: typeof GroupSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface ProductsRouteChildren {
-  ProductsHandleRoute: typeof ProductsHandleRoute
-}
-
-const ProductsRouteChildren: ProductsRouteChildren = {
-  ProductsHandleRoute: ProductsHandleRoute,
-}
-
-const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
-  ProductsRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProductsRoute: ProductsRouteWithChildren,
+  AdminRoute: AdminRoute,
+  CategoriasRoute: CategoriasRoute,
+  CustomizeRoute: CustomizeRoute,
+  OrdersRoute: OrdersRoute,
+  ProfileRoute: ProfileRoute,
+  GroupSlugRoute: GroupSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
