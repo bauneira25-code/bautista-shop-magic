@@ -408,6 +408,10 @@ function GroupPage() {
           </div>
         </Sheet>
       )}
+
+      {showPay && (
+        <PaymentMethodsSheet total={total} onClose={() => setShowPay(false)} onPaid={confirmPay} />
+      )}
     </div>
   );
 }
