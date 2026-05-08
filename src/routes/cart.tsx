@@ -4,6 +4,7 @@ import { ArrowLeft, Minus, Plus, Trash2, Lock, CreditCard, Truck, Store, Check, 
 import { useLocalCart } from "@/stores/localCart";
 import { formatARS } from "@/lib/mockData";
 import { useUserAuth } from "@/stores/userAuth";
+import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/cart")({
