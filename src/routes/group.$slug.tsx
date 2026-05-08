@@ -107,7 +107,9 @@ function GroupPage() {
   const target = product.groupTarget;
   const pct = (joined / target) * 100;
   const missing = Math.max(0, target - joined);
+  const maxQty = Math.max(1, missing);
   const almostFull = pct >= 70;
+  useEffect(() => { if (payQty > maxQty) setPayQty(maxQty); }, [maxQty, payQty]);
   const fmt = (n: number) => String(n).padStart(2, "0");
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
