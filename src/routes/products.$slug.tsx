@@ -361,7 +361,13 @@ function ProductPage() {
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setQty(Math.max(1, qty - 1))} className="grid h-9 w-9 place-items-center rounded-full bg-secondary"><Minus className="h-4 w-4" /></button>
-            <span className="w-7 text-center font-display text-lg">{qty}</span>
+            <input
+              type="number"
+              min={1}
+              value={qty}
+              onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
+              className="w-16 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
+            />
             <button onClick={() => setQty(qty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground"><Plus className="h-4 w-4" /></button>
           </div>
         </div>
