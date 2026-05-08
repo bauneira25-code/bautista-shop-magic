@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { X, Type, Upload, Plus, Check, Flame } from "lucide-react";
 import { toast } from "sonner";
+import { QtyInput } from "./QtyInput";
 
 export interface DesignData {
   text?: string;
@@ -150,23 +151,18 @@ export function MultiDesignSheet({
                 </button>
               ))}
             </div>
-            {totalUnits > 12 && (
-              <div>
-                <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                  O escribilo (1 - {totalUnits})
-                </label>
-                <input
-                  type="number"
-                  min={1}
-                  max={totalUnits}
-                  value={numDesigns}
-                  onChange={(e) =>
-                    setNumDesigns(Math.max(1, Math.min(totalUnits, Number(e.target.value))))
-                  }
-                  className="w-full rounded-xl border border-orange-200 bg-white px-3 py-2.5 text-sm"
-                />
-              </div>
-            )}
+            <div>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                O escribilo (1 - {totalUnits})
+              </label>
+              <QtyInput
+                value={numDesigns}
+                onChange={setNumDesigns}
+                min={1}
+                max={totalUnits}
+                className="w-full rounded-xl border border-orange-200 bg-white px-3 py-2.5 text-sm"
+              />
+            </div>
             <div className="rounded-xl border border-orange-100 bg-orange-50 p-3 text-[11px] text-neutral-700">
               Vas a diseñar <b>{numDesigns}</b> {numDesigns === 1 ? "modelo" : "modelos distintos"} para tus{" "}
               <b>{totalUnits}</b> unidades. Después de cada diseño tocás <b>Añadir</b> y se suma al resumen.
