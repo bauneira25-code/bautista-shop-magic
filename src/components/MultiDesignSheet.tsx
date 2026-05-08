@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { X, Type, Upload, Plus, Check, Flame } from "lucide-react";
 import { toast } from "sonner";
+import { QtyInput } from "./QtyInput";
 
 export interface DesignData {
   text?: string;
