@@ -40,6 +40,7 @@ function GroupPage() {
   const [custImageData, setCustImageData] = useState<string | null>(null);
   const [customAdded, setCustomAdded] = useState(false);
   const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
+  const [payQty, setPayQty] = useState(1);
 
   const onPickImage = (file: File | undefined) => {
     if (!file) return;
@@ -131,9 +132,9 @@ function GroupPage() {
   const CUSTOM_FEE = 2300;
   const SHIPPING_FEE = 1800;
   const hasCustom = customAdded && (!!custText || !!custImage);
-  const customFee = hasCustom ? CUSTOM_FEE : 0;
+  const customFee = hasCustom ? CUSTOM_FEE * payQty : 0;
   const shippingFee = delivery === "envio" ? SHIPPING_FEE : 0;
-  const total = product.price.group + customFee + shippingFee;
+  const total = product.price.group * payQty + customFee + shippingFee;
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] bg-white pb-32 text-neutral-900">
@@ -335,9 +336,22 @@ function GroupPage() {
               </div>
             </div>
 
+            {/* Cantidad */}
+            <div className="flex items-center justify-between rounded-xl border border-orange-100 bg-white px-3 py-2.5">
+              <div>
+                <p className="text-xs font-bold text-neutral-900">Unidades</p>
+                <p className="text-[10px] text-neutral-500">¿Cuántas reservás?</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
+                <span className="w-6 text-center font-display text-base">{payQty}</span>
+                <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
+              </div>
+            </div>
+
             <div className="rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-700">
-              <Row label="Precio grupo" value={formatARS(product.price.group)} />
-              {hasCustom && <Row label="Personalización" value={formatARS(CUSTOM_FEE)} />}
+              <Row label={`Precio grupo (${payQty})`} value={formatARS(product.price.group * payQty)} />
+              {hasCustom && <Row label={`Personalización (${payQty})`} value={formatARS(customFee)} />}
               <Row
                 label="Envío"
                 value={delivery === "envio" ? formatARS(SHIPPING_FEE) : <span className="text-[#e8451c] font-bold">Gratis</span>}

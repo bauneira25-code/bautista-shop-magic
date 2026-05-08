@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye, ShieldCheck } from "lucide-react";
+import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye, ShieldCheck, LogIn, UserPlus } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
+import { useUserAuth } from "@/stores/userAuth";
 import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
 import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
 
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { gender, views } = useUserPrefs();
   const liveNow = useLiveViewers("home");
+  const user = useUserAuth((s) => s.user);
   // Bias: orden de categorías priorizadas según género o vistas más altas
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
   const biasOrder = viewedTop.length > 0
@@ -81,6 +83,26 @@ function Home() {
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary pulse-ring" />
           </button>
         </div>
+
+        {!user && (
+          <Link
+            to="/auth"
+            className="mt-2 flex items-center justify-between rounded-xl border border-[#e8451c]/40 bg-white/95 px-3 py-2 text-[11px] shadow-sm"
+          >
+            <span className="inline-flex items-center gap-1.5 font-bold text-[#e8451c]">
+              <LogIn className="h-3.5 w-3.5" /> Iniciar sesión
+              <span className="text-neutral-300">·</span>
+              <UserPlus className="h-3.5 w-3.5" /> Registrarse
+            </span>
+            <ChevronRight className="h-3.5 w-3.5 text-[#e8451c]" />
+          </Link>
+        )}
+        {user && (
+          <div className="mt-2 flex items-center justify-between rounded-xl border border-[#e8451c]/30 bg-white/95 px-3 py-1.5 text-[11px]">
+            <span className="font-semibold text-neutral-800">Hola, <span className="text-[#e8451c]">{user.nombre}</span> 👋</span>
+            <Link to="/profile" className="text-[10px] font-bold text-[#e8451c]">Mi perfil</Link>
+          </div>
+        )}
 
         <div className="mt-3">
           <SmartSearch />
