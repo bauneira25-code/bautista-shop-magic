@@ -246,8 +246,8 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Personalizar — específico del producto (solo individual / grupal) */}
-        {product.customizable && mode === "individual" && (
+        {/* Personalizar — individual y grupal */}
+        {product.customizable && (mode === "individual" || mode === "group") && (
           <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
             <button
               onClick={() => setShowCustom(!showCustom)}
