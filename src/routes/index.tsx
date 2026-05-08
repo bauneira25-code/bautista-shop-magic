@@ -319,7 +319,7 @@ function Home() {
               <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">
                 <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
                   <span>{p.emoji}</span>
-                  <span className="absolute left-2 top-2 rounded-md bg-pink-500 px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable</span>
+                  <span className="absolute left-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable 🔥</span>
                 </div>
                 <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
                 <p className="text-[10px] text-muted-foreground">Desde {formatARS(p.price.group)}</p>
