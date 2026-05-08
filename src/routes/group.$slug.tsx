@@ -267,24 +267,24 @@ function GroupPage() {
 
             <Field icon={<Type className="h-4 w-4" />} label="Texto / nombre">
               <input value={custText} onChange={(e) => setCustText(e.target.value.slice(0, 16))} placeholder="Tu nombre, frase…" maxLength={16}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-fuchsia-400" />
+                className="w-full rounded-xl border border-orange-200 bg-white px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#e8451c]" />
             </Field>
 
             <Field icon={<Upload className="h-4 w-4" />} label="Subir imagen / logo">
-              <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-white/70">
+              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-orange-300 bg-orange-50 px-4 py-3 text-sm text-neutral-700">
                 <span className="truncate">{custImage ?? "Tocá para elegir archivo"}</span>
-                <span className="ml-2 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold">{custImage ? "Cambiar" : "+"}</span>
+                <span className="ml-2 rounded-lg bg-[#e8451c] px-2 py-1 text-[10px] font-bold text-white">{custImage ? "Cambiar" : "+"}</span>
                 <input type="file" hidden accept="image/*" onChange={(e) => onPickImage(e.target.files?.[0])} />
               </label>
               {custImageData && (
-                <button onClick={() => { setCustImage(null); setCustImageData(null); }} className="mt-2 text-[11px] font-bold text-rose-300">Quitar imagen</button>
+                <button onClick={() => { setCustImage(null); setCustImageData(null); }} className="mt-2 text-[11px] font-bold text-[#e8451c]">Quitar imagen</button>
               )}
             </Field>
 
             <Field icon={<Palette className="h-4 w-4" />} label="Color">
               <div className="flex flex-wrap gap-2">
                 {COLORS.map((c) => (
-                  <button key={c} onClick={() => setCustColor(c)} className={`h-10 w-10 rounded-2xl border-2 ${custColor === c ? "border-white scale-110" : "border-white/20"}`} style={{ background: c }} />
+                  <button key={c} onClick={() => setCustColor(c)} className={`h-10 w-10 rounded-xl border-2 ${custColor === c ? "border-[#e8451c] scale-110" : "border-neutral-200"}`} style={{ background: c }} />
                 ))}
               </div>
             </Field>
@@ -292,14 +292,14 @@ function GroupPage() {
             <Field icon={<Sparkles className="h-4 w-4" />} label="Estilo IA">
               <div className="flex flex-wrap gap-2">
                 {STYLES.map((st) => (
-                  <button key={st} onClick={() => setCustStyle(st)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${custStyle === st ? "bg-fuchsia-500 text-white" : "bg-white/5 text-white/70"}`}>{st}</button>
+                  <button key={st} onClick={() => setCustStyle(st)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${custStyle === st ? "bg-[#e8451c] text-white" : "bg-orange-50 text-neutral-700"}`}>{st}</button>
                 ))}
               </div>
             </Field>
 
             <div className="flex gap-2 pt-2">
-              <button onClick={skip} className="flex-1 rounded-2xl border border-white/10 py-3 text-sm font-bold text-white/70">Saltar</button>
-              <button onClick={confirmCustom} className="flex-[2] rounded-2xl py-3 font-display text-sm font-black text-white" style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}>
+              <button onClick={skip} className="flex-1 rounded-xl border border-neutral-200 py-3 text-sm font-bold text-neutral-600">Saltar</button>
+              <button onClick={confirmCustom} className="flex-[2] rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black text-white">
                 <Check className="mr-1 inline h-4 w-4" /> CONFIRMAR DISEÑO
               </button>
             </div>
