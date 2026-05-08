@@ -477,11 +477,23 @@ function ProductPage() {
           }}
         />
       )}
-    </div>
-  );
-}
 
-function ModeCard({
+      {/* MULTI DESIGN SHEET — individual / grupal con qty >= 2 */}
+      {showMulti && product.customizable && (mode === "individual" || mode === "group") && (
+        <MultiDesignSheet
+          productTitle={product.title}
+          productEmoji={product.emoji}
+          productGradient={product.gradient}
+          totalUnits={qty}
+          onClose={() => setShowMulti(false)}
+          onDesignAdded={addDesignToCart}
+          onAllDone={() => {
+            setShowMulti(false);
+            toast.success("Diseños añadidos al resumen ✨");
+            navigate({ to: "/cart" });
+          }}
+        />
+      )}
   active, onClick, title, icon, price, sub, highlight, badge, compareAt,
 }: {
   active: boolean; onClick: () => void; title: string; icon: string; price: number; sub: string; highlight?: boolean; badge?: string; compareAt?: number;
