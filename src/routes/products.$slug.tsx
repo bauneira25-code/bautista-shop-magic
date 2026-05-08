@@ -365,7 +365,17 @@ function ProductPage() {
               type="number"
               min={1}
               value={qty}
-              onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
+              onFocus={(e) => e.currentTarget.select()}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "") return;
+                const n = parseInt(v, 10);
+                if (!Number.isNaN(n) && n >= 1) setQty(n);
+              }}
+              onBlur={(e) => {
+                const n = parseInt(e.target.value, 10);
+                setQty(!Number.isNaN(n) && n >= 1 ? n : 1);
+              }}
               className="w-16 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
             />
             <button onClick={() => setQty(qty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground"><Plus className="h-4 w-4" /></button>
@@ -603,7 +613,9 @@ function WholesaleCustomSheet({
             <label className="text-xs font-semibold">Total a comprar</label>
             <input
               type="number" min={1} value={totalQty}
-              onChange={(e) => setTotalQty(Math.max(1, Number(e.target.value)))}
+              onFocus={(e) => e.currentTarget.select()}
+              onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 1) setTotalQty(n); }}
+              onBlur={(e) => { const n = parseInt(e.target.value, 10); setTotalQty(!Number.isNaN(n) && n >= 1 ? n : 1); }}
               className="w-20 rounded-lg border border-border bg-background px-2 py-1 text-right text-sm"
             />
           </div>
@@ -620,7 +632,9 @@ function WholesaleCustomSheet({
             <label className="text-xs font-semibold">¿Cuántas personalizar?</label>
             <input
               type="number" min={0} max={totalQty} value={customQty}
-              onChange={(e) => setCustomQty(Math.min(totalQty, Math.max(0, Number(e.target.value))))}
+              onFocus={(e) => e.currentTarget.select()}
+              onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 0) setCustomQty(Math.min(totalQty, n)); }}
+              onBlur={(e) => { const n = parseInt(e.target.value, 10); setCustomQty(!Number.isNaN(n) && n >= 0 ? Math.min(totalQty, n) : 0); }}
               className="w-20 rounded-lg border border-primary/40 bg-background px-2 py-1 text-right text-sm"
             />
           </div>
