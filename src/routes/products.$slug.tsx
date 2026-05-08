@@ -277,92 +277,32 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Personalizar — individual y grupal */}
+        {/* Personalizar — individual y grupal (fullscreen) */}
         {product.customizable && (mode === "individual" || mode === "group") && (
-          <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
-            <button
-              onClick={() => {
-                if (qty >= 2) setShowMulti(true);
-                else setShowCustom(!showCustom);
-              }}
-              className="flex w-full items-center justify-between p-4 text-white"
-            >
-              <div className="text-left">
-                <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
-                  {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Hacelo único"}
-                </p>
-                <p className="font-display text-lg">PERSONALIZAR 🔥</p>
-              </div>
-              <ChevronDown className={`h-5 w-5 transition-transform ${showCustom ? "rotate-180" : ""}`} />
-            </button>
-
-            {showCustom && (
-              <div className="space-y-4 bg-card p-4 float-up">
-                {/* Preview producto */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl" style={{ background: product.gradient }}>
-                  <div className="absolute inset-0 grid place-items-center text-7xl">{product.emoji}</div>
-                  {customText && (
-                    <div className="absolute inset-x-0 bottom-3 text-center font-display text-2xl text-white drop-shadow-lg">
-                      {customText}
-                    </div>
-                  )}
-                  {customImage && (
-                    <span className="absolute right-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
-                      📎 {customImage}
-                    </span>
-                  )}
-                </div>
-
-                {/* Texto */}
-                <div>
-                  <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                    <Type className="h-3 w-3" /> Tu texto / nombre
-                  </label>
-                  <input
-                    value={customText}
-                    onChange={(e) => setCustomText(e.target.value.slice(0, 20))}
-                    placeholder="Ej: NEIBA"
-                    className="w-full rounded-xl border border-border bg-secondary px-3 py-2.5 text-sm outline-none focus:border-primary"
-                  />
-                </div>
-
-                {/* Imagen */}
-                <div>
-                  <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                    <ImageIcon className="h-3 w-3" /> Tu imagen / logo
-                  </label>
-                  <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
-                  <button
-                    onClick={() => fileRef.current?.click()}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-secondary/50 py-4 text-xs"
-                  >
-                    <ImageIcon className="h-4 w-4" />
-                    {customImage ? customImage : "Pegar / subir imagen"}
-                  </button>
-                </div>
-
-                {/* CTA por modo */}
-                {mode === "individual" ? (
-                  <button
-                    onClick={handleBuyNow}
-                    className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
-                    style={{ background: "var(--gradient-primary)" }}
-                  >
-                    COMPRAR AHORA
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleBuyNow}
-                    className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
-                    style={{ background: "var(--gradient-primary)" }}
-                  >
-                    SUMARME AHORA
-                  </button>
-                )}
-              </div>
+          <button
+            onClick={() => {
+              if (qty >= 2) setShowMulti(true);
+              else setShowCustom(true);
+            }}
+            className="flex w-full items-center justify-between rounded-2xl p-4 text-white shadow-[var(--shadow-glow)]"
+            style={{ background: "var(--gradient-primary)" }}
+          >
+            <div className="text-left">
+              <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+                {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Texto, imagen y color"}
+              </p>
+              <p className="font-display text-lg">PERSONALIZAR 🔥</p>
+            </div>
+            {customAdded && (
+              <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold backdrop-blur">
+                ✓ Listo
+              </span>
             )}
-          </div>
+          </button>
         )}
+
+        {/* Pasos por modo */}
+        <PurchaseSteps mode={mode} />
 
         {/* Quantity — siempre visible */}
         <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3">
