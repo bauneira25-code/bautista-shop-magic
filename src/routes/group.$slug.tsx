@@ -228,6 +228,11 @@ function GroupPage() {
         </section>
       )}
 
+      {/* Pasos compra grupal */}
+      <section className="mt-4 px-4">
+        <PurchaseSteps mode="group" />
+      </section>
+
       {/* Compartir */}
       <section className="mt-4 px-4">
         <button onClick={share} className="flex w-full items-center gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-3 text-left">
