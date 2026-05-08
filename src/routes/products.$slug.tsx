@@ -511,14 +511,18 @@ function ProductPage() {
               <p className="font-display text-base text-primary leading-tight">{formatARS(price * qty)}</p>
               {savings > 0 && <p className="text-[9px] text-success leading-none">Ahorrás {formatARS(savings * qty)}</p>}
             </div>
-            <div className="flex flex-1 gap-2">
+          <div className="flex flex-1 gap-2">
               <button
                 onClick={() => { doAdd(); toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` }); }}
-                className="flex-1 rounded-xl border border-primary/40 bg-primary/10 py-2 text-[11px] font-bold text-primary"
+                className="flex-1 rounded-xl border border-primary/40 bg-primary/10 py-3 text-xs font-bold text-primary"
               >
                 AL CARRITO
               </button>
-              <button onClick={handleCta} className="flex-1 rounded-xl py-2 font-display text-[11px] tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
+              <button
+                onClick={mode === "individual" ? handleBuyNow : handleCta}
+                className="flex-1 rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
+                style={{ background: "var(--gradient-primary)" }}
+              >
                 {mode === "individual" ? "COMPRAR" : cta}
               </button>
             </div>
