@@ -311,66 +311,66 @@ function GroupPage() {
       {step === "summary" && (
         <Sheet onClose={() => setStep("browse")} title="Resumen y pago" subtitle="Confirmá para sumarte al grupo">
           <div className="space-y-4">
-            <div className="flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-3">
+            <div className="flex gap-3 rounded-xl border border-orange-100 bg-orange-50 p-3">
               <div className="grid h-16 w-16 place-items-center rounded-xl text-3xl" style={{ background: product.gradient }}>{product.emoji}</div>
               <div className="flex-1">
-                <p className="text-sm font-bold text-white">{product.title}</p>
+                <p className="text-sm font-bold text-neutral-900">{product.title}</p>
                 <div className="mt-1 flex flex-wrap gap-1">
-                  <span className="rounded-md bg-fuchsia-500/20 px-1.5 py-0.5 text-[10px] font-bold text-fuchsia-300">Grupal</span>
+                  <span className="rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[10px] font-bold text-white">Grupal</span>
                   {!skipCustom && product.customizable && (
                     <>
-                      <span className="rounded-md bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold text-amber-300">Personalizado</span>
-                      {custText && <span className="rounded-md bg-white/10 px-1.5 py-0.5 text-[10px] text-white">"{custText}"</span>}
-                      <span className="grid h-4 w-4 rounded-full border border-white/30" style={{ background: custColor }} />
+                      <span className="rounded-md bg-orange-200 px-1.5 py-0.5 text-[10px] font-bold text-[#e8451c]">Personalizado</span>
+                      {custText && <span className="rounded-md bg-white px-1.5 py-0.5 text-[10px] text-neutral-700">"{custText}"</span>}
+                      <span className="grid h-4 w-4 rounded-full border border-neutral-300" style={{ background: custColor }} />
                     </>
                   )}
                 </div>
-                <p className="mt-1 text-[11px] text-white/50">Reservás 1 lugar de {target}</p>
+                <p className="mt-1 text-[11px] text-neutral-500">Reservás 1 lugar de {target}</p>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">
+            <div className="rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-700">
               <Row label="Precio grupal" value={formatARS(product.price.group)} />
               <Row label="Servicio" value={formatARS(fees)} />
-              <Row label="Envío" value={<span className="text-emerald-400">Gratis 🎉</span>} />
-              <div className="my-3 h-px bg-white/10" />
-              <Row label={<span className="font-bold text-white">Total</span>} value={<span className="font-display text-xl font-black text-white">{formatARS(total)}</span>} />
-              <p className="mt-2 text-[10px] text-white/50">⚡ Si el grupo no se completa en {fmt(m)}:{fmt(s)}, te devolvemos el 100%.</p>
+              <Row label="Envío" value={<span className="text-[#e8451c] font-bold">Gratis 🎉</span>} />
+              <div className="my-3 h-px bg-neutral-100" />
+              <Row label={<span className="font-bold text-neutral-900">Total</span>} value={<span className="font-display text-xl font-black text-[#e8451c]">{formatARS(total)}</span>} />
+              <p className="mt-2 text-[10px] text-neutral-500">⚡ Si el grupo no se completa en {fmt(m)}:{fmt(s)}, te devolvemos el 100%.</p>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-white/50">Método de pago</p>
-              <div className="flex items-center gap-3 rounded-xl bg-white/5 p-3">
-                <div className="grid h-10 w-10 place-items-center rounded-lg bg-sky-500/20 text-sky-300"><CreditCard className="h-5 w-5" /></div>
+            <div className="rounded-xl border border-neutral-200 bg-white p-3">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Método de pago</p>
+              <div className="flex items-center gap-3 rounded-lg bg-orange-50 p-3">
+                <div className="grid h-10 w-10 place-items-center rounded-lg bg-[#e8451c] text-white"><CreditCard className="h-5 w-5" /></div>
                 <div className="flex-1">
-                  <p className="text-sm font-bold text-white">MercadoPago</p>
-                  <p className="text-[10px] text-white/50">Tarjeta, débito o saldo</p>
+                  <p className="text-sm font-bold text-neutral-900">MercadoPago</p>
+                  <p className="text-[10px] text-neutral-500">Tarjeta, débito o saldo</p>
                 </div>
-                <Lock className="h-4 w-4 text-white/40" />
+                <Lock className="h-4 w-4 text-neutral-400" />
               </div>
             </div>
 
-            <button onClick={pay} className="w-full rounded-2xl py-4 font-display text-base font-black tracking-wider text-white shadow-[0_10px_40px_-10px_rgba(168,85,247,0.8)]" style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}>
+            <button onClick={pay} className="w-full rounded-xl bg-[#e8451c] py-4 font-display text-base font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]">
               <Lock className="mr-2 inline h-4 w-4" /> PAGAR Y UNIRME · {formatARS(total)}
             </button>
-            <p className="text-center text-[10px] text-white/40">Al pagar, aceptás los términos del grupo</p>
+            <p className="text-center text-[10px] text-neutral-400">Al pagar, aceptás los términos del grupo</p>
           </div>
         </Sheet>
       )}
 
       {/* SUCCESS */}
       {step === "paid" && (
-        <Sheet onClose={() => setStep("browse")} title="¡Estás dentro! 💜" subtitle={`Sos ${joined} de ${target} en el grupo`}>
+        <Sheet onClose={() => setStep("browse")} title="¡Estás dentro!" subtitle={`Sos ${joined} de ${target} en el grupo`}>
           <div className="space-y-4 text-center">
-            <div className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-[0_0_60px_rgba(16,185,129,0.6)]">
+            <div className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-[#e8451c] shadow-[0_0_40px_rgba(232,69,28,0.4)]">
               <Check className="h-12 w-12 text-white" />
             </div>
-            <p className="font-display text-xl text-white">Reserva confirmada</p>
-            <p className="text-sm text-white/60">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
-            <button onClick={share} className="w-full rounded-2xl border border-amber-400/30 bg-amber-500/20 py-3 text-sm font-bold text-amber-200">
+            <p className="font-display text-xl text-neutral-900">Reserva confirmada</p>
+            <p className="text-sm text-neutral-600">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
+            <button onClick={share} className="w-full rounded-xl border border-orange-200 bg-orange-50 py-3 text-sm font-bold text-[#e8451c]">
               <Fire className="mr-1 inline h-4 w-4" /> Compartir y ganar 20% OFF
             </button>
-            <button onClick={() => navigate({ to: "/orders" })} className="w-full rounded-2xl bg-white/10 py-3 text-sm font-bold text-white">Ver mis pedidos</button>
+            <button onClick={() => navigate({ to: "/orders" })} className="w-full rounded-xl bg-neutral-100 py-3 text-sm font-bold text-neutral-700">Ver mis pedidos</button>
           </div>
         </Sheet>
       )}
