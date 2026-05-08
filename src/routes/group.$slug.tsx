@@ -250,11 +250,16 @@ function GroupPage() {
       {/* Sticky CTA */}
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3 pb-3">
         <div className="rounded-2xl border border-orange-200 bg-white p-2.5 shadow-[0_10px_40px_-10px_rgba(232,69,28,0.4)]">
+          {hasCustom && (
+            <p className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-bold text-[#e8451c]">
+              <Check className="h-3 w-3" /> Personalización agregada
+            </p>
+          )}
           <div className="flex items-center gap-2">
             <button onClick={addIndividualToCart} className="shrink-0 rounded-xl border border-[#e8451c] bg-white px-3 py-3 text-[11px] font-bold text-[#e8451c]">
               + Carrito
             </button>
-            <button onClick={pay} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
+            <button onClick={() => setStep("summary")} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
               <span className="inline-flex items-center justify-center gap-2">
                 <Zap className="h-4 w-4" /> SUMARME AHORA
               </span>
