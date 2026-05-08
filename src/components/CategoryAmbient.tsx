@@ -23,6 +23,24 @@ export function CategoryAmbient({ theme }: { theme: CategoryTheme }) {
   }
 }
 
+function Watermark({ text, color, mono }: { text: string; color: string; mono?: boolean }) {
+  return (
+    <div
+      aria-hidden
+      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-black tracking-tighter ${mono ? "font-mono" : "font-display"}`}
+      style={{
+        fontSize: text.length <= 3 ? "20rem" : text.length <= 5 ? "14rem" : "9rem",
+        lineHeight: 1,
+        background: `linear-gradient(180deg, ${color}33 0%, ${color}11 50%, ${color}22 100%)`,
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+      }}
+    >
+      {text}
+    </div>
+  );
+}
+
 function JoyeriaAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
