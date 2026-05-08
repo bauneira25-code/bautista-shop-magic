@@ -488,7 +488,7 @@ function WholesaleCustomSheet({
   customText: string; setCustomText: (s: string) => void;
   customImage: string | null;
   onPickImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  fileRef: React.RefObject<HTMLInputElement>;
+  fileRef: React.RefObject<HTMLInputElement | null>;
   onClose: () => void; onAddToCart: () => void; onBuyNow: () => void;
 }) {
   if (!product) return null;
