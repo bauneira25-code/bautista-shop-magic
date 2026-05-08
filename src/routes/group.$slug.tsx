@@ -259,9 +259,9 @@ function GroupPage() {
 
       {/* CUSTOMIZE SHEET */}
       {step === "customize" && (
-        <Sheet onClose={() => setStep("browse")} title="Personalizá tu unidad" subtitle="Cada uno del grupo personaliza el suyo">
+        <Sheet onClose={() => setStep("browse")} title="Personalizá tu unidad" subtitle="Texto e imagen sobre tu producto">
           <div className="space-y-5">
-            {/* Preview */}
+            {/* Preview producto */}
             <div className="relative grid h-44 place-items-center overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
               {custImageData ? (
                 <img src={custImageData} alt="custom" className="absolute inset-0 h-full w-full object-cover opacity-90" />
@@ -269,9 +269,8 @@ function GroupPage() {
                 <span className="text-7xl drop-shadow-2xl">{product.emoji}</span>
               )}
               {custText && (
-                <span className="absolute bottom-4 z-10 px-3 py-1 font-display text-lg font-black" style={{ color: custColor === "#ffffff" ? "#000" : "#fff", background: custColor + "cc", borderRadius: 12 }}>{custText}</span>
+                <span className="absolute bottom-4 z-10 rounded-xl bg-black/70 px-3 py-1 font-display text-lg font-black text-white">{custText}</span>
               )}
-              <span className="absolute left-3 top-3 z-10 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">{custStyle}</span>
             </div>
 
             <Field icon={<Type className="h-4 w-4" />} label="Texto / nombre">
@@ -290,28 +289,9 @@ function GroupPage() {
               )}
             </Field>
 
-            <Field icon={<Palette className="h-4 w-4" />} label="Color">
-              <div className="flex flex-wrap gap-2">
-                {COLORS.map((c) => (
-                  <button key={c} onClick={() => setCustColor(c)} className={`h-10 w-10 rounded-xl border-2 ${custColor === c ? "border-[#e8451c] scale-110" : "border-neutral-200"}`} style={{ background: c }} />
-                ))}
-              </div>
-            </Field>
-
-            <Field icon={<Sparkles className="h-4 w-4" />} label="Estilo IA">
-              <div className="flex flex-wrap gap-2">
-                {STYLES.map((st) => (
-                  <button key={st} onClick={() => setCustStyle(st)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${custStyle === st ? "bg-[#e8451c] text-white" : "bg-orange-50 text-neutral-700"}`}>{st}</button>
-                ))}
-              </div>
-            </Field>
-
-            <div className="flex gap-2 pt-2">
-              <button onClick={skip} className="flex-1 rounded-xl border border-neutral-200 py-3 text-sm font-bold text-neutral-600">Saltar</button>
-              <button onClick={confirmCustom} className="flex-[2] rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black text-white">
-                <Check className="mr-1 inline h-4 w-4" /> CONFIRMAR DISEÑO
-              </button>
-            </div>
+            <button onClick={pay} className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white">
+              <Zap className="mr-1 inline h-4 w-4" /> COMPRAR AHORA
+            </button>
           </div>
         </Sheet>
       )}
