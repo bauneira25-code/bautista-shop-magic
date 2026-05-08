@@ -521,7 +521,7 @@ function ModeCard({
 
 function WholesaleCustomSheet({
   product, totalQty, setTotalQty, customQty, setCustomQty, designs, setDesigns,
-  customText, setCustomText, customImage, onPickImage, fileRef, onClose, onAddToCart, onBuyNow,
+  customText, setCustomText, customImage, onPickImage, fileRef, onClose, onAddToCart, onBuyNow, onOpenMulti,
 }: {
   product: ReturnType<typeof findProduct> & {};
   totalQty: number; setTotalQty: (n: number) => void;
@@ -532,6 +532,7 @@ function WholesaleCustomSheet({
   onPickImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
   onClose: () => void; onAddToCart: () => void; onBuyNow: () => void;
+  onOpenMulti: () => void;
 }) {
   if (!product) return null;
   const sumDesigns = designs.reduce((a, b) => a + b, 0);
