@@ -380,22 +380,22 @@ function GroupPage() {
 
 function Chip({ children, icon, accent }: { children: React.ReactNode; icon?: React.ReactNode; accent?: boolean }) {
   return (
-    <span className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-bold backdrop-blur ${accent ? "border-rose-400/40 bg-rose-500/15 text-rose-200" : "border-white/15 bg-white/5 text-white/80"}`}>{icon} {children}</span>
+    <span className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-bold ${accent ? "border-[#e8451c] bg-[#e8451c] text-white" : "border-orange-200 bg-orange-50 text-[#e8451c]"}`}>{icon} {children}</span>
   );
 }
 
 function Sheet({ children, onClose, title, subtitle }: { children: React.ReactNode; onClose: () => void; title: string; subtitle?: string }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative mx-auto w-full max-w-[480px] rounded-t-[32px] border-t border-white/10 bg-gradient-to-b from-[#1a0a3a] to-[#0a0418] p-5 pb-8 shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-white/20" />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative mx-auto w-full max-w-[480px] rounded-t-[28px] border-t border-orange-100 bg-white p-5 pb-8 shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
+        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-neutral-200" />
         <div className="mb-4 flex items-start justify-between">
           <div>
-            <h3 className="font-display text-xl text-white">{title}</h3>
-            {subtitle && <p className="text-xs text-white/60">{subtitle}</p>}
+            <h3 className="font-display text-xl text-neutral-900">{title}</h3>
+            {subtitle && <p className="text-xs text-neutral-500">{subtitle}</p>}
           </div>
-          <button onClick={onClose} className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-white"><X className="h-4 w-4" /></button>
+          <button onClick={onClose} className="grid h-8 w-8 place-items-center rounded-full bg-neutral-100 text-neutral-700"><X className="h-4 w-4" /></button>
         </div>
         {children}
       </div>
@@ -406,7 +406,7 @@ function Sheet({ children, onClose, title, subtitle }: { children: React.ReactNo
 function Field({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-white/60">{icon} {label}</p>
+      <p className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-neutral-500">{icon} {label}</p>
       {children}
     </div>
   );
