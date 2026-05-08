@@ -195,6 +195,28 @@ export function MultiDesignSheet({
               </div>
             )}
 
+            {askReuse && lastDesignRef.current && (
+              <div className="rounded-2xl border border-orange-200 bg-orange-50 p-3">
+                <p className="mb-2 text-xs font-semibold text-neutral-800">
+                  ¿Querés que el diseño {currentIdx + 1} sea igual al anterior?
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={reuseLast}
+                    className="flex-1 rounded-lg bg-[#e8451c] py-2 text-xs font-black text-white"
+                  >
+                    SÍ, MISMO DISEÑO
+                  </button>
+                  <button
+                    onClick={() => setAskReuse(false)}
+                    className="flex-1 rounded-lg border border-orange-300 bg-white py-2 text-xs font-bold text-neutral-700"
+                  >
+                    NO, DISEÑAR NUEVO
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div
               className="relative grid h-44 place-items-center overflow-hidden rounded-3xl"
               style={{ background: productGradient }}
