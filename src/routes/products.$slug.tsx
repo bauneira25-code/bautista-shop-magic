@@ -7,6 +7,8 @@ import {
 import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
+import { FullCustomizeSheet } from "@/components/FullCustomizeSheet";
+import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 
