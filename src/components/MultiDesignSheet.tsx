@@ -62,16 +62,22 @@ export function MultiDesignSheet({
     r.readAsDataURL(file);
   };
 
+  const lastDesignRef = useRef<DesignData | null>(null);
+  const [askReuse, setAskReuse] = useState(false);
+
+  const pushDesign = (d: DesignData, idx: number) => {
+    onDesignAdded(d, idx);
+    lastDesignRef.current = d;
+  };
+
   const addDesign = () => {
-    onDesignAdded(
-      {
-        text: text || undefined,
-        imageName: imageName ?? undefined,
-        imageData: imageData ?? undefined,
-        units: unitsForCurrent,
-      },
-      currentIdx,
-    );
+    const design: DesignData = {
+      text: text || undefined,
+      imageName: imageName ?? undefined,
+      imageData: imageData ?? undefined,
+      units: unitsForCurrent,
+    };
+    pushDesign(design, currentIdx);
     if (currentIdx + 1 >= designsCount) {
       onAllDone();
     } else {
@@ -80,6 +86,25 @@ export function MultiDesignSheet({
       });
       setCurrentIdx(currentIdx + 1);
       reset();
+      setAskReuse(true);
+    }
+  };
+
+  const reuseLast = () => {
+    const prev = lastDesignRef.current;
+    if (!prev) {
+      setAskReuse(false);
+      return;
+    }
+    const design: DesignData = { ...prev, units: unitsForCurrent };
+    pushDesign(design, currentIdx);
+    if (currentIdx + 1 >= designsCount) {
+      setAskReuse(false);
+      onAllDone();
+    } else {
+      toast.success(`Diseño ${currentIdx + 1} añadido (mismo diseño) ✨`);
+      setCurrentIdx(currentIdx + 1);
+      // keep askReuse true so they can chain reuse for next ones too
     }
   };
 
@@ -167,6 +192,28 @@ export function MultiDesignSheet({
                     }`}
                   />
                 ))}
+              </div>
+            )}
+
+            {askReuse && lastDesignRef.current && (
+              <div className="rounded-2xl border border-orange-200 bg-orange-50 p-3">
+                <p className="mb-2 text-xs font-semibold text-neutral-800">
+                  ¿Querés que el diseño {currentIdx + 1} sea igual al anterior?
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={reuseLast}
+                    className="flex-1 rounded-lg bg-[#e8451c] py-2 text-xs font-black text-white"
+                  >
+                    SÍ, MISMO DISEÑO
+                  </button>
+                  <button
+                    onClick={() => setAskReuse(false)}
+                    className="flex-1 rounded-lg border border-orange-300 bg-white py-2 text-xs font-bold text-neutral-700"
+                  >
+                    NO, DISEÑAR NUEVO
+                  </button>
+                </div>
               </div>
             )}
 
