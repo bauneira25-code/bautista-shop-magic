@@ -320,12 +320,19 @@ function GroupPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold text-neutral-900">¿Cuántas unidades?</p>
-                  <p className="text-[10px] text-neutral-500">Si son 2 o más, podés hacer diseños distintos</p>
+                  <p className="text-[10px] text-neutral-500">Quedan {missing} cupos · Si son 2 o más, podés hacer diseños distintos</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
-                  <QtyInput value={payQty} onChange={setPayQty} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
-                  <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
+                  <QtyInput value={payQty} onChange={setPayQty} max={maxQty} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
+                  <button
+                    onClick={() => {
+                      if (payQty >= maxQty) { toast.info(`Solo quedan ${maxQty} cupos en el grupo`); return; }
+                      setPayQty(payQty + 1);
+                    }}
+                    disabled={payQty >= maxQty}
+                    className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white disabled:opacity-40"
+                  ><span className="text-lg leading-none">+</span></button>
                 </div>
               </div>
             </div>
