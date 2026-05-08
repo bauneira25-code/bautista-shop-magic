@@ -197,7 +197,6 @@ function Home() {
               </div>
               <p className="text-[11px] text-muted-foreground">Termina en 02:14:38</p>
             </div>
-            <Link to="/grupos" className="text-xs text-primary">Ver todo</Link>
           </div>
           <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
             {FLASH_DEALS.map((p) => (
