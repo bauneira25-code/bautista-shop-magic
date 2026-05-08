@@ -85,6 +85,12 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
                   <p className="text-xs font-bold text-primary">{formatARS(p.price.group)}</p>
                 </Link>
               ))}
+              <button
+                onClick={() => goSearch(q.trim())}
+                className="flex w-full items-center justify-center gap-1 bg-primary/10 py-2.5 text-[11px] font-bold text-primary"
+              >
+                Ver todos los resultados <ArrowRight className="h-3 w-3" />
+              </button>
             </div>
           )}
         </div>
