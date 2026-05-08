@@ -7,6 +7,7 @@ import {
 import { findProduct, formatARS } from "@/lib/mockData";
 import { toast } from "sonner";
 import { useLocalCart } from "@/stores/localCart";
+import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 
 export const Route = createFileRoute("/group/$slug")({
   component: GroupPage,
