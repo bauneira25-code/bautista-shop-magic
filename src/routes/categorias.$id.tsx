@@ -36,7 +36,16 @@ function CategoryPage() {
   const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
 
   // Solo productos de esta categoría
-  const all = MOCK_PRODUCTS.filter((p) => p.category === id);
+  const allCat = useMemo(() => MOCK_PRODUCTS.filter((p) => p.category === id), [id]);
+  const subs = SUBCATEGORIES[id] ?? [];
+  const [activeSub, setActiveSub] = useState<string | null>(null);
+  const all = useMemo(() => {
+    if (!activeSub) return allCat;
+    const sub = subs.find((s) => s.id === activeSub);
+    if (!sub) return allCat;
+    const filtered = allCat.filter((p) => sub.match(p.title));
+    return filtered.length ? filtered : allCat;
+  }, [allCat, activeSub, subs]);
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] overflow-hidden pb-28" style={{ background: theme.bg }}>
