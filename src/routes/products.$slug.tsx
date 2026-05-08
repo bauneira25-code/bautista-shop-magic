@@ -475,6 +475,7 @@ function ProductPage() {
             setShowWsCustom(false);
             navigate({ to: "/cart" });
           }}
+          onOpenMulti={() => { setShowWsCustom(false); setShowMulti(true); }}
         />
       )}
 
