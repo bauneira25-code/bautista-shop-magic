@@ -112,10 +112,16 @@ function ProductPage() {
 
   const onPickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
-    if (f) {
-      setCustomImage(f.name);
-      toast.success("Imagen subida ✨", { description: f.name });
-    }
+    if (f) handlePickImageFile(f);
+  };
+
+  const handlePickImageFile = (f: File | undefined) => {
+    if (!f) return;
+    setCustomImage(f.name);
+    const r = new FileReader();
+    r.onload = () => setCustomImageData(typeof r.result === "string" ? r.result : null);
+    r.readAsDataURL(f);
+    toast.success("Imagen subida ✨", { description: f.name });
   };
 
   return (
