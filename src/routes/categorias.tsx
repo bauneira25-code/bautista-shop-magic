@@ -12,7 +12,7 @@ function Categorias() {
     <MobileShell>
       <header className="sticky top-0 z-30 px-5 pb-3 pt-4 backdrop-blur-xl" style={{ background: "oklch(0.13 0.02 295 / 0.85)" }}>
         <p className="text-[10px] uppercase tracking-[0.3em] text-primary">NEIBA · explorar</p>
-        <h1 className="font-display text-3xl">Cada mundo,<br/>su propio vibe.</h1>
+        <h1 className="font-display text-3xl">Cada mundo,<br/>su propia pibe.</h1>
         <div className="mt-3 flex items-center gap-2 rounded-2xl bg-card px-4 py-3">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input placeholder="Buscar categoría o producto..." className="flex-1 bg-transparent text-sm outline-none" />

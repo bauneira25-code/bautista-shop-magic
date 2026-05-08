@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Search, Flame, Users, Sparkles, Eye } from "lucide-react";
 import { CATEGORY_THEMES } from "@/lib/categoryThemes";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
+import { SUBCATEGORIES } from "@/lib/subcategories";
 import { useUserPrefs } from "@/stores/userPrefs";
 import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
 import { CategoryHero } from "@/components/CategoryHero";
@@ -35,7 +36,16 @@ function CategoryPage() {
   const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
 
   // Solo productos de esta categoría
-  const all = MOCK_PRODUCTS.filter((p) => p.category === id);
+  const allCat = useMemo(() => MOCK_PRODUCTS.filter((p) => p.category === id), [id]);
+  const subs = SUBCATEGORIES[id] ?? [];
+  const [activeSub, setActiveSub] = useState<string | null>(null);
+  const all = useMemo(() => {
+    if (!activeSub) return allCat;
+    const sub = subs.find((s) => s.id === activeSub);
+    if (!sub) return allCat;
+    const filtered = allCat.filter((p) => sub.match(p.title));
+    return filtered.length ? filtered : allCat;
+  }, [allCat, activeSub, subs]);
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] overflow-hidden pb-28" style={{ background: theme.bg }}>
@@ -75,6 +85,43 @@ function CategoryPage() {
           </span>
         ))}
       </div>
+
+      {/* Subcategorías filtrables */}
+      {subs.length > 0 && (
+        <div className="mt-4 px-5">
+          <p className={`mb-2 text-[10px] uppercase tracking-[0.3em] ${theme.font}`} style={{ color: theme.accent }}>
+            ▸ Subcategorías
+          </p>
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            <button
+              onClick={() => setActiveSub(null)}
+              className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-bold ${theme.font}`}
+              style={{
+                background: activeSub === null ? theme.accent : `${theme.accent}15`,
+                color: activeSub === null ? "#fff" : theme.accent,
+                border: `1px solid ${theme.accent}55`,
+              }}
+            >
+              Todo
+            </button>
+            {subs.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setActiveSub(s.id)}
+                className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-bold ${theme.font}`}
+                style={{
+                  background: activeSub === s.id ? theme.accent : `${theme.accent}15`,
+                  color: activeSub === s.id ? "#fff" : theme.accent,
+                  border: `1px solid ${theme.accent}55`,
+                }}
+              >
+                <span className="mr-1">{s.emoji}</span>
+                {s.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Live ticker — feels alive */}
       <div className="mt-5 overflow-hidden border-y py-2" style={{ borderColor: `${theme.accent}33`, background: theme.isLight ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.3)" }}>
