@@ -298,21 +298,6 @@ function GroupPage() {
           <div className="space-y-5">
             {/* Preview */}
             <div className="relative grid h-44 place-items-center overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
-              <span className="text-7xl drop-shadow-2xl">{product.emoji}</span>
-              {custText && (
-                <span className="absolute bottom-4 px-3 py-1 font-display text-lg font-black" style={{ color: custColor === "#ffffff" ? "#000" : "#fff", background: custColor + "cc", borderRadius: 12 }}>{custText}</span>
-              )}
-              {custImage && <span className="absolute right-3 top-3 rounded-md bg-black/60 px-2 py-0.5 text-[10px] text-white">📎 {custImage}</span>}
-              <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">{custStyle}</span>
-            </div>
-
-            <Field icon={<Type className="h-4 w-4" />} label="Texto / nombre">
-              <input value={custText} onChange={(e) => setCustText(e.target.value.slice(0, 16))} placeholder="Tu nombre, frase…" maxLength={16}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-fuchsia-400" />
-            </Field>
-
-            {/* Preview */}
-            <div className="relative grid h-44 place-items-center overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
               {custImageData ? (
                 <img src={custImageData} alt="custom" className="absolute inset-0 h-full w-full object-cover opacity-90" />
               ) : (
