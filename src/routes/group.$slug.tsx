@@ -248,7 +248,7 @@ function GroupPage() {
             <button onClick={addIndividualToCart} className="shrink-0 rounded-xl border border-[#e8451c] bg-white px-3 py-3 text-[11px] font-bold text-[#e8451c]">
               + Carrito
             </button>
-            <button onClick={startJoin} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
+            <button onClick={pay} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
               <span className="inline-flex items-center justify-center gap-2">
                 <Zap className="h-4 w-4" /> SUMARME AHORA
               </span>
