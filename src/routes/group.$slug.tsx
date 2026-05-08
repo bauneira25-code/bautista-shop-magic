@@ -384,19 +384,7 @@ function GroupPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 bg-white p-3">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Método de pago</p>
-              <div className="flex items-center gap-3 rounded-lg bg-orange-50 p-3">
-                <div className="grid h-10 w-10 place-items-center rounded-lg bg-[#e8451c] text-white"><CreditCard className="h-5 w-5" /></div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-neutral-900">MercadoPago</p>
-                  <p className="text-[10px] text-neutral-500">Tarjeta, débito o saldo</p>
-                </div>
-                <Lock className="h-4 w-4 text-neutral-400" />
-              </div>
-            </div>
-
-            <button onClick={pay} className="w-full rounded-xl bg-[#e8451c] py-4 font-display text-base font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]">
+            <button onClick={() => setShowPay(true)} className="w-full rounded-xl bg-[#e8451c] py-4 font-display text-base font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]">
               <Lock className="mr-2 inline h-4 w-4" /> PAGAR Y UNIRME · {formatARS(total)}
             </button>
             <p className="text-center text-[10px] text-neutral-400">Al pagar, aceptás los términos del grupo</p>
