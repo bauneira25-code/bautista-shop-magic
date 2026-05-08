@@ -311,12 +311,33 @@ function GroupPage() {
                 className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-fuchsia-400" />
             </Field>
 
+            {/* Preview */}
+            <div className="relative grid h-44 place-items-center overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
+              {custImageData ? (
+                <img src={custImageData} alt="custom" className="absolute inset-0 h-full w-full object-cover opacity-90" />
+              ) : (
+                <span className="text-7xl drop-shadow-2xl">{product.emoji}</span>
+              )}
+              {custText && (
+                <span className="absolute bottom-4 z-10 px-3 py-1 font-display text-lg font-black" style={{ color: custColor === "#ffffff" ? "#000" : "#fff", background: custColor + "cc", borderRadius: 12 }}>{custText}</span>
+              )}
+              <span className="absolute left-3 top-3 z-10 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">{custStyle}</span>
+            </div>
+
+            <Field icon={<Type className="h-4 w-4" />} label="Texto / nombre">
+              <input value={custText} onChange={(e) => setCustText(e.target.value.slice(0, 16))} placeholder="Tu nombre, frase…" maxLength={16}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-fuchsia-400" />
+            </Field>
+
             <Field icon={<Upload className="h-4 w-4" />} label="Subir imagen / logo">
               <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-white/70">
-                <span>{custImage ?? "Tocá para elegir archivo"}</span>
-                <span className="rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold">+</span>
-                <input type="file" hidden accept="image/*" onChange={(e) => setCustImage(e.target.files?.[0]?.name ?? null)} />
+                <span className="truncate">{custImage ?? "Tocá para elegir archivo"}</span>
+                <span className="ml-2 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold">{custImage ? "Cambiar" : "+"}</span>
+                <input type="file" hidden accept="image/*" onChange={(e) => onPickImage(e.target.files?.[0])} />
               </label>
+              {custImageData && (
+                <button onClick={() => { setCustImage(null); setCustImageData(null); }} className="mt-2 text-[11px] font-bold text-rose-300">Quitar imagen</button>
+              )}
             </Field>
 
             <Field icon={<Palette className="h-4 w-4" />} label="Color">
