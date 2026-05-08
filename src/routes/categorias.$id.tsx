@@ -178,12 +178,19 @@ function CategoryPage() {
                 }}
               >
                 <span>{p.emoji}</span>
-                <span
-                  className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-bold ${theme.font}`}
-                  style={{ background: theme.accent, color: "#fff" }}
-                >
-                  {p.customizable ? "Personalizable" : "−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
-                </span>
+                {!p.customizable && (
+                  <span
+                    className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-bold ${theme.font}`}
+                    style={{ background: theme.accent, color: "#fff" }}
+                  >
+                    {"−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
+                  </span>
+                )}
+                {p.customizable && (
+                  <span className="absolute left-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">
+                    Personalizable 🔥
+                  </span>
+                )}
                 {p.customizable && (
                   <Sparkles className="absolute right-2 top-2 h-4 w-4" style={{ color: theme.accent }} />
                 )}
@@ -197,7 +204,6 @@ function CategoryPage() {
               </div>
               <div className="mt-1 flex flex-wrap gap-1">
                 <span className="rounded-md px-1.5 py-0.5 text-[8px] font-bold" style={{ background: `${theme.accent}22`, color: theme.accent }}>Precio en grupo</span>
-                {p.customizable && <span className="rounded-md px-1.5 py-0.5 text-[8px] font-bold" style={{ background: `${theme.accent2}33`, color: theme.accent2 }}>Personalizable</span>}
               </div>
             </Link>
           ))}
