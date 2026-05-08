@@ -26,7 +26,10 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
 
   return (
     <div ref={ref} className="relative">
-      <div className="flex items-center gap-2 rounded-2xl bg-card px-4 py-3 transition focus-within:ring-2 focus-within:ring-primary/40">
+      <form
+        onSubmit={(e) => { e.preventDefault(); if (q.trim()) goSearch(q.trim()); }}
+        className="flex items-center gap-2 rounded-2xl bg-card px-4 py-3 transition focus-within:ring-2 focus-within:ring-primary/40"
+      >
         <Search className="h-4 w-4 text-muted-foreground" />
         <input
           value={q}
@@ -36,13 +39,13 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
           className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
         />
         {q ? (
-          <button onClick={() => setQ("")} className="grid h-5 w-5 place-items-center rounded-full bg-muted">
+          <button type="button" onClick={() => setQ("")} className="grid h-5 w-5 place-items-center rounded-full bg-muted">
             <X className="h-3 w-3" />
           </button>
         ) : (
           <span className="rounded-lg bg-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary">IA</span>
         )}
-      </div>
+      </form>
 
       {open && (
         <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-border bg-popover shadow-2xl float-up">
