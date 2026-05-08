@@ -33,7 +33,26 @@ function ProductPage() {
   const [wsTotalQty, setWsTotalQty] = useState(100);
   const [wsDesignsArr, setWsDesignsArr] = useState<number[]>([50]);
   const [showWsCustom, setShowWsCustom] = useState(false);
+  const [showMulti, setShowMulti] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const addDesignToCart = (d: DesignData, idx: number) => {
+    if (!product) return;
+    const id = `${product.slug}-${mode}-${variant}-${color}-design${idx}-${Date.now()}`;
+    addToCart({
+      id,
+      slug: product.slug,
+      title: product.title,
+      emoji: product.emoji,
+      gradient: product.gradient,
+      mode,
+      unitPrice: price,
+      quantity: d.units,
+      variant: product.variants?.[variant],
+      color: product.colors?.[color],
+      customization: { text: d.text, style: customStyle, imageName: d.imageName },
+    });
+  };
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
