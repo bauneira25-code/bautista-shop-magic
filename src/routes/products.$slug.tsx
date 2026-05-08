@@ -312,9 +312,21 @@ function ProductPage() {
               </button>
             </div>
 
-            <Link to="/customize" className="block w-full rounded-xl bg-primary py-2.5 text-center text-xs font-bold text-primary-foreground">
-              Abrir Studio para diseñar →
-            </Link>
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button
+                onClick={() => { setQty(wsCustomQty); doAdd(); toast.success("Agregado al carrito 🛒", { description: `${wsCustomQty} × ${product.title}` }); }}
+                className="rounded-xl border border-primary/40 bg-primary/10 py-2.5 text-xs font-bold text-primary"
+              >
+                AGREGAR AL CARRITO
+              </button>
+              <button
+                onClick={() => { setQty(wsCustomQty); doAdd(); navigate({ to: "/cart" }); }}
+                className="rounded-xl py-2.5 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
+                style={{ background: "var(--gradient-primary)" }}
+              >
+                COMPRAR AHORA
+              </button>
+            </div>
           </div>
         )}
 
