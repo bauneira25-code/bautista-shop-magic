@@ -25,6 +25,7 @@ function CartPage() {
 
   const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
   const [showRegister, setShowRegister] = useState(false);
+  const [showPayMethods, setShowPayMethods] = useState(false);
   const [paid, setPaid] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
@@ -37,9 +38,10 @@ function CartPage() {
   const modeLabel = (m: string) =>
     m === "group" ? "Grupal" : m === "wholesale" ? "Mayorista" : "Individual";
 
-  const finishPay = () => {
+  const finishPay = (method?: string) => {
+    setShowPayMethods(false);
     setPaid(true);
-    toast.success("¡Pago confirmado!", { description: "MercadoPago · Pedido recibido" });
+    toast.success("¡Pago confirmado!", { description: `MercadoPago · ${method ?? "Pago"} · Pedido recibido` });
     setTimeout(() => {
       clear();
       navigate({ to: "/orders" });
@@ -51,7 +53,7 @@ function CartPage() {
       setShowRegister(true);
       return;
     }
-    finishPay();
+    setShowPayMethods(true);
   };
 
   return (
@@ -194,10 +196,14 @@ function CartPage() {
           onDone={(u) => {
             setUser(u);
             setShowRegister(false);
-            toast.success("Cuenta creada ✨", { description: "Procesando tu pago…" });
-            setTimeout(finishPay, 400);
+            toast.success("Cuenta creada ✨");
+            setTimeout(() => setShowPayMethods(true), 300);
           }}
         />
+      )}
+
+      {showPayMethods && (
+        <PayMethodsSheet total={total} onClose={() => setShowPayMethods(false)} onPick={finishPay} />
       )}
 
       {paid && (
@@ -306,5 +312,59 @@ function Input(
         className={`w-full border-0 bg-transparent text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none ${className ?? ""}`}
       />
     </label>
+  );
+}
+
+function PayMethodsSheet({
+  total,
+  onClose,
+  onPick,
+}: {
+  total: number;
+  onClose: () => void;
+  onPick: (method: string) => void;
+}) {
+  const methods = [
+    { id: "debito", label: "Débito", desc: "Pago inmediato con tu tarjeta de débito", icon: "💳" },
+    { id: "credito", label: "Crédito", desc: "Hasta 12 cuotas con tarjeta de crédito", icon: "💎" },
+    { id: "transferencia", label: "Transferencia", desc: "Link de MercadoPago · CVU/Alias", icon: "🔗" },
+  ];
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative mx-auto w-full max-w-[480px] rounded-t-[28px] border-t border-orange-100 bg-white p-5 pb-8 shadow-2xl">
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-neutral-200" />
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <h3 className="font-display text-xl">Elegí cómo pagar</h3>
+            <p className="text-xs text-neutral-500">MercadoPago · {formatARS(total)}</p>
+          </div>
+          <button onClick={onClose} className="grid h-8 w-8 place-items-center rounded-full bg-neutral-100">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="space-y-2">
+          {methods.map((m) => (
+            <button
+              key={m.id}
+              onClick={() => onPick(m.label)}
+              className="flex w-full items-center gap-3 rounded-2xl border border-orange-100 bg-white p-3 text-left transition active:scale-[0.99] hover:border-[#e8451c]"
+            >
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-orange-50 text-2xl">{m.icon}</span>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-neutral-900">{m.label}</p>
+                <p className="text-[11px] text-neutral-500">{m.desc}</p>
+              </div>
+              <span className="text-[#e8451c]">›</span>
+            </button>
+          ))}
+        </div>
+
+        <p className="mt-4 text-center text-[10px] text-neutral-400">
+          Procesado de forma segura por MercadoPago
+        </p>
+      </div>
+    </div>
   );
 }
