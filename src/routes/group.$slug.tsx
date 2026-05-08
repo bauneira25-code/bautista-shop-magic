@@ -482,6 +482,23 @@ function GroupPage() {
       {showPay && (
         <PaymentMethodsSheet total={total} onClose={() => setShowPay(false)} onPaid={confirmPay} />
       )}
+
+      {showMulti && product.customizable && (
+        <MultiDesignSheet
+          productTitle={product.title}
+          productEmoji={product.emoji}
+          productGradient={product.gradient}
+          totalUnits={payQty}
+          onClose={() => setShowMulti(false)}
+          onDesignAdded={addDesignToCart}
+          onAllDone={() => {
+            setShowMulti(false);
+            setJoined((j) => Math.min(target, j + payQty));
+            toast.success("Diseños añadidos al resumen ✨");
+            navigate({ to: "/cart" });
+          }}
+        />
+      )}
     </div>
   );
 }
