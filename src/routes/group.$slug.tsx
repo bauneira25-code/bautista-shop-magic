@@ -228,6 +228,21 @@ function GroupPage() {
         </section>
       )}
 
+      {/* Cantidad */}
+      <section className="mt-3 px-4">
+        <div className="flex items-center justify-between rounded-2xl border border-orange-100 bg-white p-3">
+          <div>
+            <p className="text-xs font-bold text-neutral-900">Unidades</p>
+            <p className="text-[10px] text-neutral-500">Elegí cuántas querés sumar al grupo</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-9 w-9 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-xl leading-none">−</span></button>
+            <QtyInput value={payQty} onChange={setPayQty} className="w-16 rounded-md border border-orange-200 bg-white py-1 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
+            <button onClick={() => setPayQty(payQty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-xl leading-none">+</span></button>
+          </div>
+        </div>
+      </section>
+
       {/* Pasos compra grupal */}
       <section className="mt-4 px-4">
         <PurchaseSteps mode="group" />
@@ -243,18 +258,6 @@ function GroupPage() {
           </div>
           <Copy className="h-4 w-4 text-[#e8451c]" />
         </button>
-      </section>
-
-      {/* Cómo funciona */}
-      <section className="mt-4 px-4">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-4">
-          <p className="font-display text-sm text-neutral-900"><Sparkles className="mr-1 inline h-4 w-4 text-[#e8451c]" /> Cómo funciona</p>
-          <ol className="mt-2 space-y-1.5 text-xs text-neutral-600">
-            <li><b className="text-[#e8451c]">1.</b> Personalizás tu unidad <span className="text-neutral-400">(opcional)</span></li>
-            <li><b className="text-[#e8451c]">2.</b> Te sumás al grupo y pagás</li>
-            <li><b className="text-[#e8451c]">3.</b> Si no se completa, te devolvemos el 100%</li>
-          </ol>
-        </div>
       </section>
 
       {/* Live mini-feed */}
