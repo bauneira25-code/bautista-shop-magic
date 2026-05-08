@@ -296,11 +296,33 @@ function GroupPage() {
               <p className="text-[10px] font-bold uppercase tracking-widest text-[#e8451c]">Producto</p>
               <p className="mt-1 font-display text-lg font-black text-neutral-900">{product.title}</p>
             </div>
+
+            <div className="rounded-2xl border border-orange-100 bg-white p-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-neutral-900">¿Cuántas unidades?</p>
+                  <p className="text-[10px] text-neutral-500">Si son 2 o más, podés hacer diseños distintos</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
+                  <span className="w-6 text-center font-display text-base">{payQty}</span>
+                  <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
+                </div>
+              </div>
+            </div>
+
             <button
-              onClick={() => setStep("customize")}
+              onClick={() => {
+                if (payQty >= 2) {
+                  setStep("browse");
+                  setShowMulti(true);
+                } else {
+                  setStep("customize");
+                }
+              }}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
-              <Flame className="h-4 w-4" /> PERSONALIZAR
+              <Flame className="h-4 w-4" /> PERSONALIZAR {payQty >= 2 ? `${payQty} UNIDADES` : ""}
             </button>
           </div>
         </Sheet>
