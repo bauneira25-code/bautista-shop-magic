@@ -277,14 +277,17 @@ function GroupPage() {
       {/* Sticky CTA */}
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3 pb-3">
         <div className="rounded-[28px] border border-white/10 bg-black/70 p-3 backdrop-blur-2xl shadow-[0_20px_60px_-10px_rgba(168,85,247,0.6)]">
-          <div className="flex items-center gap-3">
-            <div className="px-2">
-              <p className="text-[10px] uppercase tracking-wider text-white/50">Precio grupo</p>
-              <p className="font-display text-2xl font-black text-white">{formatARS(product.price.group)}</p>
+          <div className="flex items-center gap-2">
+            <div className="px-1">
+              <p className="text-[10px] uppercase tracking-wider text-white/50">Grupo</p>
+              <p className="font-display text-xl font-black text-white">{formatARS(product.price.group)}</p>
             </div>
-            <button onClick={startJoin} className="group relative flex-1 overflow-hidden rounded-2xl py-4 font-display text-base font-black tracking-wider text-white" style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}>
+            <button onClick={addIndividualToCart} className="shrink-0 rounded-2xl border border-white/15 bg-white/10 px-3 py-3 text-[11px] font-bold text-white">
+              + Carrito
+            </button>
+            <button onClick={startJoin} className="group relative flex-1 overflow-hidden rounded-2xl py-3.5 font-display text-sm font-black tracking-wider text-white" style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}>
               <span className="relative z-10 inline-flex items-center justify-center gap-2">
-                <Zap className="h-4 w-4" /> {product.customizable ? "PERSONALIZAR Y SUMARME" : "SUMARME AL GRUPO"}
+                <Zap className="h-4 w-4" /> SUMARME AL GRUPO
               </span>
             </button>
           </div>
