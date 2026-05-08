@@ -207,7 +207,7 @@ function CartPage() {
       )}
 
       {showPayMethods && (
-        <PayMethodsSheet total={total} onClose={() => setShowPayMethods(false)} onPick={finishPay} />
+        <PaymentMethodsSheet total={total} onClose={() => setShowPayMethods(false)} onPaid={finishPay} />
       )}
 
       {paid && (
