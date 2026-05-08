@@ -70,7 +70,7 @@ function ProductPage() {
   const groupSolo = mode === "group" && qty >= product.groupTarget;
   const cta =
     mode === "group"
-      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "SUMARME AL GRUPO")
+      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "UNIRME AL GRUPO")
       : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
