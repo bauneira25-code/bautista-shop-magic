@@ -362,22 +362,10 @@ function ProductPage() {
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setQty(Math.max(1, qty - 1))} className="grid h-9 w-9 place-items-center rounded-full bg-secondary"><Minus className="h-4 w-4" /></button>
-            <input
-              type="number"
-              min={1}
+            <QtyInput
               value={qty}
-              onFocus={(e) => e.currentTarget.select()}
-              onChange={(e) => {
-                const v = e.target.value;
-                if (v === "") return;
-                const n = parseInt(v, 10);
-                if (!Number.isNaN(n) && n >= 1) setQty(n);
-              }}
-              onBlur={(e) => {
-                const n = parseInt(e.target.value, 10);
-                setQty(!Number.isNaN(n) && n >= 1 ? n : 1);
-              }}
-              className="w-16 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
+              onChange={setQty}
+              className="w-20 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
             />
             <button onClick={() => setQty(qty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground"><Plus className="h-4 w-4" /></button>
           </div>
