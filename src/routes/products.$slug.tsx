@@ -270,11 +270,16 @@ function ProductPage() {
         {product.customizable && (mode === "individual" || mode === "group") && (
           <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
             <button
-              onClick={() => setShowCustom(!showCustom)}
+              onClick={() => {
+                if (qty >= 2) setShowMulti(true);
+                else setShowCustom(!showCustom);
+              }}
               className="flex w-full items-center justify-between p-4 text-white"
             >
               <div className="text-left">
-                <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Hacelo único</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+                  {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Hacelo único"}
+                </p>
                 <p className="font-display text-lg">PERSONALIZAR 🔥</p>
               </div>
               <ChevronDown className={`h-5 w-5 transition-transform ${showCustom ? "rotate-180" : ""}`} />
