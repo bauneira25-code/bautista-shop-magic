@@ -336,8 +336,6 @@ function GroupPage() {
               </div>
             </div>
 
-            </div>
-
             {/* Cantidad */}
             <div className="flex items-center justify-between rounded-xl border border-orange-100 bg-white px-3 py-2.5">
               <div>
