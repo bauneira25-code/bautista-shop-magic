@@ -505,21 +505,21 @@ function ProductPage() {
 
       {/* Sticky CTA */}
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2">
-        <div className="glass rounded-t-2xl border-t border-border/50 px-2.5 py-1.5">
-          <div className="flex items-center gap-2">
+        <div className="glass rounded-t-2xl border-t border-border/50 px-3 py-2">
+          <div className="flex items-center gap-2.5">
             <div className="px-1 shrink-0">
-              <p className="text-[8px] uppercase text-muted-foreground leading-none">{mode === "group" ? "Grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
-              <p className="font-display text-sm text-primary leading-tight">{formatARS(price * qty)}</p>
-              {savings > 0 && <p className="text-[8px] text-success leading-none">Ahorrás {formatARS(savings * qty)}</p>}
+              <p className="text-[9px] uppercase text-muted-foreground leading-none">{mode === "group" ? "Grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
+              <p className="font-display text-base text-primary leading-tight">{formatARS(price * qty)}</p>
+              {savings > 0 && <p className="text-[9px] text-success leading-none">Ahorrás {formatARS(savings * qty)}</p>}
             </div>
-            <div className="flex flex-1 gap-1.5">
+            <div className="flex flex-1 gap-2">
               <button
                 onClick={() => { doAdd(); toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` }); }}
-                className="flex-1 rounded-xl border border-primary/40 bg-primary/10 py-1.5 text-[10px] font-bold text-primary"
+                className="flex-1 rounded-xl border border-primary/40 bg-primary/10 py-2 text-[11px] font-bold text-primary"
               >
                 AL CARRITO
               </button>
-              <button onClick={handleCta} className="flex-1 rounded-xl py-1.5 font-display text-[10px] tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
+              <button onClick={handleCta} className="flex-1 rounded-xl py-2 font-display text-[11px] tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
                 {mode === "individual" ? "COMPRAR" : cta}
               </button>
             </div>
