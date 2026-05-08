@@ -296,6 +296,9 @@ function Home() {
           </div>
         </section>
 
+        {/* Explorar todo — scroll infinito */}
+        <InfiniteAll />
+
         {/* Para emprendedores — discreto */}
         <Link to="/registrar-marca" className="block rounded-2xl border border-border bg-card p-3.5">
           <div className="flex items-center gap-3">
