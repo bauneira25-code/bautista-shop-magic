@@ -118,8 +118,8 @@ function Home() {
               return (
                 <Link
                   key={c.id}
-                  to="/categorias/$id"
-                  params={{ id: c.id }}
+                  to="/search"
+                  search={{ q: "", cat: c.id }}
                   className="relative flex h-14 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg p-0.5 transition-transform active:scale-95"
                   style={{ background: s.bg, border: `1px solid ${s.border}` }}
                 >
