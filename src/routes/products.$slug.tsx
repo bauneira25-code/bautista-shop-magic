@@ -211,124 +211,15 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Wholesale custom — unidades a personalizar + multi diseño */}
+        {/* Wholesale custom — botón "Personalizar con fuego" */}
         {mode === "wholesale" && product.customizable && (
-          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 float-up space-y-3">
-            <p className="text-xs font-bold uppercase text-primary"><Sparkles className="mr-1 inline h-3 w-3" /> Personalización mayorista</p>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold">Unidades a personalizar</label>
-                <span className="font-display text-base text-primary">{wsCustomQty}</span>
-              </div>
-              <input
-                type="range" min={10} max={500} step={10}
-                value={wsCustomQty}
-                onChange={(e) => setWsCustomQty(Number(e.target.value))}
-                className="mt-2 w-full accent-primary"
-              />
-              <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
-                <span>10</span><span>500</span>
-              </div>
-            </div>
-
-            <label className="flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 cursor-pointer">
-              <div>
-                <p className="text-xs font-bold">¿Querés varios diseños?</p>
-                <p className="text-[10px] text-muted-foreground">Dividí las {wsCustomQty} unidades en distintos diseños</p>
-              </div>
-              <input
-                type="checkbox"
-                checked={wsMultiDesign}
-                onChange={(e) => setWsMultiDesign(e.target.checked)}
-                className="h-5 w-5 accent-primary"
-              />
-            </label>
-
-            {wsMultiDesign && (
-              <div className="rounded-xl border border-dashed border-primary/30 bg-card p-3 space-y-2 float-up">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs font-semibold">Cantidad de diseños</p>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => setWsDesigns(Math.max(2, wsDesigns - 1))} className="grid h-7 w-7 place-items-center rounded-full bg-secondary"><Minus className="h-3 w-3" /></button>
-                    <span className="w-5 text-center font-display text-base">{wsDesigns}</span>
-                    <button onClick={() => setWsDesigns(Math.min(10, wsDesigns + 1))} className="grid h-7 w-7 place-items-center rounded-full bg-primary text-primary-foreground"><Plus className="h-3 w-3" /></button>
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  {Array.from({ length: wsDesigns }).map((_, i) => (
-                    <div key={i} className="flex items-center justify-between rounded-lg bg-secondary px-2.5 py-1.5 text-[11px]">
-                      <span className="font-semibold">Diseño {i + 1}</span>
-                      <span className="text-muted-foreground">{Math.floor(wsCustomQty / wsDesigns)} u.</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[10px] text-muted-foreground">Editás cada diseño en el Studio.</p>
-              </div>
-            )}
-
-            {/* Preview del producto */}
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl" style={{ background: product.gradient }}>
-              <div className="absolute inset-0 grid place-items-center text-6xl">{product.emoji}</div>
-              {customText && (
-                <div className="absolute inset-x-0 bottom-3 text-center font-display text-2xl text-white drop-shadow-lg">
-                  {customText}
-                </div>
-              )}
-              {customImage && (
-                <span className="absolute right-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
-                  📎 {customImage}
-                </span>
-              )}
-              <span className="absolute left-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
-                Vista previa
-              </span>
-            </div>
-
-            {/* Texto */}
-            <div>
-              <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                <Type className="h-3 w-3" /> Texto / nombre / marca
-              </label>
-              <input
-                value={customText}
-                onChange={(e) => setCustomText(e.target.value.slice(0, 20))}
-                placeholder="Ej: TU MARCA"
-                className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
-              />
-            </div>
-
-            {/* Imagen / logo */}
-            <div>
-              <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                <ImageIcon className="h-3 w-3" /> Imagen / logo
-              </label>
-              <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
-              <button
-                onClick={() => fileRef.current?.click()}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card py-3.5 text-xs"
-              >
-                <ImageIcon className="h-4 w-4" />
-                {customImage ? customImage : "Subir imagen / logo"}
-              </button>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <button
-                onClick={() => { setQty(wsCustomQty); doAdd(); toast.success("Agregado al carrito 🛒", { description: `${wsCustomQty} × ${product.title}` }); }}
-                className="rounded-xl border border-primary/40 bg-primary/10 py-2.5 text-xs font-bold text-primary"
-              >
-                AGREGAR AL CARRITO
-              </button>
-              <button
-                onClick={() => { setQty(wsCustomQty); doAdd(); navigate({ to: "/cart" }); }}
-                className="rounded-xl py-2.5 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
-                style={{ background: "var(--gradient-primary)" }}
-              >
-                COMPRAR AHORA
-              </button>
-            </div>
-          </div>
+          <button
+            onClick={() => setShowWsCustom(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 font-display text-sm font-black tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
+            style={{ background: "var(--gradient-primary)" }}
+          >
+            🔥 PERSONALIZAR CON FUEGO
+          </button>
         )}
 
         {/* Variants */}
