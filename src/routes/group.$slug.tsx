@@ -38,6 +38,8 @@ function GroupPage() {
   const [custColor, setCustColor] = useState<string>(product?.colors?.[0] ?? "#000000");
   const [custImage, setCustImage] = useState<string | null>(null);
   const [custImageData, setCustImageData] = useState<string | null>(null);
+  const [customAdded, setCustomAdded] = useState(false);
+  const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
 
   const onPickImage = (file: File | undefined) => {
     if (!file) return;
@@ -126,8 +128,12 @@ function GroupPage() {
   };
 
   const milestones = useMemo(() => Array.from({ length: target }, (_, i) => i + 1), [target]);
-  const fees = Math.round(product.price.group * 0.04);
-  const total = product.price.group + fees;
+  const CUSTOM_FEE = 2300;
+  const SHIPPING_FEE = 1800;
+  const hasCustom = customAdded && (!!custText || !!custImage);
+  const customFee = hasCustom ? CUSTOM_FEE : 0;
+  const shippingFee = delivery === "envio" ? SHIPPING_FEE : 0;
+  const total = product.price.group + customFee + shippingFee;
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] bg-white pb-32 text-neutral-900">
@@ -244,11 +250,16 @@ function GroupPage() {
       {/* Sticky CTA */}
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3 pb-3">
         <div className="rounded-2xl border border-orange-200 bg-white p-2.5 shadow-[0_10px_40px_-10px_rgba(232,69,28,0.4)]">
+          {hasCustom && (
+            <p className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-bold text-[#e8451c]">
+              <Check className="h-3 w-3" /> Personalización agregada
+            </p>
+          )}
           <div className="flex items-center gap-2">
             <button onClick={addIndividualToCart} className="shrink-0 rounded-xl border border-[#e8451c] bg-white px-3 py-3 text-[11px] font-bold text-[#e8451c]">
               + Carrito
             </button>
-            <button onClick={pay} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
+            <button onClick={() => setStep("summary")} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
               <span className="inline-flex items-center justify-center gap-2">
                 <Zap className="h-4 w-4" /> SUMARME AHORA
               </span>
@@ -289,8 +300,16 @@ function GroupPage() {
               )}
             </Field>
 
-            <button onClick={pay} className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white">
-              <Zap className="mr-1 inline h-4 w-4" /> COMPRAR AHORA
+            <button
+              onClick={() => {
+                setCustomAdded(true);
+                setSkipCustom(false);
+                setStep("browse");
+                toast.success("Personalización agregada ✨", { description: "Ahora tocá Sumarme ahora para pagar" });
+              }}
+              className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white"
+            >
+              <Check className="mr-1 inline h-4 w-4" /> AGREGAR
             </button>
           </div>
         </Sheet>
@@ -319,12 +338,36 @@ function GroupPage() {
             </div>
 
             <div className="rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-700">
-              <Row label="Precio grupal" value={formatARS(product.price.group)} />
-              <Row label="Servicio" value={formatARS(fees)} />
-              <Row label="Envío" value={<span className="text-[#e8451c] font-bold">Gratis 🎉</span>} />
+              <Row label="Precio grupo" value={formatARS(product.price.group)} />
+              {hasCustom && <Row label="Personalización" value={formatARS(CUSTOM_FEE)} />}
+              <Row
+                label="Envío"
+                value={delivery === "envio" ? formatARS(SHIPPING_FEE) : <span className="text-[#e8451c] font-bold">Gratis</span>}
+              />
               <div className="my-3 h-px bg-neutral-100" />
               <Row label={<span className="font-bold text-neutral-900">Total</span>} value={<span className="font-display text-xl font-black text-[#e8451c]">{formatARS(total)}</span>} />
-              <p className="mt-2 text-[10px] text-neutral-500">⚡ Si el grupo no se completa en {fmt(m)}:{fmt(s)}, te devolvemos el 100%.</p>
+              <p className="mt-2 text-[10px] text-neutral-500">⚡ Si el grupo no se completa, te devolvemos el 100%.</p>
+            </div>
+
+            {/* Entrega */}
+            <div>
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">¿Cómo lo recibís?</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setDelivery("envio")}
+                  className={`rounded-xl border p-3 text-left transition ${delivery === "envio" ? "border-[#e8451c] bg-orange-50" : "border-neutral-200 bg-white"}`}
+                >
+                  <p className="text-[11px] font-bold text-neutral-900">Envío a domicilio</p>
+                  <p className="text-[10px] text-neutral-500">3 a 5 días · {formatARS(SHIPPING_FEE)}</p>
+                </button>
+                <button
+                  onClick={() => setDelivery("retiro")}
+                  className={`rounded-xl border p-3 text-left transition ${delivery === "retiro" ? "border-[#e8451c] bg-orange-50" : "border-neutral-200 bg-white"}`}
+                >
+                  <p className="text-[11px] font-bold text-neutral-900">Retiro en depósito</p>
+                  <p className="text-[10px] text-neutral-500">Sin costo · CABA</p>
+                </button>
+              </div>
             </div>
 
             <div className="rounded-xl border border-neutral-200 bg-white p-3">
