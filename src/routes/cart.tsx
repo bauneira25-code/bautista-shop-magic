@@ -25,6 +25,7 @@ function CartPage() {
 
   const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
   const [showRegister, setShowRegister] = useState(false);
+  const [showPayMethods, setShowPayMethods] = useState(false);
   const [paid, setPaid] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
@@ -37,9 +38,10 @@ function CartPage() {
   const modeLabel = (m: string) =>
     m === "group" ? "Grupal" : m === "wholesale" ? "Mayorista" : "Individual";
 
-  const finishPay = () => {
+  const finishPay = (method?: string) => {
+    setShowPayMethods(false);
     setPaid(true);
-    toast.success("¡Pago confirmado!", { description: "MercadoPago · Pedido recibido" });
+    toast.success("¡Pago confirmado!", { description: `MercadoPago · ${method ?? "Pago"} · Pedido recibido` });
     setTimeout(() => {
       clear();
       navigate({ to: "/orders" });
