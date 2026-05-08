@@ -190,6 +190,35 @@ function GroupPage() {
         </div>
       </div>
 
+      {/* Personalizar inline */}
+      {product.customizable && (
+        <section className="mt-4 px-4">
+          <div className="rounded-2xl border border-orange-200 bg-white p-3">
+            <div className="flex items-center gap-2">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#e8451c]"><Sparkles className="h-4 w-4 text-white" /></div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-neutral-900">Personalizá tu unidad</p>
+                <p className="text-[11px] text-neutral-500">Texto, imagen, color y estilo IA</p>
+              </div>
+              <button onClick={() => setStep("customize")} className="rounded-xl bg-[#e8451c] px-3 py-2 text-[11px] font-bold text-white">
+                Personalizar
+              </button>
+            </div>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              <button onClick={() => setStep("customize")} className="rounded-xl border border-orange-200 bg-orange-50 px-2 py-2 text-[11px] font-semibold text-[#e8451c]">Texto</button>
+              <button onClick={() => setStep("customize")} className="rounded-xl border border-orange-200 bg-orange-50 px-2 py-2 text-[11px] font-semibold text-[#e8451c]">Imagen</button>
+              <button onClick={() => setStep("customize")} className="rounded-xl border border-orange-200 bg-orange-50 px-2 py-2 text-[11px] font-semibold text-[#e8451c]">Estilo IA</button>
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <button onClick={addIndividualToCart} className="flex-1 rounded-xl border border-[#e8451c] bg-white py-2.5 text-[11px] font-bold text-[#e8451c]">+ Agregar al carrito</button>
+              <button onClick={startJoin} className="flex-1 rounded-xl bg-[#e8451c] py-2.5 text-[11px] font-black text-white">
+                <span className="inline-flex items-center justify-center gap-1.5"><Zap className="h-3.5 w-3.5" /> Sumarme ahora</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Compartir */}
       <section className="mt-4 px-4">
         <button onClick={share} className="flex w-full items-center gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-3 text-left">
