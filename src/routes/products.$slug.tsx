@@ -266,6 +266,52 @@ function ProductPage() {
               </div>
             )}
 
+            {/* Preview del producto */}
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl" style={{ background: product.gradient }}>
+              <div className="absolute inset-0 grid place-items-center text-6xl">{product.emoji}</div>
+              {customText && (
+                <div className="absolute inset-x-0 bottom-3 text-center font-display text-2xl text-white drop-shadow-lg">
+                  {customText}
+                </div>
+              )}
+              {customImage && (
+                <span className="absolute right-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
+                  📎 {customImage}
+                </span>
+              )}
+              <span className="absolute left-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
+                Vista previa
+              </span>
+            </div>
+
+            {/* Texto */}
+            <div>
+              <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+                <Type className="h-3 w-3" /> Texto / nombre / marca
+              </label>
+              <input
+                value={customText}
+                onChange={(e) => setCustomText(e.target.value.slice(0, 20))}
+                placeholder="Ej: TU MARCA"
+                className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+              />
+            </div>
+
+            {/* Imagen / logo */}
+            <div>
+              <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+                <ImageIcon className="h-3 w-3" /> Imagen / logo
+              </label>
+              <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card py-3.5 text-xs"
+              >
+                <ImageIcon className="h-4 w-4" />
+                {customImage ? customImage : "Subir imagen / logo"}
+              </button>
+            </div>
+
             <Link to="/customize" className="block w-full rounded-xl bg-primary py-2.5 text-center text-xs font-bold text-primary-foreground">
               Abrir Studio para diseñar →
             </Link>
