@@ -37,6 +37,29 @@ function GroupPage() {
   const [custStyle, setCustStyle] = useState<string>("Minimal");
   const [custColor, setCustColor] = useState<string>(product?.colors?.[0] ?? "#000000");
   const [custImage, setCustImage] = useState<string | null>(null);
+  const [custImageData, setCustImageData] = useState<string | null>(null);
+
+  const onPickImage = (file: File | undefined) => {
+    if (!file) return;
+    setCustImage(file.name);
+    const r = new FileReader();
+    r.onload = () => setCustImageData(typeof r.result === "string" ? r.result : null);
+    r.readAsDataURL(file);
+  };
+
+  const addIndividualToCart = () => {
+    addToCart({
+      id: `${product!.slug}-ind-${Date.now()}`,
+      slug: product!.slug,
+      title: product!.title,
+      emoji: product!.emoji,
+      gradient: product!.gradient,
+      mode: "individual",
+      unitPrice: product!.price.individual,
+      quantity: 1,
+    });
+    toast.success("Añadido al carrito 🛒", { description: product!.title });
+  };
 
   useEffect(() => {
     const t = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
