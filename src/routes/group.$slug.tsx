@@ -31,7 +31,7 @@ function GroupPage() {
   const [feed, setFeed] = useState<{ name: string; hood: string; ago: string; key: number }[]>([]);
 
   // Flow state
-  const [step, setStep] = useState<Step>("customize");
+  const [step, setStep] = useState<Step>("browse");
   const [skipCustom, setSkipCustom] = useState(false);
   const [custText, setCustText] = useState("");
   const [custStyle, setCustStyle] = useState<string>("Minimal");
