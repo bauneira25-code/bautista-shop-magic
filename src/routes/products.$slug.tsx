@@ -355,7 +355,7 @@ function ProductPage() {
         )}
 
         {/* Personalizar — específico del producto (solo individual / grupal) */}
-        {product.customizable && mode !== "wholesale" && (
+        {product.customizable && mode === "individual" && (
           <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
             <button
               onClick={() => setShowCustom(!showCustom)}
