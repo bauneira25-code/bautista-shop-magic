@@ -466,20 +466,17 @@ function ProductPage() {
               <p className="font-display text-lg text-primary leading-tight">{formatARS(price * qty)}</p>
               {savings > 0 && <p className="text-[9px] text-success leading-none">Ahorrás {formatARS(savings * qty)}</p>}
             </div>
-            {mode === "individual" ? (
-              <div className="flex flex-1 flex-col gap-1.5">
-                <button onClick={handleBuyNow} className="rounded-2xl py-2.5 font-display text-[11px] tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
-                  COMPRAR AHORA
-                </button>
-                <button onClick={handleCta} className="rounded-2xl border border-primary/40 bg-primary/10 py-2 text-[11px] font-bold text-primary">
-                  AGREGAR AL CARRITO
-                </button>
-              </div>
-            ) : (
-              <button onClick={handleCta} className="flex-1 rounded-2xl py-3.5 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
-                {cta}
+            <div className="flex flex-1 flex-col gap-1.5">
+              <button onClick={handleCta} className="rounded-2xl py-2.5 font-display text-[11px] tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
+                {mode === "individual" ? "COMPRAR AHORA" : cta}
               </button>
-            )}
+              <button
+                onClick={() => { doAdd(); toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` }); }}
+                className="rounded-2xl border border-primary/40 bg-primary/10 py-2 text-[11px] font-bold text-primary"
+              >
+                AGREGAR AL CARRITO
+              </button>
+            </div>
           </div>
         </div>
       </div>
