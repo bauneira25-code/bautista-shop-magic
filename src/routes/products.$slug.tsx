@@ -316,7 +316,7 @@ function ProductPage() {
                   </button>
                 ) : (
                   <button
-                    onClick={handleCta}
+                    onClick={handleBuyNow}
                     className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
                     style={{ background: "var(--gradient-primary)" }}
                   >
