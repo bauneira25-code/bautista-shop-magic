@@ -48,19 +48,47 @@ function JoyeriaAmbient({ theme }: { theme: CategoryTheme }) {
 function TechAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
-      {/* full circuit grid background */}
+      {/* circuit grid background */}
       <div className="absolute inset-0 opacity-[0.18] pat-circuit" style={{ ["--pat-color" as never]: theme.accent }} />
+
+      {/* Giant IA watermark */}
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-mono font-black tracking-tighter select-none"
+        style={{
+          fontSize: "22rem",
+          lineHeight: 1,
+          background: `linear-gradient(180deg, ${theme.accent}33 0%, #ffffff11 50%, ${theme.accent}22 100%)`,
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          textShadow: `0 0 80px ${theme.accent}33`,
+        }}
+      >
+        IA
+      </div>
+
+      {/* Horizontal blue/white scan lines */}
+      {[15, 28, 42, 58, 72, 86].map((top, i) => (
+        <div
+          key={top}
+          className="absolute left-0 right-0 h-px"
+          style={{
+            top: `${top}%`,
+            background: `linear-gradient(90deg, transparent, ${i % 2 ? "#ffffff66" : theme.accent}, transparent)`,
+          }}
+        />
+      ))}
+
       {/* glowing AI orbs */}
       <div className="absolute -left-20 top-[30%] h-56 w-56 rounded-full opacity-50 blur-3xl" style={{ background: theme.accent }} />
-      <div className="absolute -right-24 top-[60%] h-60 w-60 rounded-full opacity-40 blur-3xl" style={{ background: theme.accent2 }} />
+      <div className="absolute -right-24 top-[60%] h-60 w-60 rounded-full opacity-40 blur-3xl" style={{ background: "#ffffff" }} />
 
       {/* Floating chips - LEFT */}
       <div className="absolute left-1 top-[25%] -rotate-[8deg] rounded-md border-2 px-2 py-1 font-mono text-[9px] backdrop-blur shadow-lg" style={{ borderColor: theme.accent, color: theme.accent, background: "rgba(0,0,0,0.6)" }}>
         <div>▷ AI.boot()</div>
         <div className="opacity-70">{">"} loading...</div>
       </div>
-      <div className="absolute left-2 top-[48%] rotate-[5deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>
-        ●●● LIVE
+      <div className="absolute left-2 top-[48%] rotate-[5deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: "#ffffff66", color: "#ffffff", background: "rgba(0,0,0,0.5)" }}>
+        ●●● EN VIVO
       </div>
       <div className="absolute left-1 top-[68%] -rotate-[4deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.5)" }}>
         chip-x9 · 5G
@@ -70,14 +98,14 @@ function TechAmbient({ theme }: { theme: CategoryTheme }) {
       </div>
 
       {/* Floating chips - RIGHT */}
-      <div className="absolute right-1 top-[28%] rotate-[6deg] rounded-md border-2 px-2 py-1 font-mono text-[9px] backdrop-blur shadow-lg" style={{ borderColor: theme.accent2, color: theme.accent2, background: "rgba(0,0,0,0.6)" }}>
+      <div className="absolute right-1 top-[28%] rotate-[6deg] rounded-md border-2 px-2 py-1 font-mono text-[9px] backdrop-blur shadow-lg" style={{ borderColor: "#ffffff", color: "#ffffff", background: "rgba(0,0,0,0.6)" }}>
         <div>NEURAL</div>
         <div className="opacity-70">v3.1</div>
       </div>
       <div className="absolute right-2 top-[45%] -rotate-[6deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>
         100% UP
       </div>
-      <div className="absolute right-1 top-[60%] rotate-[3deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent2}66`, color: theme.accent2, background: "rgba(0,0,0,0.5)" }}>
+      <div className="absolute right-1 top-[60%] rotate-[3deg] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: "#ffffff66", color: "#ffffff", background: "rgba(0,0,0,0.5)" }}>
         BIONIC
       </div>
       <div className="absolute right-2 top-[78%] rounded-md border px-2 py-1 font-mono text-[8px] backdrop-blur" style={{ borderColor: `${theme.accent}66`, color: theme.accent, background: "rgba(0,0,0,0.5)" }}>
