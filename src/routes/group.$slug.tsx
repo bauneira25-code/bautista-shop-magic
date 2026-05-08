@@ -282,7 +282,7 @@ function GroupPage() {
             </button>
             <button onClick={() => setStep("summary")} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
               <span className="inline-flex items-center justify-center gap-2">
-                <Zap className="h-4 w-4" /> SUMARME AHORA
+                <Zap className="h-4 w-4" /> UNIRME AL GRUPO
               </span>
             </button>
           </div>
@@ -381,7 +381,7 @@ function GroupPage() {
               }}
               className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
-              <Zap className="mr-1 inline h-4 w-4" /> SUMARME AHORA
+              <Zap className="mr-1 inline h-4 w-4" /> UNIRME AL GRUPO
             </button>
           </div>
         </Sheet>
