@@ -613,7 +613,9 @@ function WholesaleCustomSheet({
             <label className="text-xs font-semibold">Total a comprar</label>
             <input
               type="number" min={1} value={totalQty}
-              onChange={(e) => setTotalQty(Math.max(1, Number(e.target.value)))}
+              onFocus={(e) => e.currentTarget.select()}
+              onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 1) setTotalQty(n); }}
+              onBlur={(e) => { const n = parseInt(e.target.value, 10); setTotalQty(!Number.isNaN(n) && n >= 1 ? n : 1); }}
               className="w-20 rounded-lg border border-border bg-background px-2 py-1 text-right text-sm"
             />
           </div>
