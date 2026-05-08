@@ -350,3 +350,37 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
     </Link>
   );
 }
+
+function InfiniteAll() {
+  const PAGE = 12;
+  const [count, setCount] = useState(PAGE);
+  const sentinel = useRef<HTMLDivElement>(null);
+
+  // Lista repetida para simular catálogo infinito
+  const all = MOCK_PRODUCTS;
+  const items = Array.from({ length: count }).map((_, i) => all[i % all.length]);
+
+  useEffect(() => {
+    const el = sentinel.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        setCount((c) => c + PAGE);
+      }
+    }, { rootMargin: "400px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <section>
+      <SectionHeader title="Explorar todo" icon={<Sparkles className="h-4 w-4 text-primary" />} />
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        {items.map((p, i) => <ProductCard key={`${p.id}-${i}`} product={p} />)}
+      </div>
+      <div ref={sentinel} className="mt-4 grid place-items-center py-4 text-[10px] text-muted-foreground">
+        Cargando más…
+      </div>
+    </section>
+  );
+}
