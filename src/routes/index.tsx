@@ -92,8 +92,8 @@ function Home() {
           style={{
             maxHeight: showCats ? 96 : 0,
             opacity: showCats ? 1 : 0,
-            transform: showCats ? "translateY(0)" : "translateY(-8px)",
-            transition: "max-height 380ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 220ms ease, transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+            transform: showCats ? "translateY(0)" : "translateY(-6px)",
+            transition: "max-height 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <div className="grid grid-cols-6 gap-1.5 pt-2">
