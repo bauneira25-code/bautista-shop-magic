@@ -129,7 +129,7 @@ function GroupPage() {
 
       <div className="relative z-10 flex gap-2 overflow-x-auto px-4 pt-3 scrollbar-hide">
         <Chip icon={<Eye className="h-3 w-3" />}>{viewers.toLocaleString("es-AR")} mirando</Chip>
-        <Chip icon={<TrendingUp className="h-3 w-3" />} accent>🔥 Tendencia BA</Chip>
+        <Chip icon={<TrendingUp className="h-3 w-3" />} accent>Tendencia BA</Chip>
         <Chip icon={<Flame className="h-3 w-3" />}>+1 cada 23s</Chip>
         <Chip icon={<MapPin className="h-3 w-3" />}>Envío 48h</Chip>
       </div>
@@ -381,7 +381,7 @@ function GroupPage() {
               <Check className="h-12 w-12 text-white" />
             </div>
             <p className="font-display text-xl text-white">Reserva confirmada</p>
-            <p className="text-sm text-white/60">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing} 🔥` : "¡Grupo completo!"}</p>
+            <p className="text-sm text-white/60">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
             <button onClick={share} className="w-full rounded-2xl border border-amber-400/30 bg-amber-500/20 py-3 text-sm font-bold text-amber-200">
               <Fire className="mr-1 inline h-4 w-4" /> Compartir y ganar 20% OFF
             </button>
