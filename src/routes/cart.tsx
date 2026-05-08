@@ -53,7 +53,7 @@ function CartPage() {
       setShowRegister(true);
       return;
     }
-    finishPay();
+    setShowPayMethods(true);
   };
 
   return (
