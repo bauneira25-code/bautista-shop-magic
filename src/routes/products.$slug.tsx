@@ -476,3 +476,148 @@ function ModeCard({
     </button>
   );
 }
+
+function WholesaleCustomSheet({
+  product, totalQty, setTotalQty, customQty, setCustomQty, designs, setDesigns,
+  customText, setCustomText, customImage, onPickImage, fileRef, onClose, onAddToCart, onBuyNow,
+}: {
+  product: ReturnType<typeof findProduct> & {};
+  totalQty: number; setTotalQty: (n: number) => void;
+  customQty: number; setCustomQty: (n: number) => void;
+  designs: number[]; setDesigns: (a: number[]) => void;
+  customText: string; setCustomText: (s: string) => void;
+  customImage: string | null;
+  onPickImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  fileRef: React.RefObject<HTMLInputElement>;
+  onClose: () => void; onAddToCart: () => void; onBuyNow: () => void;
+}) {
+  if (!product) return null;
+  const sumDesigns = designs.reduce((a, b) => a + b, 0);
+  const stockQty = Math.max(0, totalQty - customQty);
+  const valid = customQty > 0 && customQty <= totalQty && sumDesigns === customQty;
+  const updateDesign = (i: number, v: number) => {
+    const next = [...designs];
+    next[i] = Math.max(0, Math.floor(v));
+    setDesigns(next);
+  };
+  const addDesign = () => setDesigns([...designs, 0]);
+  const removeDesign = (i: number) => setDesigns(designs.filter((_, idx) => idx !== i));
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-end justify-center">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative mx-auto max-h-[92vh] w-full max-w-[480px] overflow-y-auto rounded-t-[28px] border-t border-primary/20 bg-background p-5 pb-8 shadow-2xl">
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-muted" />
+        <div className="mb-3 flex items-start justify-between">
+          <div>
+            <h3 className="font-display text-xl">🔥 Personalizar mayorista</h3>
+            <p className="text-[11px] text-muted-foreground">Diseñá libremente cuántas y cuántos diseños distintos.</p>
+          </div>
+          <button onClick={onClose} className="grid h-8 w-8 place-items-center rounded-full bg-muted">×</button>
+        </div>
+
+        {/* Preview producto */}
+        <div className="relative mb-3 grid aspect-[16/9] place-items-center overflow-hidden rounded-2xl text-7xl" style={{ background: product.gradient }}>
+          <span>{product.emoji}</span>
+          {customText && (
+            <div className="absolute inset-x-0 bottom-3 text-center font-display text-2xl text-white drop-shadow-lg">{customText}</div>
+          )}
+          {customImage && (
+            <span className="absolute right-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">📎 {customImage}</span>
+          )}
+        </div>
+
+        {/* Texto */}
+        <div className="mb-3">
+          <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Texto / marca</label>
+          <input
+            value={customText}
+            onChange={(e) => setCustomText(e.target.value.slice(0, 24))}
+            placeholder="Ej: TU MARCA"
+            className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+          />
+        </div>
+
+        {/* Imagen */}
+        <div className="mb-3">
+          <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Imagen / logo</label>
+          <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
+          <button onClick={() => fileRef.current?.click()} className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card py-3 text-xs">
+            🖼 {customImage ? customImage : "Subir imagen / logo"}
+          </button>
+        </div>
+
+        {/* Total */}
+        <div className="mb-3 rounded-xl border border-border bg-card p-3">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold">Total a comprar</label>
+            <input
+              type="number" min={1} value={totalQty}
+              onChange={(e) => setTotalQty(Math.max(1, Number(e.target.value)))}
+              className="w-20 rounded-lg border border-border bg-background px-2 py-1 text-right text-sm"
+            />
+          </div>
+          <input
+            type="range" min={10} max={1000} step={10} value={totalQty}
+            onChange={(e) => setTotalQty(Number(e.target.value))}
+            className="mt-2 w-full accent-primary"
+          />
+        </div>
+
+        {/* Personalizar cantidad */}
+        <div className="mb-3 rounded-xl border border-primary/30 bg-primary/5 p-3">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold">¿Cuántas personalizar?</label>
+            <input
+              type="number" min={0} max={totalQty} value={customQty}
+              onChange={(e) => setCustomQty(Math.min(totalQty, Math.max(0, Number(e.target.value))))}
+              className="w-20 rounded-lg border border-primary/40 bg-background px-2 py-1 text-right text-sm"
+            />
+          </div>
+          <input
+            type="range" min={0} max={totalQty} step={1} value={customQty}
+            onChange={(e) => setCustomQty(Number(e.target.value))}
+            className="mt-2 w-full accent-primary"
+          />
+          <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+            <span>{customQty} personalizadas</span>
+            <span>{stockQty} stock estándar</span>
+          </div>
+        </div>
+
+        {/* Diseños — distribución libre */}
+        <div className="mb-3 rounded-xl border border-dashed border-primary/30 bg-card p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <p className="text-xs font-semibold">Diseños distintos ({designs.length})</p>
+            <button onClick={addDesign} className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">+ diseño</button>
+          </div>
+          <div className="space-y-1.5">
+            {designs.map((d, i) => (
+              <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary px-2 py-1.5">
+                <span className="text-[11px] font-semibold">Diseño {i + 1}</span>
+                <input
+                  type="number" min={0} value={d}
+                  onChange={(e) => updateDesign(i, Number(e.target.value))}
+                  className="ml-auto w-20 rounded-md border border-border bg-background px-2 py-1 text-right text-xs"
+                />
+                <span className="text-[10px] text-muted-foreground">u.</span>
+                {designs.length > 1 && (
+                  <button onClick={() => removeDesign(i)} className="text-[10px] text-muted-foreground hover:text-destructive">✕</button>
+                )}
+              </div>
+            ))}
+          </div>
+          <p className={`mt-2 text-[10px] ${sumDesigns === customQty ? "text-success" : "text-warning"}`}>
+            Asignadas {sumDesigns} de {customQty} unidades personalizadas
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <button onClick={onAddToCart} disabled={!valid} className="rounded-xl border border-primary/40 bg-primary/10 py-3 text-xs font-bold text-primary disabled:opacity-40">AL CARRITO</button>
+          <button onClick={onBuyNow} disabled={!valid} className="rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)] disabled:opacity-40" style={{ background: "var(--gradient-primary)" }}>COMPRAR AHORA</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
