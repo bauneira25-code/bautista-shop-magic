@@ -8,6 +8,7 @@ import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type Pu
 import { useLocalCart } from "@/stores/localCart";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { toast } from "sonner";
+import { QtyInput } from "@/components/QtyInput";
 
 export const Route = createFileRoute("/products/$slug")({
   component: ProductPage,
