@@ -124,7 +124,13 @@ function CartPage() {
                   <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <button onClick={() => setQty(it.id, it.quantity - 1)} className="grid h-7 w-7 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><Minus className="h-3 w-3" /></button>
-                      <span className="w-5 text-center text-sm font-bold">{it.quantity}</span>
+                      <input
+                        type="number"
+                        min={1}
+                        value={it.quantity}
+                        onChange={(e) => setQty(it.id, Math.max(1, Number(e.target.value) || 1))}
+                        className="w-12 rounded-md border border-orange-200 bg-white py-0.5 text-center text-sm font-bold text-neutral-900 focus:border-[#e8451c] focus:outline-none"
+                      />
                       <button onClick={() => setQty(it.id, it.quantity + 1)} className="grid h-7 w-7 place-items-center rounded-full bg-[#e8451c] text-white"><Plus className="h-3 w-3" /></button>
                     </div>
                     <p className="font-display text-base text-[#e8451c]">{formatARS(it.unitPrice * it.quantity)}</p>
