@@ -136,7 +136,7 @@ function CategoryPage() {
                   className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-bold ${theme.font}`}
                   style={{ background: theme.accent, color: "#fff" }}
                 >
-                  {p.customizable ? "CUSTOM" : "−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
+                  {p.customizable ? "Personalizable" : "−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
                 </span>
                 {p.customizable && (
                   <Sparkles className="absolute right-2 top-2 h-4 w-4" style={{ color: theme.accent }} />
