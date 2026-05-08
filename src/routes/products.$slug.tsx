@@ -411,11 +411,11 @@ function ProductPage() {
                 AL CARRITO
               </button>
               <button
-                onClick={mode === "individual" ? handleBuyNow : handleCta}
+                onClick={mode === "wholesale" ? handleCta : handleBuyNow}
                 className="flex-1 rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
                 style={{ background: "var(--gradient-primary)" }}
               >
-                {mode === "individual" ? "COMPRAR" : cta}
+                {mode === "individual" ? "COMPRAR" : mode === "group" ? "SUMARME AHORA" : cta}
               </button>
             </div>
           </div>
