@@ -32,6 +32,8 @@ function ProductPage() {
   const [customText, setCustomText] = useState("");
   const [customStyle, setCustomStyle] = useState(AI_STYLES[0].id);
   const [customImage, setCustomImage] = useState<string | null>(null);
+  const [customImageData, setCustomImageData] = useState<string | null>(null);
+  const [customAdded, setCustomAdded] = useState(false);
   const [wsCustomQty, setWsCustomQty] = useState(50);
   const [wsTotalQty, setWsTotalQty] = useState(100);
   const [wsDesignsArr, setWsDesignsArr] = useState<number[]>([50]);
