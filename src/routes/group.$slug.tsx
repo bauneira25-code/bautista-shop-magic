@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useLocalCart } from "@/stores/localCart";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
+import { QtyInput } from "@/components/QtyInput";
 
 export const Route = createFileRoute("/group/$slug")({
   component: GroupPage,
@@ -305,7 +306,7 @@ function GroupPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
-                  <input type="number" min={1} value={payQty} onFocus={(e) => e.currentTarget.select()} onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 1) setPayQty(n); }} onBlur={(e) => { const n = parseInt(e.target.value, 10); setPayQty(!Number.isNaN(n) && n >= 1 ? n : 1); }} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
+                  <QtyInput value={payQty} onChange={setPayQty} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
                   <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
                 </div>
               </div>
@@ -416,7 +417,7 @@ function GroupPage() {
               </div>
               <div className="flex items-center gap-3">
                 <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
-                <input type="number" min={1} value={payQty} onFocus={(e) => e.currentTarget.select()} onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 1) setPayQty(n); }} onBlur={(e) => { const n = parseInt(e.target.value, 10); setPayQty(!Number.isNaN(n) && n >= 1 ? n : 1); }} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
+                <QtyInput value={payQty} onChange={setPayQty} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
                 <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
               </div>
             </div>

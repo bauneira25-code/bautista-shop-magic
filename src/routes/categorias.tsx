@@ -26,8 +26,8 @@ function Categorias() {
             return (
               <Link
                 key={c.id}
-                to="/categorias/$id"
-                params={{ id: c.id }}
+                to="/search"
+                search={{ q: "", cat: c.id }}
                 className="relative block aspect-square overflow-hidden rounded-3xl border"
                 style={{
                   background: c.bg,

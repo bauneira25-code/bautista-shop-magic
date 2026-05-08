@@ -8,6 +8,7 @@ import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type Pu
 import { useLocalCart } from "@/stores/localCart";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { toast } from "sonner";
+import { QtyInput } from "@/components/QtyInput";
 
 export const Route = createFileRoute("/products/$slug")({
   component: ProductPage,
@@ -361,22 +362,10 @@ function ProductPage() {
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setQty(Math.max(1, qty - 1))} className="grid h-9 w-9 place-items-center rounded-full bg-secondary"><Minus className="h-4 w-4" /></button>
-            <input
-              type="number"
-              min={1}
+            <QtyInput
               value={qty}
-              onFocus={(e) => e.currentTarget.select()}
-              onChange={(e) => {
-                const v = e.target.value;
-                if (v === "") return;
-                const n = parseInt(v, 10);
-                if (!Number.isNaN(n) && n >= 1) setQty(n);
-              }}
-              onBlur={(e) => {
-                const n = parseInt(e.target.value, 10);
-                setQty(!Number.isNaN(n) && n >= 1 ? n : 1);
-              }}
-              className="w-16 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
+              onChange={setQty}
+              className="w-20 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
             />
             <button onClick={() => setQty(qty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground"><Plus className="h-4 w-4" /></button>
           </div>
@@ -611,11 +600,9 @@ function WholesaleCustomSheet({
         <div className="mb-3 rounded-xl border border-border bg-card p-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold">Total a comprar</label>
-            <input
-              type="number" min={1} value={totalQty}
-              onFocus={(e) => e.currentTarget.select()}
-              onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 1) setTotalQty(n); }}
-              onBlur={(e) => { const n = parseInt(e.target.value, 10); setTotalQty(!Number.isNaN(n) && n >= 1 ? n : 1); }}
+            <QtyInput
+              value={totalQty}
+              onChange={setTotalQty}
               className="w-20 rounded-lg border border-border bg-background px-2 py-1 text-right text-sm"
             />
           </div>
@@ -630,11 +617,11 @@ function WholesaleCustomSheet({
         <div className="mb-3 rounded-xl border border-primary/30 bg-primary/5 p-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold">¿Cuántas personalizar?</label>
-            <input
-              type="number" min={0} max={totalQty} value={customQty}
-              onFocus={(e) => e.currentTarget.select()}
-              onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 0) setCustomQty(Math.min(totalQty, n)); }}
-              onBlur={(e) => { const n = parseInt(e.target.value, 10); setCustomQty(!Number.isNaN(n) && n >= 0 ? Math.min(totalQty, n) : 0); }}
+            <QtyInput
+              value={customQty}
+              min={0}
+              max={totalQty}
+              onChange={setCustomQty}
               className="w-20 rounded-lg border border-primary/40 bg-background px-2 py-1 text-right text-sm"
             />
           </div>
@@ -659,9 +646,10 @@ function WholesaleCustomSheet({
             {designs.map((d, i) => (
               <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary px-2 py-1.5">
                 <span className="text-[11px] font-semibold">Diseño {i + 1}</span>
-                <input
-                  type="number" min={0} value={d}
-                  onChange={(e) => updateDesign(i, Number(e.target.value))}
+                <QtyInput
+                  value={d}
+                  min={0}
+                  onChange={(n) => updateDesign(i, n)}
                   className="ml-auto w-20 rounded-md border border-border bg-background px-2 py-1 text-right text-xs"
                 />
                 <span className="text-[10px] text-muted-foreground">u.</span>
