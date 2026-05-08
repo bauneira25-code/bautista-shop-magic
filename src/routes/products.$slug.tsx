@@ -654,6 +654,15 @@ function WholesaleCustomSheet({
           </p>
         </div>
 
+        {customQty >= 2 && (
+          <button
+            onClick={onOpenMulti}
+            className="mb-2 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/50 bg-primary/5 py-2.5 text-xs font-bold text-primary"
+          >
+            🎨 Diseñar uno por uno ({customQty} pantallas)
+          </button>
+        )}
+
         <div className="grid grid-cols-2 gap-2">
           <button onClick={onAddToCart} disabled={!valid} className="rounded-xl border border-primary/40 bg-primary/10 py-3 text-xs font-bold text-primary disabled:opacity-40">AL CARRITO</button>
           <button onClick={onBuyNow} disabled={!valid} className="rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)] disabled:opacity-40" style={{ background: "var(--gradient-primary)" }}>COMPRAR AHORA</button>
