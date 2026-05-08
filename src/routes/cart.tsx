@@ -196,10 +196,14 @@ function CartPage() {
           onDone={(u) => {
             setUser(u);
             setShowRegister(false);
-            toast.success("Cuenta creada ✨", { description: "Procesando tu pago…" });
-            setTimeout(finishPay, 400);
+            toast.success("Cuenta creada ✨");
+            setTimeout(() => setShowPayMethods(true), 300);
           }}
         />
+      )}
+
+      {showPayMethods && (
+        <PayMethodsSheet total={total} onClose={() => setShowPayMethods(false)} onPick={finishPay} />
       )}
 
       {paid && (
