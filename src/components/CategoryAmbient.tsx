@@ -44,6 +44,7 @@ function Watermark({ text, color, mono }: { text: string; color: string; mono?: 
 function JoyeriaAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <Watermark text="JOYAS" color={theme.accent} />
       <div className="absolute inset-0 opacity-30 pat-shine" style={{ ["--pat-color" as never]: theme.accent }} />
       <div className="absolute -left-20 top-[20%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
       <div className="absolute -right-20 top-[70%] h-56 w-56 rounded-full opacity-25 blur-3xl" style={{ background: theme.accent2 }} />
@@ -140,6 +141,7 @@ function TechAmbient({ theme }: { theme: CategoryTheme }) {
 function HogarAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <Watermark text="ZEN" color={theme.accent} />
       {/* warm light beams */}
       <div className="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full opacity-25 blur-3xl" style={{ background: theme.accent }} />
       <div className="absolute -bottom-20 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-20 blur-3xl" style={{ background: theme.accent2 }} />
@@ -216,6 +218,7 @@ function AudioAmbient({ theme }: { theme: CategoryTheme }) {
 function BellezaAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <Watermark text="GLOW" color={theme.accent} />
       <div className="absolute inset-0 opacity-40 pat-sparkle" style={{ ["--pat-color" as never]: theme.accent }} />
       <div className="absolute -left-20 top-[20%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
       <div className="absolute -right-20 top-[70%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent2 }} />
@@ -240,6 +243,7 @@ function BellezaAmbient({ theme }: { theme: CategoryTheme }) {
 function DeporteAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <Watermark text="BEAST" color={theme.accent} />
       <div className="absolute inset-0 opacity-25 pat-scan" style={{ ["--pat-color" as never]: theme.accent }} />
       {/* Vertical text */}
       <div className="absolute left-2 top-[25%] -rotate-90 origin-top-left translate-y-24 font-bebas text-4xl tracking-widest opacity-40" style={{ color: theme.accent }}>NO PAIN</div>
@@ -279,6 +283,7 @@ function GamerAmbient({ theme }: { theme: CategoryTheme }) {
 function SmartAmbient({ theme }: { theme: CategoryTheme }) {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[480px] overflow-hidden">
+      <Watermark text="SMART" color={theme.accent} mono />
       <div className="absolute inset-0 opacity-15 pat-grid" style={{ ["--pat-color" as never]: theme.accent }} />
       <div className="absolute -left-20 top-[40%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent }} />
       <div className="absolute -right-20 top-[20%] h-56 w-56 rounded-full opacity-30 blur-3xl" style={{ background: theme.accent2 }} />
