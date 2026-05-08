@@ -47,11 +47,27 @@ function Home() {
     .sort((a, b) => score(a.category) - score(b.category))
     .slice(0, 10);
 
+  // Scroll direction: ocultar categorías al bajar, mostrarlas al subir (con rebote)
+  const [showCats, setShowCats] = useState(true);
+  const lastY = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 60) { setShowCats(true); lastY.current = y; return; }
+      const dy = y - lastY.current;
+      if (dy > 8) setShowCats(false);
+      else if (dy < -8) setShowCats(true);
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <MobileShell>
       <OnboardingGender />
-      {/* Top bar */}
-      <header className="sticky top-0 z-30 px-5 pb-3 pt-4 backdrop-blur-xl" style={{ background: "oklch(0.13 0.02 295 / 0.85)" }}>
+      {/* Top bar — buscador siempre fijo */}
+      <header className="sticky top-0 z-30 px-5 pb-2 pt-4 backdrop-blur-xl" style={{ background: "oklch(0.13 0.02 295 / 0.9)" }}>
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <span className="grid h-9 w-9 place-items-center rounded-xl text-base font-black text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>N</span>
@@ -69,6 +85,36 @@ function Home() {
         <div className="mt-3">
           <SmartSearch />
         </div>
+
+        {/* Categorías — fijas debajo del buscador, se ocultan al bajar y vuelven con rebote al subir */}
+        <div
+          className="overflow-hidden"
+          style={{
+            maxHeight: showCats ? 96 : 0,
+            opacity: showCats ? 1 : 0,
+            transform: showCats ? "translateY(0)" : "translateY(-8px)",
+            transition: "max-height 380ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 220ms ease, transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+          }}
+        >
+          <div className="grid grid-cols-6 gap-1.5 pt-2">
+            {CATEGORIES.map((c) => {
+              const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
+              return (
+                <Link
+                  key={c.id}
+                  to="/categorias/$id"
+                  params={{ id: c.id }}
+                  className="relative flex h-14 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg p-0.5 transition-transform active:scale-95"
+                  style={{ background: s.bg, border: `1px solid ${s.border}` }}
+                >
+                  <span className="text-sm leading-none">{c.emoji}</span>
+                  <span className="text-[7px] font-bold leading-none text-center" style={{ color: s.text }}>{c.name}</span>
+                  <span className="pointer-events-none absolute -right-2 -bottom-2 h-5 w-5 rounded-full opacity-50 blur-md" style={{ background: s.glow }} />
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </header>
 
       <main className="space-y-5 px-5 pt-3">
@@ -85,28 +131,6 @@ function Home() {
             </div>
           </div>
         </div>
-
-        {/* Categorías — fila horizontal compacta */}
-        <section>
-          <div className="grid grid-cols-6 gap-1.5">
-            {CATEGORIES.map((c) => {
-              const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
-              return (
-                <Link
-                  key={c.id}
-                  to="/categorias/$id"
-                  params={{ id: c.id }}
-                  className="relative flex aspect-square flex-col items-center justify-center gap-1 overflow-hidden rounded-xl p-1 transition-transform active:scale-95"
-                  style={{ background: s.bg, border: `1px solid ${s.border}` }}
-                >
-                  <span className="text-base leading-none">{c.emoji}</span>
-                  <span className="text-[8px] font-bold leading-none text-center" style={{ color: s.text }}>{c.name}</span>
-                  <span className="pointer-events-none absolute -right-2 -bottom-2 h-6 w-6 rounded-full opacity-50 blur-md" style={{ background: s.glow }} />
-                </Link>
-              );
-            })}
-          </div>
-        </section>
 
         {/* Combo: Hero grupal grande (izq) + productos destacados (der) */}
         <section className="grid grid-cols-5 gap-3">
