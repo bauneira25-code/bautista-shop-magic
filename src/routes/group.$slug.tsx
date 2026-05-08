@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useLocalCart } from "@/stores/localCart";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
+import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { QtyInput } from "@/components/QtyInput";
 
 export const Route = createFileRoute("/group/$slug")({
@@ -227,6 +228,11 @@ function GroupPage() {
         </section>
       )}
 
+      {/* Pasos compra grupal */}
+      <section className="mt-4 px-4">
+        <PurchaseSteps mode="group" />
+      </section>
+
       {/* Compartir */}
       <section className="mt-4 px-4">
         <button onClick={share} className="flex w-full items-center gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-3 text-left">
@@ -282,7 +288,7 @@ function GroupPage() {
             </button>
             <button onClick={() => setStep("summary")} className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-sm font-black tracking-wider text-white">
               <span className="inline-flex items-center justify-center gap-2">
-                <Zap className="h-4 w-4" /> SUMARME AHORA
+                <Zap className="h-4 w-4" /> UNIRME AL GRUPO
               </span>
             </button>
           </div>
@@ -381,7 +387,7 @@ function GroupPage() {
               }}
               className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
-              <Zap className="mr-1 inline h-4 w-4" /> SUMARME AHORA
+              <Zap className="mr-1 inline h-4 w-4" /> UNIRME AL GRUPO
             </button>
           </div>
         </Sheet>

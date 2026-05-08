@@ -2,11 +2,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import {
   ArrowLeft, Heart, Share2, Star, Users, Clock, Truck, ShieldCheck, Sparkles,
-  Plus, Minus, Type, Image as ImageIcon, Smile, Wand2, ChevronDown,
+  Plus, Minus,
 } from "lucide-react";
 import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
+import { FullCustomizeSheet } from "@/components/FullCustomizeSheet";
+import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 
@@ -30,6 +32,8 @@ function ProductPage() {
   const [customText, setCustomText] = useState("");
   const [customStyle, setCustomStyle] = useState(AI_STYLES[0].id);
   const [customImage, setCustomImage] = useState<string | null>(null);
+  const [customImageData, setCustomImageData] = useState<string | null>(null);
+  const [customAdded, setCustomAdded] = useState(false);
   const [wsCustomQty, setWsCustomQty] = useState(50);
   const [wsTotalQty, setWsTotalQty] = useState(100);
   const [wsDesignsArr, setWsDesignsArr] = useState<number[]>([50]);
@@ -66,7 +70,7 @@ function ProductPage() {
   const groupSolo = mode === "group" && qty >= product.groupTarget;
   const cta =
     mode === "group"
-      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "SUMARME AL GRUPO")
+      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "UNIRME AL GRUPO")
       : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
@@ -108,10 +112,16 @@ function ProductPage() {
 
   const onPickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
-    if (f) {
-      setCustomImage(f.name);
-      toast.success("Imagen subida ✨", { description: f.name });
-    }
+    if (f) handlePickImageFile(f);
+  };
+
+  const handlePickImageFile = (f: File | undefined) => {
+    if (!f) return;
+    setCustomImage(f.name);
+    const r = new FileReader();
+    r.onload = () => setCustomImageData(typeof r.result === "string" ? r.result : null);
+    r.readAsDataURL(f);
+    toast.success("Imagen subida ✨", { description: f.name });
   };
 
   return (
@@ -267,92 +277,32 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Personalizar — individual y grupal */}
+        {/* Personalizar — individual y grupal (fullscreen) */}
         {product.customizable && (mode === "individual" || mode === "group") && (
-          <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
-            <button
-              onClick={() => {
-                if (qty >= 2) setShowMulti(true);
-                else setShowCustom(!showCustom);
-              }}
-              className="flex w-full items-center justify-between p-4 text-white"
-            >
-              <div className="text-left">
-                <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
-                  {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Hacelo único"}
-                </p>
-                <p className="font-display text-lg">PERSONALIZAR 🔥</p>
-              </div>
-              <ChevronDown className={`h-5 w-5 transition-transform ${showCustom ? "rotate-180" : ""}`} />
-            </button>
-
-            {showCustom && (
-              <div className="space-y-4 bg-card p-4 float-up">
-                {/* Preview producto */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl" style={{ background: product.gradient }}>
-                  <div className="absolute inset-0 grid place-items-center text-7xl">{product.emoji}</div>
-                  {customText && (
-                    <div className="absolute inset-x-0 bottom-3 text-center font-display text-2xl text-white drop-shadow-lg">
-                      {customText}
-                    </div>
-                  )}
-                  {customImage && (
-                    <span className="absolute right-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
-                      📎 {customImage}
-                    </span>
-                  )}
-                </div>
-
-                {/* Texto */}
-                <div>
-                  <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                    <Type className="h-3 w-3" /> Tu texto / nombre
-                  </label>
-                  <input
-                    value={customText}
-                    onChange={(e) => setCustomText(e.target.value.slice(0, 20))}
-                    placeholder="Ej: NEIBA"
-                    className="w-full rounded-xl border border-border bg-secondary px-3 py-2.5 text-sm outline-none focus:border-primary"
-                  />
-                </div>
-
-                {/* Imagen */}
-                <div>
-                  <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                    <ImageIcon className="h-3 w-3" /> Tu imagen / logo
-                  </label>
-                  <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
-                  <button
-                    onClick={() => fileRef.current?.click()}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-secondary/50 py-4 text-xs"
-                  >
-                    <ImageIcon className="h-4 w-4" />
-                    {customImage ? customImage : "Pegar / subir imagen"}
-                  </button>
-                </div>
-
-                {/* CTA por modo */}
-                {mode === "individual" ? (
-                  <button
-                    onClick={handleBuyNow}
-                    className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
-                    style={{ background: "var(--gradient-primary)" }}
-                  >
-                    COMPRAR AHORA
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleBuyNow}
-                    className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
-                    style={{ background: "var(--gradient-primary)" }}
-                  >
-                    SUMARME AHORA
-                  </button>
-                )}
-              </div>
+          <button
+            onClick={() => {
+              if (qty >= 2) setShowMulti(true);
+              else setShowCustom(true);
+            }}
+            className="flex w-full items-center justify-between rounded-2xl p-4 text-white shadow-[var(--shadow-glow)]"
+            style={{ background: "var(--gradient-primary)" }}
+          >
+            <div className="text-left">
+              <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+                {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Texto, imagen y color"}
+              </p>
+              <p className="font-display text-lg">PERSONALIZAR 🔥</p>
+            </div>
+            {customAdded && (
+              <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold backdrop-blur">
+                ✓ Listo
+              </span>
             )}
-          </div>
+          </button>
         )}
+
+        {/* Pasos por modo */}
+        <PurchaseSteps mode={mode} />
 
         {/* Quantity — siempre visible */}
         <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3">
@@ -445,7 +395,7 @@ function ProductPage() {
                 className="flex-1 rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
                 style={{ background: "var(--gradient-primary)" }}
               >
-                {mode === "individual" ? "COMPRAR" : mode === "group" ? "SUMARME AHORA" : cta}
+                {mode === "individual" ? "COMPRAR" : mode === "group" ? "UNIRME AL GRUPO" : cta}
               </button>
             </div>
           </div>
@@ -497,6 +447,32 @@ function ProductPage() {
             setShowMulti(false);
             toast.success("Diseños añadidos al resumen ✨");
             navigate({ to: "/cart" });
+          }}
+        />
+      )}
+
+      {/* FULLSCREEN CUSTOM SHEET — individual / grupal con 1 unidad */}
+      {showCustom && product.customizable && (
+        <FullCustomizeSheet
+          productTitle={product.title}
+          productEmoji={product.emoji}
+          productGradient={product.gradient}
+          text={customText}
+          setText={setCustomText}
+          imageName={customImage}
+          imageData={customImageData}
+          onPickImage={handlePickImageFile}
+          colors={product.colors}
+          selectedColor={product.colors?.[color]}
+          onSelectColor={(c) => {
+            const idx = product.colors?.indexOf(c) ?? -1;
+            if (idx >= 0) setColor(idx);
+          }}
+          onClose={() => setShowCustom(false)}
+          onConfirm={() => {
+            setCustomAdded(true);
+            setShowCustom(false);
+            toast.success("Diseño guardado ✨", { description: "Listo para comprar" });
           }}
         />
       )}
