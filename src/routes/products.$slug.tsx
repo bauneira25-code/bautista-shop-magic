@@ -375,29 +375,26 @@ function ProductPage() {
       </div>
 
       {/* Sticky CTA */}
-      <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2">
-        <div className="glass rounded-t-2xl border-t border-border/50 px-3 py-2">
-          <div className="flex items-center gap-2.5">
-            <div className="px-1 shrink-0">
-              <p className="text-[9px] uppercase text-muted-foreground leading-none">{mode === "group" ? "Grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
-              <p className="font-display text-base text-primary leading-tight">{formatARS(price * qty)}</p>
-              {savings > 0 && <p className="text-[9px] text-success leading-none">Ahorrás {formatARS(savings * qty)}</p>}
-            </div>
+      <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 border-t border-orange-100 bg-white px-3 py-2.5 shadow-[0_-8px_24px_-8px_rgba(0,0,0,0.08)]">
+        <div className="flex items-center gap-2.5">
+          <div className="shrink-0 px-1">
+            <p className="text-[9px] uppercase leading-none text-neutral-500">{mode === "group" ? "Grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
+            <p className="font-display text-base leading-tight text-[#e8451c]">{formatARS(price * qty)}</p>
+            {savings > 0 && <p className="text-[9px] leading-none text-emerald-600">Ahorrás {formatARS(savings * qty)}</p>}
+          </div>
           <div className="flex flex-1 gap-2">
-              <button
-                onClick={() => { doAdd(); toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` }); }}
-                className="flex-1 rounded-xl border border-primary/40 bg-primary/10 py-3 text-xs font-bold text-primary"
-              >
-                AL CARRITO
-              </button>
-              <button
-                onClick={mode === "wholesale" ? handleCta : handleBuyNow}
-                className="flex-1 rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
-                style={{ background: "var(--gradient-primary)" }}
-              >
-                {mode === "individual" ? "COMPRAR" : mode === "group" ? "UNIRME AL GRUPO" : cta}
-              </button>
-            </div>
+            <button
+              onClick={() => { doAdd(); toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` }); }}
+              className="flex-1 rounded-xl border-2 border-[#e8451c] bg-white py-3 text-xs font-black tracking-wider text-[#e8451c]"
+            >
+              AL CARRITO
+            </button>
+            <button
+              onClick={mode === "wholesale" ? handleCta : handleBuyNow}
+              className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-xs font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
+            >
+              {mode === "individual" ? "COMPRAR" : mode === "group" ? "UNIRME AL GRUPO" : cta}
+            </button>
           </div>
         </div>
       </div>
