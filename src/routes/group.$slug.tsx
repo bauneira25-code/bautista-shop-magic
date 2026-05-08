@@ -115,7 +115,7 @@ function GroupPage() {
       },
     });
     setStep("paid");
-    toast.success("¡Estás dentro del grupo! 💜", {
+    toast.success("¡Estás dentro del grupo!", {
       description: `Faltan ${Math.max(0, target - joined - 1)} para desbloquear`,
     });
   };
