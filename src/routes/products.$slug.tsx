@@ -193,20 +193,20 @@ function ProductPage() {
 
         {/* Wholesale tiers */}
         {mode === "wholesale" && (
-          <div className="rounded-2xl border border-border bg-card p-4 float-up space-y-2">
-            <p className="text-xs font-bold uppercase text-muted-foreground">Precios mayoristas</p>
+          <div className="rounded-2xl border border-border bg-card p-3 float-up space-y-1">
+            <p className="text-[10px] font-bold uppercase text-muted-foreground">Precios mayoristas</p>
             {[
               { range: "1 - 5 unidades", price: product.price.individual },
               { range: "5 - 20 unidades", price: product.price.group },
               { range: "20 - 100 unidades", price: Math.round((product.price.group + product.price.wholesale) / 2) },
               { range: "100+ unidades", price: product.price.wholesale, best: true },
             ].map((t) => (
-              <div key={t.range} className={`flex items-center justify-between rounded-xl px-3 py-2 ${t.best ? "bg-primary/15 border border-primary/30" : "bg-secondary"}`}>
-                <span className="text-xs">{t.range}</span>
-                <span className="text-sm font-bold">{formatARS(t.price)}</span>
+              <div key={t.range} className={`flex items-center justify-between rounded-lg px-2.5 py-1 ${t.best ? "bg-primary/15 border border-primary/30" : "bg-secondary"}`}>
+                <span className="text-[10px]">{t.range}</span>
+                <span className="text-[11px] font-bold">{formatARS(t.price)}</span>
               </div>
             ))}
-            <p className="pt-2 text-[11px] text-muted-foreground">📦 Packaging personalizado · 🏷 Branding propio · 🚚 Envío directo a tu local</p>
+            <p className="pt-1 text-[10px] text-muted-foreground">📦 Packaging · 🏷 Branding · 🚚 Envío a tu local</p>
           </div>
         )}
 
