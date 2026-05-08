@@ -128,8 +128,18 @@ function CartPage() {
                         type="number"
                         min={1}
                         value={it.quantity}
-                        onChange={(e) => setQty(it.id, Math.max(1, Number(e.target.value) || 1))}
-                        className="w-12 rounded-md border border-orange-200 bg-white py-0.5 text-center text-sm font-bold text-neutral-900 focus:border-[#e8451c] focus:outline-none"
+                        onFocus={(e) => e.currentTarget.select()}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          if (v === "") return;
+                          const n = parseInt(v, 10);
+                          if (!Number.isNaN(n) && n >= 1) setQty(it.id, n);
+                        }}
+                        onBlur={(e) => {
+                          const n = parseInt(e.target.value, 10);
+                          setQty(it.id, !Number.isNaN(n) && n >= 1 ? n : 1);
+                        }}
+                        className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center text-sm font-bold text-neutral-900 focus:border-[#e8451c] focus:outline-none"
                       />
                       <button onClick={() => setQty(it.id, it.quantity + 1)} className="grid h-7 w-7 place-items-center rounded-full bg-[#e8451c] text-white"><Plus className="h-3 w-3" /></button>
                     </div>
