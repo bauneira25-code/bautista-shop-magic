@@ -216,7 +216,6 @@ export const TRENDING = MOCK_PRODUCTS.filter((p) => !!p.badge).slice(0, 8);
 export const VIRAL = MOCK_PRODUCTS.filter((p) => p.badge?.includes("Viral") || p.badge?.includes("TikTok")).slice(0, 6);
 
 export const LIVE_FEED = [
-  "🔥 Lucas se unió al grupo de Funda iPhone Magsafe",
   "⚡ Mica compró Auriculares Pro ANC",
   "✨ Sofi personalizó un collar minimalista",
   "🎯 Tomás se unió al grupo de Smartwatch X9",
