@@ -7,6 +7,7 @@ import {
 import { findProduct, formatARS } from "@/lib/mockData";
 import { toast } from "sonner";
 import { useLocalCart } from "@/stores/localCart";
+import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 
 export const Route = createFileRoute("/group/$slug")({
   component: GroupPage,
@@ -41,6 +42,7 @@ function GroupPage() {
   const [customAdded, setCustomAdded] = useState(false);
   const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
   const [payQty, setPayQty] = useState(1);
+  const [showPay, setShowPay] = useState(false);
 
   const onPickImage = (file: File | undefined) => {
     if (!file) return;
@@ -99,7 +101,8 @@ function GroupPage() {
   const confirmCustom = () => setStep("summary");
   const skip = () => { setSkipCustom(true); setStep("summary"); };
 
-  const pay = () => {
+  const confirmPay = (info: { method: string; cardLast4?: string }) => {
+    setShowPay(false);
     setJoined((j) => Math.min(target, j + 1));
     addToCart({
       id: `${product.slug}-group-${Date.now()}`,
@@ -109,7 +112,7 @@ function GroupPage() {
       gradient: product.gradient,
       mode: "group",
       unitPrice: product.price.group,
-      quantity: 1,
+      quantity: payQty,
       color: skipCustom ? undefined : custColor,
       customization: skipCustom ? undefined : {
         text: custText || undefined,
@@ -118,9 +121,8 @@ function GroupPage() {
       },
     });
     setStep("paid");
-    toast.success("¡Estás dentro del grupo!", {
-      description: `Faltan ${Math.max(0, target - joined - 1)} para desbloquear`,
-    });
+    const desc = info.cardLast4 ? `${info.method} ···· ${info.cardLast4}` : info.method;
+    toast.success("¡Estás dentro del grupo!", { description: desc });
   };
 
   const share = () => {
@@ -382,19 +384,7 @@ function GroupPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 bg-white p-3">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Método de pago</p>
-              <div className="flex items-center gap-3 rounded-lg bg-orange-50 p-3">
-                <div className="grid h-10 w-10 place-items-center rounded-lg bg-[#e8451c] text-white"><CreditCard className="h-5 w-5" /></div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-neutral-900">MercadoPago</p>
-                  <p className="text-[10px] text-neutral-500">Tarjeta, débito o saldo</p>
-                </div>
-                <Lock className="h-4 w-4 text-neutral-400" />
-              </div>
-            </div>
-
-            <button onClick={pay} className="w-full rounded-xl bg-[#e8451c] py-4 font-display text-base font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]">
+            <button onClick={() => setShowPay(true)} className="w-full rounded-xl bg-[#e8451c] py-4 font-display text-base font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]">
               <Lock className="mr-2 inline h-4 w-4" /> PAGAR Y UNIRME · {formatARS(total)}
             </button>
             <p className="text-center text-[10px] text-neutral-400">Al pagar, aceptás los términos del grupo</p>
@@ -417,6 +407,10 @@ function GroupPage() {
             <button onClick={() => navigate({ to: "/orders" })} className="w-full rounded-xl bg-neutral-100 py-3 text-sm font-bold text-neutral-700">Ver mis pedidos</button>
           </div>
         </Sheet>
+      )}
+
+      {showPay && (
+        <PaymentMethodsSheet total={total} onClose={() => setShowPay(false)} onPaid={confirmPay} />
       )}
     </div>
   );
