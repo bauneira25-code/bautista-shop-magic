@@ -107,7 +107,9 @@ function GroupPage() {
   const target = product.groupTarget;
   const pct = (joined / target) * 100;
   const missing = Math.max(0, target - joined);
+  const maxQty = Math.max(1, missing);
   const almostFull = pct >= 70;
+  useEffect(() => { if (payQty > maxQty) setPayQty(maxQty); }, [maxQty, payQty]);
   const fmt = (n: number) => String(n).padStart(2, "0");
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
@@ -233,12 +235,19 @@ function GroupPage() {
         <div className="flex items-center justify-between rounded-2xl border border-orange-100 bg-white p-3">
           <div>
             <p className="text-xs font-bold text-neutral-900">Unidades</p>
-            <p className="text-[10px] text-neutral-500">Elegí cuántas querés sumar al grupo</p>
+            <p className="text-[10px] text-neutral-500">Quedan {missing} cupos en el grupo</p>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-9 w-9 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-xl leading-none">−</span></button>
-            <QtyInput value={payQty} onChange={setPayQty} className="w-16 rounded-md border border-orange-200 bg-white py-1 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
-            <button onClick={() => setPayQty(payQty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-xl leading-none">+</span></button>
+            <QtyInput value={payQty} onChange={setPayQty} max={maxQty} className="w-16 rounded-md border border-orange-200 bg-white py-1 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
+            <button
+              onClick={() => {
+                if (payQty >= maxQty) { toast.info(`Solo quedan ${maxQty} cupos en el grupo`); return; }
+                setPayQty(payQty + 1);
+              }}
+              disabled={payQty >= maxQty}
+              className="grid h-9 w-9 place-items-center rounded-full bg-[#e8451c] text-white disabled:opacity-40"
+            ><span className="text-xl leading-none">+</span></button>
           </div>
         </div>
       </section>
@@ -311,12 +320,19 @@ function GroupPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold text-neutral-900">¿Cuántas unidades?</p>
-                  <p className="text-[10px] text-neutral-500">Si son 2 o más, podés hacer diseños distintos</p>
+                  <p className="text-[10px] text-neutral-500">Quedan {missing} cupos · Si son 2 o más, podés hacer diseños distintos</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
-                  <QtyInput value={payQty} onChange={setPayQty} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
-                  <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
+                  <QtyInput value={payQty} onChange={setPayQty} max={maxQty} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
+                  <button
+                    onClick={() => {
+                      if (payQty >= maxQty) { toast.info(`Solo quedan ${maxQty} cupos en el grupo`); return; }
+                      setPayQty(payQty + 1);
+                    }}
+                    disabled={payQty >= maxQty}
+                    className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white disabled:opacity-40"
+                  ><span className="text-lg leading-none">+</span></button>
                 </div>
               </div>
             </div>
