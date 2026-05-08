@@ -39,10 +39,13 @@ function CartPage() {
   const modeLabel = (m: string) =>
     m === "group" ? "Grupal" : m === "wholesale" ? "Mayorista" : "Individual";
 
-  const finishPay = (method?: string) => {
+  const finishPay = (info: { method: string; cardLast4?: string }) => {
     setShowPayMethods(false);
     setPaid(true);
-    toast.success("¡Pago confirmado!", { description: `MercadoPago · ${method ?? "Pago"} · Pedido recibido` });
+    const desc = info.cardLast4
+      ? `${info.method} ···· ${info.cardLast4}`
+      : info.method;
+    toast.success("¡Pago confirmado!", { description: desc });
     setTimeout(() => {
       clear();
       navigate({ to: "/orders" });
