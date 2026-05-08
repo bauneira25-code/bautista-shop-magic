@@ -18,7 +18,7 @@ const NEIGHBORHOODS = ["Palermo", "Caballito", "Recoleta", "Belgrano", "Núñez"
 const STYLES = ["Minimal", "Neón", "Retro", "Y2K", "Anime", "Grafitti"];
 const COLORS = ["#000000", "#ffffff", "#7c3aed", "#ec4899", "#f59e0b", "#10b981", "#3b82f6", "#ef4444"];
 
-type Step = "browse" | "customize" | "summary" | "paid";
+type Step = "browse" | "intro" | "customize" | "summary" | "paid";
 
 function GroupPage() {
   const { slug } = Route.useParams();
@@ -202,7 +202,7 @@ function GroupPage() {
       {/* Personalizar inline */}
       {product.customizable && (
         <section className="mt-4 px-4">
-          <button onClick={() => setStep("customize")} className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#e8451c] py-3.5 font-display text-sm font-black text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.5)]">
+          <button onClick={() => setStep("intro")} className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#e8451c] py-3.5 font-display text-sm font-black text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.5)]">
             <Flame className="h-4 w-4" /> PERSONALIZAR
           </button>
         </section>
