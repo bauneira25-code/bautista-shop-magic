@@ -479,13 +479,13 @@ function ProductPage() {
         />
       )}
 
-      {/* MULTI DESIGN SHEET — individual / grupal con qty >= 2 */}
-      {showMulti && product.customizable && (mode === "individual" || mode === "group") && (
+      {/* MULTI DESIGN SHEET — individual / grupal con qty >= 2 o mayorista */}
+      {showMulti && product.customizable && (
         <MultiDesignSheet
           productTitle={product.title}
           productEmoji={product.emoji}
           productGradient={product.gradient}
-          totalUnits={qty}
+          totalUnits={mode === "wholesale" ? wsCustomQty : qty}
           onClose={() => setShowMulti(false)}
           onDesignAdded={addDesignToCart}
           onAllDone={() => {
