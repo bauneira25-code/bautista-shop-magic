@@ -218,7 +218,7 @@ function ProductPage() {
             className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 font-display text-sm font-black tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
             style={{ background: "var(--gradient-primary)" }}
           >
-            🔥 PERSONALIZAR CON FUEGO
+            PERSONALIZAR 🔥
           </button>
         )}
 
