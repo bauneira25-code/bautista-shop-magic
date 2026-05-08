@@ -37,6 +37,29 @@ function GroupPage() {
   const [custStyle, setCustStyle] = useState<string>("Minimal");
   const [custColor, setCustColor] = useState<string>(product?.colors?.[0] ?? "#000000");
   const [custImage, setCustImage] = useState<string | null>(null);
+  const [custImageData, setCustImageData] = useState<string | null>(null);
+
+  const onPickImage = (file: File | undefined) => {
+    if (!file) return;
+    setCustImage(file.name);
+    const r = new FileReader();
+    r.onload = () => setCustImageData(typeof r.result === "string" ? r.result : null);
+    r.readAsDataURL(file);
+  };
+
+  const addIndividualToCart = () => {
+    addToCart({
+      id: `${product!.slug}-ind-${Date.now()}`,
+      slug: product!.slug,
+      title: product!.title,
+      emoji: product!.emoji,
+      gradient: product!.gradient,
+      mode: "individual",
+      unitPrice: product!.price.individual,
+      quantity: 1,
+    });
+    toast.success("Añadido al carrito 🛒", { description: product!.title });
+  };
 
   useEffect(() => {
     const t = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
@@ -254,14 +277,17 @@ function GroupPage() {
       {/* Sticky CTA */}
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3 pb-3">
         <div className="rounded-[28px] border border-white/10 bg-black/70 p-3 backdrop-blur-2xl shadow-[0_20px_60px_-10px_rgba(168,85,247,0.6)]">
-          <div className="flex items-center gap-3">
-            <div className="px-2">
-              <p className="text-[10px] uppercase tracking-wider text-white/50">Precio grupo</p>
-              <p className="font-display text-2xl font-black text-white">{formatARS(product.price.group)}</p>
+          <div className="flex items-center gap-2">
+            <div className="px-1">
+              <p className="text-[10px] uppercase tracking-wider text-white/50">Grupo</p>
+              <p className="font-display text-xl font-black text-white">{formatARS(product.price.group)}</p>
             </div>
-            <button onClick={startJoin} className="group relative flex-1 overflow-hidden rounded-2xl py-4 font-display text-base font-black tracking-wider text-white" style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}>
+            <button onClick={addIndividualToCart} className="shrink-0 rounded-2xl border border-white/15 bg-white/10 px-3 py-3 text-[11px] font-bold text-white">
+              + Carrito
+            </button>
+            <button onClick={startJoin} className="group relative flex-1 overflow-hidden rounded-2xl py-3.5 font-display text-sm font-black tracking-wider text-white" style={{ background: "linear-gradient(135deg, #a855f7, #ec4899)" }}>
               <span className="relative z-10 inline-flex items-center justify-center gap-2">
-                <Zap className="h-4 w-4" /> {product.customizable ? "PERSONALIZAR Y SUMARME" : "SUMARME AL GRUPO"}
+                <Zap className="h-4 w-4" /> SUMARME AL GRUPO
               </span>
             </button>
           </div>
@@ -275,12 +301,15 @@ function GroupPage() {
           <div className="space-y-5">
             {/* Preview */}
             <div className="relative grid h-44 place-items-center overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
-              <span className="text-7xl drop-shadow-2xl">{product.emoji}</span>
-              {custText && (
-                <span className="absolute bottom-4 px-3 py-1 font-display text-lg font-black" style={{ color: custColor === "#ffffff" ? "#000" : "#fff", background: custColor + "cc", borderRadius: 12 }}>{custText}</span>
+              {custImageData ? (
+                <img src={custImageData} alt="custom" className="absolute inset-0 h-full w-full object-cover opacity-90" />
+              ) : (
+                <span className="text-7xl drop-shadow-2xl">{product.emoji}</span>
               )}
-              {custImage && <span className="absolute right-3 top-3 rounded-md bg-black/60 px-2 py-0.5 text-[10px] text-white">📎 {custImage}</span>}
-              <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">{custStyle}</span>
+              {custText && (
+                <span className="absolute bottom-4 z-10 px-3 py-1 font-display text-lg font-black" style={{ color: custColor === "#ffffff" ? "#000" : "#fff", background: custColor + "cc", borderRadius: 12 }}>{custText}</span>
+              )}
+              <span className="absolute left-3 top-3 z-10 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">{custStyle}</span>
             </div>
 
             <Field icon={<Type className="h-4 w-4" />} label="Texto / nombre">
@@ -290,10 +319,13 @@ function GroupPage() {
 
             <Field icon={<Upload className="h-4 w-4" />} label="Subir imagen / logo">
               <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-white/70">
-                <span>{custImage ?? "Tocá para elegir archivo"}</span>
-                <span className="rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold">+</span>
-                <input type="file" hidden accept="image/*" onChange={(e) => setCustImage(e.target.files?.[0]?.name ?? null)} />
+                <span className="truncate">{custImage ?? "Tocá para elegir archivo"}</span>
+                <span className="ml-2 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold">{custImage ? "Cambiar" : "+"}</span>
+                <input type="file" hidden accept="image/*" onChange={(e) => onPickImage(e.target.files?.[0])} />
               </label>
+              {custImageData && (
+                <button onClick={() => { setCustImage(null); setCustImageData(null); }} className="mt-2 text-[11px] font-bold text-rose-300">Quitar imagen</button>
+              )}
             </Field>
 
             <Field icon={<Palette className="h-4 w-4" />} label="Color">
