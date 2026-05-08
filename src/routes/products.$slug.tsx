@@ -450,6 +450,32 @@ function ProductPage() {
           }}
         />
       )}
+
+      {/* FULLSCREEN CUSTOM SHEET — individual / grupal con 1 unidad */}
+      {showCustom && product.customizable && (
+        <FullCustomizeSheet
+          productTitle={product.title}
+          productEmoji={product.emoji}
+          productGradient={product.gradient}
+          text={customText}
+          setText={setCustomText}
+          imageName={customImage}
+          imageData={customImageData}
+          onPickImage={handlePickImageFile}
+          colors={product.colors}
+          selectedColor={product.colors?.[color]}
+          onSelectColor={(c) => {
+            const idx = product.colors?.indexOf(c) ?? -1;
+            if (idx >= 0) setColor(idx);
+          }}
+          onClose={() => setShowCustom(false)}
+          onConfirm={() => {
+            setCustomAdded(true);
+            setShowCustom(false);
+            toast.success("Diseño guardado ✨", { description: "Listo para comprar" });
+          }}
+        />
+      )}
     </div>
   );
 }
