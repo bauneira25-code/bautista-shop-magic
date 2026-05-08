@@ -34,9 +34,8 @@ function CategoryPage() {
   const TXT = theme.isLight ? "#1a0f08" : "#ffffff";
   const TXT_MUTED = theme.isLight ? "rgba(26,15,8,0.65)" : "rgba(255,255,255,0.65)";
 
-  // Filtros especiales para categorías agregadoras
-  const products = MOCK_PRODUCTS.filter((p) => p.category === id);
-  const all = products.length ? products : MOCK_PRODUCTS;
+  // Solo productos de esta categoría
+  const all = MOCK_PRODUCTS.filter((p) => p.category === id);
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] overflow-hidden pb-28" style={{ background: theme.bg }}>
