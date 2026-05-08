@@ -129,7 +129,7 @@ function GroupPage() {
 
       <div className="relative z-10 flex gap-2 overflow-x-auto px-4 pt-3 scrollbar-hide">
         <Chip icon={<Eye className="h-3 w-3" />}>{viewers.toLocaleString("es-AR")} mirando</Chip>
-        <Chip icon={<TrendingUp className="h-3 w-3" />} accent>🔥 Tendencia BA</Chip>
+        <Chip icon={<TrendingUp className="h-3 w-3" />} accent>Tendencia BA</Chip>
         <Chip icon={<Flame className="h-3 w-3" />}>+1 cada 23s</Chip>
         <Chip icon={<MapPin className="h-3 w-3" />}>Envío 48h</Chip>
       </div>
@@ -217,7 +217,7 @@ function GroupPage() {
                   {filled ? FAKE_NAMES[i % FAKE_NAMES.length][0] : "?"}
                 </div>
                 {filled && product.customizable && (
-                  <span className="text-[8px] text-fuchsia-300">🔥 custom</span>
+                  <span className="text-[8px] text-fuchsia-300">personalizado</span>
                 )}
               </div>
             );
@@ -271,7 +271,7 @@ function GroupPage() {
 
       {/* CUSTOMIZE SHEET */}
       {step === "customize" && (
-        <Sheet onClose={() => setStep("browse")} title="Personalizá tu unidad" subtitle="Cada uno del grupo personaliza el suyo 🔥">
+        <Sheet onClose={() => setStep("browse")} title="Personalizá tu unidad" subtitle="Cada uno del grupo personaliza el suyo">
           <div className="space-y-5">
             {/* Preview */}
             <div className="relative grid h-44 place-items-center overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
@@ -334,7 +334,7 @@ function GroupPage() {
                   <span className="rounded-md bg-fuchsia-500/20 px-1.5 py-0.5 text-[10px] font-bold text-fuchsia-300">Grupal</span>
                   {!skipCustom && product.customizable && (
                     <>
-                      <span className="rounded-md bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold text-amber-300">🔥 Personalizado</span>
+                      <span className="rounded-md bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold text-amber-300">Personalizado</span>
                       {custText && <span className="rounded-md bg-white/10 px-1.5 py-0.5 text-[10px] text-white">"{custText}"</span>}
                       <span className="grid h-4 w-4 rounded-full border border-white/30" style={{ background: custColor }} />
                     </>
@@ -381,7 +381,7 @@ function GroupPage() {
               <Check className="h-12 w-12 text-white" />
             </div>
             <p className="font-display text-xl text-white">Reserva confirmada</p>
-            <p className="text-sm text-white/60">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing} 🔥` : "¡Grupo completo!"}</p>
+            <p className="text-sm text-white/60">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
             <button onClick={share} className="w-full rounded-2xl border border-amber-400/30 bg-amber-500/20 py-3 text-sm font-bold text-amber-200">
               <Fire className="mr-1 inline h-4 w-4" /> Compartir y ganar 20% OFF
             </button>

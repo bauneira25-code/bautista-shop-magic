@@ -101,7 +101,7 @@ const isCustomizable = (title: string) => {
 
 const _RAW: MockProduct[] = [
   // ============ TECNOLOGÍA ============
-  make("tech", "Funda iPhone Magsafe", "📱", 14000, 0.22, ["#0a1530", "#38bdf8"], { customizable: true, badge: "🔥 Viral", variants: ["iPhone 13", "iPhone 14", "iPhone 15", "iPhone 15 Pro", "iPhone 16"], colors: ["#000", "#7c3aed", "#ec4899"] }),
+  make("tech", "Funda iPhone Magsafe", "📱", 14000, 0.22, ["#0a1530", "#38bdf8"], { customizable: true, badge: "Viral", variants: ["iPhone 13", "iPhone 14", "iPhone 15", "iPhone 15 Pro", "iPhone 16"], colors: ["#000", "#7c3aed", "#ec4899"] }),
   make("tech", "Auriculares Pro ANC", "🎧", 45000, 0.20, ["#0a1530", "#3b82f6"], { badge: "Nuevo" }),
   make("tech", "Smartwatch X9 AMOLED", "⌚", 38000, 0.21, ["#05060a", "#38bdf8"], { badge: "Stock bajo" }),
   make("tech", "Parlante Bluetooth 360°", "🔊", 22000, 0.23, ["#0a1530", "#c0c8d4"]),

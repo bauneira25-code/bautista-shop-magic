@@ -64,7 +64,7 @@ function CartPage() {
                   {it.variant && <span className="rounded-md bg-secondary px-1.5 py-0.5 text-[10px]">{it.variant}</span>}
                   {it.color && <span className="grid h-4 w-4 rounded-full border border-border" style={{ background: it.color }} />}
                   {it.customization && (
-                    <span className="rounded-md bg-warning/20 px-1.5 py-0.5 text-[10px] font-bold text-warning">🔥 Personalizado</span>
+                    <span className="rounded-md bg-warning/20 px-1.5 py-0.5 text-[10px] font-bold text-warning">Personalizado</span>
                   )}
                 </div>
                 <div className="mt-2 flex items-center justify-between">

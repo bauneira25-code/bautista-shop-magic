@@ -94,7 +94,7 @@ function Customize() {
     <MobileShell>
       <header className="px-5 pb-3 pt-5">
         <p className="text-xs font-bold uppercase tracking-wider text-primary">Studio</p>
-        <h1 className="font-display text-3xl">Personalizar 🔥</h1>
+        <h1 className="font-display text-3xl">Personalizar</h1>
         <p className="mt-1 text-xs text-muted-foreground">Subí tu logo y vé cómo queda en el producto</p>
       </header>
 
