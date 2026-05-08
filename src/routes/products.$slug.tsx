@@ -255,7 +255,7 @@ function ProductPage() {
             >
               <div className="text-left">
                 <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Hacelo único</p>
-                <p className="font-display text-lg">PERSONALIZAR</p>
+                <p className="font-display text-lg">PERSONALIZAR 🔥</p>
               </div>
               <ChevronDown className={`h-5 w-5 transition-transform ${showCustom ? "rotate-180" : ""}`} />
             </button>
