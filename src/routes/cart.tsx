@@ -6,6 +6,7 @@ import { formatARS } from "@/lib/mockData";
 import { useUserAuth } from "@/stores/userAuth";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { toast } from "sonner";
+import { QtyInput } from "@/components/QtyInput";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
