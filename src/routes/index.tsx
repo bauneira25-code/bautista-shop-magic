@@ -69,42 +69,36 @@ function Home() {
     <MobileShell>
       <OnboardingGender />
       {/* Top bar — buscador siempre fijo */}
-      <header className="sticky top-0 z-30 px-5 pb-2 pt-4 backdrop-blur-xl" style={{ background: "oklch(0.13 0.02 295 / 0.9)" }}>
+      <header className="sticky top-0 z-30 border-b border-orange-100 bg-white/95 px-4 pb-2 pt-2 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-xl text-base font-black text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>N</span>
+            <span className="grid h-7 w-7 place-items-center rounded-lg text-xs font-black text-white" style={{ background: "linear-gradient(135deg,#ff7a3d,#e8451c)" }}>N</span>
             <div>
-              <p className="font-display text-lg leading-none">NEIBA</p>
-              <p className="text-[10px] text-muted-foreground">Buenos Aires, AR</p>
+              <p className="font-display text-sm leading-none text-neutral-900">NEIBA</p>
+              <p className="text-[9px] text-neutral-400">Buenos Aires, AR</p>
             </div>
           </Link>
-          <button className="relative grid h-10 w-10 place-items-center rounded-full bg-card">
-            <Bell className="h-4 w-4" />
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary pulse-ring" />
+          <button className="relative grid h-8 w-8 place-items-center rounded-full bg-orange-50">
+            <Bell className="h-3.5 w-3.5 text-[#e8451c]" />
+            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#e8451c]" />
           </button>
         </div>
 
         {!user && (
           <Link
             to="/auth"
-            className="mt-2 flex items-center justify-between rounded-xl border border-[#e8451c]/40 bg-white/95 px-3 py-2 text-[11px] shadow-sm"
+            className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-[#e8451c]"
           >
-            <span className="inline-flex items-center gap-1.5 font-bold text-[#e8451c]">
-              <LogIn className="h-3.5 w-3.5" /> Iniciar sesión
-              <span className="text-neutral-300">·</span>
-              <UserPlus className="h-3.5 w-3.5" /> Registrarse
-            </span>
-            <ChevronRight className="h-3.5 w-3.5 text-[#e8451c]" />
+            Iniciar sesión <span className="text-neutral-300">/</span> Registrarse
           </Link>
         )}
         {user && (
-          <div className="mt-2 flex items-center justify-between rounded-xl border border-[#e8451c]/30 bg-white/95 px-3 py-1.5 text-[11px]">
-            <span className="font-semibold text-neutral-800">Hola, <span className="text-[#e8451c]">{user.nombre}</span> 👋</span>
-            <Link to="/profile" className="text-[10px] font-bold text-[#e8451c]">Mi perfil</Link>
-          </div>
+          <Link to="/profile" className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-neutral-700">
+            Hola, <span className="text-[#e8451c]">{user.nombre}</span>
+          </Link>
         )}
 
-        <div className="mt-3">
+        <div className="mt-2">
           <SmartSearch />
         </div>
 
