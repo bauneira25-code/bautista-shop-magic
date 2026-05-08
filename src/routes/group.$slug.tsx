@@ -44,6 +44,23 @@ function GroupPage() {
   const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
   const [payQty, setPayQty] = useState(1);
   const [showPay, setShowPay] = useState(false);
+  const [showMulti, setShowMulti] = useState(false);
+
+  const addDesignToCart = (d: DesignData, idx: number) => {
+    if (!product) return;
+    addToCart({
+      id: `${product.slug}-group-d${idx}-${Date.now()}`,
+      slug: product.slug,
+      title: product.title,
+      emoji: product.emoji,
+      gradient: product.gradient,
+      mode: "group",
+      unitPrice: product.price.group,
+      quantity: d.units,
+      color: custColor,
+      customization: { text: d.text, style: custStyle, imageName: d.imageName },
+    });
+  };
 
   const onPickImage = (file: File | undefined) => {
     if (!file) return;
