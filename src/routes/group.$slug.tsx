@@ -338,12 +338,36 @@ function GroupPage() {
             </div>
 
             <div className="rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-700">
-              <Row label="Precio grupal" value={formatARS(product.price.group)} />
-              <Row label="Servicio" value={formatARS(fees)} />
-              <Row label="Envío" value={<span className="text-[#e8451c] font-bold">Gratis 🎉</span>} />
+              <Row label="Precio grupo" value={formatARS(product.price.group)} />
+              {hasCustom && <Row label="Personalización" value={formatARS(CUSTOM_FEE)} />}
+              <Row
+                label="Envío"
+                value={delivery === "envio" ? formatARS(SHIPPING_FEE) : <span className="text-[#e8451c] font-bold">Gratis</span>}
+              />
               <div className="my-3 h-px bg-neutral-100" />
               <Row label={<span className="font-bold text-neutral-900">Total</span>} value={<span className="font-display text-xl font-black text-[#e8451c]">{formatARS(total)}</span>} />
-              <p className="mt-2 text-[10px] text-neutral-500">⚡ Si el grupo no se completa en {fmt(m)}:{fmt(s)}, te devolvemos el 100%.</p>
+              <p className="mt-2 text-[10px] text-neutral-500">⚡ Si el grupo no se completa, te devolvemos el 100%.</p>
+            </div>
+
+            {/* Entrega */}
+            <div>
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">¿Cómo lo recibís?</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setDelivery("envio")}
+                  className={`rounded-xl border p-3 text-left transition ${delivery === "envio" ? "border-[#e8451c] bg-orange-50" : "border-neutral-200 bg-white"}`}
+                >
+                  <p className="text-[11px] font-bold text-neutral-900">Envío a domicilio</p>
+                  <p className="text-[10px] text-neutral-500">3 a 5 días · {formatARS(SHIPPING_FEE)}</p>
+                </button>
+                <button
+                  onClick={() => setDelivery("retiro")}
+                  className={`rounded-xl border p-3 text-left transition ${delivery === "retiro" ? "border-[#e8451c] bg-orange-50" : "border-neutral-200 bg-white"}`}
+                >
+                  <p className="text-[11px] font-bold text-neutral-900">Retiro en depósito</p>
+                  <p className="text-[10px] text-neutral-500">Sin costo · CABA</p>
+                </button>
+              </div>
             </div>
 
             <div className="rounded-xl border border-neutral-200 bg-white p-3">
