@@ -153,7 +153,7 @@ function Home() {
             <div>
               <div className="flex items-center gap-2">
                 <Zap className="h-4 w-4 text-warning" />
-                <h3 className="font-display text-lg">Flash Deals</h3>
+                <h3 className="font-display text-lg">Oferta relámpago</h3>
               </div>
               <p className="text-[11px] text-muted-foreground">Termina en 02:14:38</p>
             </div>
