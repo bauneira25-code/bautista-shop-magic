@@ -189,12 +189,18 @@ function CartPage() {
 
       {/* Sticky pay CTA */}
       {items.length > 0 && (
-        <div className="fixed bottom-3 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3">
+        <div className="fixed bottom-3 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 space-y-2 px-3">
           <button
             onClick={handlePay}
             className="w-full rounded-2xl bg-[#e8451c] py-4 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
           >
             <Lock className="mr-2 inline h-4 w-4" /> PAGAR · {formatARS(total)}
+          </button>
+          <button
+            onClick={() => navigate({ to: "/" })}
+            className="w-full rounded-2xl border border-[#e8451c]/40 bg-white py-3 text-xs font-bold text-[#e8451c]"
+          >
+            🛒 Seguir navegando
           </button>
         </div>
       )}
