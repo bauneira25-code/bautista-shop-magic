@@ -193,20 +193,20 @@ function ProductPage() {
 
         {/* Wholesale tiers */}
         {mode === "wholesale" && (
-          <div className="rounded-2xl border border-border bg-card p-4 float-up space-y-2">
-            <p className="text-xs font-bold uppercase text-muted-foreground">Precios mayoristas</p>
+          <div className="rounded-2xl border border-border bg-card p-3 float-up space-y-1">
+            <p className="text-[10px] font-bold uppercase text-muted-foreground">Precios mayoristas</p>
             {[
               { range: "1 - 5 unidades", price: product.price.individual },
               { range: "5 - 20 unidades", price: product.price.group },
               { range: "20 - 100 unidades", price: Math.round((product.price.group + product.price.wholesale) / 2) },
               { range: "100+ unidades", price: product.price.wholesale, best: true },
             ].map((t) => (
-              <div key={t.range} className={`flex items-center justify-between rounded-xl px-3 py-2 ${t.best ? "bg-primary/15 border border-primary/30" : "bg-secondary"}`}>
-                <span className="text-xs">{t.range}</span>
-                <span className="text-sm font-bold">{formatARS(t.price)}</span>
+              <div key={t.range} className={`flex items-center justify-between rounded-lg px-2.5 py-1 ${t.best ? "bg-primary/15 border border-primary/30" : "bg-secondary"}`}>
+                <span className="text-[10px]">{t.range}</span>
+                <span className="text-[11px] font-bold">{formatARS(t.price)}</span>
               </div>
             ))}
-            <p className="pt-2 text-[11px] text-muted-foreground">📦 Packaging personalizado · 🏷 Branding propio · 🚚 Envío directo a tu local</p>
+            <p className="pt-1 text-[10px] text-muted-foreground">📦 Packaging · 🏷 Branding · 🚚 Envío a tu local</p>
           </div>
         )}
 
@@ -312,9 +312,21 @@ function ProductPage() {
               </button>
             </div>
 
-            <Link to="/customize" className="block w-full rounded-xl bg-primary py-2.5 text-center text-xs font-bold text-primary-foreground">
-              Abrir Studio para diseñar →
-            </Link>
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button
+                onClick={() => { setQty(wsCustomQty); doAdd(); toast.success("Agregado al carrito 🛒", { description: `${wsCustomQty} × ${product.title}` }); }}
+                className="rounded-xl border border-primary/40 bg-primary/10 py-2.5 text-xs font-bold text-primary"
+              >
+                AGREGAR AL CARRITO
+              </button>
+              <button
+                onClick={() => { setQty(wsCustomQty); doAdd(); navigate({ to: "/cart" }); }}
+                className="rounded-xl py-2.5 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
+                style={{ background: "var(--gradient-primary)" }}
+              >
+                COMPRAR AHORA
+              </button>
+            </div>
           </div>
         )}
 
@@ -342,8 +354,8 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Personalizar — específico del producto */}
-        {product.customizable && (
+        {/* Personalizar — específico del producto (solo individual / grupal) */}
+        {product.customizable && mode !== "wholesale" && (
           <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
             <button
               onClick={() => setShowCustom(!showCustom)}
@@ -358,6 +370,21 @@ function ProductPage() {
 
             {showCustom && (
               <div className="space-y-4 bg-card p-4 float-up">
+                {/* Preview producto */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl" style={{ background: product.gradient }}>
+                  <div className="absolute inset-0 grid place-items-center text-7xl">{product.emoji}</div>
+                  {customText && (
+                    <div className="absolute inset-x-0 bottom-3 text-center font-display text-2xl text-white drop-shadow-lg">
+                      {customText}
+                    </div>
+                  )}
+                  {customImage && (
+                    <span className="absolute right-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
+                      📎 {customImage}
+                    </span>
+                  )}
+                </div>
+
                 {/* Texto */}
                 <div>
                   <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
@@ -386,52 +413,24 @@ function ProductPage() {
                   </button>
                 </div>
 
-                {/* Estilo IA */}
-                <div>
-                  <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                    <Sparkles className="h-3 w-3" /> Estilo
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {AI_STYLES.slice(0, 6).map((s) => (
-                      <button
-                        key={s.id}
-                        onClick={() => setCustomStyle(s.id)}
-                        className={`rounded-xl border px-2.5 py-1.5 text-xs ${customStyle === s.id ? "border-primary bg-primary/15 text-primary" : "border-border bg-secondary"}`}
-                      >
-                        <span className="mr-1">{s.emoji}</span>{s.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Emoji rápido */}
-                <div>
-                  <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                    <Smile className="h-3 w-3" /> Agregar emoji
-                  </label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {["🔥", "💜", "✨", "🚀", "👑", "🌙", "💎", "🎮"].map((e) => (
-                      <button
-                        key={e}
-                        onClick={() => setCustomText((customText + e).slice(0, 20))}
-                        className="grid h-9 w-9 place-items-center rounded-lg bg-secondary text-lg hover:bg-primary/15"
-                      >
-                        {e}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => toast.success("✨ 4 diseños generados con IA")}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary/20 py-3 text-xs font-bold text-primary"
-                >
-                  <Wand2 className="h-4 w-4" /> Generar con IA
-                </button>
-
-                <Link to="/customize" className="block text-center text-[11px] text-muted-foreground underline">
-                  Studio completo →
-                </Link>
+                {/* CTA por modo */}
+                {mode === "individual" ? (
+                  <button
+                    onClick={handleBuyNow}
+                    className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
+                    style={{ background: "var(--gradient-primary)" }}
+                  >
+                    COMPRAR AHORA
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleCta}
+                    className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
+                    style={{ background: "var(--gradient-primary)" }}
+                  >
+                    SUMARME AHORA
+                  </button>
+                )}
               </div>
             )}
           </div>
