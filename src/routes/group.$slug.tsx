@@ -101,7 +101,8 @@ function GroupPage() {
   const confirmCustom = () => setStep("summary");
   const skip = () => { setSkipCustom(true); setStep("summary"); };
 
-  const pay = () => {
+  const confirmPay = (info: { method: string; cardLast4?: string }) => {
+    setShowPay(false);
     setJoined((j) => Math.min(target, j + 1));
     addToCart({
       id: `${product.slug}-group-${Date.now()}`,
@@ -111,7 +112,7 @@ function GroupPage() {
       gradient: product.gradient,
       mode: "group",
       unitPrice: product.price.group,
-      quantity: 1,
+      quantity: payQty,
       color: skipCustom ? undefined : custColor,
       customization: skipCustom ? undefined : {
         text: custText || undefined,
@@ -120,9 +121,8 @@ function GroupPage() {
       },
     });
     setStep("paid");
-    toast.success("¡Estás dentro del grupo!", {
-      description: `Faltan ${Math.max(0, target - joined - 1)} para desbloquear`,
-    });
+    const desc = info.cardLast4 ? `${info.method} ···· ${info.cardLast4}` : info.method;
+    toast.success("¡Estás dentro del grupo!", { description: desc });
   };
 
   const share = () => {
