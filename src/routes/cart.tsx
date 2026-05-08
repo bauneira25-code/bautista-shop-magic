@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, Lock, CreditCard, Truck, Store, Check, X, User, Mail, Phone, MapPin, IdCard } from "lucide-react";
+import { ArrowLeft, Minus, Plus, Trash2, Lock, CreditCard, Truck, Store, Check, X, User, Mail, Phone, MapPin } from "lucide-react";
 import { useLocalCart } from "@/stores/localCart";
 import { formatARS } from "@/lib/mockData";
 import { useUserAuth } from "@/stores/userAuth";
@@ -37,17 +37,21 @@ function CartPage() {
   const modeLabel = (m: string) =>
     m === "group" ? "Grupal" : m === "wholesale" ? "Mayorista" : "Individual";
 
-  const handlePay = () => {
-    if (!user) {
-      setShowRegister(true);
-      return;
-    }
+  const finishPay = () => {
     setPaid(true);
     toast.success("¡Pago confirmado!", { description: "MercadoPago · Pedido recibido" });
     setTimeout(() => {
       clear();
       navigate({ to: "/orders" });
     }, 1500);
+  };
+
+  const handlePay = () => {
+    if (!user) {
+      setShowRegister(true);
+      return;
+    }
+    finishPay();
   };
 
   return (
@@ -171,8 +175,9 @@ function CartPage() {
         </div>
       )}
 
+      {/* Sticky pay CTA */}
       {items.length > 0 && (
-        <div className="fixed bottom-16 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3">
+        <div className="fixed bottom-3 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 px-3">
           <button
             onClick={handlePay}
             className="w-full rounded-2xl bg-[#e8451c] py-4 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
@@ -190,7 +195,7 @@ function CartPage() {
             setUser(u);
             setShowRegister(false);
             toast.success("Cuenta creada ✨", { description: "Procesando tu pago…" });
-            setTimeout(handlePay, 400);
+            setTimeout(finishPay, 400);
           }}
         />
       )}
@@ -268,7 +273,7 @@ function RegisterSheet({
             <Input icon={<User className="h-4 w-4" />} value={f.nombre} onChange={upd("nombre")} placeholder="Nombre" />
             <Input icon={<User className="h-4 w-4" />} value={f.apellido} onChange={upd("apellido")} placeholder="Apellido" />
           </div>
-          <Input icon={<IdCard className="h-4 w-4" />} value={f.dni} onChange={upd("dni")} placeholder="DNI" inputMode="numeric" />
+          <Input icon={<CreditCard className="h-4 w-4" />} value={f.dni} onChange={upd("dni")} placeholder="DNI" inputMode="numeric" />
           <Input icon={<Mail className="h-4 w-4" />} value={f.email} onChange={upd("email")} placeholder="Email" type="email" />
           <Input icon={<Phone className="h-4 w-4" />} value={f.telefono} onChange={upd("telefono")} placeholder="Teléfono" inputMode="tel" />
           <Input icon={<MapPin className="h-4 w-4" />} value={f.direccion} onChange={upd("direccion")} placeholder="Dirección de envío" />
