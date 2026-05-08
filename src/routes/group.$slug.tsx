@@ -303,12 +303,11 @@ function GroupPage() {
               onClick={() => {
                 setCustomAdded(true);
                 setSkipCustom(false);
-                setStep("browse");
-                toast.success("Personalización agregada ✨", { description: "Ahora tocá Sumarme ahora para pagar" });
+                setStep("summary");
               }}
-              className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white"
+              className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
-              <Check className="mr-1 inline h-4 w-4" /> AGREGAR
+              <Zap className="mr-1 inline h-4 w-4" /> SUMARME AHORA
             </button>
           </div>
         </Sheet>
