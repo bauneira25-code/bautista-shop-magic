@@ -305,7 +305,7 @@ function GroupPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
-                  <span className="w-6 text-center font-display text-base">{payQty}</span>
+                  <input type="number" min={1} value={payQty} onChange={(e) => setPayQty(Math.max(1, Number(e.target.value) || 1))} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
                   <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
                 </div>
               </div>
@@ -416,7 +416,7 @@ function GroupPage() {
               </div>
               <div className="flex items-center gap-3">
                 <button onClick={() => setPayQty(Math.max(1, payQty - 1))} className="grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><span className="text-lg leading-none">−</span></button>
-                <span className="w-6 text-center font-display text-base">{payQty}</span>
+                <input type="number" min={1} value={payQty} onChange={(e) => setPayQty(Math.max(1, Number(e.target.value) || 1))} className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center font-display text-base text-neutral-900 focus:border-[#e8451c] focus:outline-none" />
                 <button onClick={() => setPayQty(payQty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#e8451c] text-white"><span className="text-lg leading-none">+</span></button>
               </div>
             </div>
