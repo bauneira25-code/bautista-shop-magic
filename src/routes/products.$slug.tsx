@@ -494,6 +494,11 @@ function ProductPage() {
           }}
         />
       )}
+    </div>
+  );
+}
+
+function ModeCard({
   active, onClick, title, icon, price, sub, highlight, badge, compareAt,
 }: {
   active: boolean; onClick: () => void; title: string; icon: string; price: number; sub: string; highlight?: boolean; badge?: string; compareAt?: number;
