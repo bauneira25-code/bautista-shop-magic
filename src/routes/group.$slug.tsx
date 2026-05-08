@@ -300,8 +300,16 @@ function GroupPage() {
               )}
             </Field>
 
-            <button onClick={pay} className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white">
-              <Zap className="mr-1 inline h-4 w-4" /> COMPRAR AHORA
+            <button
+              onClick={() => {
+                setCustomAdded(true);
+                setSkipCustom(false);
+                setStep("browse");
+                toast.success("Personalización agregada ✨", { description: "Ahora tocá Sumarme ahora para pagar" });
+              }}
+              className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white"
+            >
+              <Check className="mr-1 inline h-4 w-4" /> AGREGAR
             </button>
           </div>
         </Sheet>
