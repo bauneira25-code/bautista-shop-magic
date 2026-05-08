@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
 import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye, ShieldCheck } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
@@ -152,7 +153,7 @@ function Home() {
             <div>
               <div className="flex items-center gap-2">
                 <Zap className="h-4 w-4 text-warning" />
-                <h3 className="font-display text-lg">Flash Deals</h3>
+                <h3 className="font-display text-lg">Oferta relámpago</h3>
               </div>
               <p className="text-[11px] text-muted-foreground">Termina en 02:14:38</p>
             </div>
@@ -295,6 +296,9 @@ function Home() {
           </div>
         </section>
 
+        {/* Explorar todo — scroll infinito */}
+        <InfiniteAll />
+
         {/* Para emprendedores — discreto */}
         <Link to="/registrar-marca" className="block rounded-2xl border border-border bg-card p-3.5">
           <div className="flex items-center gap-3">
@@ -344,5 +348,39 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
       </div>
       <p className="text-[10px] text-success">Grupo desde {formatARS(p.price.group)}</p>
     </Link>
+  );
+}
+
+function InfiniteAll() {
+  const PAGE = 12;
+  const [count, setCount] = useState(PAGE);
+  const sentinel = useRef<HTMLDivElement>(null);
+
+  // Lista repetida para simular catálogo infinito
+  const all = MOCK_PRODUCTS;
+  const items = Array.from({ length: count }).map((_, i) => all[i % all.length]);
+
+  useEffect(() => {
+    const el = sentinel.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        setCount((c) => c + PAGE);
+      }
+    }, { rootMargin: "400px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <section>
+      <SectionHeader title="Explorar todo" icon={<Sparkles className="h-4 w-4 text-primary" />} />
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        {items.map((p, i) => <ProductCard key={`${p.id}-${i}`} product={p} />)}
+      </div>
+      <div ref={sentinel} className="mt-4 grid place-items-center py-4 text-[10px] text-muted-foreground">
+        Cargando más…
+      </div>
+    </section>
   );
 }
