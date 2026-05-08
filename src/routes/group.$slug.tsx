@@ -42,6 +42,7 @@ function GroupPage() {
   const [customAdded, setCustomAdded] = useState(false);
   const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
   const [payQty, setPayQty] = useState(1);
+  const [showPay, setShowPay] = useState(false);
 
   const onPickImage = (file: File | undefined) => {
     if (!file) return;
