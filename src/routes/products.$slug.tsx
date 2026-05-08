@@ -646,9 +646,10 @@ function WholesaleCustomSheet({
             {designs.map((d, i) => (
               <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary px-2 py-1.5">
                 <span className="text-[11px] font-semibold">Diseño {i + 1}</span>
-                <input
-                  type="number" min={0} value={d}
-                  onChange={(e) => updateDesign(i, Number(e.target.value))}
+                <QtyInput
+                  value={d}
+                  min={0}
+                  onChange={(n) => updateDesign(i, n)}
                   className="ml-auto w-20 rounded-md border border-border bg-background px-2 py-1 text-right text-xs"
                 />
                 <span className="text-[10px] text-muted-foreground">u.</span>
