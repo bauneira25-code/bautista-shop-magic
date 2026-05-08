@@ -378,8 +378,8 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
     <Link to="/products/$slug" params={{ slug: p.slug }} className="group">
       <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
         <span>{p.emoji}</span>
-        {p.badge && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{p.badge}</span>}
-        {p.customizable && <span className="absolute right-2 top-2 rounded-md bg-primary px-1.5 py-0.5 text-[9px] font-bold text-primary-foreground">Personalizable</span>}
+        {p.badge && p.badge !== "Personalizable" && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{p.badge}</span>}
+        {p.customizable && <span className="absolute right-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable 🔥</span>}
       </div>
       <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
       <div className="flex items-center justify-between">
