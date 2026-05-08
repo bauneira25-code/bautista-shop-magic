@@ -16,7 +16,7 @@ export const Route = createFileRoute("/grupos")({
 });
 
 function GruposPage() {
-  const groups = MOCK_PRODUCTS.slice(0, 14);
+  const groups = MOCK_PRODUCTS.filter((p) => p.groupJoined > 0 && p.groupJoined < p.groupTarget);
   const add = useLocalCart((s) => s.add);
   const navigate = useNavigate();
 

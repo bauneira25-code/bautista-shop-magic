@@ -24,7 +24,8 @@ function ProductPage() {
   const product = findProduct(slug);
   const navigate = useNavigate();
   const addToCart = useLocalCart((s) => s.add);
-  const [mode, setMode] = useState<PurchaseMode>("group");
+  const hasActiveGroup = !!product && product.groupJoined > 0 && product.groupJoined < product.groupTarget;
+  const [mode, setMode] = useState<PurchaseMode>(hasActiveGroup ? "group" : "individual");
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
@@ -175,19 +176,21 @@ function ProductPage() {
         {/* 3 PURCHASE MODES — uno al lado del otro */}
         <div>
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
-          <div className="grid grid-cols-3 gap-2">
+          <div className={`grid gap-2 ${hasActiveGroup ? "grid-cols-3" : "grid-cols-2"}`}>
             <ModeCard
               active={mode === "individual"} onClick={() => setMode("individual")}
               title="Individual" icon="🛍" price={product.price.individual}
               sub="1 unidad"
             />
-            <ModeCard
-              active={mode === "group"} onClick={() => setMode("group")}
-              title="Grupal" icon="👥" price={product.price.group}
-              sub={`Desde ${product.groupTarget}`}
-              highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
-              compareAt={product.price.individual}
-            />
+            {hasActiveGroup && (
+              <ModeCard
+                active={mode === "group"} onClick={() => setMode("group")}
+                title="Grupal" icon="👥" price={product.price.group}
+                sub={`Desde ${product.groupTarget}`}
+                highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
+                compareAt={product.price.individual}
+              />
+            )}
             <ModeCard
               active={mode === "wholesale"} onClick={() => setMode("wholesale")}
               title="Mayorista" icon="📦" price={product.price.wholesale}
