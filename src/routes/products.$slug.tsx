@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
+import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -32,7 +33,26 @@ function ProductPage() {
   const [wsTotalQty, setWsTotalQty] = useState(100);
   const [wsDesignsArr, setWsDesignsArr] = useState<number[]>([50]);
   const [showWsCustom, setShowWsCustom] = useState(false);
+  const [showMulti, setShowMulti] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const addDesignToCart = (d: DesignData, idx: number) => {
+    if (!product) return;
+    const id = `${product.slug}-${mode}-${variant}-${color}-design${idx}-${Date.now()}`;
+    addToCart({
+      id,
+      slug: product.slug,
+      title: product.title,
+      emoji: product.emoji,
+      gradient: product.gradient,
+      mode,
+      unitPrice: price,
+      quantity: d.units,
+      variant: product.variants?.[variant],
+      color: product.colors?.[color],
+      customization: { text: d.text, style: customStyle, imageName: d.imageName },
+    });
+  };
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
@@ -250,11 +270,16 @@ function ProductPage() {
         {product.customizable && (mode === "individual" || mode === "group") && (
           <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
             <button
-              onClick={() => setShowCustom(!showCustom)}
+              onClick={() => {
+                if (qty >= 2) setShowMulti(true);
+                else setShowCustom(!showCustom);
+              }}
               className="flex w-full items-center justify-between p-4 text-white"
             >
               <div className="text-left">
-                <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Hacelo único</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+                  {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Hacelo único"}
+                </p>
                 <p className="font-display text-lg">PERSONALIZAR 🔥</p>
               </div>
               <ChevronDown className={`h-5 w-5 transition-transform ${showCustom ? "rotate-180" : ""}`} />
@@ -450,6 +475,24 @@ function ProductPage() {
             setShowWsCustom(false);
             navigate({ to: "/cart" });
           }}
+          onOpenMulti={() => { setShowWsCustom(false); setShowMulti(true); }}
+        />
+      )}
+
+      {/* MULTI DESIGN SHEET — individual / grupal con qty >= 2 o mayorista */}
+      {showMulti && product.customizable && (
+        <MultiDesignSheet
+          productTitle={product.title}
+          productEmoji={product.emoji}
+          productGradient={product.gradient}
+          totalUnits={mode === "wholesale" ? wsCustomQty : qty}
+          onClose={() => setShowMulti(false)}
+          onDesignAdded={addDesignToCart}
+          onAllDone={() => {
+            setShowMulti(false);
+            toast.success("Diseños añadidos al resumen ✨");
+            navigate({ to: "/cart" });
+          }}
         />
       )}
     </div>
@@ -479,7 +522,7 @@ function ModeCard({
 
 function WholesaleCustomSheet({
   product, totalQty, setTotalQty, customQty, setCustomQty, designs, setDesigns,
-  customText, setCustomText, customImage, onPickImage, fileRef, onClose, onAddToCart, onBuyNow,
+  customText, setCustomText, customImage, onPickImage, fileRef, onClose, onAddToCart, onBuyNow, onOpenMulti,
 }: {
   product: ReturnType<typeof findProduct> & {};
   totalQty: number; setTotalQty: (n: number) => void;
@@ -490,6 +533,7 @@ function WholesaleCustomSheet({
   onPickImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   fileRef: React.RefObject<HTMLInputElement | null>;
   onClose: () => void; onAddToCart: () => void; onBuyNow: () => void;
+  onOpenMulti: () => void;
 }) {
   if (!product) return null;
   const sumDesigns = designs.reduce((a, b) => a + b, 0);
@@ -611,6 +655,15 @@ function WholesaleCustomSheet({
             Asignadas {sumDesigns} de {customQty} unidades personalizadas
           </p>
         </div>
+
+        {customQty >= 2 && (
+          <button
+            onClick={onOpenMulti}
+            className="mb-2 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/50 bg-primary/5 py-2.5 text-xs font-bold text-primary"
+          >
+            🎨 Diseñar uno por uno ({customQty} pantallas)
+          </button>
+        )}
 
         <div className="grid grid-cols-2 gap-2">
           <button onClick={onAddToCart} disabled={!valid} className="rounded-xl border border-primary/40 bg-primary/10 py-3 text-xs font-bold text-primary disabled:opacity-40">AL CARRITO</button>
