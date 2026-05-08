@@ -99,16 +99,25 @@ function GruposPage() {
 
                 {/* Formas de personalizar */}
                 {p.customizable && (
-                  <div className="mt-3 rounded-2xl border border-primary/20 bg-primary/5 p-2.5">
-                    <p className="mb-1.5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary">
-                      <Sparkles className="h-3 w-3" /> Personalizá tu unidad
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      <Chip icon={<Type className="h-3 w-3" />}>Texto</Chip>
-                      <Chip icon={<ImageIcon className="h-3 w-3" />}>Imagen</Chip>
-                      <Chip icon={<Palette className="h-3 w-3" />}>Color</Chip>
-                      <Chip icon={<Sparkles className="h-3 w-3" />}>Estilo IA</Chip>
+                  <div className="mt-3 space-y-2">
+                    <div className="rounded-2xl border border-primary/20 bg-primary/5 p-2.5">
+                      <p className="mb-1.5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                        <Sparkles className="h-3 w-3" /> Personalizá tu unidad
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        <Chip icon={<Type className="h-3 w-3" />}>Texto</Chip>
+                        <Chip icon={<ImageIcon className="h-3 w-3" />}>Imagen</Chip>
+                        <Chip icon={<Palette className="h-3 w-3" />}>Color</Chip>
+                        <Chip icon={<Sparkles className="h-3 w-3" />}>Estilo IA</Chip>
+                      </div>
                     </div>
+                    <button
+                      onClick={() => navigate({ to: "/group/$slug", params: { slug: p.slug } })}
+                      className="w-full rounded-2xl py-2.5 font-display text-xs font-black tracking-wider text-primary-foreground shadow-[var(--shadow-glow)] inline-flex items-center justify-center gap-1.5"
+                      style={{ background: "var(--gradient-primary)" }}
+                    >
+                      PERSONALIZAR 🔥
+                    </button>
                   </div>
                 )}
 
