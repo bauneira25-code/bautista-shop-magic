@@ -617,11 +617,11 @@ function WholesaleCustomSheet({
         <div className="mb-3 rounded-xl border border-primary/30 bg-primary/5 p-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold">¿Cuántas personalizar?</label>
-            <input
-              type="number" min={0} max={totalQty} value={customQty}
-              onFocus={(e) => e.currentTarget.select()}
-              onChange={(e) => { const v = e.target.value; if (v === "") return; const n = parseInt(v, 10); if (!Number.isNaN(n) && n >= 0) setCustomQty(Math.min(totalQty, n)); }}
-              onBlur={(e) => { const n = parseInt(e.target.value, 10); setCustomQty(!Number.isNaN(n) && n >= 0 ? Math.min(totalQty, n) : 0); }}
+            <QtyInput
+              value={customQty}
+              min={0}
+              max={totalQty}
+              onChange={setCustomQty}
               className="w-20 rounded-lg border border-primary/40 bg-background px-2 py-1 text-right text-sm"
             />
           </div>
