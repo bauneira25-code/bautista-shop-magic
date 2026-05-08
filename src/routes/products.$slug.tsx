@@ -421,6 +421,37 @@ function ProductPage() {
           </div>
         </div>
       </div>
+
+      {/* WHOLESALE CUSTOM SHEET */}
+      {showWsCustom && product.customizable && (
+        <WholesaleCustomSheet
+          product={product}
+          totalQty={wsTotalQty}
+          setTotalQty={setWsTotalQty}
+          customQty={wsCustomQty}
+          setCustomQty={setWsCustomQty}
+          designs={wsDesignsArr}
+          setDesigns={setWsDesignsArr}
+          customText={customText}
+          setCustomText={setCustomText}
+          customImage={customImage}
+          onPickImage={onPickImage}
+          fileRef={fileRef}
+          onClose={() => setShowWsCustom(false)}
+          onAddToCart={() => {
+            setQty(wsTotalQty);
+            doAdd();
+            setShowWsCustom(false);
+            toast.success("Agregado al carrito 🛒", { description: `${wsTotalQty} × ${product.title} · ${wsCustomQty} personalizadas` });
+          }}
+          onBuyNow={() => {
+            setQty(wsTotalQty);
+            doAdd();
+            setShowWsCustom(false);
+            navigate({ to: "/cart" });
+          }}
+        />
+      )}
     </div>
   );
 }
