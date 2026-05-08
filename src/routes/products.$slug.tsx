@@ -210,6 +210,68 @@ function ProductPage() {
           </div>
         )}
 
+        {/* Wholesale custom — unidades a personalizar + multi diseño */}
+        {mode === "wholesale" && product.customizable && (
+          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 float-up space-y-3">
+            <p className="text-xs font-bold uppercase text-primary"><Sparkles className="mr-1 inline h-3 w-3" /> Personalización mayorista</p>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold">Unidades a personalizar</label>
+                <span className="font-display text-base text-primary">{wsCustomQty}</span>
+              </div>
+              <input
+                type="range" min={10} max={500} step={10}
+                value={wsCustomQty}
+                onChange={(e) => setWsCustomQty(Number(e.target.value))}
+                className="mt-2 w-full accent-primary"
+              />
+              <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+                <span>10</span><span>500</span>
+              </div>
+            </div>
+
+            <label className="flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 cursor-pointer">
+              <div>
+                <p className="text-xs font-bold">¿Querés varios diseños?</p>
+                <p className="text-[10px] text-muted-foreground">Dividí las {wsCustomQty} unidades en distintos diseños</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={wsMultiDesign}
+                onChange={(e) => setWsMultiDesign(e.target.checked)}
+                className="h-5 w-5 accent-primary"
+              />
+            </label>
+
+            {wsMultiDesign && (
+              <div className="rounded-xl border border-dashed border-primary/30 bg-card p-3 space-y-2 float-up">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold">Cantidad de diseños</p>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => setWsDesigns(Math.max(2, wsDesigns - 1))} className="grid h-7 w-7 place-items-center rounded-full bg-secondary"><Minus className="h-3 w-3" /></button>
+                    <span className="w-5 text-center font-display text-base">{wsDesigns}</span>
+                    <button onClick={() => setWsDesigns(Math.min(10, wsDesigns + 1))} className="grid h-7 w-7 place-items-center rounded-full bg-primary text-primary-foreground"><Plus className="h-3 w-3" /></button>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  {Array.from({ length: wsDesigns }).map((_, i) => (
+                    <div key={i} className="flex items-center justify-between rounded-lg bg-secondary px-2.5 py-1.5 text-[11px]">
+                      <span className="font-semibold">Diseño {i + 1}</span>
+                      <span className="text-muted-foreground">{Math.floor(wsCustomQty / wsDesigns)} u.</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] text-muted-foreground">Editás cada diseño en el Studio.</p>
+              </div>
+            )}
+
+            <Link to="/customize" className="block w-full rounded-xl bg-primary py-2.5 text-center text-xs font-bold text-primary-foreground">
+              Abrir Studio para diseñar →
+            </Link>
+          </div>
+        )}
+
         {/* Variants */}
         {product.variants && (
           <div>
