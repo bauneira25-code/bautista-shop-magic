@@ -395,7 +395,7 @@ function ProductPage() {
                 className="flex-1 rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
                 style={{ background: "var(--gradient-primary)" }}
               >
-                {mode === "individual" ? "COMPRAR" : mode === "group" ? "SUMARME AHORA" : cta}
+                {mode === "individual" ? "COMPRAR" : mode === "group" ? "UNIRME AL GRUPO" : cta}
               </button>
             </div>
           </div>
