@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
+import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/products/$slug")({
