@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useLocalCart } from "@/stores/localCart";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
+import { QtyInput } from "@/components/QtyInput";
 
 export const Route = createFileRoute("/group/$slug")({
   component: GroupPage,
