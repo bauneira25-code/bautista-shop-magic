@@ -56,7 +56,7 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {TRENDING_QUERIES.map((t) => (
-                  <button key={t} onClick={() => setQ(t)} className="rounded-full bg-secondary px-2.5 py-1 text-[11px] hover:bg-primary/20">
+                  <button key={t} onClick={() => goSearch(t)} className="rounded-full bg-secondary px-2.5 py-1 text-[11px] hover:bg-primary/20">
                     {t}
                   </button>
                 ))}
