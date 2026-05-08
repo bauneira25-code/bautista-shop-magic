@@ -38,6 +38,8 @@ function GroupPage() {
   const [custColor, setCustColor] = useState<string>(product?.colors?.[0] ?? "#000000");
   const [custImage, setCustImage] = useState<string | null>(null);
   const [custImageData, setCustImageData] = useState<string | null>(null);
+  const [customAdded, setCustomAdded] = useState(false);
+  const [delivery, setDelivery] = useState<"envio" | "retiro">("envio");
 
   const onPickImage = (file: File | undefined) => {
     if (!file) return;
