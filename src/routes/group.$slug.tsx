@@ -222,10 +222,9 @@ function GroupPage() {
         <div className="rounded-2xl border border-neutral-200 bg-white p-4">
           <p className="font-display text-sm text-neutral-900"><Sparkles className="mr-1 inline h-4 w-4 text-[#e8451c]" /> Cómo funciona</p>
           <ol className="mt-2 space-y-1.5 text-xs text-neutral-600">
-            <li><b className="text-[#e8451c]">1.</b> {product.customizable ? "Personalizás tu unidad" : "Te sumás al grupo"}</li>
-            <li><b className="text-[#e8451c]">2.</b> Pagás para reservar tu lugar</li>
-            <li><b className="text-[#e8451c]">3.</b> Cuando se completa, se produce y envía</li>
-            <li><b className="text-[#e8451c]">4.</b> Si no se completa, te devolvemos el 100%</li>
+            <li><b className="text-[#e8451c]">1.</b> Personalizás tu unidad <span className="text-neutral-400">(opcional)</span></li>
+            <li><b className="text-[#e8451c]">2.</b> Te sumás al grupo y pagás</li>
+            <li><b className="text-[#e8451c]">3.</b> Si no se completa, te devolvemos el 100%</li>
           </ol>
         </div>
       </section>
@@ -304,12 +303,11 @@ function GroupPage() {
               onClick={() => {
                 setCustomAdded(true);
                 setSkipCustom(false);
-                setStep("browse");
-                toast.success("Personalización agregada ✨", { description: "Ahora tocá Sumarme ahora para pagar" });
+                setStep("summary");
               }}
-              className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white"
+              className="w-full rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
-              <Check className="mr-1 inline h-4 w-4" /> AGREGAR
+              <Zap className="mr-1 inline h-4 w-4" /> SUMARME AHORA
             </button>
           </div>
         </Sheet>
