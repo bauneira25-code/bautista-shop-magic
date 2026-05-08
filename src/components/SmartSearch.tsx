@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "@tanstack/react-router";
-import { Search, Sparkles, TrendingUp, X } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Search, Sparkles, TrendingUp, X, ArrowRight } from "lucide-react";
 import { searchProducts, formatARS } from "@/lib/mockData";
 
 const TRENDING_QUERIES = ["iPhone 15", "Auriculares ANC", "Smartwatch", "Freidora aire", "Máscara LED"];
@@ -9,7 +9,12 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const results = searchProducts(q, 6);
+  const navigate = useNavigate();
+  const results = searchProducts(q, 6).filter((p) => p.stock > 0);
+  const goSearch = (term: string) => {
+    setOpen(false);
+    navigate({ to: "/search", search: { q: term } });
+  };
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -21,7 +26,10 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
 
   return (
     <div ref={ref} className="relative">
-      <div className="flex items-center gap-2 rounded-2xl bg-card px-4 py-3 transition focus-within:ring-2 focus-within:ring-primary/40">
+      <form
+        onSubmit={(e) => { e.preventDefault(); if (q.trim()) goSearch(q.trim()); }}
+        className="flex items-center gap-2 rounded-2xl bg-card px-4 py-3 transition focus-within:ring-2 focus-within:ring-primary/40"
+      >
         <Search className="h-4 w-4 text-muted-foreground" />
         <input
           value={q}
@@ -31,13 +39,13 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
           className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
         />
         {q ? (
-          <button onClick={() => setQ("")} className="grid h-5 w-5 place-items-center rounded-full bg-muted">
+          <button type="button" onClick={() => setQ("")} className="grid h-5 w-5 place-items-center rounded-full bg-muted">
             <X className="h-3 w-3" />
           </button>
         ) : (
           <span className="rounded-lg bg-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary">IA</span>
         )}
-      </div>
+      </form>
 
       {open && (
         <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-border bg-popover shadow-2xl float-up">
@@ -48,7 +56,7 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {TRENDING_QUERIES.map((t) => (
-                  <button key={t} onClick={() => setQ(t)} className="rounded-full bg-secondary px-2.5 py-1 text-[11px] hover:bg-primary/20">
+                  <button key={t} onClick={() => goSearch(t)} className="rounded-full bg-secondary px-2.5 py-1 text-[11px] hover:bg-primary/20">
                     {t}
                   </button>
                 ))}
@@ -77,6 +85,12 @@ export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { p
                   <p className="text-xs font-bold text-primary">{formatARS(p.price.group)}</p>
                 </Link>
               ))}
+              <button
+                onClick={() => goSearch(q.trim())}
+                className="flex w-full items-center justify-center gap-1 bg-primary/10 py-2.5 text-[11px] font-bold text-primary"
+              >
+                Ver todos los resultados <ArrowRight className="h-3 w-3" />
+              </button>
             </div>
           )}
         </div>

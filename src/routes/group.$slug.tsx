@@ -272,8 +272,20 @@ function GroupPage() {
 
       {/* CUSTOMIZE SHEET */}
       {step === "customize" && (
-        <Sheet onClose={() => setStep("browse")} title="Personalizá tu unidad" subtitle="Texto e imagen sobre tu producto">
+        <Sheet onClose={() => setStep("browse")} title="Personalizá tu unidad" subtitle={`${joined} de ${target} ya se unieron`}>
           <div className="space-y-5">
+            {/* Progreso del grupo */}
+            <div className="rounded-2xl border border-orange-100 bg-orange-50 p-3">
+              <div className="flex items-center justify-between">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#e8451c]">Grupo en marcha</p>
+                <p className="font-display text-sm font-black text-[#e8451c]">{joined} de {target}</p>
+              </div>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white">
+                <div className="h-full rounded-full bg-[#e8451c] transition-all" style={{ width: `${pct}%` }} />
+              </div>
+              <p className="mt-1 text-[10px] text-neutral-500">{missing > 0 ? `Faltan ${missing} para completar` : "¡Grupo completo!"}</p>
+            </div>
+
             {/* Preview producto */}
             <div className="relative grid h-44 place-items-center overflow-hidden rounded-3xl" style={{ background: product.gradient }}>
               {custImageData ? (
