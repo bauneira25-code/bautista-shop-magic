@@ -128,8 +128,12 @@ function GroupPage() {
   };
 
   const milestones = useMemo(() => Array.from({ length: target }, (_, i) => i + 1), [target]);
-  const fees = Math.round(product.price.group * 0.04);
-  const total = product.price.group + fees;
+  const CUSTOM_FEE = 2300;
+  const SHIPPING_FEE = 1800;
+  const hasCustom = customAdded && (!!custText || !!custImage);
+  const customFee = hasCustom ? CUSTOM_FEE : 0;
+  const shippingFee = delivery === "envio" ? SHIPPING_FEE : 0;
+  const total = product.price.group + customFee + shippingFee;
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] bg-white pb-32 text-neutral-900">
