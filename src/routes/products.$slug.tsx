@@ -246,8 +246,8 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Personalizar — específico del producto (solo individual / grupal) */}
-        {product.customizable && mode === "individual" && (
+        {/* Personalizar — individual y grupal */}
+        {product.customizable && (mode === "individual" || mode === "group") && (
           <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
             <button
               onClick={() => setShowCustom(!showCustom)}
@@ -255,7 +255,7 @@ function ProductPage() {
             >
               <div className="text-left">
                 <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Hacelo único</p>
-                <p className="font-display text-lg">PERSONALIZAR</p>
+                <p className="font-display text-lg">PERSONALIZAR 🔥</p>
               </div>
               <ChevronDown className={`h-5 w-5 transition-transform ${showCustom ? "rotate-180" : ""}`} />
             </button>
@@ -316,7 +316,7 @@ function ProductPage() {
                   </button>
                 ) : (
                   <button
-                    onClick={handleCta}
+                    onClick={handleBuyNow}
                     className="w-full rounded-xl py-3.5 font-display text-sm tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
                     style={{ background: "var(--gradient-primary)" }}
                   >
@@ -411,11 +411,11 @@ function ProductPage() {
                 AL CARRITO
               </button>
               <button
-                onClick={mode === "individual" ? handleBuyNow : handleCta}
+                onClick={mode === "wholesale" ? handleCta : handleBuyNow}
                 className="flex-1 rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
                 style={{ background: "var(--gradient-primary)" }}
               >
-                {mode === "individual" ? "COMPRAR" : cta}
+                {mode === "individual" ? "COMPRAR" : mode === "group" ? "SUMARME AHORA" : cta}
               </button>
             </div>
           </div>
