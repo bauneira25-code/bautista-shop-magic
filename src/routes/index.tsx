@@ -74,8 +74,14 @@ function Home() {
           <Link to="/" className="flex items-center gap-2">
             <span className="grid h-7 w-7 place-items-center rounded-lg text-xs font-black text-white" style={{ background: "linear-gradient(135deg,#ff7a3d,#e8451c)" }}>N</span>
             <div>
-              <p className="font-display text-sm leading-none text-neutral-900">NEIBA</p>
-              <p className="text-[9px] text-neutral-400">Buenos Aires, AR</p>
+              <div className="flex items-center gap-1">
+                <p className="font-display text-sm leading-none text-neutral-900">NEIBA</p>
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[7px] font-semibold text-[#e8451c] leading-none">
+                  Productos internacionales
+                  <ShieldCheck className="h-2 w-2" />
+                </span>
+              </div>
+              <p className="mt-0.5 text-[9px] text-neutral-400">Buenos Aires, AR · verificado</p>
             </div>
           </Link>
           <button className="relative grid h-8 w-8 place-items-center rounded-full bg-orange-50">
