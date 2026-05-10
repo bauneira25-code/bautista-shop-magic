@@ -125,7 +125,7 @@ export function MultiDesignSheet({
             </h3>
             <p className="text-xs text-neutral-500">
               {phase === "count"
-                ? "¿Cuántos diseños distintos querés?"
+                ? "¿Cuántos querés diseñar?"
                 : `${unitsForCurrent} unidad${unitsForCurrent > 1 ? "es" : ""} con este diseño`}
             </p>
           </div>
