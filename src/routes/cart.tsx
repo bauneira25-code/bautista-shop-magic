@@ -5,6 +5,7 @@ import { useLocalCart } from "@/stores/localCart";
 import { formatARS } from "@/lib/mockData";
 import { useUserAuth } from "@/stores/userAuth";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
+import { useUserOrders } from "@/stores/userOrders";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 
@@ -40,6 +41,8 @@ function CartPage() {
   const modeLabel = (m: string) =>
     m === "group" ? "Grupal" : m === "wholesale" ? "Mayorista" : "Individual";
 
+  const addOrder = useUserOrders((s) => s.add);
+
   const finishPay = (info: { method: string; cardLast4?: string }) => {
     setShowPayMethods(false);
     setPaid(true);
@@ -47,6 +50,51 @@ function CartPage() {
       ? `${info.method} ···· ${info.cardLast4}`
       : info.method;
     toast.success("¡Pago confirmado!", { description: desc });
+
+    // Group items by mode → one order per mode
+    const byMode = items.reduce<Record<string, typeof items>>((acc, it) => {
+      (acc[it.mode] ||= []).push(it);
+      return acc;
+    }, {});
+    Object.entries(byMode).forEach(([mode, list]) => {
+      const orderTotal =
+        list.reduce((s, i) => s + i.unitPrice * i.quantity, 0) +
+        list.reduce((s, i) => s + (i.customization ? i.quantity * CUSTOM_FEE : 0), 0) +
+        (delivery === "envio" ? SHIPPING_FEE : 0);
+      const isGroup = mode === "group";
+      addOrder({
+        id: `NB-${Date.now().toString().slice(-6)}-${mode.slice(0, 1).toUpperCase()}`,
+        createdAt: Date.now(),
+        mode: mode as "individual" | "group" | "wholesale",
+        items: list.map((i) => ({
+          slug: i.slug,
+          title: i.title,
+          emoji: i.emoji,
+          gradient: i.gradient,
+          unitPrice: i.unitPrice,
+          quantity: i.quantity,
+          variant: i.variant,
+          color: i.color,
+          customization: i.customization,
+        })),
+        total: orderTotal,
+        paymentMethod: info.method,
+        cardLast4: info.cardLast4,
+        delivery,
+        shippingAddress: user?.direccion,
+        receiver: user
+          ? { nombre: user.nombre, apellido: user.apellido, telefono: user.telefono }
+          : undefined,
+        status: "processing",
+        progress: 10,
+        eta: isGroup ? "Cuando se complete el grupo" : delivery === "envio" ? "Llega en 3 a 5 días" : "Listo para retirar en 48h",
+        groupTarget: isGroup ? 10 : undefined,
+        groupJoined: isGroup ? 7 : undefined,
+        groupEndsAt: isGroup ? Date.now() + 1000 * 60 * 60 * 24 : undefined,
+        whatsappNotify: isGroup,
+      });
+    });
+
     setTimeout(() => {
       clear();
       navigate({ to: "/orders" });

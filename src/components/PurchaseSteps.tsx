@@ -1,26 +1,29 @@
-import { Check, Package, Users, Wand2, CreditCard, Truck } from "lucide-react";
+import { Check, Package, Users, Wand2, CreditCard, Truck, Plus } from "lucide-react";
 
 type Mode = "individual" | "group" | "wholesale";
 
 const STEPS: Record<Mode, { icon: React.ComponentType<{ className?: string }>; label: string }[]> = {
   group: [
     { icon: Package, label: "Elegís producto" },
-    { icon: Users, label: "Te sumás al grupo" },
+    { icon: Plus, label: "Elegís cantidad" },
+    { icon: Users, label: "Te sumás al grupo con otras personas" },
     { icon: Wand2, label: "Personalizás (opcional)" },
     { icon: CreditCard, label: "Pagás" },
-    { icon: Truck, label: "Envío" },
+    { icon: Truck, label: "Recibís tu envío" },
   ],
   individual: [
     { icon: Package, label: "Elegís producto" },
+    { icon: Plus, label: "Elegís cantidad" },
     { icon: Wand2, label: "Personalizás (opcional)" },
     { icon: CreditCard, label: "Pagás" },
-    { icon: Truck, label: "Envío" },
+    { icon: Truck, label: "Recibís tu envío" },
   ],
   wholesale: [
     { icon: Package, label: "Elegís producto" },
+    { icon: Plus, label: "Elegís cantidad" },
     { icon: Wand2, label: "Personalizás (opcional)" },
     { icon: CreditCard, label: "Pagás" },
-    { icon: Truck, label: "Envío" },
+    { icon: Truck, label: "Recibís tu envío" },
   ],
 };
 

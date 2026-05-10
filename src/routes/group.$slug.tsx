@@ -7,6 +7,8 @@ import {
 import { findProduct, formatARS } from "@/lib/mockData";
 import { toast } from "sonner";
 import { useLocalCart } from "@/stores/localCart";
+import { useUserOrders } from "@/stores/userOrders";
+import { useUserAuth } from "@/stores/userAuth";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
@@ -28,6 +30,8 @@ function GroupPage() {
   const product = findProduct(slug);
   const navigate = useNavigate();
   const addToCart = useLocalCart((s) => s.add);
+  const addOrder = useUserOrders((s) => s.add);
+  const user = useUserAuth((s) => s.user);
 
   const [seconds, setSeconds] = useState(842);
   const [joined, setJoined] = useState(product?.groupJoined ?? 0);
@@ -142,9 +146,42 @@ function GroupPage() {
         imageName: custImage ?? undefined,
       },
     });
+    addOrder({
+      id: `NB-${Date.now().toString().slice(-6)}-G`,
+      createdAt: Date.now(),
+      mode: "group",
+      items: [{
+        slug: product.slug,
+        title: product.title,
+        emoji: product.emoji,
+        gradient: product.gradient,
+        unitPrice: product.price.group,
+        quantity: payQty,
+        color: skipCustom ? undefined : custColor,
+        customization: skipCustom ? undefined : {
+          text: custText || undefined,
+          style: custStyle,
+          imageName: custImage ?? undefined,
+        },
+      }],
+      total,
+      paymentMethod: info.method,
+      cardLast4: info.cardLast4,
+      delivery,
+      shippingAddress: user?.direccion,
+      receiver: user ? { nombre: user.nombre, apellido: user.apellido, telefono: user.telefono } : undefined,
+      status: "processing",
+      progress: 10,
+      eta: "Cuando se complete el grupo",
+      groupTarget: target,
+      groupJoined: Math.min(target, joined + 1),
+      groupEndsAt: Date.now() + seconds * 1000,
+      whatsappNotify: true,
+    });
     setStep("paid");
     const desc = info.cardLast4 ? `${info.method} ···· ${info.cardLast4}` : info.method;
     toast.success("¡Estás dentro del grupo!", { description: desc });
+    toast.info("📲 Te avisamos por WhatsApp cuando se complete el grupo", { duration: 5000 });
   };
 
   const share = () => {
@@ -190,14 +227,42 @@ function GroupPage() {
           <div className="p-4">
             <h1 className="font-display text-lg leading-tight">{product.title}</h1>
 
-            <div className="mt-3 flex items-end gap-2">
-              <span className="font-display text-5xl font-black leading-none text-[#e8451c]">{joined}</span>
-              <span className="font-display text-2xl font-bold text-neutral-400">/{target}</span>
-              <span className="ml-auto text-xs text-neutral-500">{missing > 0 ? `Faltan ${missing}` : "Completo 🎉"}</span>
-            </div>
+            {/* Personas que se sumaron — visual claro */}
+            <div className="mt-4 rounded-2xl border-2 border-[#e8451c]/30 bg-orange-50 p-4">
+              <p className="text-center text-[11px] font-bold uppercase tracking-wider text-[#e8451c]">
+                👥 Personas en este grupo
+              </p>
+              <div className="mt-2 flex items-center justify-center gap-1">
+                <span className="font-display text-5xl font-black leading-none text-[#e8451c]">{joined}</span>
+                <span className="font-display text-2xl font-bold text-neutral-400">de {target}</span>
+              </div>
+              <p className="mt-1 text-center text-xs text-neutral-700">
+                {missing > 0 ? <>Faltan <b className="text-[#e8451c]">{missing} persona{missing === 1 ? "" : "s"}</b> para desbloquear el precio</> : "¡Grupo completo! 🎉"}
+              </p>
 
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-orange-50">
-              <div className="h-full rounded-full bg-[#e8451c] transition-all duration-700" style={{ width: `${pct}%` }} />
+              {/* Avatares visibles */}
+              <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+                {Array.from({ length: target }, (_, i) => i).map((i) => {
+                  const filled = i < joined;
+                  return (
+                    <span
+                      key={i}
+                      className={`grid h-8 w-8 place-items-center rounded-full text-[11px] font-bold ${
+                        filled
+                          ? "bg-[#e8451c] text-white shadow-sm"
+                          : "border-2 border-dashed border-[#e8451c]/40 bg-white text-[#e8451c]/50"
+                      }`}
+                      title={filled ? "Sumado" : "Lugar libre"}
+                    >
+                      {filled ? "✓" : "+"}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white">
+                <div className="h-full rounded-full bg-[#e8451c] transition-all duration-700" style={{ width: `${pct}%` }} />
+              </div>
             </div>
 
             <div className="mt-4 flex items-center justify-between">
@@ -217,6 +282,7 @@ function GroupPage() {
               <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> Cierra en</span>
               <span className="font-display text-base tabular-nums">{fmt(h)}:{fmt(m)}:{fmt(s)}</span>
             </div>
+            <p className="mt-2 text-center text-[10px] text-neutral-500">📲 Te avisamos por WhatsApp cuando se complete</p>
           </div>
         </div>
       </div>
