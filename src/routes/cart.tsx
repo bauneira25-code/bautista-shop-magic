@@ -5,6 +5,7 @@ import { useLocalCart } from "@/stores/localCart";
 import { formatARS } from "@/lib/mockData";
 import { useUserAuth } from "@/stores/userAuth";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
+import { useUserOrders } from "@/stores/userOrders";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 
