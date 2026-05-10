@@ -7,6 +7,8 @@ import {
 import { findProduct, formatARS } from "@/lib/mockData";
 import { toast } from "sonner";
 import { useLocalCart } from "@/stores/localCart";
+import { useUserOrders } from "@/stores/userOrders";
+import { useUserAuth } from "@/stores/userAuth";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
