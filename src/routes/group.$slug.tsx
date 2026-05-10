@@ -30,6 +30,8 @@ function GroupPage() {
   const product = findProduct(slug);
   const navigate = useNavigate();
   const addToCart = useLocalCart((s) => s.add);
+  const addOrder = useUserOrders((s) => s.add);
+  const user = useUserAuth((s) => s.user);
 
   const [seconds, setSeconds] = useState(842);
   const [joined, setJoined] = useState(product?.groupJoined ?? 0);
