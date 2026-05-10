@@ -252,14 +252,25 @@ function ProductPage() {
             </div>
 
             {/* Quick choice */}
-            <div className="flex gap-2">
-              <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${qty < product.groupTarget ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
-                Sumarme con 1
-              </button>
-              <button onClick={() => setQty(product.groupTarget)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${qty >= product.groupTarget ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
-                Llevar las {product.groupTarget}
-              </button>
-            </div>
+            {(() => {
+              const remaining = product.groupTarget - product.groupJoined;
+              const completing = qty >= remaining;
+              return (
+                <>
+                  <div className="flex gap-2">
+                    <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${!completing ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
+                      Sumarme con 1
+                    </button>
+                    <button onClick={() => setQty(remaining)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${completing ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
+                      Llevarme las {remaining}
+                    </button>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-neutral-700">
+                    💡 Comprando <b>{remaining} unidad{remaining === 1 ? "" : "es"}</b> completás el grupo y desbloqueás la oferta al instante para vos y todos los que ya se sumaron.
+                  </p>
+                </>
+              );
+            })()}
           </div>
         )}
 
