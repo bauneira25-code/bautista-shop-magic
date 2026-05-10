@@ -46,8 +46,12 @@ const make = (
     .replace(/^-|-$/g, "");
   const group = Math.round(individual * (1 - groupPct));
   const wholesale = Math.round(individual * (1 - groupPct - 0.15));
-  const target = 10 + ((_id * 3) % 16);
-  const joined = Math.max(1, Math.floor(target * (0.3 + ((_id * 17) % 50) / 100)));
+  // Demanda simulada (0-100). Mayor demanda => target más bajo (4) para cerrar rápido.
+  const demand = (_id * 37) % 100;
+  const target = demand > 66 ? 4 : demand > 33 ? 6 : 8;
+  // Siempre grupo activo: faltan entre 1 y target-1
+  const missing = 1 + ((_id * 13) % (target - 1));
+  const joined = target - missing;
   return {
     id: `p${_id}`,
     slug,
