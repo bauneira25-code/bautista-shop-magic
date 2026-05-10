@@ -202,27 +202,64 @@ function ProductPage() {
 
         {/* Group simple explainer */}
         {mode === "group" && (
-          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 float-up space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-bold text-primary"><Users className="mr-1 inline h-4 w-4" />Compra grupal desde {product.groupTarget} unidades</p>
-              <span className="inline-flex items-center gap-1 text-[10px] text-warning"><Clock className="h-3 w-3" />{product.groupTimeLeft}</span>
+          <div className="rounded-3xl border-2 border-[#e8451c]/40 bg-white p-4 float-up space-y-4 shadow-sm">
+            {/* Big number row */}
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="font-display text-3xl font-black leading-none text-[#e8451c]">
+                  {product.groupJoined}<span className="text-neutral-400">/{product.groupTarget}</span>
+                </p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-600">personas se unieron</p>
+              </div>
+              <div className="rounded-2xl bg-[#e8451c] px-3 py-2 text-center text-white">
+                <p className="text-[9px] font-bold uppercase opacity-90">Cierra en</p>
+                <p className="font-display text-sm font-black leading-tight">{product.groupTimeLeft}</p>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Sumate al grupo y pagás <b className="text-primary">{formatARS(product.price.group)}</b> por unidad,
-              o llevate las <b>{product.groupTarget} unidades</b> vos solo y desbloqueás el precio al instante.
-            </p>
+
+            {/* Avatars grid */}
+            <div className="flex flex-wrap gap-1.5">
+              {Array.from({ length: product.groupTarget }).map((_, i) => {
+                const filled = i < product.groupJoined;
+                return (
+                  <span
+                    key={i}
+                    className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-black ${
+                      filled ? "bg-[#e8451c] text-white" : "border-2 border-dashed border-neutral-300 text-neutral-400"
+                    }`}
+                  >
+                    {filled ? "✓" : "+"}
+                  </span>
+                );
+              })}
+            </div>
+
+            {/* Progress bar */}
+            <div className="h-2 overflow-hidden rounded-full bg-neutral-100">
+              <div className="h-full rounded-full bg-[#e8451c] transition-all" style={{ width: `${groupPct}%` }} />
+            </div>
+
+            {/* Plain explanation */}
+            <div className="rounded-2xl bg-orange-50 p-3">
+              <p className="text-xs font-bold text-neutral-900">
+                👥 Comprá junto a otras personas que quieren el mismo producto
+              </p>
+              <p className="mt-1 text-[11px] leading-relaxed text-neutral-700">
+                Cuando se completen las <b>{product.groupTarget}</b> unidades, todos pagan solo{" "}
+                <b className="text-[#e8451c]">{formatARS(product.price.group)}</b> por unidad.
+                Faltan <b>{product.groupTarget - product.groupJoined}</b> para cerrar el grupo.
+              </p>
+            </div>
+
+            {/* Quick choice */}
             <div className="flex gap-2">
-              <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition ${qty < product.groupTarget ? "border-primary bg-primary/15 text-primary" : "border-border"}`}>
+              <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${qty < product.groupTarget ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
                 Sumarme con 1
               </button>
-              <button onClick={() => setQty(product.groupTarget)} className={`flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition ${qty >= product.groupTarget ? "border-primary bg-primary/15 text-primary" : "border-border"}`}>
+              <button onClick={() => setQty(product.groupTarget)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${qty >= product.groupTarget ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
                 Llevar las {product.groupTarget}
               </button>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
-              <div className="h-full" style={{ width: `${groupPct}%`, background: "var(--gradient-primary)" }} />
-            </div>
-            <p className="text-[10px] text-muted-foreground">{product.groupJoined}/{product.groupTarget} ya se sumaron</p>
           </div>
         )}
 
