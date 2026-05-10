@@ -146,9 +146,42 @@ function GroupPage() {
         imageName: custImage ?? undefined,
       },
     });
+    addOrder({
+      id: `NB-${Date.now().toString().slice(-6)}-G`,
+      createdAt: Date.now(),
+      mode: "group",
+      items: [{
+        slug: product.slug,
+        title: product.title,
+        emoji: product.emoji,
+        gradient: product.gradient,
+        unitPrice: product.price.group,
+        quantity: payQty,
+        color: skipCustom ? undefined : custColor,
+        customization: skipCustom ? undefined : {
+          text: custText || undefined,
+          style: custStyle,
+          imageName: custImage ?? undefined,
+        },
+      }],
+      total,
+      paymentMethod: info.method,
+      cardLast4: info.cardLast4,
+      delivery,
+      shippingAddress: user?.direccion,
+      receiver: user ? { nombre: user.nombre, apellido: user.apellido, telefono: user.telefono } : undefined,
+      status: "processing",
+      progress: 10,
+      eta: "Cuando se complete el grupo",
+      groupTarget: target,
+      groupJoined: Math.min(target, joined + 1),
+      groupEndsAt: Date.now() + seconds * 1000,
+      whatsappNotify: true,
+    });
     setStep("paid");
     const desc = info.cardLast4 ? `${info.method} ···· ${info.cardLast4}` : info.method;
     toast.success("¡Estás dentro del grupo!", { description: desc });
+    toast.info("📲 Te avisamos por WhatsApp cuando se complete el grupo", { duration: 5000 });
   };
 
   const share = () => {
