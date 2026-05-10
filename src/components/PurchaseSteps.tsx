@@ -1,4 +1,4 @@
-import { Check, Package, Users, Wand2, CreditCard, Truck } from "lucide-react";
+import { Check, Package, Users, Wand2, CreditCard, Truck, Plus } from "lucide-react";
 
 type Mode = "individual" | "group" | "wholesale";
 
