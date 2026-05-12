@@ -13,6 +13,7 @@ import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { QtyInput } from "@/components/QtyInput";
+import { NotifyButton } from "@/components/NotifyButton";
 
 export const Route = createFileRoute("/group/$slug")({
   component: GroupPage,
