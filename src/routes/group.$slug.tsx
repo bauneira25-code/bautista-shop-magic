@@ -282,7 +282,10 @@ function GroupPage() {
               <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> Cierra en</span>
               <span className="font-display text-base tabular-nums">{fmt(h)}:{fmt(m)}:{fmt(s)}</span>
             </div>
-            <p className="mt-2 text-center text-[10px] text-neutral-500">📲 Te avisamos por WhatsApp cuando se complete</p>
+            <div className="mt-2 flex items-center justify-center gap-2">
+              <p className="text-[10px] text-neutral-500">🔔 Te avisamos con una notificación cuando se complete</p>
+              <NotifyButton />
+            </div>
           </div>
         </div>
       </div>
