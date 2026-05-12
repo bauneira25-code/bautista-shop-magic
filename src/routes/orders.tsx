@@ -4,6 +4,7 @@ import { Package, Truck, CheckCircle2, Sparkles, Clock, MapPin, Phone, CreditCar
 import { MobileShell } from "@/components/MobileShell";
 import { MOCK_ORDERS, formatARS } from "@/lib/mockData";
 import { useUserOrders, type UserOrder } from "@/stores/userOrders";
+import { NotifyButton } from "@/components/NotifyButton";
 
 export const Route = createFileRoute("/orders")({
   component: Orders,
@@ -179,9 +180,12 @@ function UserOrderCard({ order }: { order: UserOrder }) {
       </div>
 
       {order.whatsappNotify && (
-        <p className="mt-2 flex items-center gap-1.5 rounded-xl bg-success/10 px-2.5 py-1.5 text-[11px] font-semibold text-success">
-          <MessageCircle className="h-3 w-3" /> Te avisamos por WhatsApp cuando se complete el grupo
-        </p>
+        <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-success/10 px-2.5 py-1.5">
+          <p className="flex items-center gap-1.5 text-[11px] font-semibold text-success">
+            <MessageCircle className="h-3 w-3" /> Te avisaremos con una notificación cuando se complete el grupo
+          </p>
+          <NotifyButton />
+        </div>
       )}
     </div>
   );

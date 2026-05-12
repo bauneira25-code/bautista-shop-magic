@@ -13,6 +13,7 @@ import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { QtyInput } from "@/components/QtyInput";
+import { NotifyButton } from "@/components/NotifyButton";
 
 export const Route = createFileRoute("/group/$slug")({
   component: GroupPage,
@@ -181,7 +182,7 @@ function GroupPage() {
     setStep("paid");
     const desc = info.cardLast4 ? `${info.method} ···· ${info.cardLast4}` : info.method;
     toast.success("¡Estás dentro del grupo!", { description: desc });
-    toast.info("📲 Te avisamos por WhatsApp cuando se complete el grupo", { duration: 5000 });
+    toast.info("🔔 Te avisamos con una notificación cuando se complete el grupo", { duration: 5000 });
   };
 
   const share = () => {
@@ -282,7 +283,10 @@ function GroupPage() {
               <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> Cierra en</span>
               <span className="font-display text-base tabular-nums">{fmt(h)}:{fmt(m)}:{fmt(s)}</span>
             </div>
-            <p className="mt-2 text-center text-[10px] text-neutral-500">📲 Te avisamos por WhatsApp cuando se complete</p>
+            <div className="mt-2 flex items-center justify-center gap-2">
+              <p className="text-[10px] text-neutral-500">🔔 Te avisamos con una notificación cuando se complete</p>
+              <NotifyButton />
+            </div>
           </div>
         </div>
       </div>
@@ -562,7 +566,8 @@ function GroupPage() {
               <Check className="h-12 w-12 text-white" />
             </div>
             <p className="font-display text-xl text-neutral-900">Reserva confirmada</p>
-            <p className="text-sm text-neutral-600">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
+            <p className="text-sm text-neutral-600">Te avisamos con una notificación cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
+            <div className="flex justify-center"><NotifyButton /></div>
             <button onClick={share} className="w-full rounded-xl border border-orange-200 bg-orange-50 py-3 text-sm font-bold text-[#e8451c]">
               <Fire className="mr-1 inline h-4 w-4" /> Compartir y ganar 20% OFF
             </button>
