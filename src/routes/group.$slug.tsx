@@ -182,7 +182,7 @@ function GroupPage() {
     setStep("paid");
     const desc = info.cardLast4 ? `${info.method} ···· ${info.cardLast4}` : info.method;
     toast.success("¡Estás dentro del grupo!", { description: desc });
-    toast.info("📲 Te avisamos por WhatsApp cuando se complete el grupo", { duration: 5000 });
+    toast.info("🔔 Te avisamos con una notificación cuando se complete el grupo", { duration: 5000 });
   };
 
   const share = () => {
