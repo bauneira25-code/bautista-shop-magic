@@ -566,7 +566,8 @@ function GroupPage() {
               <Check className="h-12 w-12 text-white" />
             </div>
             <p className="font-display text-xl text-neutral-900">Reserva confirmada</p>
-            <p className="text-sm text-neutral-600">Te avisamos cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
+            <p className="text-sm text-neutral-600">Te avisamos con una notificación cuando se complete el grupo. {missing > 0 ? `Faltan ${missing}` : "¡Grupo completo!"}</p>
+            <div className="flex justify-center"><NotifyButton /></div>
             <button onClick={share} className="w-full rounded-xl border border-orange-200 bg-orange-50 py-3 text-sm font-bold text-[#e8451c]">
               <Fire className="mr-1 inline h-4 w-4" /> Compartir y ganar 20% OFF
             </button>
