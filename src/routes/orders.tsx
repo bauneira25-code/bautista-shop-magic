@@ -179,9 +179,12 @@ function UserOrderCard({ order }: { order: UserOrder }) {
       </div>
 
       {order.whatsappNotify && (
-        <p className="mt-2 flex items-center gap-1.5 rounded-xl bg-success/10 px-2.5 py-1.5 text-[11px] font-semibold text-success">
-          <MessageCircle className="h-3 w-3" /> Te avisamos por WhatsApp cuando se complete el grupo
-        </p>
+        <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-success/10 px-2.5 py-1.5">
+          <p className="flex items-center gap-1.5 text-[11px] font-semibold text-success">
+            <MessageCircle className="h-3 w-3" /> Te avisaremos con una notificación cuando se complete el grupo
+          </p>
+          <NotifyButton />
+        </div>
       )}
     </div>
   );
