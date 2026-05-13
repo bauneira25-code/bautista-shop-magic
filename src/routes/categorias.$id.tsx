@@ -10,6 +10,23 @@ import { CategoryHero } from "@/components/CategoryHero";
 import { CategoryAmbient } from "@/components/CategoryAmbient";
 
 export const Route = createFileRoute("/categorias/$id")({
+  head: ({ params }) => {
+    const theme = CATEGORY_THEMES[params.id];
+    const name = theme?.name ?? "Categoría";
+    const title = `${name} — NEIBA`;
+    const desc = `Descubrí los mejores productos de ${name.toLowerCase()} en NEIBA. Compras grupales con descuentos de hasta 45%.`;
+    const url = `/categorias/${params.id}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: CategoryPage,
   notFoundComponent: () => (
     <div className="grid min-h-screen place-items-center bg-background text-foreground">
