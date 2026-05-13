@@ -1,0 +1,18 @@
+# NEIBA
+
+> Marketplace de compras grupales y productos personalizables con IA. Sumate a grupos en vivo, ahorrá hasta 45% y diseñá tu producto.
+
+## Pages
+
+- [Inicio](/): Recomendaciones, grupos en vivo y ofertas flash.
+- [Categorías](/categorias): Tecnología, hogar, belleza, gym, joyería y más.
+- [Grupos activos](/grupos): Compras grupales en vivo a las que te podés sumar.
+- [Buscar](/search): Buscador de productos.
+- [Personalizar](/customize): Diseñá productos con IA.
+- [Registrar marca](/registrar-marca): Vendé tu marca en NEIBA.
+
+## Optional
+
+- [Carrito](/cart)
+- [Pedidos](/orders)
+- [Perfil](/profile)

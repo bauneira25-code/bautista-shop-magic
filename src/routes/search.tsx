@@ -12,6 +12,16 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(searchSchema),
+  head: () => ({
+    meta: [
+      { title: "Buscar productos — NEIBA" },
+      { name: "description", content: "Buscá productos en NEIBA: tecnología, hogar, belleza, gym y más con compras grupales y descuentos." },
+      { property: "og:title", content: "Buscar productos — NEIBA" },
+      { property: "og:description", content: "Buscá productos y sumate a compras grupales en NEIBA." },
+      { property: "og:url", content: "/search" },
+    ],
+    links: [{ rel: "canonical", href: "/search" }],
+  }),
   component: SearchPage,
 });
 

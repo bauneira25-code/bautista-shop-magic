@@ -13,6 +13,57 @@ import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 
 export const Route = createFileRoute("/products/$slug")({
+  head: ({ params }) => {
+    const product = findProduct(params.slug);
+    if (!product) {
+      return {
+        meta: [
+          { title: "Producto no encontrado — NEIBA" },
+          { name: "description", content: "El producto que buscás no está disponible en NEIBA." },
+        ],
+      };
+    }
+    const title = `${product.title} — NEIBA`;
+    const desc = product.description.slice(0, 155);
+    const url = `/products/${product.slug}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "product" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.title,
+            description: product.description,
+            sku: product.id,
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: product.rating,
+              reviewCount: product.reviews,
+            },
+            offers: {
+              "@type": "Offer",
+              price: product.price.individual,
+              priceCurrency: "ARS",
+              availability: product.stock > 0
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
+              url,
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: ProductPage,
   notFoundComponent: () => (
     <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>

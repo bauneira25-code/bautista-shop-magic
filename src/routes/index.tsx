@@ -21,8 +21,39 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NEIBA — Marketplace futurista" },
-      { name: "description", content: "Tecnología, hogar, belleza y más con compras grupales y personalización IA." },
+      { title: "NEIBA — Compras grupales y productos personalizados" },
+      { name: "description", content: "Sumate a grupos en vivo, ahorrá hasta 45% y personalizá productos con IA. Tecnología, hogar, belleza y más." },
+      { property: "og:title", content: "NEIBA — Compras grupales y productos personalizados" },
+      { property: "og:description", content: "Sumate a grupos en vivo, ahorrá hasta 45% y personalizá productos con IA." },
+      { property: "og:url", content: "/" },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "NEIBA",
+          url: "/",
+          description: "Marketplace de compras grupales y productos personalizables con IA.",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "NEIBA",
+          url: "/",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "/search?q={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
     ],
   }),
   component: Home,

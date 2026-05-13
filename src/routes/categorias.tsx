@@ -4,6 +4,16 @@ import { MobileShell } from "@/components/MobileShell";
 import { CATEGORY_LIST } from "@/lib/categoryThemes";
 
 export const Route = createFileRoute("/categorias")({
+  head: () => ({
+    meta: [
+      { title: "Categorías — Explorá NEIBA" },
+      { name: "description", content: "Explorá tecnología, hogar, belleza, gym, joyería y más. Encontrá tu próxima compra grupal en NEIBA." },
+      { property: "og:title", content: "Categorías — Explorá NEIBA" },
+      { property: "og:description", content: "Explorá tecnología, hogar, belleza, gym, joyería y más en NEIBA." },
+      { property: "og:url", content: "/categorias" },
+    ],
+    links: [{ rel: "canonical", href: "/categorias" }],
+  }),
   component: Categorias,
 });
 
