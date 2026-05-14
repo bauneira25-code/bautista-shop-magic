@@ -28,9 +28,18 @@ import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as GroupSlugRouteImport } from './routes/group.$slug'
 import { Route as CategoriasIdRouteImport } from './routes/categorias.$id'
 import { Route as AdminMachineRouteImport } from './routes/admin.machine'
+import { Route as AdminPanelStockRouteImport } from './routes/admin-panel.stock'
+import { Route as AdminPanelReclamosRouteImport } from './routes/admin-panel.reclamos'
+import { Route as AdminPanelProductosRouteImport } from './routes/admin-panel.productos'
 import { Route as AdminPanelProduccionRouteImport } from './routes/admin-panel.produccion'
 import { Route as AdminPanelPersonalizadosRouteImport } from './routes/admin-panel.personalizados'
 import { Route as AdminPanelPedidosRouteImport } from './routes/admin-panel.pedidos'
+import { Route as AdminPanelPagosRouteImport } from './routes/admin-panel.pagos'
+import { Route as AdminPanelGruposRouteImport } from './routes/admin-panel.grupos'
+import { Route as AdminPanelEnviosRouteImport } from './routes/admin-panel.envios'
+import { Route as AdminPanelEmpleadosRouteImport } from './routes/admin-panel.empleados'
+import { Route as AdminPanelConfiguracionRouteImport } from './routes/admin-panel.configuracion'
+import { Route as AdminPanelClientesRouteImport } from './routes/admin-panel.clientes'
 import { Route as AdminPanelCalidadRouteImport } from './routes/admin-panel.calidad'
 import { Route as ProductsSlugDesignRouteImport } from './routes/products.$slug.design'
 
@@ -129,6 +138,21 @@ const AdminMachineRoute = AdminMachineRouteImport.update({
   path: '/machine',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPanelStockRoute = AdminPanelStockRouteImport.update({
+  id: '/stock',
+  path: '/stock',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelReclamosRoute = AdminPanelReclamosRouteImport.update({
+  id: '/reclamos',
+  path: '/reclamos',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelProductosRoute = AdminPanelProductosRouteImport.update({
+  id: '/productos',
+  path: '/productos',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
 const AdminPanelProduccionRoute = AdminPanelProduccionRouteImport.update({
   id: '/produccion',
   path: '/produccion',
@@ -143,6 +167,36 @@ const AdminPanelPersonalizadosRoute =
 const AdminPanelPedidosRoute = AdminPanelPedidosRouteImport.update({
   id: '/pedidos',
   path: '/pedidos',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelPagosRoute = AdminPanelPagosRouteImport.update({
+  id: '/pagos',
+  path: '/pagos',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelGruposRoute = AdminPanelGruposRouteImport.update({
+  id: '/grupos',
+  path: '/grupos',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelEnviosRoute = AdminPanelEnviosRouteImport.update({
+  id: '/envios',
+  path: '/envios',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelEmpleadosRoute = AdminPanelEmpleadosRouteImport.update({
+  id: '/empleados',
+  path: '/empleados',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelConfiguracionRoute = AdminPanelConfiguracionRouteImport.update({
+  id: '/configuracion',
+  path: '/configuracion',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelClientesRoute = AdminPanelClientesRouteImport.update({
+  id: '/clientes',
+  path: '/clientes',
   getParentRoute: () => AdminPanelRoute,
 } as any)
 const AdminPanelCalidadRoute = AdminPanelCalidadRouteImport.update({
@@ -172,9 +226,18 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
+  '/admin-panel/clientes': typeof AdminPanelClientesRoute
+  '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
+  '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
+  '/admin-panel/envios': typeof AdminPanelEnviosRoute
+  '/admin-panel/grupos': typeof AdminPanelGruposRoute
+  '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
   '/admin-panel/produccion': typeof AdminPanelProduccionRoute
+  '/admin-panel/productos': typeof AdminPanelProductosRoute
+  '/admin-panel/reclamos': typeof AdminPanelReclamosRoute
+  '/admin-panel/stock': typeof AdminPanelStockRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
@@ -197,9 +260,18 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
+  '/admin-panel/clientes': typeof AdminPanelClientesRoute
+  '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
+  '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
+  '/admin-panel/envios': typeof AdminPanelEnviosRoute
+  '/admin-panel/grupos': typeof AdminPanelGruposRoute
+  '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
   '/admin-panel/produccion': typeof AdminPanelProduccionRoute
+  '/admin-panel/productos': typeof AdminPanelProductosRoute
+  '/admin-panel/reclamos': typeof AdminPanelReclamosRoute
+  '/admin-panel/stock': typeof AdminPanelStockRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
@@ -224,9 +296,18 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
+  '/admin-panel/clientes': typeof AdminPanelClientesRoute
+  '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
+  '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
+  '/admin-panel/envios': typeof AdminPanelEnviosRoute
+  '/admin-panel/grupos': typeof AdminPanelGruposRoute
+  '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
   '/admin-panel/produccion': typeof AdminPanelProduccionRoute
+  '/admin-panel/productos': typeof AdminPanelProductosRoute
+  '/admin-panel/reclamos': typeof AdminPanelReclamosRoute
+  '/admin-panel/stock': typeof AdminPanelStockRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
@@ -252,9 +333,18 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/admin-panel/calidad'
+    | '/admin-panel/clientes'
+    | '/admin-panel/configuracion'
+    | '/admin-panel/empleados'
+    | '/admin-panel/envios'
+    | '/admin-panel/grupos'
+    | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
     | '/admin-panel/produccion'
+    | '/admin-panel/productos'
+    | '/admin-panel/reclamos'
+    | '/admin-panel/stock'
     | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
@@ -277,9 +367,18 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/admin-panel/calidad'
+    | '/admin-panel/clientes'
+    | '/admin-panel/configuracion'
+    | '/admin-panel/empleados'
+    | '/admin-panel/envios'
+    | '/admin-panel/grupos'
+    | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
     | '/admin-panel/produccion'
+    | '/admin-panel/productos'
+    | '/admin-panel/reclamos'
+    | '/admin-panel/stock'
     | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
@@ -303,9 +402,18 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/admin-panel/calidad'
+    | '/admin-panel/clientes'
+    | '/admin-panel/configuracion'
+    | '/admin-panel/empleados'
+    | '/admin-panel/envios'
+    | '/admin-panel/grupos'
+    | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
     | '/admin-panel/produccion'
+    | '/admin-panel/productos'
+    | '/admin-panel/reclamos'
+    | '/admin-panel/stock'
     | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
@@ -468,6 +576,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMachineRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin-panel/stock': {
+      id: '/admin-panel/stock'
+      path: '/stock'
+      fullPath: '/admin-panel/stock'
+      preLoaderRoute: typeof AdminPanelStockRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/reclamos': {
+      id: '/admin-panel/reclamos'
+      path: '/reclamos'
+      fullPath: '/admin-panel/reclamos'
+      preLoaderRoute: typeof AdminPanelReclamosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/productos': {
+      id: '/admin-panel/productos'
+      path: '/productos'
+      fullPath: '/admin-panel/productos'
+      preLoaderRoute: typeof AdminPanelProductosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
     '/admin-panel/produccion': {
       id: '/admin-panel/produccion'
       path: '/produccion'
@@ -487,6 +616,48 @@ declare module '@tanstack/react-router' {
       path: '/pedidos'
       fullPath: '/admin-panel/pedidos'
       preLoaderRoute: typeof AdminPanelPedidosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/pagos': {
+      id: '/admin-panel/pagos'
+      path: '/pagos'
+      fullPath: '/admin-panel/pagos'
+      preLoaderRoute: typeof AdminPanelPagosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/grupos': {
+      id: '/admin-panel/grupos'
+      path: '/grupos'
+      fullPath: '/admin-panel/grupos'
+      preLoaderRoute: typeof AdminPanelGruposRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/envios': {
+      id: '/admin-panel/envios'
+      path: '/envios'
+      fullPath: '/admin-panel/envios'
+      preLoaderRoute: typeof AdminPanelEnviosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/empleados': {
+      id: '/admin-panel/empleados'
+      path: '/empleados'
+      fullPath: '/admin-panel/empleados'
+      preLoaderRoute: typeof AdminPanelEmpleadosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/configuracion': {
+      id: '/admin-panel/configuracion'
+      path: '/configuracion'
+      fullPath: '/admin-panel/configuracion'
+      preLoaderRoute: typeof AdminPanelConfiguracionRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/clientes': {
+      id: '/admin-panel/clientes'
+      path: '/clientes'
+      fullPath: '/admin-panel/clientes'
+      preLoaderRoute: typeof AdminPanelClientesRouteImport
       parentRoute: typeof AdminPanelRoute
     }
     '/admin-panel/calidad': {
@@ -518,17 +689,35 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AdminPanelRouteChildren {
   AdminPanelCalidadRoute: typeof AdminPanelCalidadRoute
+  AdminPanelClientesRoute: typeof AdminPanelClientesRoute
+  AdminPanelConfiguracionRoute: typeof AdminPanelConfiguracionRoute
+  AdminPanelEmpleadosRoute: typeof AdminPanelEmpleadosRoute
+  AdminPanelEnviosRoute: typeof AdminPanelEnviosRoute
+  AdminPanelGruposRoute: typeof AdminPanelGruposRoute
+  AdminPanelPagosRoute: typeof AdminPanelPagosRoute
   AdminPanelPedidosRoute: typeof AdminPanelPedidosRoute
   AdminPanelPersonalizadosRoute: typeof AdminPanelPersonalizadosRoute
   AdminPanelProduccionRoute: typeof AdminPanelProduccionRoute
+  AdminPanelProductosRoute: typeof AdminPanelProductosRoute
+  AdminPanelReclamosRoute: typeof AdminPanelReclamosRoute
+  AdminPanelStockRoute: typeof AdminPanelStockRoute
   AdminPanelIndexRoute: typeof AdminPanelIndexRoute
 }
 
 const AdminPanelRouteChildren: AdminPanelRouteChildren = {
   AdminPanelCalidadRoute: AdminPanelCalidadRoute,
+  AdminPanelClientesRoute: AdminPanelClientesRoute,
+  AdminPanelConfiguracionRoute: AdminPanelConfiguracionRoute,
+  AdminPanelEmpleadosRoute: AdminPanelEmpleadosRoute,
+  AdminPanelEnviosRoute: AdminPanelEnviosRoute,
+  AdminPanelGruposRoute: AdminPanelGruposRoute,
+  AdminPanelPagosRoute: AdminPanelPagosRoute,
   AdminPanelPedidosRoute: AdminPanelPedidosRoute,
   AdminPanelPersonalizadosRoute: AdminPanelPersonalizadosRoute,
   AdminPanelProduccionRoute: AdminPanelProduccionRoute,
+  AdminPanelProductosRoute: AdminPanelProductosRoute,
+  AdminPanelReclamosRoute: AdminPanelReclamosRoute,
+  AdminPanelStockRoute: AdminPanelStockRoute,
   AdminPanelIndexRoute: AdminPanelIndexRoute,
 }
 
