@@ -47,22 +47,38 @@ function PersonalizadosPage() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {loading && <p className="text-white/40">Cargando...</p>}
         {!loading && rows.length === 0 && <p className="text-white/40 col-span-full text-center py-10">Sin personalizados aún</p>}
-        {rows.map(({ cust, order }) => (
-          <button key={cust.id} onClick={() => setSelected({ cust, order })}
-            className="text-left rounded-2xl bg-white/[0.03] border border-white/5 p-4 hover:bg-white/[0.06] transition">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <p className="font-display text-base">{order.product_emoji} {order.product_title}</p>
-                <p className="text-xs text-white/50 mt-0.5">{order.customer_name}</p>
+        {rows.map(({ cust, order }) => {
+          const isPrinting = order.status === "imprimiendo" || order.status === "en_produccion";
+          return (
+            <div key={cust.id} className="rounded-2xl bg-white/[0.03] border border-white/5 p-4 space-y-3">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <PersonalizedBadge on={true} />
+                  <p className="font-display text-base mt-2">{order.product_emoji} {order.product_title}</p>
+                  <p className="text-xs text-white/50 mt-0.5">{order.customer_name}</p>
+                </div>
+                <StatusBadge status={order.status} />
               </div>
-              <StatusBadge status={order.status} />
+              <button onClick={() => setSelected({ cust, order })} className="block w-full rounded-xl bg-black/40 px-3 py-2 text-center hover:bg-black/60 transition" style={{ fontFamily: cust.font, color: cust.color }}>
+                "{cust.text}"
+              </button>
+              <div className="flex gap-2">
+                {!isPrinting ? (
+                  <button onClick={() => updateStatus(order.id, "imprimiendo")}
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 py-2.5 text-xs font-bold">
+                    <Flame className="h-3.5 w-3.5" /> Comenzar personalización
+                  </button>
+                ) : (
+                  <button onClick={() => updateStatus(order.id, "personalizado_terminado")}
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 py-2.5 text-xs font-bold">
+                    <PackageCheck className="h-3.5 w-3.5" /> Terminado · enviar a empaquetado
+                  </button>
+                )}
+              </div>
+              <p className="text-[10px] text-white/40">{new Date(cust.created_at).toLocaleString("es-AR")}</p>
             </div>
-            <div className="rounded-xl bg-black/40 px-3 py-2 text-center" style={{ fontFamily: cust.font, color: cust.color }}>
-              "{cust.text}"
-            </div>
-            <p className="mt-2 text-[10px] text-white/40">{new Date(cust.created_at).toLocaleString("es-AR")}</p>
-          </button>
-        ))}
+          );
+        })}
       </div>
 
       {selected && (
