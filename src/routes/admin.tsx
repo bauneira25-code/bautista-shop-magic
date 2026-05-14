@@ -493,6 +493,41 @@ function EmpaquetadoTab({ orders }: { orders: OrderRow[] }) {
     const { error } = await supabase.from("orders").update({ status: "enviado" as any, tracking_code: code || null }).eq("id", id);
     if (error) toast.error(error.message); else toast.success("📦 Enviado");
   };
+
+  const imprimir = (o: OrderRow) => {
+    const isCust = !!(o as any).is_customized;
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Envío ${o.id.slice(0,8)}</title>
+<style>
+  *{box-sizing:border-box} body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;padding:24px;color:#0a0a0a}
+  .card{border:2px solid #000;border-radius:14px;padding:20px;max-width:520px}
+  h1{margin:0 0 4px;font-size:22px} .muted{color:#666;font-size:12px;margin-bottom:14px}
+  .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #ddd;font-size:13px}
+  .row:last-child{border-bottom:none} .lbl{color:#666} .val{font-weight:600;text-align:right;max-width:60%}
+  .badge{display:inline-block;background:#ff5722;color:#fff;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.5px;margin-bottom:10px}
+  .std{background:#222}
+  .total{font-size:16px;margin-top:10px;padding-top:10px;border-top:2px solid #000}
+  @media print{@page{margin:8mm}}
+</style></head><body>
+<div class="card">
+  <span class="badge ${isCust?"":"std"}">${isCust?"PERSONALIZADO":"ESTÁNDAR"}</span>
+  <h1>${esc(o.product_title)}</h1>
+  <div class="muted">Pedido #${o.id.slice(0,8)} · ${new Date(o.created_at).toLocaleString("es-AR")}</div>
+
+  <div class="row"><span class="lbl">Cliente</span><span class="val">${esc(o.customer_name)}</span></div>
+  <div class="row"><span class="lbl">Teléfono</span><span class="val">${esc(o.customer_phone ?? "-")}</span></div>
+  <div class="row"><span class="lbl">Producto</span><span class="val">${o.product_emoji ?? ""} ${esc(o.product_title)}</span></div>
+  <div class="row"><span class="lbl">Cantidad</span><span class="val">${o.quantity}</span></div>
+  <div class="row"><span class="lbl">Tracking</span><span class="val">${esc(o.tracking_code ?? "pendiente")}</span></div>
+  ${o.notes ? `<div class="row"><span class="lbl">Notas</span><span class="val">${esc(o.notes)}</span></div>` : ""}
+  <div class="row total"><span class="lbl">Total</span><span class="val">$${Number(o.unit_price)*o.quantity}</span></div>
+</div>
+<script>window.onload=()=>{window.print();setTimeout(()=>window.close(),300)}</script>
+</body></html>`;
+    const w = window.open("", "_blank", "width=600,height=800");
+    if (!w) { toast.error("Permití pop-ups para imprimir"); return; }
+    w.document.write(html); w.document.close();
+  };
+
   return (
     <div className="space-y-3">
       <div className="rounded-3xl border border-primary/30 bg-primary/5 p-4">
@@ -510,11 +545,21 @@ function EmpaquetadoTab({ orders }: { orders: OrderRow[] }) {
               <div className="min-w-0 flex-1">
                 <PersonalizedBadge on={!!(o as any).is_customized} />
                 <p className="line-clamp-1 text-xs font-semibold mt-1">{o.product_title}</p>
-                <p className="text-[10px] text-muted-foreground">{o.customer_name} · {o.quantity}u</p>
+                <p className="text-[10px] text-muted-foreground">{o.customer_name} · {o.customer_phone ?? "sin tel"} · {o.quantity}u</p>
               </div>
               <span className={`rounded-full px-2 py-0.5 text-[9px] font-black ${meta.color}`}>{meta.label}</span>
             </div>
+
+            <div className="rounded-xl bg-muted/40 p-2.5 text-[10px] text-muted-foreground space-y-0.5">
+              <p>📦 Pedido <span className="font-mono text-foreground">#{o.id.slice(0,8)}</span></p>
+              <p>💰 Total <span className="font-bold text-foreground">${Number(o.unit_price) * o.quantity}</span></p>
+              <p>🚚 Tracking: <span className="text-foreground">{o.tracking_code ?? "pendiente"}</span></p>
+            </div>
+
             <div className="flex gap-2">
+              <button onClick={() => imprimir(o)} className="flex items-center justify-center gap-1.5 rounded-xl bg-foreground px-3 py-2.5 text-[11px] font-bold text-background">
+                <Printer className="h-3.5 w-3.5" /> Imprimir detalle
+              </button>
               {!empaquetado ? (
                 <button onClick={() => finalizar(o.id)} className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-success/90 py-2.5 text-[11px] font-bold text-white">
                   <PackageCheck className="h-3.5 w-3.5" /> Empaquetado finalizado
@@ -531,3 +576,8 @@ function EmpaquetadoTab({ orders }: { orders: OrderRow[] }) {
     </div>
   );
 }
+
+function esc(s: string) {
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]!));
+}
+
