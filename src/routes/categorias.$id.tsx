@@ -205,7 +205,7 @@ function CategoryPage() {
                 )}
                 {p.customizable && (
                   <span className="absolute left-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">
-                    Personalizable 🔥
+                    Personalizable
                   </span>
                 )}
                 {p.customizable && (

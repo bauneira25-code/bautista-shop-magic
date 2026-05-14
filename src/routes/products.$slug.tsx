@@ -351,7 +351,7 @@ function ProductPage() {
             className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 font-display text-sm font-black tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
             style={{ background: "var(--gradient-primary)" }}
           >
-            PERSONALIZAR 🔥
+            PERSONALIZAR
           </button>
         )}
 
@@ -379,21 +379,6 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Editor Pro (nuevo) */}
-        {product.customizable && (
-          <Link
-            to="/products/$slug/design"
-            params={{ slug: product.slug }}
-            className="flex w-full items-center justify-between rounded-2xl border-2 border-primary/40 bg-primary/5 p-3 text-primary"
-          >
-            <div className="text-left">
-              <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Editor Pro · texto + color + tipografía</p>
-              <p className="font-display text-base">DISEÑAR Y PEDIR ✨</p>
-            </div>
-            <span className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">NUEVO</span>
-          </Link>
-        )}
-
         {/* Personalizar — individual y grupal (fullscreen) */}
         {product.customizable && (mode === "individual" || mode === "group") && (
           <button
@@ -408,7 +393,7 @@ function ProductPage() {
               <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
                 {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Texto, imagen y color"}
               </p>
-              <p className="font-display text-lg">PERSONALIZAR 🔥</p>
+              <p className="font-display text-lg">PERSONALIZAR</p>
             </div>
             {customAdded && (
               <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold backdrop-blur">
