@@ -3,17 +3,21 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, TrendingUp, Package, DollarSign, Users, AlertTriangle,
   BarChart3, Factory, Boxes, Hammer, ArrowUp, ArrowDown, ShieldCheck, LogOut, Wrench,
+  Layers3, Sparkles, PackageCheck, Flame, Truck, Check,
 } from "lucide-react";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useBrands } from "@/stores/brands";
 import { AdminPinGate } from "@/components/AdminPinGate";
+import { SectionPinGate } from "@/components/admin/SectionPinGate";
+import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
 import { adminLogout } from "@/lib/adminAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { ageMinutes, STATUS_META, type OrderRow } from "@/lib/orders";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({ component: AdminPage });
 
-type Tab = "resumen" | "analytics" | "produccion" | "stock";
+type Tab = "todo" | "resumen" | "analytics" | "produccion" | "stock" | "personalizados" | "empaquetado";
 
 function AdminPage() {
   return (
