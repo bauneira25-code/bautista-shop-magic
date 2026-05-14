@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Sparkles, Download, Check, Play, X } from "lucide-react";
+import { Sparkles, Download, Check, Play, X, Flame, PackageCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/admin/StatusBadge";
+import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
 import { generateSVG, downloadSVG } from "@/lib/generateSVG";
 import { toast } from "sonner";
 
