@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, RotateCcw, Type, Palette, Maximize2, Save, Sparkles } from "lucide-react";
 import { findProduct, formatARS } from "@/lib/mockData";
 import { createOrderWithDesign, uploadDesignSVG } from "@/lib/orders";
+import { pushCustomerOrderId } from "@/stores/customerOrderIds";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/products/$slug/design")({
@@ -84,6 +85,7 @@ function DesignEditor() {
       });
       // Subir SVG en background
       uploadDesignSVG(order.id, design).catch((e) => console.error(e));
+      pushCustomerOrderId(order.id);
       toast.success("¡Diseño guardado! Pago confirmado.");
       navigate({ to: "/orders" });
     } catch (e) {
