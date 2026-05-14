@@ -32,7 +32,7 @@ function statusToStep(s: string, isCustom: boolean): { step: number; blinkNext?:
     case "enviado":
       return { step: isCustom ? 3 : 2, banner: "🚚 En camino a tu dirección" };
     case "entregado":
-      return { step: 4, banner: "🎉 Entregado · ¡gracias!" };
+      return { step: isCustom ? 4 : 3, banner: "🎉 Entregado · ¡gracias!" };
     case "cancelado": case "reembolsado":
       return { step: 0, banner: "⚠️ Pedido cancelado" };
     case "rehacer":
