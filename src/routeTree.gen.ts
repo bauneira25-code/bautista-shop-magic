@@ -24,6 +24,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as GroupSlugRouteImport } from './routes/group.$slug'
 import { Route as CategoriasIdRouteImport } from './routes/categorias.$id'
+import { Route as AdminMachineRouteImport } from './routes/admin.machine'
+import { Route as ProductsSlugDesignRouteImport } from './routes/products.$slug.design'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -100,10 +102,20 @@ const CategoriasIdRoute = CategoriasIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => CategoriasRoute,
 } as any)
+const AdminMachineRoute = AdminMachineRouteImport.update({
+  id: '/machine',
+  path: '/machine',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ProductsSlugDesignRoute = ProductsSlugDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => ProductsSlugRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
@@ -114,13 +126,15 @@ export interface FileRoutesByFullPath {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
-  '/products/$slug': typeof ProductsSlugRoute
+  '/products/$slug': typeof ProductsSlugRouteWithChildren
+  '/products/$slug/design': typeof ProductsSlugDesignRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
@@ -131,14 +145,16 @@ export interface FileRoutesByTo {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
-  '/products/$slug': typeof ProductsSlugRoute
+  '/products/$slug': typeof ProductsSlugRouteWithChildren
+  '/products/$slug/design': typeof ProductsSlugDesignRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
@@ -149,9 +165,11 @@ export interface FileRoutesById {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
-  '/products/$slug': typeof ProductsSlugRoute
+  '/products/$slug': typeof ProductsSlugRouteWithChildren
+  '/products/$slug/design': typeof ProductsSlugDesignRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -168,9 +186,11 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
+    | '/products/$slug/design'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -185,9 +205,11 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
+    | '/products/$slug/design'
   id:
     | '__root__'
     | '/'
@@ -202,14 +224,16 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
+    | '/products/$slug/design'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CategoriasRoute: typeof CategoriasRouteWithChildren
@@ -221,7 +245,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   GroupSlugRoute: typeof GroupSlugRoute
-  ProductsSlugRoute: typeof ProductsSlugRoute
+  ProductsSlugRoute: typeof ProductsSlugRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -331,8 +355,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriasIdRouteImport
       parentRoute: typeof CategoriasRoute
     }
+    '/admin/machine': {
+      id: '/admin/machine'
+      path: '/machine'
+      fullPath: '/admin/machine'
+      preLoaderRoute: typeof AdminMachineRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/products/$slug/design': {
+      id: '/products/$slug/design'
+      path: '/design'
+      fullPath: '/products/$slug/design'
+      preLoaderRoute: typeof ProductsSlugDesignRouteImport
+      parentRoute: typeof ProductsSlugRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminMachineRoute: typeof AdminMachineRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminMachineRoute: AdminMachineRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface CategoriasRouteChildren {
   CategoriasIdRoute: typeof CategoriasIdRoute
@@ -346,9 +394,21 @@ const CategoriasRouteWithChildren = CategoriasRoute._addFileChildren(
   CategoriasRouteChildren,
 )
 
+interface ProductsSlugRouteChildren {
+  ProductsSlugDesignRoute: typeof ProductsSlugDesignRoute
+}
+
+const ProductsSlugRouteChildren: ProductsSlugRouteChildren = {
+  ProductsSlugDesignRoute: ProductsSlugDesignRoute,
+}
+
+const ProductsSlugRouteWithChildren = ProductsSlugRoute._addFileChildren(
+  ProductsSlugRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CategoriasRoute: CategoriasRouteWithChildren,
@@ -360,7 +420,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   GroupSlugRoute: GroupSlugRoute,
-  ProductsSlugRoute: ProductsSlugRoute,
+  ProductsSlugRoute: ProductsSlugRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
