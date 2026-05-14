@@ -66,17 +66,20 @@ function Admin() {
       </header>
 
       {/* Tabs */}
-      <nav className="sticky top-[64px] z-20 flex gap-1 border-b border-border bg-background/95 px-3 py-2 backdrop-blur-xl">
+      <nav className="sticky top-[64px] z-20 flex gap-1.5 overflow-x-auto border-b border-border bg-background/95 px-3 py-2 backdrop-blur-xl no-scrollbar">
         {([
+          ["todo", "Todo", Layers3],
           ["resumen", "Resumen", BarChart3],
           ["analytics", "Analytics", TrendingUp],
           ["produccion", "Producción", Factory],
           ["stock", "Stock", Boxes],
+          ["personalizados", "Personalizados 🔒", Sparkles],
+          ["empaquetado", "Empaquetado 🔒", PackageCheck],
         ] as const).map(([key, label, Icon]) => (
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`flex flex-1 items-center justify-center gap-1.5 rounded-2xl px-2 py-2 text-[11px] font-bold transition ${
+            className={`shrink-0 flex items-center justify-center gap-1.5 rounded-2xl px-3 py-2 text-[11px] font-bold transition ${
               tab === key ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"
             }`}
           >
@@ -87,10 +90,21 @@ function Admin() {
       </nav>
 
       <main className="space-y-5 px-4 pt-4">
+        {tab === "todo" && <TodoTab orders={orders} />}
         {tab === "resumen" && <ResumenTab orders={orders} />}
         {tab === "analytics" && <AnalyticsTab orders={orders} />}
         {tab === "produccion" && <ProduccionTab orders={orders} />}
         {tab === "stock" && <StockTab />}
+        {tab === "personalizados" && (
+          <SectionPinGate section="personalizados" label="Personalizados">
+            <PersonalizadosTab orders={orders} />
+          </SectionPinGate>
+        )}
+        {tab === "empaquetado" && (
+          <SectionPinGate section="empaquetado" label="Empaquetado">
+            <EmpaquetadoTab orders={orders} />
+          </SectionPinGate>
+        )}
       </main>
     </div>
   );
