@@ -31,6 +31,7 @@ import { Route as AdminMachineRouteImport } from './routes/admin.machine'
 import { Route as AdminPanelProduccionRouteImport } from './routes/admin-panel.produccion'
 import { Route as AdminPanelPersonalizadosRouteImport } from './routes/admin-panel.personalizados'
 import { Route as AdminPanelPedidosRouteImport } from './routes/admin-panel.pedidos'
+import { Route as AdminPanelCalidadRouteImport } from './routes/admin-panel.calidad'
 import { Route as ProductsSlugDesignRouteImport } from './routes/products.$slug.design'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -144,6 +145,11 @@ const AdminPanelPedidosRoute = AdminPanelPedidosRouteImport.update({
   path: '/pedidos',
   getParentRoute: () => AdminPanelRoute,
 } as any)
+const AdminPanelCalidadRoute = AdminPanelCalidadRouteImport.update({
+  id: '/calidad',
+  path: '/calidad',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
 const ProductsSlugDesignRoute = ProductsSlugDesignRouteImport.update({
   id: '/design',
   path: '/design',
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
   '/admin-panel/produccion': typeof AdminPanelProduccionRoute
@@ -189,6 +196,7 @@ export interface FileRoutesByTo {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
   '/admin-panel/produccion': typeof AdminPanelProduccionRoute
@@ -215,6 +223,7 @@ export interface FileRoutesById {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
   '/admin-panel/produccion': typeof AdminPanelProduccionRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/calidad'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
     | '/admin-panel/produccion'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/calidad'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
     | '/admin-panel/produccion'
@@ -291,6 +302,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/calidad'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
     | '/admin-panel/produccion'
@@ -477,6 +489,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelPedidosRouteImport
       parentRoute: typeof AdminPanelRoute
     }
+    '/admin-panel/calidad': {
+      id: '/admin-panel/calidad'
+      path: '/calidad'
+      fullPath: '/admin-panel/calidad'
+      preLoaderRoute: typeof AdminPanelCalidadRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
     '/products/$slug/design': {
       id: '/products/$slug/design'
       path: '/design'
@@ -498,6 +517,7 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AdminPanelRouteChildren {
+  AdminPanelCalidadRoute: typeof AdminPanelCalidadRoute
   AdminPanelPedidosRoute: typeof AdminPanelPedidosRoute
   AdminPanelPersonalizadosRoute: typeof AdminPanelPersonalizadosRoute
   AdminPanelProduccionRoute: typeof AdminPanelProduccionRoute
@@ -505,6 +525,7 @@ interface AdminPanelRouteChildren {
 }
 
 const AdminPanelRouteChildren: AdminPanelRouteChildren = {
+  AdminPanelCalidadRoute: AdminPanelCalidadRoute,
   AdminPanelPedidosRoute: AdminPanelPedidosRoute,
   AdminPanelPersonalizadosRoute: AdminPanelPersonalizadosRoute,
   AdminPanelProduccionRoute: AdminPanelProduccionRoute,
@@ -560,3 +581,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
