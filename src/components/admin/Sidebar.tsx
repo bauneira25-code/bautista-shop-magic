@@ -7,7 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { ROLE_LABEL } from "@/lib/admin/statuses";
 import type { AdminProfile } from "@/hooks/useAdminAuth";
 
-const items = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const items: NavItem[] = [
   { to: "/admin-panel", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin-panel/pedidos", label: "Pedidos", icon: ShoppingBag },
   { to: "/admin-panel/personalizados", label: "Personalizados", icon: Sparkles },
