@@ -41,6 +41,8 @@ function Orders() {
         <p className="text-xs text-muted-foreground">Seguimiento en tiempo real</p>
       </header>
 
+      <CustomerLiveOrders />
+
       <div className="space-y-4 px-5">
         {orders.length === 0 && (
           <div className="rounded-2xl border border-dashed border-border bg-card/40 p-6 text-center text-xs text-muted-foreground">
