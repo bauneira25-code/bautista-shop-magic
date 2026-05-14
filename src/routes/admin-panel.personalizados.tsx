@@ -20,7 +20,7 @@ function PersonalizadosPage() {
     if (ids.length === 0) { setRows([]); setLoading(false); return; }
     const { data: orders } = await supabase.from("orders").select("*").in("id", ids);
     const byId = new Map(orders?.map(o => [o.id, o]));
-    setRows((custs ?? []).map(c => ({ cust: c, order: byId.get(c.order_id) })).filter(r => r.order));
+    setRows((custs ?? []).map(c => ({ cust: c, order: c.order_id ? byId.get(c.order_id) : null })).filter(r => r.order));
     setLoading(false);
   };
   useEffect(() => { load(); }, []);
