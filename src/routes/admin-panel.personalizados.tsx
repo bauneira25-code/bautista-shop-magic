@@ -24,7 +24,13 @@ function PersonalizadosPage() {
     setRows((custs ?? []).map(c => ({ cust: c, order: c.order_id ? byId.get(c.order_id) : null })).filter(r => r.order));
     setLoading(false);
   };
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    const ch = supabase.channel("admin-personalizados")
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, load)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, []);
 
   const updateStatus = async (orderId: string, status: string) => {
     const { error } = await supabase.from("orders").update({ status: status as any }).eq("id", orderId);
