@@ -96,8 +96,10 @@ export function CustomerLiveOrders() {
 
 function LiveCard({ order }: { order: LiveOrder }) {
   const info = statusToStep(order.status, order.is_customized);
-  // Si el producto NO es personalizado, el step de Personalización se oculta visualmente
+  // Construir lista de steps según si es personalizado o no
   const visibleSteps = order.is_customized ? STEPS : STEPS.filter(s => s.id !== "customization");
+  // info.step ya viene en la escala correcta (con/sin personalización)
+  const currentIdx = info.step;
 
   return (
     <div className="rounded-3xl border-2 border-primary/40 bg-card p-4 shadow-sm">
@@ -108,9 +110,13 @@ function LiveCard({ order }: { order: LiveOrder }) {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5 flex-wrap">
-            {order.is_customized && (
+            {order.is_customized ? (
               <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[9px] font-black uppercase text-primary inline-flex items-center gap-1">
                 <Sparkles className="h-2.5 w-2.5" /> PERSONALIZADO
+              </span>
+            ) : (
+              <span className="rounded-full bg-secondary px-2 py-0.5 text-[9px] font-black uppercase text-muted-foreground inline-flex items-center gap-1">
+                <Package className="h-2.5 w-2.5" /> ESTÁNDAR
               </span>
             )}
             <span className="text-[10px] font-bold uppercase text-muted-foreground">#{order.id.slice(0, 8)}</span>
@@ -129,15 +135,10 @@ function LiveCard({ order }: { order: LiveOrder }) {
 
       <div className="mt-4 flex items-center justify-between">
         {visibleSteps.map((s, i) => {
-          const fullIndex = STEPS.findIndex(x => x.id === s.id);
-          // mapear info.step (en escala completa) al index visible
-          const adjusted = order.is_customized
-            ? info.step
-            : (info.step >= 1 ? info.step + (info.step >= 1 ? 1 : 0) : 0); // ajustar escala
-          const realIndex = order.is_customized ? fullIndex : (fullIndex > 1 ? fullIndex - 1 : fullIndex);
-          const done = realIndex <= adjusted;
-          const blink = info.blinkNext && realIndex === adjusted + 1;
+          const done = i <= currentIdx;
+          const blink = info.blinkNext && i === currentIdx + 1;
           const Icon = s.icon;
+          const isActiveCustom = s.id === "customization" && i === currentIdx && info.step === 1 && order.is_customized;
           return (
             <div key={s.id} className="flex flex-col items-center gap-1">
               <span
@@ -146,7 +147,7 @@ function LiveCard({ order }: { order: LiveOrder }) {
                 }`}
                 style={done ? { background: "var(--gradient-primary)" } : undefined}
               >
-                {s.id === "customization" && info.step === 1 ? <Flame className="h-4 w-4" /> : <Icon className="h-3.5 w-3.5" />}
+                {isActiveCustom ? <Flame className="h-4 w-4 animate-pulse" /> : <Icon className="h-3.5 w-3.5" />}
               </span>
               <span className={`text-[9px] text-center ${done || blink ? "text-foreground" : "text-muted-foreground"}`}>{s.label}</span>
             </div>
