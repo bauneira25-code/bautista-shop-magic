@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, ShoppingBag, Sparkles, Factory, ShieldCheck,
+  LayoutDashboard, ShoppingBag, Sparkles, Factory, ShieldCheck, Layers3, PackageCheck,
   Package, Users2, CreditCard, Truck, AlertTriangle, Boxes, UserCog, Settings, Layers, LogOut,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,9 +10,11 @@ import type { AdminProfile } from "@/hooks/useAdminAuth";
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
 const items: NavItem[] = [
   { to: "/admin-panel", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/admin-panel/todo", label: "Todo", icon: Layers3 },
   { to: "/admin-panel/pedidos", label: "Pedidos", icon: ShoppingBag },
   { to: "/admin-panel/personalizados", label: "Personalizados", icon: Sparkles },
   { to: "/admin-panel/produccion", label: "Producción", icon: Factory },
+  { to: "/admin-panel/empaquetado", label: "Empaquetado", icon: PackageCheck },
   { to: "/admin-panel/calidad", label: "Control de calidad", icon: ShieldCheck },
   { to: "/admin-panel/productos", label: "Productos", icon: Package },
   { to: "/admin-panel/grupos", label: "Compras grupales", icon: Layers },

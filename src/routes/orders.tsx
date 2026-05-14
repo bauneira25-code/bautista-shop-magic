@@ -5,6 +5,7 @@ import { MobileShell } from "@/components/MobileShell";
 import { MOCK_ORDERS, formatARS } from "@/lib/mockData";
 import { useUserOrders, type UserOrder } from "@/stores/userOrders";
 import { NotifyButton } from "@/components/NotifyButton";
+import { CustomerLiveOrders } from "@/components/CustomerLiveOrders";
 
 export const Route = createFileRoute("/orders")({
   component: Orders,
@@ -39,6 +40,8 @@ function Orders() {
         <h1 className="font-display text-3xl">Mis pedidos</h1>
         <p className="text-xs text-muted-foreground">Seguimiento en tiempo real</p>
       </header>
+
+      <CustomerLiveOrders />
 
       <div className="space-y-4 px-5">
         {orders.length === 0 && (
