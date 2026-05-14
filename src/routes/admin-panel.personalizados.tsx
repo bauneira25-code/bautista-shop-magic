@@ -16,7 +16,7 @@ function PersonalizadosPage() {
   const load = async () => {
     setLoading(true);
     const { data: custs } = await supabase.from("customizations").select("*").order("created_at", { ascending: false }).limit(200);
-    const ids = (custs ?? []).map(c => c.order_id).filter(Boolean);
+    const ids = (custs ?? []).map(c => c.order_id).filter((x): x is string => !!x);
     if (ids.length === 0) { setRows([]); setLoading(false); return; }
     const { data: orders } = await supabase.from("orders").select("*").in("id", ids);
     const byId = new Map(orders?.map(o => [o.id, o]));
