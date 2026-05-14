@@ -396,37 +396,83 @@ function TodoTab({ orders }: { orders: OrderRow[] }) {
 
 function PersonalizadosTab({ orders }: { orders: OrderRow[] }) {
   const cust = orders.filter(o => (o as any).is_customized);
+  const [designs, setDesigns] = useState<Record<string, any>>({});
+
+  useEffect(() => {
+    if (cust.length === 0) return;
+    const ids = cust.map(o => o.id);
+    supabase.from("customizations").select("*").in("order_id", ids).then(({ data }) => {
+      const map: Record<string, any> = {};
+      (data ?? []).forEach((d: any) => { if (d.order_id) map[d.order_id] = d; });
+      setDesigns(map);
+    });
+  }, [cust.map(o => o.id).join(",")]);
+
   const update = async (id: string, status: string) => {
     const { error } = await supabase.from("orders").update({ status: status as any }).eq("id", id);
-    if (error) toast.error(error.message); else toast.success("Estado actualizado");
+    if (error) toast.error(error.message);
+    else toast.success(status === "imprimiendo" ? "🔥 Máquina láser iniciada" : "Estado actualizado");
   };
+
   return (
     <div className="space-y-3">
       <div className="rounded-3xl border border-primary/30 bg-primary/5 p-4">
         <p className="text-[10px] font-bold uppercase tracking-wider text-primary">Personalizados activos</p>
         <p className="mt-1 font-display text-2xl">{cust.length}</p>
+        <p className="text-[10px] text-muted-foreground mt-1">Conectado en vivo con los pedidos del cliente</p>
       </div>
       {cust.length === 0 && <p className="rounded-2xl bg-muted/50 p-6 text-center text-xs text-muted-foreground">Sin personalizados</p>}
       {cust.map(o => {
         const printing = (o.status as string) === "imprimiendo" || (o.status as string) === "en_produccion";
         const meta = STATUS_META[o.status];
+        const d = designs[o.id];
         return (
-          <div key={o.id} className="rounded-2xl border border-border bg-card p-3 space-y-2">
+          <div key={o.id} className="rounded-2xl border border-border bg-card p-3 space-y-3">
             <div className="flex items-center gap-3">
               <div className="grid h-10 w-10 place-items-center rounded-xl text-xl" style={{ background: o.product_gradient ?? "var(--muted)" }}>{o.product_emoji ?? "📦"}</div>
               <div className="min-w-0 flex-1">
                 <p className="line-clamp-1 text-xs font-semibold">{o.product_title}</p>
-                <p className="text-[10px] text-muted-foreground">{o.customer_name}</p>
+                <p className="text-[10px] text-muted-foreground">{o.customer_name} · {o.customer_phone ?? "sin tel"}</p>
               </div>
               <span className={`rounded-full px-2 py-0.5 text-[9px] font-black ${meta.color}`}>{meta.label}</span>
             </div>
+
+            {/* Preview del diseño del cliente */}
+            <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-border" style={{ background: o.product_gradient ?? "var(--muted)" }}>
+              <div className="absolute inset-0 grid place-items-center text-6xl opacity-30">{o.product_emoji ?? "📦"}</div>
+              {d ? (
+                <svg viewBox="0 0 200 200" className="absolute inset-0 h-full w-full">
+                  <g transform={`translate(${d.pos_x ?? 100} ${d.pos_y ?? 100}) rotate(${d.rotation_deg ?? 0})`}>
+                    <text x="0" y="0"
+                      fontFamily={`${d.font ?? "Bebas Neue"}, sans-serif`}
+                      fontSize={Math.max(8, (d.size ?? 48) * 0.35)}
+                      fontWeight={700}
+                      fill={d.color ?? "#000"}
+                      textAnchor="middle"
+                      dominantBaseline="middle">
+                      {d.text}
+                    </text>
+                  </g>
+                </svg>
+              ) : (
+                <div className="absolute inset-0 grid place-items-center text-[10px] text-muted-foreground">Diseño cargando…</div>
+              )}
+            </div>
+
+            {d && (
+              <div className="rounded-xl bg-muted/40 p-2 text-[10px] text-muted-foreground space-y-0.5">
+                <p>Texto: <span className="font-mono text-foreground">"{d.text}"</span></p>
+                <p>Fuente: {d.font} · Color: <span className="inline-block h-2 w-2 rounded-full align-middle" style={{ background: d.color }} /> {d.color} · Tamaño {d.size}px · Rot {d.rotation_deg}°</p>
+              </div>
+            )}
+
             {!printing ? (
-              <button onClick={() => update(o.id, "imprimiendo")} className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-[11px] font-bold text-primary-foreground">
-                <Flame className="h-3.5 w-3.5" /> Comenzar personalización
+              <button onClick={() => update(o.id, "imprimiendo")} className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary py-3 text-[12px] font-bold text-primary-foreground">
+                <Flame className="h-4 w-4" /> Comenzar personalización · iniciar láser
               </button>
             ) : (
-              <button onClick={() => update(o.id, "personalizado_terminado")} className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-success/90 py-2.5 text-[11px] font-bold text-white">
-                <Check className="h-3.5 w-3.5" /> Terminado · enviar a empaquetado
+              <button onClick={() => update(o.id, "personalizado_terminado")} className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-success/90 py-3 text-[12px] font-bold text-white">
+                <Check className="h-4 w-4" /> Terminado · enviar a empaquetado
               </button>
             )}
           </div>
