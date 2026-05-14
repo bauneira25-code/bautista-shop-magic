@@ -6,13 +6,8 @@ import { StatusBadge } from "@/components/admin/StatusBadge";
 import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
 import { generateSVG, downloadSVG } from "@/lib/generateSVG";
 import { toast } from "sonner";
-import { SectionPinGate } from "@/components/admin/SectionPinGate";
 
-export const Route = createFileRoute("/admin-panel/personalizados")({
-  component: () => (
-    <SectionPinGate section="personalizados" label="Personalizados"><PersonalizadosPage /></SectionPinGate>
-  ),
-});
+export const Route = createFileRoute("/admin-panel/personalizados")({ component: PersonalizadosPage });
 
 function PersonalizadosPage() {
   const [rows, setRows] = useState<any[]>([]);
