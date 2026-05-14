@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, TrendingUp, Package, DollarSign, Users, AlertTriangle,
   BarChart3, Factory, Boxes, Hammer, ArrowUp, ArrowDown, ShieldCheck, LogOut, Wrench,
-  Layers3, Sparkles, PackageCheck, Flame, Truck, Check,
+  Layers3, Sparkles, PackageCheck, Flame, Truck, Check, Printer,
 } from "lucide-react";
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useBrands } from "@/stores/brands";
