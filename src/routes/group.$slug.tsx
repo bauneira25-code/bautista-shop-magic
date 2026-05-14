@@ -295,7 +295,7 @@ function GroupPage() {
       {product.customizable && (
         <section className="mt-4 px-4">
           <button onClick={() => setStep("intro")} className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#e8451c] py-3.5 font-display text-sm font-black text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.5)]">
-            <Flame className="h-4 w-4" /> PERSONALIZAR
+            PERSONALIZAR
           </button>
         </section>
       )}
@@ -418,7 +418,7 @@ function GroupPage() {
               }}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#e8451c] py-3.5 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
-              <Flame className="h-4 w-4" /> PERSONALIZAR {payQty >= 2 ? `${payQty} UNIDADES` : ""}
+              PERSONALIZAR {payQty >= 2 ? `${payQty} UNIDADES` : ""}
             </button>
           </div>
         </Sheet>
