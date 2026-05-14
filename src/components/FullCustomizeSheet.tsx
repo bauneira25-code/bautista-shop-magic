@@ -38,7 +38,7 @@ export function FullCustomizeSheet({
             <X className="h-4 w-4" />
           </button>
           <div className="flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1 text-[11px] font-black text-[#e8451c]">
-            <Flame className="h-3 w-3" /> PERSONALIZAR
+            PERSONALIZAR
           </div>
           <button onClick={onConfirm} className="rounded-full bg-[#e8451c] px-3 py-1.5 text-[11px] font-black text-white">
             <Check className="mr-1 inline h-3 w-3" /> LISTO

@@ -116,7 +116,7 @@ function GruposPage() {
                       className="w-full rounded-2xl py-2.5 font-display text-xs font-black tracking-wider text-primary-foreground shadow-[var(--shadow-glow)] inline-flex items-center justify-center gap-1.5"
                       style={{ background: "var(--gradient-primary)" }}
                     >
-                      PERSONALIZAR 🔥
+                      PERSONALIZAR
                     </button>
                   </div>
                 )}

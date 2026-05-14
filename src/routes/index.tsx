@@ -355,7 +355,7 @@ function Home() {
               <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">
                 <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
                   <span>{p.emoji}</span>
-                  <span className="absolute left-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable 🔥</span>
+                  <span className="absolute left-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable</span>
                 </div>
                 <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
                 <p className="text-[10px] text-muted-foreground">Desde {formatARS(p.price.group)}</p>
@@ -415,7 +415,7 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
       <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
         <span>{p.emoji}</span>
         {p.badge && p.badge !== "Personalizable" && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{p.badge}</span>}
-        {p.customizable && <span className="absolute right-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable 🔥</span>}
+        {p.customizable && <span className="absolute right-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable</span>}
       </div>
       <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
       <div className="flex items-center justify-between">
