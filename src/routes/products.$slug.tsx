@@ -379,6 +379,21 @@ function ProductPage() {
           </div>
         )}
 
+        {/* Editor Pro (nuevo) */}
+        {product.customizable && (
+          <Link
+            to="/products/$slug/design"
+            params={{ slug: product.slug }}
+            className="flex w-full items-center justify-between rounded-2xl border-2 border-primary/40 bg-primary/5 p-3 text-primary"
+          >
+            <div className="text-left">
+              <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Editor Pro · texto + color + tipografía</p>
+              <p className="font-display text-base">DISEÑAR Y PEDIR ✨</p>
+            </div>
+            <span className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">NUEVO</span>
+          </Link>
+        )}
+
         {/* Personalizar — individual y grupal (fullscreen) */}
         {product.customizable && (mode === "individual" || mode === "group") && (
           <button
