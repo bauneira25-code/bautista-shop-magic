@@ -48,7 +48,7 @@ export function AdminSidebar({ profile }: { profile: AdminProfile }) {
           return (
             <Link
               key={item.to}
-              to={item.to}
+              to={item.to as any}
               className={`flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] transition ${
                 active ? "bg-white/10 text-white" : "text-white/60 hover:text-white hover:bg-white/5"
               }`}
@@ -90,7 +90,7 @@ export function AdminMobileBar() {
           const active = it.exact ? path === it.to : path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
           return (
-            <Link key={it.to} to={it.to} className={`shrink-0 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] ${active ? "bg-white/15" : "bg-white/5 text-white/60"}`}>
+            <Link key={it.to} to={it.to as any} className={`shrink-0 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] ${active ? "bg-white/15" : "bg-white/5 text-white/60"}`}>
               <Icon className="h-3 w-3" /> {it.label}
             </Link>
           );
