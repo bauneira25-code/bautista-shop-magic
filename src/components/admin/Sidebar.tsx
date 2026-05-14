@@ -23,7 +23,7 @@ const items: NavItem[] = [
   { to: "/admin-panel/stock", label: "Stock", icon: Boxes },
   { to: "/admin-panel/empleados", label: "Empleados", icon: UserCog },
   { to: "/admin-panel/configuracion", label: "Configuración", icon: Settings },
-] as const;
+];
 
 export function AdminSidebar({ profile }: { profile: AdminProfile }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
