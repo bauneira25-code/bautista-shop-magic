@@ -5,8 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
 import { toast } from "sonner";
+import { SectionPinGate } from "@/components/admin/SectionPinGate";
 
-export const Route = createFileRoute("/admin-panel/empaquetado")({ component: EmpaquetadoPage });
+export const Route = createFileRoute("/admin-panel/empaquetado")({
+  component: () => (
+    <SectionPinGate section="empaquetado" label="Empaquetado"><EmpaquetadoPage /></SectionPinGate>
+  ),
+});
 
 // Pedidos esperando o pasando por empaquetado
 const QUEUE = ["personalizado_terminado", "control_calidad", "listo_empaquetar", "impreso"];

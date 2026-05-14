@@ -9,12 +9,10 @@ import type { AdminProfile } from "@/hooks/useAdminAuth";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
 const items: NavItem[] = [
-  { to: "/admin-panel", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin-panel/todo", label: "Todo", icon: Layers3 },
+  { to: "/admin-panel", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin-panel/pedidos", label: "Pedidos", icon: ShoppingBag },
-  { to: "/admin-panel/personalizados", label: "Personalizados", icon: Sparkles },
   { to: "/admin-panel/produccion", label: "Producción", icon: Factory },
-  { to: "/admin-panel/empaquetado", label: "Empaquetado", icon: PackageCheck },
   { to: "/admin-panel/calidad", label: "Control de calidad", icon: ShieldCheck },
   { to: "/admin-panel/productos", label: "Productos", icon: Package },
   { to: "/admin-panel/grupos", label: "Compras grupales", icon: Layers },
@@ -23,6 +21,8 @@ const items: NavItem[] = [
   { to: "/admin-panel/envios", label: "Envíos", icon: Truck },
   { to: "/admin-panel/reclamos", label: "Reclamos", icon: AlertTriangle },
   { to: "/admin-panel/stock", label: "Stock", icon: Boxes },
+  { to: "/admin-panel/personalizados", label: "Personalizados 🔒", icon: Sparkles },
+  { to: "/admin-panel/empaquetado", label: "Empaquetado 🔒", icon: PackageCheck },
   { to: "/admin-panel/empleados", label: "Empleados", icon: UserCog },
   { to: "/admin-panel/configuracion", label: "Configuración", icon: Settings },
 ];
