@@ -73,8 +73,8 @@ function Admin() {
           ["analytics", "Analytics", TrendingUp],
           ["produccion", "Producción", Factory],
           ["stock", "Stock", Boxes],
-          ["personalizados", "Personalizados 🔒", Sparkles],
-          ["empaquetado", "Empaquetado 🔒", PackageCheck],
+          ["personalizados", "Personalizados", Sparkles],
+          ["empaquetado", "Empaquetado", PackageCheck],
         ] as const).map(([key, label, Icon]) => (
           <button
             key={key}
@@ -95,16 +95,8 @@ function Admin() {
         {tab === "analytics" && <AnalyticsTab orders={orders} />}
         {tab === "produccion" && <ProduccionTab orders={orders} />}
         {tab === "stock" && <StockTab />}
-        {tab === "personalizados" && (
-          <SectionPinGate section="personalizados" label="Personalizados">
-            <PersonalizadosTab orders={orders} />
-          </SectionPinGate>
-        )}
-        {tab === "empaquetado" && (
-          <SectionPinGate section="empaquetado" label="Empaquetado">
-            <EmpaquetadoTab orders={orders} />
-          </SectionPinGate>
-        )}
+        {tab === "personalizados" && <PersonalizadosTab orders={orders} />}
+        {tab === "empaquetado" && <EmpaquetadoTab orders={orders} />}
       </main>
     </div>
   );
