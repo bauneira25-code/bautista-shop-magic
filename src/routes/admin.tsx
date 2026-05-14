@@ -355,3 +355,141 @@ function KPI({ icon: Icon, label, value, delta, up }: { icon: typeof TrendingUp;
     </div>
   );
 }
+
+// ============= Nuevos tabs =============
+
+function TodoTab({ orders }: { orders: OrderRow[] }) {
+  const [filter, setFilter] = useState<"all" | "custom" | "standard">("all");
+  const visible = orders.filter(o =>
+    filter === "all" || (filter === "custom" ? (o as any).is_customized : !(o as any).is_customized)
+  );
+  const totals = {
+    total: orders.length,
+    custom: orders.filter(o => (o as any).is_customized).length,
+    standard: orders.filter(o => !(o as any).is_customized).length,
+  };
+  return (
+    <div className="space-y-3">
+      <div className="rounded-3xl border border-border bg-card p-4">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-primary">Todos los pedidos</p>
+        <p className="mt-1 font-display text-2xl">{totals.total}</p>
+        <p className="text-[11px] text-muted-foreground">{totals.custom} personalizados · {totals.standard} estándar</p>
+      </div>
+      <div className="flex gap-1.5">
+        {[["all","Todos"],["custom","Personalizados"],["standard","Estándar"]].map(([v,l]) => (
+          <button key={v} onClick={() => setFilter(v as any)}
+            className={`flex-1 rounded-full px-2 py-1.5 text-[10px] font-bold ${filter===v ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}>{l}</button>
+        ))}
+      </div>
+      {visible.length === 0 && <p className="rounded-2xl bg-muted/50 p-6 text-center text-xs text-muted-foreground">Sin pedidos</p>}
+      {visible.map(o => {
+        const meta = STATUS_META[o.status];
+        return (
+          <div key={o.id} className="rounded-2xl border border-border bg-card p-3">
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-xl text-xl" style={{ background: o.product_gradient ?? "var(--muted)" }}>{o.product_emoji ?? "📦"}</div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5"><PersonalizedBadge on={!!(o as any).is_customized} /></div>
+                <p className="line-clamp-1 text-xs font-semibold mt-1">{o.product_title}</p>
+                <p className="text-[10px] text-muted-foreground">{o.customer_name} · {formatARS(Number(o.unit_price) * o.quantity)}</p>
+              </div>
+              <span className={`rounded-full px-2 py-0.5 text-[9px] font-black ${meta.color}`}>{meta.label}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function PersonalizadosTab({ orders }: { orders: OrderRow[] }) {
+  const cust = orders.filter(o => (o as any).is_customized);
+  const update = async (id: string, status: string) => {
+    const { error } = await supabase.from("orders").update({ status: status as any }).eq("id", id);
+    if (error) toast.error(error.message); else toast.success("Estado actualizado");
+  };
+  return (
+    <div className="space-y-3">
+      <div className="rounded-3xl border border-primary/30 bg-primary/5 p-4">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-primary">Personalizados activos</p>
+        <p className="mt-1 font-display text-2xl">{cust.length}</p>
+      </div>
+      {cust.length === 0 && <p className="rounded-2xl bg-muted/50 p-6 text-center text-xs text-muted-foreground">Sin personalizados</p>}
+      {cust.map(o => {
+        const printing = o.status === "imprimiendo" || o.status === "en_produccion";
+        const meta = STATUS_META[o.status];
+        return (
+          <div key={o.id} className="rounded-2xl border border-border bg-card p-3 space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-xl text-xl" style={{ background: o.product_gradient ?? "var(--muted)" }}>{o.product_emoji ?? "📦"}</div>
+              <div className="min-w-0 flex-1">
+                <p className="line-clamp-1 text-xs font-semibold">{o.product_title}</p>
+                <p className="text-[10px] text-muted-foreground">{o.customer_name}</p>
+              </div>
+              <span className={`rounded-full px-2 py-0.5 text-[9px] font-black ${meta.color}`}>{meta.label}</span>
+            </div>
+            {!printing ? (
+              <button onClick={() => update(o.id, "imprimiendo")} className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-[11px] font-bold text-primary-foreground">
+                <Flame className="h-3.5 w-3.5" /> Comenzar personalización
+              </button>
+            ) : (
+              <button onClick={() => update(o.id, "personalizado_terminado")} className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-success/90 py-2.5 text-[11px] font-bold text-white">
+                <Check className="h-3.5 w-3.5" /> Terminado · enviar a empaquetado
+              </button>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function EmpaquetadoTab({ orders }: { orders: OrderRow[] }) {
+  const queue = orders.filter(o => ["personalizado_terminado","control_calidad","listo_empaquetar","impreso","empaquetado"].includes(o.status as string));
+  const finalizar = async (id: string) => {
+    const { error } = await supabase.from("orders").update({ status: "empaquetado" as any }).eq("id", id);
+    if (error) toast.error(error.message); else toast.success("✅ Empaquetado finalizado");
+  };
+  const enviar = async (id: string) => {
+    const code = window.prompt("Código de seguimiento (opcional):") ?? "";
+    const { error } = await supabase.from("orders").update({ status: "enviado" as any, tracking_code: code || null }).eq("id", id);
+    if (error) toast.error(error.message); else toast.success("📦 Enviado");
+  };
+  return (
+    <div className="space-y-3">
+      <div className="rounded-3xl border border-primary/30 bg-primary/5 p-4">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-primary">Cola de empaquetado</p>
+        <p className="mt-1 font-display text-2xl">{queue.length}</p>
+      </div>
+      {queue.length === 0 && <p className="rounded-2xl bg-muted/50 p-6 text-center text-xs text-muted-foreground">Sin pedidos para empaquetar</p>}
+      {queue.map(o => {
+        const empaquetado = o.status === "empaquetado";
+        const meta = STATUS_META[o.status];
+        return (
+          <div key={o.id} className="rounded-2xl border border-border bg-card p-3 space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-xl text-xl" style={{ background: o.product_gradient ?? "var(--muted)" }}>{o.product_emoji ?? "📦"}</div>
+              <div className="min-w-0 flex-1">
+                <PersonalizedBadge on={!!(o as any).is_customized} />
+                <p className="line-clamp-1 text-xs font-semibold mt-1">{o.product_title}</p>
+                <p className="text-[10px] text-muted-foreground">{o.customer_name} · {o.quantity}u</p>
+              </div>
+              <span className={`rounded-full px-2 py-0.5 text-[9px] font-black ${meta.color}`}>{meta.label}</span>
+            </div>
+            <div className="flex gap-2">
+              {!empaquetado ? (
+                <button onClick={() => finalizar(o.id)} className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-success/90 py-2.5 text-[11px] font-bold text-white">
+                  <PackageCheck className="h-3.5 w-3.5" /> Empaquetado finalizado
+                </button>
+              ) : (
+                <button onClick={() => enviar(o.id)} className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-[11px] font-bold text-primary-foreground">
+                  <Truck className="h-3.5 w-3.5" /> Marcar enviado
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
