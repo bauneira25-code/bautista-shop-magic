@@ -118,7 +118,7 @@ function OrderDetail({ id, onClose, onUpdate }: { id: string; onClose: () => voi
       ]);
       setOrder(o); setHistory(h ?? []); setCust(c);
       setNotes(o?.internal_notes ?? "");
-      setStatus(o?.status);
+      setStatus((o?.status ?? "pago_confirmado") as FullOrderStatus);
     })();
   }, [id]);
 

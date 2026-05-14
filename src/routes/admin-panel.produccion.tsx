@@ -18,7 +18,7 @@ function ProduccionPage() {
 
   const load = async () => {
     const { data: orders } = await supabase.from("orders").select("*")
-      .in("status", ACTIVE).order("created_at", { ascending: true });
+      .in("status", ACTIVE as any).order("created_at", { ascending: true });
     const ids = (orders ?? []).map(o => o.id);
     const { data: custs } = ids.length
       ? await supabase.from("customizations").select("*").in("order_id", ids)

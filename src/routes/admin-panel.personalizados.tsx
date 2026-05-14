@@ -26,7 +26,7 @@ function PersonalizadosPage() {
   useEffect(() => { load(); }, []);
 
   const updateStatus = async (orderId: string, status: string) => {
-    const { error } = await supabase.from("orders").update({ status }).eq("id", orderId);
+    const { error } = await supabase.from("orders").update({ status: status as any }).eq("id", orderId);
     if (error) toast.error(error.message); else { toast.success("Estado actualizado"); load(); setSelected(null); }
   };
 

@@ -19,13 +19,18 @@ import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminPanelRouteImport } from './routes/admin-panel'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminPanelIndexRouteImport } from './routes/admin-panel.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as GroupSlugRouteImport } from './routes/group.$slug'
 import { Route as CategoriasIdRouteImport } from './routes/categorias.$id'
 import { Route as AdminMachineRouteImport } from './routes/admin.machine'
+import { Route as AdminPanelProduccionRouteImport } from './routes/admin-panel.produccion'
+import { Route as AdminPanelPersonalizadosRouteImport } from './routes/admin-panel.personalizados'
+import { Route as AdminPanelPedidosRouteImport } from './routes/admin-panel.pedidos'
 import { Route as ProductsSlugDesignRouteImport } from './routes/products.$slug.design'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -78,6 +83,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPanelRoute = AdminPanelRouteImport.update({
+  id: '/admin-panel',
+  path: '/admin-panel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin-login',
   path: '/admin-login',
@@ -92,6 +102,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPanelIndexRoute = AdminPanelIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminPanelRoute,
 } as any)
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
   id: '/products/$slug',
@@ -113,6 +128,22 @@ const AdminMachineRoute = AdminMachineRouteImport.update({
   path: '/machine',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPanelProduccionRoute = AdminPanelProduccionRouteImport.update({
+  id: '/produccion',
+  path: '/produccion',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
+const AdminPanelPersonalizadosRoute =
+  AdminPanelPersonalizadosRouteImport.update({
+    id: '/personalizados',
+    path: '/personalizados',
+    getParentRoute: () => AdminPanelRoute,
+  } as any)
+const AdminPanelPedidosRoute = AdminPanelPedidosRouteImport.update({
+  id: '/pedidos',
+  path: '/pedidos',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
 const ProductsSlugDesignRoute = ProductsSlugDesignRouteImport.update({
   id: '/design',
   path: '/design',
@@ -123,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
+  '/admin-panel': typeof AdminPanelRouteWithChildren
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
@@ -133,10 +165,14 @@ export interface FileRoutesByFullPath {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
+  '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
+  '/admin-panel/produccion': typeof AdminPanelProduccionRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
+  '/admin-panel/': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
 }
 export interface FileRoutesByTo {
@@ -153,10 +189,14 @@ export interface FileRoutesByTo {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
+  '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
+  '/admin-panel/produccion': typeof AdminPanelProduccionRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
+  '/admin-panel': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
 }
 export interface FileRoutesById {
@@ -164,6 +204,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
+  '/admin-panel': typeof AdminPanelRouteWithChildren
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
@@ -174,10 +215,14 @@ export interface FileRoutesById {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
+  '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
+  '/admin-panel/produccion': typeof AdminPanelProduccionRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
   '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
+  '/admin-panel/': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
 }
 export interface FileRouteTypes {
@@ -186,6 +231,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin-login'
+    | '/admin-panel'
     | '/auth'
     | '/cart'
     | '/categorias'
@@ -196,10 +242,14 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/pedidos'
+    | '/admin-panel/personalizados'
+    | '/admin-panel/produccion'
     | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
+    | '/admin-panel/'
     | '/products/$slug/design'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -216,16 +266,21 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/pedidos'
+    | '/admin-panel/personalizados'
+    | '/admin-panel/produccion'
     | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
+    | '/admin-panel'
     | '/products/$slug/design'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/admin-login'
+    | '/admin-panel'
     | '/auth'
     | '/cart'
     | '/categorias'
@@ -236,10 +291,14 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/pedidos'
+    | '/admin-panel/personalizados'
+    | '/admin-panel/produccion'
     | '/admin/machine'
     | '/categorias/$id'
     | '/group/$slug'
     | '/products/$slug'
+    | '/admin-panel/'
     | '/products/$slug/design'
   fileRoutesById: FileRoutesById
 }
@@ -247,6 +306,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminPanelRoute: typeof AdminPanelRouteWithChildren
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CategoriasRoute: typeof CategoriasRouteWithChildren
@@ -333,6 +393,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin-panel': {
+      id: '/admin-panel'
+      path: '/admin-panel'
+      fullPath: '/admin-panel'
+      preLoaderRoute: typeof AdminPanelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin-login': {
       id: '/admin-login'
       path: '/admin-login'
@@ -353,6 +420,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin-panel/': {
+      id: '/admin-panel/'
+      path: '/'
+      fullPath: '/admin-panel/'
+      preLoaderRoute: typeof AdminPanelIndexRouteImport
+      parentRoute: typeof AdminPanelRoute
     }
     '/products/$slug': {
       id: '/products/$slug'
@@ -382,6 +456,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMachineRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin-panel/produccion': {
+      id: '/admin-panel/produccion'
+      path: '/produccion'
+      fullPath: '/admin-panel/produccion'
+      preLoaderRoute: typeof AdminPanelProduccionRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/personalizados': {
+      id: '/admin-panel/personalizados'
+      path: '/personalizados'
+      fullPath: '/admin-panel/personalizados'
+      preLoaderRoute: typeof AdminPanelPersonalizadosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
+    '/admin-panel/pedidos': {
+      id: '/admin-panel/pedidos'
+      path: '/pedidos'
+      fullPath: '/admin-panel/pedidos'
+      preLoaderRoute: typeof AdminPanelPedidosRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
     '/products/$slug/design': {
       id: '/products/$slug/design'
       path: '/design'
@@ -401,6 +496,24 @@ const AdminRouteChildren: AdminRouteChildren = {
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AdminPanelRouteChildren {
+  AdminPanelPedidosRoute: typeof AdminPanelPedidosRoute
+  AdminPanelPersonalizadosRoute: typeof AdminPanelPersonalizadosRoute
+  AdminPanelProduccionRoute: typeof AdminPanelProduccionRoute
+  AdminPanelIndexRoute: typeof AdminPanelIndexRoute
+}
+
+const AdminPanelRouteChildren: AdminPanelRouteChildren = {
+  AdminPanelPedidosRoute: AdminPanelPedidosRoute,
+  AdminPanelPersonalizadosRoute: AdminPanelPersonalizadosRoute,
+  AdminPanelProduccionRoute: AdminPanelProduccionRoute,
+  AdminPanelIndexRoute: AdminPanelIndexRoute,
+}
+
+const AdminPanelRouteWithChildren = AdminPanelRoute._addFileChildren(
+  AdminPanelRouteChildren,
+)
 
 interface CategoriasRouteChildren {
   CategoriasIdRoute: typeof CategoriasIdRoute
@@ -430,6 +543,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
+  AdminPanelRoute: AdminPanelRouteWithChildren,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CategoriasRoute: CategoriasRouteWithChildren,
