@@ -8,7 +8,7 @@ import {
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useBrands } from "@/stores/brands";
 import { AdminPinGate } from "@/components/AdminPinGate";
-import { SectionPinGate } from "@/components/admin/SectionPinGate";
+
 import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
 import { adminLogout } from "@/lib/adminAuth";
 import { supabase } from "@/integrations/supabase/client";
