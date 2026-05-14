@@ -28,7 +28,7 @@ function AdminPage() {
 }
 
 function Admin() {
-  const [tab, setTab] = useState<Tab>("resumen");
+  const [tab, setTab] = useState<Tab>("todo");
   const [orders, setOrders] = useState<OrderRow[]>([]);
 
   useEffect(() => {
