@@ -8,7 +8,7 @@ import {
 import { MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useBrands } from "@/stores/brands";
 import { AdminPinGate } from "@/components/AdminPinGate";
-import { SectionPinGate } from "@/components/admin/SectionPinGate";
+
 import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
 import { adminLogout } from "@/lib/adminAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -73,8 +73,8 @@ function Admin() {
           ["analytics", "Analytics", TrendingUp],
           ["produccion", "Producción", Factory],
           ["stock", "Stock", Boxes],
-          ["personalizados", "Personalizados 🔒", Sparkles],
-          ["empaquetado", "Empaquetado 🔒", PackageCheck],
+          ["personalizados", "Personalizados", Sparkles],
+          ["empaquetado", "Empaquetado", PackageCheck],
         ] as const).map(([key, label, Icon]) => (
           <button
             key={key}
@@ -95,16 +95,8 @@ function Admin() {
         {tab === "analytics" && <AnalyticsTab orders={orders} />}
         {tab === "produccion" && <ProduccionTab orders={orders} />}
         {tab === "stock" && <StockTab />}
-        {tab === "personalizados" && (
-          <SectionPinGate section="personalizados" label="Personalizados">
-            <PersonalizadosTab orders={orders} />
-          </SectionPinGate>
-        )}
-        {tab === "empaquetado" && (
-          <SectionPinGate section="empaquetado" label="Empaquetado">
-            <EmpaquetadoTab orders={orders} />
-          </SectionPinGate>
-        )}
+        {tab === "personalizados" && <PersonalizadosTab orders={orders} />}
+        {tab === "empaquetado" && <EmpaquetadoTab orders={orders} />}
       </main>
     </div>
   );
@@ -416,7 +408,7 @@ function PersonalizadosTab({ orders }: { orders: OrderRow[] }) {
       </div>
       {cust.length === 0 && <p className="rounded-2xl bg-muted/50 p-6 text-center text-xs text-muted-foreground">Sin personalizados</p>}
       {cust.map(o => {
-        const printing = o.status === "imprimiendo" || o.status === "en_produccion";
+        const printing = (o.status as string) === "imprimiendo" || (o.status as string) === "en_produccion";
         const meta = STATUS_META[o.status];
         return (
           <div key={o.id} className="rounded-2xl border border-border bg-card p-3 space-y-2">
