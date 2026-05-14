@@ -113,6 +113,7 @@ export type Database = {
           final_photo_url: string | null
           id: string
           internal_notes: string | null
+          is_customized: boolean
           notes: string | null
           printed_at: string | null
           product_emoji: string | null
@@ -137,6 +138,7 @@ export type Database = {
           final_photo_url?: string | null
           id?: string
           internal_notes?: string | null
+          is_customized?: boolean
           notes?: string | null
           printed_at?: string | null
           product_emoji?: string | null
@@ -161,6 +163,7 @@ export type Database = {
           final_photo_url?: string | null
           id?: string
           internal_notes?: string | null
+          is_customized?: boolean
           notes?: string | null
           printed_at?: string | null
           product_emoji?: string | null
