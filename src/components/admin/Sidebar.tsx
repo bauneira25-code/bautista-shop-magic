@@ -21,8 +21,8 @@ const items: NavItem[] = [
   { to: "/admin-panel/envios", label: "Envíos", icon: Truck },
   { to: "/admin-panel/reclamos", label: "Reclamos", icon: AlertTriangle },
   { to: "/admin-panel/stock", label: "Stock", icon: Boxes },
-  { to: "/admin-panel/personalizados", label: "Personalizados 🔒", icon: Sparkles },
-  { to: "/admin-panel/empaquetado", label: "Empaquetado 🔒", icon: PackageCheck },
+  { to: "/admin-panel/personalizados", label: "Personalizados", icon: Sparkles },
+  { to: "/admin-panel/empaquetado", label: "Empaquetado", icon: PackageCheck },
   { to: "/admin-panel/empleados", label: "Empleados", icon: UserCog },
   { to: "/admin-panel/configuracion", label: "Configuración", icon: Settings },
 ];
