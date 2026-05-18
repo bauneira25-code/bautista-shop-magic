@@ -238,7 +238,7 @@ function Home() {
 
         {/* Combo: Personaliza tu producto (izq) + productos personalizables (der) */}
         {(() => {
-          const gender = prefs.gender;
+          const gender = useUserPrefs.getState().gender;
           const order = gender === "hombre"
             ? ["tech", "electronica", "gym", "joyeria", "hogar", "belleza"]
             : ["belleza", "hogar", "joyeria", "electronica", "tech"];
