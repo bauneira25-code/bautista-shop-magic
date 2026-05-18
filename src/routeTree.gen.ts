@@ -15,6 +15,7 @@ import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PersonalizablesRouteImport } from './routes/personalizables'
 import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as OfertasRouteImport } from './routes/ofertas'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as CartRouteImport } from './routes/cart'
@@ -71,6 +72,11 @@ const PersonalizablesRoute = PersonalizablesRouteImport.update({
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfertasRoute = OfertasRouteImport.update({
+  id: '/ofertas',
+  path: '/ofertas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomizeRoute = CustomizeRouteImport.update({
@@ -219,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/personalizables': typeof PersonalizablesRoute
   '/profile': typeof ProfileRoute
@@ -253,6 +260,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/personalizables': typeof PersonalizablesRoute
   '/profile': typeof ProfileRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/personalizables': typeof PersonalizablesRoute
   '/profile': typeof ProfileRoute
@@ -326,6 +335,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/ofertas'
     | '/orders'
     | '/personalizables'
     | '/profile'
@@ -360,6 +370,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/ofertas'
     | '/orders'
     | '/personalizables'
     | '/profile'
@@ -395,6 +406,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/ofertas'
     | '/orders'
     | '/personalizables'
     | '/profile'
@@ -431,6 +443,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriasRoute: typeof CategoriasRouteWithChildren
   CustomizeRoute: typeof CustomizeRoute
+  OfertasRoute: typeof OfertasRoute
   OrdersRoute: typeof OrdersRoute
   PersonalizablesRoute: typeof PersonalizablesRoute
   ProfileRoute: typeof ProfileRoute
@@ -482,6 +495,13 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ofertas': {
+      id: '/ofertas'
+      path: '/ofertas'
+      fullPath: '/ofertas'
+      preLoaderRoute: typeof OfertasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customize': {
@@ -759,6 +779,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriasRoute: CategoriasRouteWithChildren,
   CustomizeRoute: CustomizeRoute,
+  OfertasRoute: OfertasRoute,
   OrdersRoute: OrdersRoute,
   PersonalizablesRoute: PersonalizablesRoute,
   ProfileRoute: ProfileRoute,
