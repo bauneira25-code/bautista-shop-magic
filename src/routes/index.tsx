@@ -21,10 +21,10 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NEIBA — Compras grupales y productos personalizados" },
-      { name: "description", content: "Sumate a grupos en vivo, ahorrá hasta 45% y personalizá productos con IA. Tecnología, hogar, belleza y más." },
-      { property: "og:title", content: "NEIBA — Compras grupales y productos personalizados" },
-      { property: "og:description", content: "Sumate a grupos en vivo, ahorrá hasta 45% y personalizá productos con IA." },
+      { title: "NEIBA — Productos personalizados y ofertas" },
+      { name: "description", content: "Personalizá productos con IA y descubrí ofertas en tecnología, hogar, belleza y más." },
+      { property: "og:title", content: "NEIBA — Productos personalizados y ofertas" },
+      { property: "og:description", content: "Personalizá productos con IA y descubrí ofertas exclusivas." },
       { property: "og:url", content: "/" },
       { property: "og:type", content: "website" },
     ],
