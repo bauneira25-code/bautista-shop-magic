@@ -335,7 +335,7 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
         <span className="text-sm font-bold">{formatARS(p.price.individual)}</span>
         <span className="text-[10px] text-muted-foreground">⭐ {p.rating}</span>
       </div>
-      <p className="text-[10px] text-success">Grupo desde {formatARS(p.price.group)}</p>
+      <p className="text-[10px] text-success">Desde {formatARS(p.price.group)}</p>
     </Link>
   );
 }
