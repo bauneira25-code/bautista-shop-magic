@@ -56,6 +56,9 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>) => ({
+    similar: typeof s.similar === "string" ? s.similar : undefined,
+  }),
   component: Home,
 });
 
