@@ -8,6 +8,7 @@ import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { useUserOrders } from "@/stores/userOrders";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
