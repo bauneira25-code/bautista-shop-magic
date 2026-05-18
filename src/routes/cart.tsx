@@ -8,6 +8,7 @@ import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { useUserOrders } from "@/stores/userOrders";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
@@ -51,7 +52,38 @@ function CartPage() {
       : info.method;
     toast.success("¡Pago confirmado!", { description: desc });
 
-    // Group items by mode → one order per mode
+    const customerName = user ? `${user.nombre} ${user.apellido}`.trim() : "Invitado";
+    const customerPhone = user?.telefono ?? null;
+
+    // 1) Persistir en Supabase: una fila por item (lo que ve el admin panel)
+    const rows = items.map((i) => ({
+      customer_name: customerName,
+      customer_phone: customerPhone,
+      product_slug: i.slug,
+      product_title: i.title,
+      product_emoji: i.emoji,
+      product_gradient: i.gradient,
+      unit_price: i.unitPrice,
+      cost: Math.round(i.unitPrice * 0.4),
+      quantity: i.quantity,
+      status: "pago_confirmado" as const,
+      is_customized: !!i.customization,
+      notes: [
+        i.variant ? `Variante: ${i.variant}` : null,
+        i.color ? `Color: ${i.color}` : null,
+        i.customization ? `Personalizado: ${i.customization.text ?? ""}` : null,
+        `Modo: ${i.mode}`,
+        `Entrega: ${delivery}${user?.direccion ? ` · ${user.direccion}` : ""}`,
+        `Pago: ${info.method}${info.cardLast4 ? ` ····${info.cardLast4}` : ""}`,
+      ].filter(Boolean).join(" | "),
+    }));
+    if (rows.length > 0) {
+      supabase.from("orders").insert(rows).then(({ error }) => {
+        if (error) console.error("orders insert error", error);
+      });
+    }
+
+    // 2) Mantener el orders local del cliente (lo que ve en /orders)
     const byMode = items.reduce<Record<string, typeof items>>((acc, it) => {
       (acc[it.mode] ||= []).push(it);
       return acc;
