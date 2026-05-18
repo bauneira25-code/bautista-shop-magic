@@ -188,8 +188,7 @@ function Home() {
         {/* Combo: Oferta relámpago (izq) + Destacados (der) */}
         <section className="grid grid-cols-5 gap-3">
           <Link
-            to="/products/$slug"
-            params={{ slug: FLASH_DEALS[0]?.slug ?? "" }}
+            to="/ofertas"
             className="col-span-2 block"
           >
             <div
