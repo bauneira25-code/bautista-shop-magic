@@ -64,6 +64,42 @@ export type Database = {
           },
         ]
       }
+      live_cameras: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          machine: Database["public"]["Enums"]["camera_machine"]
+          name: string
+          sort_order: number
+          thumbnail_url: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          machine?: Database["public"]["Enums"]["camera_machine"]
+          name: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          machine?: Database["public"]["Enums"]["camera_machine"]
+          name?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       order_status_history: {
         Row: {
           changed_at: string
@@ -120,6 +156,9 @@ export type Database = {
           product_gradient: string | null
           product_slug: string
           product_title: string
+          production_finished_at: string | null
+          production_started_at: string | null
+          production_video_url: string | null
           progress: number
           quantity: number
           shipped_at: string | null
@@ -145,6 +184,9 @@ export type Database = {
           product_gradient?: string | null
           product_slug: string
           product_title: string
+          production_finished_at?: string | null
+          production_started_at?: string | null
+          production_video_url?: string | null
           progress?: number
           quantity?: number
           shipped_at?: string | null
@@ -170,12 +212,122 @@ export type Database = {
           product_gradient?: string | null
           product_slug?: string
           product_title?: string
+          production_finished_at?: string | null
+          production_started_at?: string | null
+          production_video_url?: string | null
           progress?: number
           quantity?: number
           shipped_at?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           tracking_code?: string | null
           unit_price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      product_media: {
+        Row: {
+          created_at: string
+          id: string
+          media_type: string
+          product_id: string
+          sort_order: number
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          media_type?: string
+          product_id: string
+          sort_order?: number
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          media_type?: string
+          product_id?: string
+          sort_order?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_media_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          badges: string[]
+          category: Database["public"]["Enums"]["product_category"]
+          cover_url: string | null
+          created_at: string
+          customization_type:
+            | Database["public"]["Enums"]["customization_kind"]
+            | null
+          description: string | null
+          emoji: string | null
+          gradient: string | null
+          id: string
+          is_active: boolean
+          is_customizable: boolean
+          location: string | null
+          name: string
+          price_individual: number
+          price_wholesale: number
+          slug: string
+          sort_order: number
+          stock: number
+          updated_at: string
+        }
+        Insert: {
+          badges?: string[]
+          category?: Database["public"]["Enums"]["product_category"]
+          cover_url?: string | null
+          created_at?: string
+          customization_type?:
+            | Database["public"]["Enums"]["customization_kind"]
+            | null
+          description?: string | null
+          emoji?: string | null
+          gradient?: string | null
+          id?: string
+          is_active?: boolean
+          is_customizable?: boolean
+          location?: string | null
+          name: string
+          price_individual?: number
+          price_wholesale?: number
+          slug: string
+          sort_order?: number
+          stock?: number
+          updated_at?: string
+        }
+        Update: {
+          badges?: string[]
+          category?: Database["public"]["Enums"]["product_category"]
+          cover_url?: string | null
+          created_at?: string
+          customization_type?:
+            | Database["public"]["Enums"]["customization_kind"]
+            | null
+          description?: string | null
+          emoji?: string | null
+          gradient?: string | null
+          id?: string
+          is_active?: boolean
+          is_customizable?: boolean
+          location?: string | null
+          name?: string
+          price_individual?: number
+          price_wholesale?: number
+          slug?: string
+          sort_order?: number
+          stock?: number
           updated_at?: string
         }
         Relationships: []
@@ -244,6 +396,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "operations" | "production" | "support" | "finance"
+      camera_machine: "laser" | "uv" | "sublimacion" | "empaquetado"
+      customization_kind:
+        | "laser"
+        | "uv"
+        | "sublimacion"
+        | "bordado"
+        | "estampado"
       order_status:
         | "pago_confirmado"
         | "enviando_maquina"
@@ -264,6 +423,18 @@ export type Database = {
         | "rehacer"
         | "cancelado"
         | "reembolsado"
+        | "picking"
+        | "en_personalizacion"
+      product_category:
+        | "tecnologia"
+        | "electrodomesticos"
+        | "hogar"
+        | "joyeria"
+        | "moda"
+        | "tech"
+        | "electronica"
+        | "gym"
+        | "belleza"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -392,6 +563,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "operations", "production", "support", "finance"],
+      camera_machine: ["laser", "uv", "sublimacion", "empaquetado"],
+      customization_kind: [
+        "laser",
+        "uv",
+        "sublimacion",
+        "bordado",
+        "estampado",
+      ],
       order_status: [
         "pago_confirmado",
         "enviando_maquina",
@@ -412,6 +591,19 @@ export const Constants = {
         "rehacer",
         "cancelado",
         "reembolsado",
+        "picking",
+        "en_personalizacion",
+      ],
+      product_category: [
+        "tecnologia",
+        "electrodomesticos",
+        "hogar",
+        "joyeria",
+        "moda",
+        "tech",
+        "electronica",
+        "gym",
+        "belleza",
       ],
     },
   },

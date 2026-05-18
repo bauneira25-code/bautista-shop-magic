@@ -1,67 +1,106 @@
-## Resumen
+# Panel Admin NEIBA — Funcional y Real
 
-Construyo un panel admin nuevo en `/admin-panel` con sidebar lateral estilo SaaS. Las 4 secciones core (Dashboard, Pedidos, Personalizados, Producción) quedan funcionando real contra Supabase. Las otras 10 quedan navegables con un placeholder limpio "En construcción — fase 2". El `/admin/machine` actual queda intacto como pantalla de tablet.
+Convertir el panel admin en una herramienta de gestión real conectada a Supabase, manteniendo el estilo actual (blanco + naranja rojizo, minimalista).
 
-## 1. Base de datos (migración única)
+## 1. Base de datos (Supabase)
 
-Tablas nuevas y extensiones a las existentes:
+Nuevas tablas y cambios vía migración:
 
-- `app_role` enum: `admin`, `operations`, `production`, `support`, `finance`
-- `user_roles` (user_id, role) — patrón seguro recomendado, con función `has_role()` SECURITY DEFINER
-- `profiles` (user_id, full_name, email) + trigger auto-create on signup
-- Extender `orders`: nuevo enum con los 16 estados pedidos (`pedido_creado`, `pago_pendiente`, `pago_confirmado`, `pendiente_personalizacion`, `diseno_aprobado`, `cola_produccion`, `en_produccion`, `personalizado_terminado`, `control_calidad`, `listo_empaquetar`, `empaquetado`, `enviado`, `entregado`, `rehacer`, `cancelado`, `reembolsado`); columnas `assigned_to uuid`, `final_photo_url`, `internal_notes`
-- `order_status_history` ya existe — agregar columna `changed_by_user_id`
-- Storage bucket `qc-photos` (público) para fotos finales del operario
-- RLS: solo usuarios con rol en `user_roles` pueden leer/escribir las tablas de admin
+**`products`** (catálogo gestionable)
+- name, description, price_individual, price_wholesale
+- category (enum: tecnologia, electrodomesticos, hogar, joyeria, moda)
+- is_customizable (bool), customization_type (enum: laser, uv, sublimacion, bordado, estampado, null)
+- stock, location (texto: "A1", "Joyería-2")
+- is_active (bool), badges (array: destacado, viral, nuevo, stock_bajo)
+- emoji, gradient (mantener compatibilidad visual)
+- slug (único, autogenerado)
 
-## 2. Auth y guard
+**`product_media`**
+- product_id (FK), url, type (image/video), sort_order
 
-- Habilitar email/password en Supabase (sin auto-confirm, según reglas)
-- Ruta `/admin-login` con login email+password
-- Layout protegido `_admin/` (TanStack pathless layout) con `beforeLoad` que valida sesión + `has_role()`. Redirige a `/admin-login` si falla
-- Hook `useAdminAuth()` que expone user, role, hasRole
+**`live_cameras`**
+- name, machine (laser/uv/sublimacion/empaquetado)
+- video_url, thumbnail_url, is_active, sort_order
 
-## 3. Shell del panel (`src/routes/_admin.tsx`)
+**`orders`** — agregar columnas:
+- production_photo_url, production_video_url ya existen parcialmente (`final_photo_url`); agregar `production_started_at`, `production_finished_at`
+- Ampliar enum `order_status` con los nuevos estados pedidos (pedido_recibido, picking, en_personalizacion, control_calidad, empaquetado, enviado, entregado)
 
-- Sidebar fijo izquierdo, 14 items con íconos (lucide), item activo marcado, colapsable a iconos en mobile
-- Header con: nombre del usuario, rol, botón logout
-- Dark mode elegante por default en panel admin (usando tokens existentes)
-- `<Outlet />` para las páginas hijas
+**Storage buckets nuevos:**
+- `product-media` (público) — imágenes/videos de productos
+- `live-videos` (público) — videos de demostración para En Vivo
+- `production-files` ya existe — se reutiliza para fotos/videos del resultado
 
-## 4. Secciones REALES (fase 1)
+**RLS:**
+- Lectura pública en products, product_media, live_cameras (catálogo público)
+- Escritura solo para usuarios con rol admin/operations/production según corresponda
+- Storage: lectura pública; escritura con rol staff
 
-### Dashboard `/_admin/`
-KPI cards (ventas día, ingresos mes, pedidos pendientes, en producción, personalizados pendientes, listos empaquetar, reclamos abiertos, grupos activos, stock bajo, ticket promedio). Gráfico de ventas últimos 14 días + pedidos por estado (recharts).
+## 2. Admin → Productos (`/admin-panel/productos`)
 
-### Pedidos `/_admin/pedidos`
-Tabla con filtros por estado (chips), búsqueda por cliente. Modal de detalle con: cliente, producto, personalización, historial completo, notas internas editables, cambio manual de estado.
+Reemplaza el placeholder actual. Lista todos los productos con filtros (categoría, activo, personalizable). Botón "Nuevo producto" abre formulario completo:
 
-### Personalizados `/_admin/personalizados`
-Tabla solo de pedidos con customization. Estados específicos del workflow de personalización. Modal con preview SVG, archivo descargable, asignar empleado (dropdown de user_roles con rol production), aprobar diseño, enviar a producción, marcar terminado.
+- Nombre, descripción, precios (individual/mayorista)
+- Categoría (select)
+- Toggle personalizable + select tipo personalización
+- Stock + ubicación física
+- Toggle activo
+- Multi-select badges (destacado/viral/nuevo/stock_bajo)
+- Uploader múltiple de imágenes y videos (subida a bucket `product-media`)
+- Preview en vivo del producto
 
-### Producción `/_admin/produccion`
-Vista cards grandes (no tabla) — pensada para tablet al lado de máquina. Cards con foto/emoji del producto, texto del diseño, botones grandes "Comenzar" / "Terminado" / "Reportar problema". "Comenzar" lockea el trabajo (asigna `assigned_to` al user actual). "Terminado" abre input de subir foto final → bucket `qc-photos` → estado pasa a `control_calidad`.
+Editar producto reutiliza el mismo formulario. Eliminar con confirmación.
 
-## 5. Secciones PLACEHOLDER (navegables, fase 2)
+## 3. Admin → Pedidos (`/admin-panel/pedidos`)
 
-10 rutas (`/control-calidad`, `/productos`, `/grupos`, `/clientes`, `/pagos`, `/envios`, `/reclamos`, `/stock`, `/empleados`, `/configuracion`) con un componente compartido `<ComingSoonSection />` que muestra el ícono, título, descripción de qué va a tener y un badge "Fase 2". Sidebar funcional, navegación funcional.
+Mejorar la vista existente:
+- Orden cronológico (más reciente primero) con filtros por estado
+- Card por pedido: cliente, teléfono, productos, badge "personalizable", monto
+- Selector de estado con los 7 estados nuevos
+- Detalle expandible con timeline de `order_status_history`
 
-## 6. Setup inicial
+## 4. Admin → Producción (`/admin-panel/produccion`)
 
-Como el primer admin no puede crearse solo, después de la migración te paso el flujo: te registrás en `/admin-login` con email+password, y luego corro un INSERT manual asignándote el rol `admin` para que puedas entrar.
+Vista enfocada al operario:
+- Solo pedidos con `is_customized=true` en estados pre-producción
+- Cada card muestra: cliente, producto, máquina detectada (función `machineForProduct` ya existe), preview del diseño (SVG de `customizations`)
+- Botón **Iniciar producción** → estado `en_produccion`, registra `production_started_at`
+- Mientras está en producción: uploader para foto/video del resultado (bucket `production-files`)
+- Botón **Finalizar producción** → estado `personalizado_terminado`, registra `production_finished_at`
 
----
+## 5. Admin → En Vivo (`/admin-panel/en-vivo`)
+
+Gestión de cámaras de la sección pública /en-vivo:
+- Lista de cámaras existentes con preview de thumbnail
+- Crear cámara: nombre, máquina asignada, upload de video demo, upload de thumbnail, toggle activo
+- Editar/eliminar cámara
+- Reordenar (sort_order)
+
+La página pública `/en-vivo` pasa a leer `live_cameras` desde Supabase (en vez del array hardcoded `LIVE_MACHINES`), con fallback a las 3 máquinas por defecto si no hay datos.
+
+## 6. Frontend público
+
+- `/index`, `/personalizables`, `/ofertas`, `/categorias/*` leen productos desde Supabase en vez de `MOCK_PRODUCTS` (mantener `MOCK_PRODUCTS` como seed inicial)
+- `/en-vivo` y `/en-vivo/$machineId` leen `live_cameras`
+
+## 7. Seed inicial
+
+Migración inserta los productos actuales de `MOCK_PRODUCTS` en la tabla `products`, y las 3 máquinas de `LIVE_MACHINES` en `live_cameras`, para no romper la experiencia actual.
+
+## Diseño
+
+Mantener exactamente el estilo actual del admin (dark sidebar + acentos naranja `#ff6b35`) y el del frontend público (blanco + naranja rojizo, minimalista). Formularios usando shadcn/ui ya instalado. Uploads con preview y barra de progreso.
 
 ## Detalles técnicos
 
-- Server functions con `requireSupabaseAuth` para cada query/mutation del admin (RLS aplicada como el user)
-- Middleware de roles: server fn helper `requireRole(['admin','operations'])` que valida `has_role()` en server
-- Realtime en Producción y Personalizados (igual que `/admin/machine`)
-- Convivencia con tablas actuales: el enum `order_status` existente se reemplaza con `ALTER TYPE ... ADD VALUE` para no romper código actual; se mantienen los 7 estados viejos como sinónimos válidos
-- `/admin` y `/admin/machine` viejos quedan intactos (no se tocan)
-- Diseño: tokens existentes de `src/styles.css`, sidebar inspirado en Stripe/Linear
+- Migración única con todas las tablas, enums, RLS y seed
+- Buckets de storage creados en la misma migración
+- Subidas hechas desde el cliente con el `supabase` client del navegador, autenticado con rol admin (RLS valida)
+- Realtime ya configurado en `orders`; agregar a `products` y `live_cameras` para reflejar cambios en vivo
+- Toda la lógica nueva en frontend (componentes admin) — sin server functions adicionales
 
----
+## Fuera de scope (lo decimos para ser claros)
 
-## Lo que NO entra en esta tanda
-Control de calidad como sección dedicada con checklist, productos CRUD, grupos admin, clientes, pagos integrados con MP, envíos con tracking, reclamos, stock con SKUs, empleados CRUD, configuración general. Todo eso queda como placeholder navegable y lo construimos en tandas siguientes.
+- No se agregan reportes nuevos al panel (Análisis, Stock ya existen y siguen funcionando con datos reales)
+- No se cambia el flujo de checkout ni el carrito
+- No se agrega bordado/estampado como máquinas en /en-vivo más allá del select de personalización (las máquinas en vivo siguen siendo láser/UV/sublimación + empaquetado opcional)

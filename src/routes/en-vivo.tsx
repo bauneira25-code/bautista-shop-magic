@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
-import { LIVE_MACHINES } from "@/lib/liveMachines";
+import { LIVE_MACHINES, type LiveMachine } from "@/lib/liveMachines";
 import { MachineCard, LiveBadge } from "@/components/live/MachineFeed";
 import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 import { Eye } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/en-vivo")({
   head: () => ({
@@ -17,6 +19,21 @@ export const Route = createFileRoute("/en-vivo")({
 
 function EnVivoPage() {
   const totalViewers = useLiveTotalViewers(4000);
+  const [cams, setCams] = useState<Array<{ id: string; name: string; machine: string; video_url: string | null; thumbnail_url: string | null }>>([]);
+
+  useEffect(() => {
+    supabase.from("live_cameras").select("*").eq("is_active", true).order("sort_order")
+      .then(({ data }) => setCams((data ?? []) as any));
+  }, []);
+
+  // Merge DB cameras over defaults; fallback to LIVE_MACHINES if DB empty
+  const machines: LiveMachine[] = cams.length > 0
+    ? cams.map(c => {
+        const def = LIVE_MACHINES.find(m => m.id === c.machine) ?? LIVE_MACHINES[0];
+        return { ...def, id: (c.machine as any) ?? def.id, name: c.name };
+      })
+    : LIVE_MACHINES;
+
   return (
     <MobileShell>
       <header className="px-5 pb-3 pt-5">
@@ -31,8 +48,8 @@ function EnVivoPage() {
       </header>
 
       <section className="space-y-4 px-5 pt-2">
-        {LIVE_MACHINES.map((m) => (
-          <MachineCard key={m.id} machine={m} />
+        {machines.map((m, i) => (
+          <MachineCard key={`${m.id}-${i}`} machine={m} />
         ))}
       </section>
 
@@ -47,3 +64,4 @@ function EnVivoPage() {
     </MobileShell>
   );
 }
+
