@@ -287,7 +287,7 @@ function ProductPage() {
         )}
 
         {/* Personalizar — individual y grupal (fullscreen) */}
-        {product.customizable && (mode === "individual" || mode === "group") && (
+        {product.customizable && mode === "individual" && (
           <button
             onClick={() => {
               if (qty >= 2) setShowMulti(true);
