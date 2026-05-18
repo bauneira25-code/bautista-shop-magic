@@ -46,17 +46,29 @@ export function AdminSidebar({ profile }: { profile: AdminProfile }) {
       </div>
 
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-        {items.map((item) => {
+        <p className="px-3 pt-1 pb-1.5 text-[9px] uppercase tracking-widest text-white/30">Operación</p>
+        {items.filter(i => i.primary).map((item) => {
           const active = item.exact ? path === item.to : path === item.to || path.startsWith(item.to + "/");
           const Icon = item.icon;
           return (
-            <Link
-              key={item.to}
-              to={item.to as any}
+            <Link key={item.to} to={item.to as any}
+              className={`flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] transition ${
+                active ? "bg-orange-500/20 text-orange-200 ring-1 ring-orange-500/30" : "text-white/70 hover:text-white hover:bg-white/5"
+              }`}>
+              <Icon className="h-4 w-4 shrink-0" />
+              <span className="truncate font-medium">{item.label}</span>
+            </Link>
+          );
+        })}
+        <p className="px-3 pt-4 pb-1.5 text-[9px] uppercase tracking-widest text-white/30">Más</p>
+        {items.filter(i => !i.primary).map((item) => {
+          const active = item.exact ? path === item.to : path === item.to || path.startsWith(item.to + "/");
+          const Icon = item.icon;
+          return (
+            <Link key={item.to} to={item.to as any}
               className={`flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] transition ${
                 active ? "bg-white/10 text-white" : "text-white/60 hover:text-white hover:bg-white/5"
-              }`}
-            >
+              }`}>
               <Icon className="h-4 w-4 shrink-0" />
               <span className="truncate">{item.label}</span>
             </Link>
