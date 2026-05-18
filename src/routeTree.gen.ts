@@ -16,6 +16,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PersonalizablesRouteImport } from './routes/personalizables'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as OfertasRouteImport } from './routes/ofertas'
+import { Route as EnVivoRouteImport } from './routes/en-vivo'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as CartRouteImport } from './routes/cart'
@@ -26,6 +27,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminPanelIndexRouteImport } from './routes/admin-panel.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
+import { Route as EnVivoMachineIdRouteImport } from './routes/en-vivo.$machineId'
 import { Route as CategoriasIdRouteImport } from './routes/categorias.$id'
 import { Route as AdminMachineRouteImport } from './routes/admin.machine'
 import { Route as AdminPanelTodoRouteImport } from './routes/admin-panel.todo'
@@ -80,6 +82,11 @@ const OfertasRoute = OfertasRouteImport.update({
   path: '/ofertas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnVivoRoute = EnVivoRouteImport.update({
+  id: '/en-vivo',
+  path: '/en-vivo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CustomizeRoute = CustomizeRouteImport.update({
   id: '/customize',
   path: '/customize',
@@ -129,6 +136,11 @@ const ProductsSlugRoute = ProductsSlugRouteImport.update({
   id: '/products/$slug',
   path: '/products/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const EnVivoMachineIdRoute = EnVivoMachineIdRouteImport.update({
+  id: '/$machineId',
+  path: '/$machineId',
+  getParentRoute: () => EnVivoRoute,
 } as any)
 const CategoriasIdRoute = CategoriasIdRouteImport.update({
   id: '/$id',
@@ -231,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/en-vivo': typeof EnVivoRouteWithChildren
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/personalizables': typeof PersonalizablesRoute
@@ -255,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/admin-panel/todo': typeof AdminPanelTodoRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
+  '/en-vivo/$machineId': typeof EnVivoMachineIdRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
   '/admin-panel/': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
@@ -267,6 +281,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/en-vivo': typeof EnVivoRouteWithChildren
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/personalizables': typeof PersonalizablesRoute
@@ -291,6 +306,7 @@ export interface FileRoutesByTo {
   '/admin-panel/todo': typeof AdminPanelTodoRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
+  '/en-vivo/$machineId': typeof EnVivoMachineIdRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
   '/admin-panel': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
@@ -305,6 +321,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
+  '/en-vivo': typeof EnVivoRouteWithChildren
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/personalizables': typeof PersonalizablesRoute
@@ -329,6 +346,7 @@ export interface FileRoutesById {
   '/admin-panel/todo': typeof AdminPanelTodoRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
+  '/en-vivo/$machineId': typeof EnVivoMachineIdRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
   '/admin-panel/': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
@@ -344,6 +362,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/en-vivo'
     | '/ofertas'
     | '/orders'
     | '/personalizables'
@@ -368,6 +387,7 @@ export interface FileRouteTypes {
     | '/admin-panel/todo'
     | '/admin/machine'
     | '/categorias/$id'
+    | '/en-vivo/$machineId'
     | '/products/$slug'
     | '/admin-panel/'
     | '/products/$slug/design'
@@ -380,6 +400,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/en-vivo'
     | '/ofertas'
     | '/orders'
     | '/personalizables'
@@ -404,6 +425,7 @@ export interface FileRouteTypes {
     | '/admin-panel/todo'
     | '/admin/machine'
     | '/categorias/$id'
+    | '/en-vivo/$machineId'
     | '/products/$slug'
     | '/admin-panel'
     | '/products/$slug/design'
@@ -417,6 +439,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
+    | '/en-vivo'
     | '/ofertas'
     | '/orders'
     | '/personalizables'
@@ -441,6 +464,7 @@ export interface FileRouteTypes {
     | '/admin-panel/todo'
     | '/admin/machine'
     | '/categorias/$id'
+    | '/en-vivo/$machineId'
     | '/products/$slug'
     | '/admin-panel/'
     | '/products/$slug/design'
@@ -455,6 +479,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriasRoute: typeof CategoriasRouteWithChildren
   CustomizeRoute: typeof CustomizeRoute
+  EnVivoRoute: typeof EnVivoRouteWithChildren
   OfertasRoute: typeof OfertasRoute
   OrdersRoute: typeof OrdersRoute
   PersonalizablesRoute: typeof PersonalizablesRoute
@@ -514,6 +539,13 @@ declare module '@tanstack/react-router' {
       path: '/ofertas'
       fullPath: '/ofertas'
       preLoaderRoute: typeof OfertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en-vivo': {
+      id: '/en-vivo'
+      path: '/en-vivo'
+      fullPath: '/en-vivo'
+      preLoaderRoute: typeof EnVivoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customize': {
@@ -585,6 +617,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/products/$slug'
       preLoaderRoute: typeof ProductsSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/en-vivo/$machineId': {
+      id: '/en-vivo/$machineId'
+      path: '/$machineId'
+      fullPath: '/en-vivo/$machineId'
+      preLoaderRoute: typeof EnVivoMachineIdRouteImport
+      parentRoute: typeof EnVivoRoute
     }
     '/categorias/$id': {
       id: '/categorias/$id'
@@ -779,6 +818,17 @@ const CategoriasRouteWithChildren = CategoriasRoute._addFileChildren(
   CategoriasRouteChildren,
 )
 
+interface EnVivoRouteChildren {
+  EnVivoMachineIdRoute: typeof EnVivoMachineIdRoute
+}
+
+const EnVivoRouteChildren: EnVivoRouteChildren = {
+  EnVivoMachineIdRoute: EnVivoMachineIdRoute,
+}
+
+const EnVivoRouteWithChildren =
+  EnVivoRoute._addFileChildren(EnVivoRouteChildren)
+
 interface ProductsSlugRouteChildren {
   ProductsSlugDesignRoute: typeof ProductsSlugDesignRoute
 }
@@ -800,6 +850,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriasRoute: CategoriasRouteWithChildren,
   CustomizeRoute: CustomizeRoute,
+  EnVivoRoute: EnVivoRouteWithChildren,
   OfertasRoute: OfertasRoute,
   OrdersRoute: OrdersRoute,
   PersonalizablesRoute: PersonalizablesRoute,
@@ -812,3 +863,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
