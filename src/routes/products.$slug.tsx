@@ -214,24 +214,15 @@ function ProductPage() {
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
         </div>
 
-        {/* 3 PURCHASE MODES — uno al lado del otro */}
+        {/* 2 PURCHASE MODES */}
         <div>
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
-          <div className={`grid gap-2 ${hasActiveGroup ? "grid-cols-3" : "grid-cols-2"}`}>
+          <div className="grid gap-2 grid-cols-2">
             <ModeCard
               active={mode === "individual"} onClick={() => setMode("individual")}
               title="Individual" icon="🛍" price={product.price.individual}
               sub="1 unidad"
             />
-            {hasActiveGroup && (
-              <ModeCard
-                active={mode === "group"} onClick={() => setMode("group")}
-                title="Grupal" icon="👥" price={product.price.group}
-                sub={`Desde ${product.groupTarget}`}
-                highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
-                compareAt={product.price.individual}
-              />
-            )}
             <ModeCard
               active={mode === "wholesale"} onClick={() => setMode("wholesale")}
               title="Mayorista" icon="📦" price={product.price.wholesale}
@@ -240,80 +231,6 @@ function ProductPage() {
             />
           </div>
         </div>
-
-        {/* Group simple explainer */}
-        {mode === "group" && (
-          <div className="rounded-3xl border-2 border-[#e8451c]/40 bg-white p-4 float-up space-y-4 shadow-sm">
-            {/* Big number row */}
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="font-display text-3xl font-black leading-none text-[#e8451c]">
-                  {product.groupJoined}<span className="text-neutral-400">/{product.groupTarget}</span>
-                </p>
-                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-600">personas se unieron</p>
-              </div>
-              <div className="rounded-2xl bg-[#e8451c] px-3 py-2 text-center text-white">
-                <p className="text-[9px] font-bold uppercase opacity-90">Cierra en</p>
-                <p className="font-display text-sm font-black leading-tight">{product.groupTimeLeft}</p>
-              </div>
-            </div>
-
-            {/* Avatars grid */}
-            <div className="flex flex-wrap gap-1.5">
-              {Array.from({ length: product.groupTarget }).map((_, i) => {
-                const filled = i < product.groupJoined;
-                return (
-                  <span
-                    key={i}
-                    className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-black ${
-                      filled ? "bg-[#e8451c] text-white" : "border-2 border-dashed border-neutral-300 text-neutral-400"
-                    }`}
-                  >
-                    {filled ? "✓" : "+"}
-                  </span>
-                );
-              })}
-            </div>
-
-            {/* Progress bar */}
-            <div className="h-2 overflow-hidden rounded-full bg-neutral-100">
-              <div className="h-full rounded-full bg-[#e8451c] transition-all" style={{ width: `${groupPct}%` }} />
-            </div>
-
-            {/* Plain explanation */}
-            <div className="rounded-2xl bg-orange-50 p-3">
-              <p className="text-xs font-bold text-neutral-900">
-                👥 Comprá junto a otras personas que quieren el mismo producto
-              </p>
-              <p className="mt-1 text-[11px] leading-relaxed text-neutral-700">
-                Cuando se completen las <b>{product.groupTarget}</b> unidades, todos pagan solo{" "}
-                <b className="text-[#e8451c]">{formatARS(product.price.group)}</b> por unidad.
-                Faltan <b>{product.groupTarget - product.groupJoined}</b> para cerrar el grupo.
-              </p>
-            </div>
-
-            {/* Quick choice */}
-            {(() => {
-              const remaining = product.groupTarget - product.groupJoined;
-              const completing = qty >= remaining;
-              return (
-                <>
-                  <div className="flex gap-2">
-                    <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${!completing ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
-                      Sumarme con 1
-                    </button>
-                    <button onClick={() => setQty(remaining)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${completing ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
-                      Llevarme las {remaining}
-                    </button>
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-neutral-700">
-                    💡 Comprando <b>{remaining} unidad{remaining === 1 ? "" : "es"}</b> completás el grupo y desbloqueás la oferta al instante para vos y todos los que ya se sumaron.
-                  </p>
-                </>
-              );
-            })()}
-          </div>
-        )}
 
         {/* Wholesale tiers */}
         {mode === "wholesale" && (
