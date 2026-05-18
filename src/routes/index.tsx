@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
           "@type": "Organization",
           name: "NEIBA",
           url: "/",
-          description: "Marketplace de compras grupales y productos personalizables con IA.",
+          description: "Marketplace de productos personalizables con IA.",
         }),
       },
       {
