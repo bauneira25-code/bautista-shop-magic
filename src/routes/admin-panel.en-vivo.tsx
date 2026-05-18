@@ -136,7 +136,7 @@ function CameraEditor({ camera, onClose, onSaved }: { camera: Partial<Camera>; o
   const save = async () => {
     if (!form.name?.trim()) { toast.error("Falta nombre"); return; }
     setSaving(true);
-    const payload = {
+    const payload: any = {
       name: form.name, machine: form.machine ?? "laser",
       video_url: form.video_url ?? null, thumbnail_url: form.thumbnail_url ?? null,
       is_active: form.is_active ?? true, sort_order: form.sort_order ?? 0,

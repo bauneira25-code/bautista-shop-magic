@@ -39,6 +39,7 @@ import { Route as AdminPanelPersonalizadosRouteImport } from './routes/admin-pan
 import { Route as AdminPanelPedidosRouteImport } from './routes/admin-panel.pedidos'
 import { Route as AdminPanelPagosRouteImport } from './routes/admin-panel.pagos'
 import { Route as AdminPanelEnviosRouteImport } from './routes/admin-panel.envios'
+import { Route as AdminPanelEnVivoRouteImport } from './routes/admin-panel.en-vivo'
 import { Route as AdminPanelEmpleadosRouteImport } from './routes/admin-panel.empleados'
 import { Route as AdminPanelEmpaquetadoRouteImport } from './routes/admin-panel.empaquetado'
 import { Route as AdminPanelConfiguracionRouteImport } from './routes/admin-panel.configuracion'
@@ -198,6 +199,11 @@ const AdminPanelEnviosRoute = AdminPanelEnviosRouteImport.update({
   path: '/envios',
   getParentRoute: () => AdminPanelRoute,
 } as any)
+const AdminPanelEnVivoRoute = AdminPanelEnVivoRouteImport.update({
+  id: '/en-vivo',
+  path: '/en-vivo',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
 const AdminPanelEmpleadosRoute = AdminPanelEmpleadosRouteImport.update({
   id: '/empleados',
   path: '/empleados',
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
   '/admin-panel/empaquetado': typeof AdminPanelEmpaquetadoRoute
   '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
+  '/admin-panel/en-vivo': typeof AdminPanelEnVivoRoute
   '/admin-panel/envios': typeof AdminPanelEnviosRoute
   '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
@@ -295,6 +302,7 @@ export interface FileRoutesByTo {
   '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
   '/admin-panel/empaquetado': typeof AdminPanelEmpaquetadoRoute
   '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
+  '/admin-panel/en-vivo': typeof AdminPanelEnVivoRoute
   '/admin-panel/envios': typeof AdminPanelEnviosRoute
   '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
@@ -335,6 +343,7 @@ export interface FileRoutesById {
   '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
   '/admin-panel/empaquetado': typeof AdminPanelEmpaquetadoRoute
   '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
+  '/admin-panel/en-vivo': typeof AdminPanelEnVivoRoute
   '/admin-panel/envios': typeof AdminPanelEnviosRoute
   '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
@@ -376,6 +385,7 @@ export interface FileRouteTypes {
     | '/admin-panel/configuracion'
     | '/admin-panel/empaquetado'
     | '/admin-panel/empleados'
+    | '/admin-panel/en-vivo'
     | '/admin-panel/envios'
     | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
@@ -414,6 +424,7 @@ export interface FileRouteTypes {
     | '/admin-panel/configuracion'
     | '/admin-panel/empaquetado'
     | '/admin-panel/empleados'
+    | '/admin-panel/en-vivo'
     | '/admin-panel/envios'
     | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
@@ -453,6 +464,7 @@ export interface FileRouteTypes {
     | '/admin-panel/configuracion'
     | '/admin-panel/empaquetado'
     | '/admin-panel/empleados'
+    | '/admin-panel/en-vivo'
     | '/admin-panel/envios'
     | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
@@ -702,6 +714,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelEnviosRouteImport
       parentRoute: typeof AdminPanelRoute
     }
+    '/admin-panel/en-vivo': {
+      id: '/admin-panel/en-vivo'
+      path: '/en-vivo'
+      fullPath: '/admin-panel/en-vivo'
+      preLoaderRoute: typeof AdminPanelEnVivoRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
     '/admin-panel/empleados': {
       id: '/admin-panel/empleados'
       path: '/empleados'
@@ -771,6 +790,7 @@ interface AdminPanelRouteChildren {
   AdminPanelConfiguracionRoute: typeof AdminPanelConfiguracionRoute
   AdminPanelEmpaquetadoRoute: typeof AdminPanelEmpaquetadoRoute
   AdminPanelEmpleadosRoute: typeof AdminPanelEmpleadosRoute
+  AdminPanelEnVivoRoute: typeof AdminPanelEnVivoRoute
   AdminPanelEnviosRoute: typeof AdminPanelEnviosRoute
   AdminPanelPagosRoute: typeof AdminPanelPagosRoute
   AdminPanelPedidosRoute: typeof AdminPanelPedidosRoute
@@ -790,6 +810,7 @@ const AdminPanelRouteChildren: AdminPanelRouteChildren = {
   AdminPanelConfiguracionRoute: AdminPanelConfiguracionRoute,
   AdminPanelEmpaquetadoRoute: AdminPanelEmpaquetadoRoute,
   AdminPanelEmpleadosRoute: AdminPanelEmpleadosRoute,
+  AdminPanelEnVivoRoute: AdminPanelEnVivoRoute,
   AdminPanelEnviosRoute: AdminPanelEnviosRoute,
   AdminPanelPagosRoute: AdminPanelPagosRoute,
   AdminPanelPedidosRoute: AdminPanelPedidosRoute,
