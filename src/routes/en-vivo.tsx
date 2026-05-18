@@ -16,7 +16,7 @@ export const Route = createFileRoute("/en-vivo")({
 });
 
 function EnVivoPage() {
-  const totalViewers = useLiveViewers("envivo:global", 4000);
+  const totalViewers = useLiveTotalViewers(4000);
   return (
     <MobileShell>
       <header className="px-5 pb-3 pt-5">
