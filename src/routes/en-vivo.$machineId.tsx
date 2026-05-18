@@ -23,7 +23,7 @@ function MachineLivePage() {
   const machine = getMachine(machineId);
   if (!machine) throw notFound();
 
-  const viewers = useLiveViewers("live:" + machine.id, 3500);
+  const viewers = useMachineViewers(machine.id, 3500);
   const [activityIdx, setActivityIdx] = useState(0);
   const [elapsed, setElapsed] = useState(0);
 
