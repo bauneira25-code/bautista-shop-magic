@@ -14,7 +14,6 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrdersRouteImport } from './routes/orders'
-import { Route as GruposRouteImport } from './routes/grupos'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as CartRouteImport } from './routes/cart'
@@ -25,7 +24,6 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminPanelIndexRouteImport } from './routes/admin-panel.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
-import { Route as GroupSlugRouteImport } from './routes/group.$slug'
 import { Route as CategoriasIdRouteImport } from './routes/categorias.$id'
 import { Route as AdminMachineRouteImport } from './routes/admin.machine'
 import { Route as AdminPanelTodoRouteImport } from './routes/admin-panel.todo'
@@ -36,7 +34,6 @@ import { Route as AdminPanelProduccionRouteImport } from './routes/admin-panel.p
 import { Route as AdminPanelPersonalizadosRouteImport } from './routes/admin-panel.personalizados'
 import { Route as AdminPanelPedidosRouteImport } from './routes/admin-panel.pedidos'
 import { Route as AdminPanelPagosRouteImport } from './routes/admin-panel.pagos'
-import { Route as AdminPanelGruposRouteImport } from './routes/admin-panel.grupos'
 import { Route as AdminPanelEnviosRouteImport } from './routes/admin-panel.envios'
 import { Route as AdminPanelEmpleadosRouteImport } from './routes/admin-panel.empleados'
 import { Route as AdminPanelEmpaquetadoRouteImport } from './routes/admin-panel.empaquetado'
@@ -68,11 +65,6 @@ const ProfileRoute = ProfileRouteImport.update({
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GruposRoute = GruposRouteImport.update({
-  id: '/grupos',
-  path: '/grupos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomizeRoute = CustomizeRouteImport.update({
@@ -123,11 +115,6 @@ const AdminPanelIndexRoute = AdminPanelIndexRouteImport.update({
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
   id: '/products/$slug',
   path: '/products/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GroupSlugRoute = GroupSlugRouteImport.update({
-  id: '/group/$slug',
-  path: '/group/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriasIdRoute = CategoriasIdRouteImport.update({
@@ -181,11 +168,6 @@ const AdminPanelPagosRoute = AdminPanelPagosRouteImport.update({
   path: '/pagos',
   getParentRoute: () => AdminPanelRoute,
 } as any)
-const AdminPanelGruposRoute = AdminPanelGruposRouteImport.update({
-  id: '/grupos',
-  path: '/grupos',
-  getParentRoute: () => AdminPanelRoute,
-} as any)
 const AdminPanelEnviosRoute = AdminPanelEnviosRouteImport.update({
   id: '/envios',
   path: '/envios',
@@ -231,7 +213,6 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
-  '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
   '/registrar-marca': typeof RegistrarMarcaRoute
@@ -243,7 +224,6 @@ export interface FileRoutesByFullPath {
   '/admin-panel/empaquetado': typeof AdminPanelEmpaquetadoRoute
   '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
   '/admin-panel/envios': typeof AdminPanelEnviosRoute
-  '/admin-panel/grupos': typeof AdminPanelGruposRoute
   '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
@@ -254,7 +234,6 @@ export interface FileRoutesByFullPath {
   '/admin-panel/todo': typeof AdminPanelTodoRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
-  '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
   '/admin-panel/': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
@@ -267,7 +246,6 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
-  '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
   '/registrar-marca': typeof RegistrarMarcaRoute
@@ -279,7 +257,6 @@ export interface FileRoutesByTo {
   '/admin-panel/empaquetado': typeof AdminPanelEmpaquetadoRoute
   '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
   '/admin-panel/envios': typeof AdminPanelEnviosRoute
-  '/admin-panel/grupos': typeof AdminPanelGruposRoute
   '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
@@ -290,7 +267,6 @@ export interface FileRoutesByTo {
   '/admin-panel/todo': typeof AdminPanelTodoRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
-  '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
   '/admin-panel': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
@@ -305,7 +281,6 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
-  '/grupos': typeof GruposRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
   '/registrar-marca': typeof RegistrarMarcaRoute
@@ -317,7 +292,6 @@ export interface FileRoutesById {
   '/admin-panel/empaquetado': typeof AdminPanelEmpaquetadoRoute
   '/admin-panel/empleados': typeof AdminPanelEmpleadosRoute
   '/admin-panel/envios': typeof AdminPanelEnviosRoute
-  '/admin-panel/grupos': typeof AdminPanelGruposRoute
   '/admin-panel/pagos': typeof AdminPanelPagosRoute
   '/admin-panel/pedidos': typeof AdminPanelPedidosRoute
   '/admin-panel/personalizados': typeof AdminPanelPersonalizadosRoute
@@ -328,7 +302,6 @@ export interface FileRoutesById {
   '/admin-panel/todo': typeof AdminPanelTodoRoute
   '/admin/machine': typeof AdminMachineRoute
   '/categorias/$id': typeof CategoriasIdRoute
-  '/group/$slug': typeof GroupSlugRoute
   '/products/$slug': typeof ProductsSlugRouteWithChildren
   '/admin-panel/': typeof AdminPanelIndexRoute
   '/products/$slug/design': typeof ProductsSlugDesignRoute
@@ -344,7 +317,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
-    | '/grupos'
     | '/orders'
     | '/profile'
     | '/registrar-marca'
@@ -356,7 +328,6 @@ export interface FileRouteTypes {
     | '/admin-panel/empaquetado'
     | '/admin-panel/empleados'
     | '/admin-panel/envios'
-    | '/admin-panel/grupos'
     | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
@@ -367,7 +338,6 @@ export interface FileRouteTypes {
     | '/admin-panel/todo'
     | '/admin/machine'
     | '/categorias/$id'
-    | '/group/$slug'
     | '/products/$slug'
     | '/admin-panel/'
     | '/products/$slug/design'
@@ -380,7 +350,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
-    | '/grupos'
     | '/orders'
     | '/profile'
     | '/registrar-marca'
@@ -392,7 +361,6 @@ export interface FileRouteTypes {
     | '/admin-panel/empaquetado'
     | '/admin-panel/empleados'
     | '/admin-panel/envios'
-    | '/admin-panel/grupos'
     | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
@@ -403,7 +371,6 @@ export interface FileRouteTypes {
     | '/admin-panel/todo'
     | '/admin/machine'
     | '/categorias/$id'
-    | '/group/$slug'
     | '/products/$slug'
     | '/admin-panel'
     | '/products/$slug/design'
@@ -417,7 +384,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/customize'
-    | '/grupos'
     | '/orders'
     | '/profile'
     | '/registrar-marca'
@@ -429,7 +395,6 @@ export interface FileRouteTypes {
     | '/admin-panel/empaquetado'
     | '/admin-panel/empleados'
     | '/admin-panel/envios'
-    | '/admin-panel/grupos'
     | '/admin-panel/pagos'
     | '/admin-panel/pedidos'
     | '/admin-panel/personalizados'
@@ -440,7 +405,6 @@ export interface FileRouteTypes {
     | '/admin-panel/todo'
     | '/admin/machine'
     | '/categorias/$id'
-    | '/group/$slug'
     | '/products/$slug'
     | '/admin-panel/'
     | '/products/$slug/design'
@@ -455,13 +419,11 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriasRoute: typeof CategoriasRouteWithChildren
   CustomizeRoute: typeof CustomizeRoute
-  GruposRoute: typeof GruposRoute
   OrdersRoute: typeof OrdersRoute
   ProfileRoute: typeof ProfileRoute
   RegistrarMarcaRoute: typeof RegistrarMarcaRoute
   SearchRoute: typeof SearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  GroupSlugRoute: typeof GroupSlugRoute
   ProductsSlugRoute: typeof ProductsSlugRouteWithChildren
 }
 
@@ -500,13 +462,6 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof OrdersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/grupos': {
-      id: '/grupos'
-      path: '/grupos'
-      fullPath: '/grupos'
-      preLoaderRoute: typeof GruposRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customize': {
@@ -579,13 +534,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/group/$slug': {
-      id: '/group/$slug'
-      path: '/group/$slug'
-      fullPath: '/group/$slug'
-      preLoaderRoute: typeof GroupSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/categorias/$id': {
       id: '/categorias/$id'
       path: '/$id'
@@ -654,13 +602,6 @@ declare module '@tanstack/react-router' {
       path: '/pagos'
       fullPath: '/admin-panel/pagos'
       preLoaderRoute: typeof AdminPanelPagosRouteImport
-      parentRoute: typeof AdminPanelRoute
-    }
-    '/admin-panel/grupos': {
-      id: '/admin-panel/grupos'
-      path: '/grupos'
-      fullPath: '/admin-panel/grupos'
-      preLoaderRoute: typeof AdminPanelGruposRouteImport
       parentRoute: typeof AdminPanelRoute
     }
     '/admin-panel/envios': {
@@ -732,7 +673,6 @@ interface AdminPanelRouteChildren {
   AdminPanelEmpaquetadoRoute: typeof AdminPanelEmpaquetadoRoute
   AdminPanelEmpleadosRoute: typeof AdminPanelEmpleadosRoute
   AdminPanelEnviosRoute: typeof AdminPanelEnviosRoute
-  AdminPanelGruposRoute: typeof AdminPanelGruposRoute
   AdminPanelPagosRoute: typeof AdminPanelPagosRoute
   AdminPanelPedidosRoute: typeof AdminPanelPedidosRoute
   AdminPanelPersonalizadosRoute: typeof AdminPanelPersonalizadosRoute
@@ -751,7 +691,6 @@ const AdminPanelRouteChildren: AdminPanelRouteChildren = {
   AdminPanelEmpaquetadoRoute: AdminPanelEmpaquetadoRoute,
   AdminPanelEmpleadosRoute: AdminPanelEmpleadosRoute,
   AdminPanelEnviosRoute: AdminPanelEnviosRoute,
-  AdminPanelGruposRoute: AdminPanelGruposRoute,
   AdminPanelPagosRoute: AdminPanelPagosRoute,
   AdminPanelPedidosRoute: AdminPanelPedidosRoute,
   AdminPanelPersonalizadosRoute: AdminPanelPersonalizadosRoute,
@@ -800,13 +739,11 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriasRoute: CategoriasRouteWithChildren,
   CustomizeRoute: CustomizeRoute,
-  GruposRoute: GruposRoute,
   OrdersRoute: OrdersRoute,
   ProfileRoute: ProfileRoute,
   RegistrarMarcaRoute: RegistrarMarcaRoute,
   SearchRoute: SearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  GroupSlugRoute: GroupSlugRoute,
   ProductsSlugRoute: ProductsSlugRouteWithChildren,
 }
 export const routeTree = rootRouteImport

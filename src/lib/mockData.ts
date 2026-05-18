@@ -1,6 +1,6 @@
 // Mock data for the NEIBA prototype (UI-only).
 
-export type PurchaseMode = "individual" | "group" | "wholesale";
+export type PurchaseMode = "individual" | "wholesale";
 
 export interface MockProduct {
   id: string;
@@ -244,7 +244,7 @@ export const MOCK_ORDERS = [
     status: "shipping" as const,
     progress: 75,
     eta: "Llega mañana",
-    mode: "group" as PurchaseMode,
+    mode: "individual" as PurchaseMode,
     qty: 1,
   },
   {
@@ -262,7 +262,7 @@ export const MOCK_ORDERS = [
     status: "delivered" as const,
     progress: 100,
     eta: "Entregado",
-    mode: "group" as PurchaseMode,
+    mode: "wholesale" as PurchaseMode,
     qty: 2,
   },
 ];

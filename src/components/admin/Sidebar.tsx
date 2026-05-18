@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, ShoppingBag, Sparkles, Factory, ShieldCheck, Layers3, PackageCheck,
-  Package, Users2, CreditCard, Truck, AlertTriangle, Boxes, UserCog, Settings, Layers, LogOut,
+  Package, Users2, CreditCard, Truck, AlertTriangle, Boxes, UserCog, Settings, LogOut,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ROLE_LABEL } from "@/lib/admin/statuses";
@@ -15,7 +15,6 @@ const items: NavItem[] = [
   { to: "/admin-panel/produccion", label: "Producción", icon: Factory },
   { to: "/admin-panel/calidad", label: "Control de calidad", icon: ShieldCheck },
   { to: "/admin-panel/productos", label: "Productos", icon: Package },
-  { to: "/admin-panel/grupos", label: "Compras grupales", icon: Layers },
   { to: "/admin-panel/clientes", label: "Clientes", icon: Users2 },
   { to: "/admin-panel/pagos", label: "Pagos", icon: CreditCard },
   { to: "/admin-panel/envios", label: "Envíos", icon: Truck },

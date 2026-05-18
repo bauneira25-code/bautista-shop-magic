@@ -75,8 +75,7 @@ function ProductPage() {
   const product = findProduct(slug);
   const navigate = useNavigate();
   const addToCart = useLocalCart((s) => s.add);
-  const hasActiveGroup = !!product && product.groupJoined > 0 && product.groupJoined < product.groupTarget;
-  const [mode, setMode] = useState<PurchaseMode>(hasActiveGroup ? "group" : "individual");
+  const [mode, setMode] = useState<PurchaseMode>("individual");
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
@@ -117,13 +116,8 @@ function ProductPage() {
 
   const price = product.price[mode];
   const savings = product.price.individual - price;
-  const groupPct = (product.groupJoined / product.groupTarget) * 100;
 
-  const groupSolo = mode === "group" && qty >= product.groupTarget;
-  const cta =
-    mode === "group"
-      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "UNIRME AL GRUPO")
-      : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
+  const cta = mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
     const customization = customText || customImage
@@ -146,10 +140,6 @@ function ProductPage() {
   };
 
   const handleCta = () => {
-    if (mode === "group" && !groupSolo) {
-      navigate({ to: "/group/$slug", params: { slug: product.slug } });
-      return;
-    }
     doAdd();
     toast.success("Agregado al carrito 🛒", {
       description: `${qty} × ${product.title} · ${formatARS(price * qty)}`,
@@ -224,24 +214,15 @@ function ProductPage() {
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
         </div>
 
-        {/* 3 PURCHASE MODES — uno al lado del otro */}
+        {/* 2 PURCHASE MODES */}
         <div>
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
-          <div className={`grid gap-2 ${hasActiveGroup ? "grid-cols-3" : "grid-cols-2"}`}>
+          <div className="grid gap-2 grid-cols-2">
             <ModeCard
               active={mode === "individual"} onClick={() => setMode("individual")}
               title="Individual" icon="🛍" price={product.price.individual}
               sub="1 unidad"
             />
-            {hasActiveGroup && (
-              <ModeCard
-                active={mode === "group"} onClick={() => setMode("group")}
-                title="Grupal" icon="👥" price={product.price.group}
-                sub={`Desde ${product.groupTarget}`}
-                highlight badge={`-${Math.round((1 - product.price.group / product.price.individual) * 100)}%`}
-                compareAt={product.price.individual}
-              />
-            )}
             <ModeCard
               active={mode === "wholesale"} onClick={() => setMode("wholesale")}
               title="Mayorista" icon="📦" price={product.price.wholesale}
@@ -250,80 +231,6 @@ function ProductPage() {
             />
           </div>
         </div>
-
-        {/* Group simple explainer */}
-        {mode === "group" && (
-          <div className="rounded-3xl border-2 border-[#e8451c]/40 bg-white p-4 float-up space-y-4 shadow-sm">
-            {/* Big number row */}
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="font-display text-3xl font-black leading-none text-[#e8451c]">
-                  {product.groupJoined}<span className="text-neutral-400">/{product.groupTarget}</span>
-                </p>
-                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-600">personas se unieron</p>
-              </div>
-              <div className="rounded-2xl bg-[#e8451c] px-3 py-2 text-center text-white">
-                <p className="text-[9px] font-bold uppercase opacity-90">Cierra en</p>
-                <p className="font-display text-sm font-black leading-tight">{product.groupTimeLeft}</p>
-              </div>
-            </div>
-
-            {/* Avatars grid */}
-            <div className="flex flex-wrap gap-1.5">
-              {Array.from({ length: product.groupTarget }).map((_, i) => {
-                const filled = i < product.groupJoined;
-                return (
-                  <span
-                    key={i}
-                    className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-black ${
-                      filled ? "bg-[#e8451c] text-white" : "border-2 border-dashed border-neutral-300 text-neutral-400"
-                    }`}
-                  >
-                    {filled ? "✓" : "+"}
-                  </span>
-                );
-              })}
-            </div>
-
-            {/* Progress bar */}
-            <div className="h-2 overflow-hidden rounded-full bg-neutral-100">
-              <div className="h-full rounded-full bg-[#e8451c] transition-all" style={{ width: `${groupPct}%` }} />
-            </div>
-
-            {/* Plain explanation */}
-            <div className="rounded-2xl bg-orange-50 p-3">
-              <p className="text-xs font-bold text-neutral-900">
-                👥 Comprá junto a otras personas que quieren el mismo producto
-              </p>
-              <p className="mt-1 text-[11px] leading-relaxed text-neutral-700">
-                Cuando se completen las <b>{product.groupTarget}</b> unidades, todos pagan solo{" "}
-                <b className="text-[#e8451c]">{formatARS(product.price.group)}</b> por unidad.
-                Faltan <b>{product.groupTarget - product.groupJoined}</b> para cerrar el grupo.
-              </p>
-            </div>
-
-            {/* Quick choice */}
-            {(() => {
-              const remaining = product.groupTarget - product.groupJoined;
-              const completing = qty >= remaining;
-              return (
-                <>
-                  <div className="flex gap-2">
-                    <button onClick={() => setQty(1)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${!completing ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
-                      Sumarme con 1
-                    </button>
-                    <button onClick={() => setQty(remaining)} className={`flex-1 rounded-xl border-2 px-3 py-2.5 text-xs font-bold transition ${completing ? "border-[#e8451c] bg-[#e8451c]/10 text-[#e8451c]" : "border-neutral-200 text-neutral-600"}`}>
-                      Llevarme las {remaining}
-                    </button>
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-neutral-700">
-                    💡 Comprando <b>{remaining} unidad{remaining === 1 ? "" : "es"}</b> completás el grupo y desbloqueás la oferta al instante para vos y todos los que ya se sumaron.
-                  </p>
-                </>
-              );
-            })()}
-          </div>
-        )}
 
         {/* Wholesale tiers */}
         {mode === "wholesale" && (
@@ -380,7 +287,7 @@ function ProductPage() {
         )}
 
         {/* Personalizar — individual y grupal (fullscreen) */}
-        {product.customizable && (mode === "individual" || mode === "group") && (
+        {product.customizable && mode === "individual" && (
           <button
             onClick={() => {
               if (qty >= 2) setShowMulti(true);
@@ -480,7 +387,7 @@ function ProductPage() {
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 border-t border-orange-100 bg-white px-3 py-2.5 shadow-[0_-8px_24px_-8px_rgba(0,0,0,0.08)]">
         <div className="flex items-center gap-2.5">
           <div className="shrink-0 px-1">
-            <p className="text-[9px] uppercase leading-none text-neutral-500">{mode === "group" ? "Grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
+            <p className="text-[9px] uppercase leading-none text-neutral-500">{mode === "wholesale" ? "Mayorista" : "Individual"}</p>
             <p className="font-display text-base leading-tight text-[#e8451c]">{formatARS(price * qty)}</p>
             {savings > 0 && <p className="text-[9px] leading-none text-emerald-600">Ahorrás {formatARS(savings * qty)}</p>}
           </div>
@@ -495,7 +402,7 @@ function ProductPage() {
               onClick={mode === "wholesale" ? handleCta : handleBuyNow}
               className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-xs font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
-              {mode === "individual" ? "COMPRAR" : mode === "group" ? "UNIRME AL GRUPO" : cta}
+              {mode === "individual" ? "COMPRAR" : cta}
             </button>
           </div>
         </div>
