@@ -75,8 +75,7 @@ function ProductPage() {
   const product = findProduct(slug);
   const navigate = useNavigate();
   const addToCart = useLocalCart((s) => s.add);
-  const hasActiveGroup = !!product && product.groupJoined > 0 && product.groupJoined < product.groupTarget;
-  const [mode, setMode] = useState<PurchaseMode>(hasActiveGroup ? "group" : "individual");
+  const [mode, setMode] = useState<PurchaseMode>("individual");
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
