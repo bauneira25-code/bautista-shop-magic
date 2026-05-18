@@ -185,42 +185,23 @@ function Home() {
           </div>
         </div>
 
-        {/* Combo: Hero grupal grande (izq) + productos destacados (der) */}
-        <section className="grid grid-cols-5 gap-3">
-          <Link to="/grupos" className="col-span-2 block">
-            <div className="relative h-full min-h-[200px] overflow-hidden rounded-2xl p-3.5" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
-              <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10 blur-2xl" />
-              <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur">
-                <Flame className="h-2.5 w-2.5" /> Drop grupal
-              </span>
-              <h2 className="mt-2 font-display text-lg leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
-              <p className="mt-1 text-[10px] text-white/80">Sumate antes de que cierre</p>
-              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-primary">
-                Ver grupos <ChevronRight className="h-3 w-3" />
-              </div>
-              <div className="absolute right-2 bottom-2 text-5xl">👥</div>
-            </div>
-          </Link>
-
-          {/* Divisor naranja */}
-          <div className="col-span-3 relative pl-3">
-            <span className="pointer-events-none absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-primary to-transparent" />
-            <div className="mb-2 flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              <h3 className="font-display text-sm">Destacados</h3>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {forYou.slice(0, 4).map((p) => (
-                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
-                  <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
-                    <span>{p.emoji}</span>
-                    {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
-                  </div>
-                  <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
-                  <p className="text-[10px] font-bold text-primary leading-none">{formatARS(p.price.group)}</p>
-                </Link>
-              ))}
-            </div>
+        {/* Destacados */}
+        <section>
+          <div className="mb-2 flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <h3 className="font-display text-sm">Destacados</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {forYou.slice(0, 4).map((p) => (
+              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
+                <div className="relative aspect-square overflow-hidden rounded-xl text-4xl grid place-items-center" style={{ background: p.gradient }}>
+                  <span>{p.emoji}</span>
+                  {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
+                </div>
+                <p className="mt-1 line-clamp-1 text-[11px] font-medium">{p.title}</p>
+                <p className="text-[11px] font-bold text-primary leading-none">{formatARS(p.price.individual)}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
