@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Package, Truck, CheckCircle2, Sparkles, Clock, MapPin, Phone, CreditCard, Users, MessageCircle } from "lucide-react";
+import { Package, Truck, CheckCircle2, Sparkles, Clock, MapPin, Phone, CreditCard } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { MOCK_ORDERS, formatARS } from "@/lib/mockData";
 import { useUserOrders, type UserOrder } from "@/stores/userOrders";
-import { NotifyButton } from "@/components/NotifyButton";
 import { CustomerLiveOrders } from "@/components/CustomerLiveOrders";
 
 export const Route = createFileRoute("/orders")({
