@@ -4,7 +4,7 @@ import { ArrowLeft, Eye, Clock, Activity } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { getMachine, LIVE_MACHINES } from "@/lib/liveMachines";
 import { MachineFeed, LiveBadge } from "@/components/live/MachineFeed";
-import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
+import { useMachineViewers, formatViewers } from "@/lib/liveViewers";
 
 export const Route = createFileRoute("/en-vivo/$machineId")({
   component: MachineLivePage,
@@ -23,7 +23,7 @@ function MachineLivePage() {
   const machine = getMachine(machineId);
   if (!machine) throw notFound();
 
-  const viewers = useLiveViewers("live:" + machine.id, 3500);
+  const viewers = useMachineViewers(machine.id, 3500);
   const [activityIdx, setActivityIdx] = useState(0);
   const [elapsed, setElapsed] = useState(0);
 

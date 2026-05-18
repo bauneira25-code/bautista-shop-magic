@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Radio, Eye } from "lucide-react";
 import type { LiveMachine } from "@/lib/liveMachines";
-import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
+import { useMachineViewers, formatViewers } from "@/lib/liveViewers";
 
 /**
  * "Cinematic" simulated live feed. Pure CSS/SVG — looks tech, futurista, premium.
@@ -123,7 +123,7 @@ export function MachineFeed({
 }
 
 export function MachineCard({ machine }: { machine: LiveMachine }) {
-  const viewers = useLiveViewers("machine:" + machine.id, 5000);
+  const viewers = useMachineViewers(machine.id, 5000);
   return (
     <Link
       to="/en-vivo/$machineId"

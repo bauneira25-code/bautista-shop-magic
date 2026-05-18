@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MobileShell } from "@/components/MobileShell";
 import { LIVE_MACHINES } from "@/lib/liveMachines";
 import { MachineCard, LiveBadge } from "@/components/live/MachineFeed";
-import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
+import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 import { Eye } from "lucide-react";
 
 export const Route = createFileRoute("/en-vivo")({
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/en-vivo")({
 });
 
 function EnVivoPage() {
-  const totalViewers = useLiveViewers("envivo:global", 4000);
+  const totalViewers = useLiveTotalViewers(4000);
   return (
     <MobileShell>
       <header className="px-5 pb-3 pt-5">
