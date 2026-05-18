@@ -19,13 +19,11 @@ const STATUS_STEPS = [
 
 const MODE_LABEL = {
   individual: "Compra individual",
-  group: "Compra grupal",
   wholesale: "Pedido mayorista",
 } as const;
 
 const MODE_BADGE = {
   individual: "🛍",
-  group: "👥",
   wholesale: "📦",
 } as const;
 
