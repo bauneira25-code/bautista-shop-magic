@@ -1,12 +1,11 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Users, ShoppingBag, Package, User } from "lucide-react";
+import { Home, ShoppingBag, Package, User } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLocalCart } from "@/stores/localCart";
 
 type NavItem = { to: string; label: string; icon: typeof Home; highlight?: boolean };
 const navItems: NavItem[] = [
   { to: "/", label: "Inicio", icon: Home },
-  { to: "/grupos", label: "Grupos", icon: Users },
   { to: "/cart", label: "Carrito", icon: ShoppingBag, highlight: true },
   { to: "/orders", label: "Pedidos", icon: Package },
   { to: "/profile", label: "Perfil", icon: User },
