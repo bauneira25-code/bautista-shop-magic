@@ -39,7 +39,7 @@ function CartPage() {
   const count = items.reduce((s, i) => s + i.quantity, 0);
 
   const modeLabel = (m: string) =>
-    m === "group" ? "Grupal" : m === "wholesale" ? "Mayorista" : "Individual";
+    m === "wholesale" ? "Mayorista" : "Individual";
 
   const addOrder = useUserOrders((s) => s.add);
 
@@ -61,11 +61,10 @@ function CartPage() {
         list.reduce((s, i) => s + i.unitPrice * i.quantity, 0) +
         list.reduce((s, i) => s + (i.customization ? i.quantity * CUSTOM_FEE : 0), 0) +
         (delivery === "envio" ? SHIPPING_FEE : 0);
-      const isGroup = mode === "group";
       addOrder({
         id: `NB-${Date.now().toString().slice(-6)}-${mode.slice(0, 1).toUpperCase()}`,
         createdAt: Date.now(),
-        mode: mode as "individual" | "group" | "wholesale",
+        mode: mode as "individual" | "wholesale",
         items: list.map((i) => ({
           slug: i.slug,
           title: i.title,
@@ -87,11 +86,7 @@ function CartPage() {
           : undefined,
         status: "processing",
         progress: 10,
-        eta: isGroup ? "Cuando se complete el grupo" : delivery === "envio" ? "Llega en 3 a 5 días" : "Listo para retirar en 48h",
-        groupTarget: isGroup ? 10 : undefined,
-        groupJoined: isGroup ? 7 : undefined,
-        groupEndsAt: isGroup ? Date.now() + 1000 * 60 * 60 * 24 : undefined,
-        whatsappNotify: isGroup,
+        eta: delivery === "envio" ? "Llega en 3 a 5 días" : "Listo para retirar en 48h",
       });
     });
 
