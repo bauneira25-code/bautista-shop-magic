@@ -1,6 +1,6 @@
 // Mock data for the NEIBA prototype (UI-only).
 
-export type PurchaseMode = "individual" | "group" | "wholesale";
+export type PurchaseMode = "individual" | "wholesale";
 
 export interface MockProduct {
   id: string;
