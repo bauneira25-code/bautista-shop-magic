@@ -116,13 +116,8 @@ function ProductPage() {
 
   const price = product.price[mode];
   const savings = product.price.individual - price;
-  const groupPct = (product.groupJoined / product.groupTarget) * 100;
 
-  const groupSolo = mode === "group" && qty >= product.groupTarget;
-  const cta =
-    mode === "group"
-      ? (groupSolo ? "COMPRAR LAS " + product.groupTarget : "UNIRME AL GRUPO")
-      : mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
+  const cta = mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
     const customization = customText || customImage
@@ -145,10 +140,6 @@ function ProductPage() {
   };
 
   const handleCta = () => {
-    if (mode === "group" && !groupSolo) {
-      navigate({ to: "/group/$slug", params: { slug: product.slug } });
-      return;
-    }
     doAdd();
     toast.success("Agregado al carrito 🛒", {
       description: `${qty} × ${product.title} · ${formatARS(price * qty)}`,
