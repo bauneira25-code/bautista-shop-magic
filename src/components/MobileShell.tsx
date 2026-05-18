@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, ShoppingBag, Package, User } from "lucide-react";
+import { Home, ShoppingBag, Package, User, Radio } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLocalCart } from "@/stores/localCart";
 
@@ -11,6 +11,7 @@ const sideItems = {
     { to: "/orders", label: "Pedidos", icon: Package, exact: false },
   ],
   right: [
+    { to: "/en-vivo", label: "En Vivo", icon: Radio, exact: false },
     { to: "/profile", label: "Perfil", icon: User, exact: false },
   ],
 };
