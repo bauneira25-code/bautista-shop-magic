@@ -393,7 +393,11 @@ function ProductPage() {
           </div>
           <div className="flex flex-1 gap-2">
             <button
-              onClick={() => { doAdd(); toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` }); }}
+              onClick={() => {
+                doAdd();
+                toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` });
+                navigate({ to: "/", search: { similar: product.slug } });
+              }}
               className="flex-1 rounded-xl border-2 border-[#e8451c] bg-white py-3 text-xs font-black tracking-wider text-[#e8451c]"
             >
               AL CARRITO
