@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PersonalizablesRouteImport } from './routes/personalizables'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CategoriasRouteImport } from './routes/categorias'
@@ -60,6 +61,11 @@ const RegistrarMarcaRoute = RegistrarMarcaRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersonalizablesRoute = PersonalizablesRouteImport.update({
+  id: '/personalizables',
+  path: '/personalizables',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersRoute = OrdersRouteImport.update({
@@ -214,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
   '/orders': typeof OrdersRoute
+  '/personalizables': typeof PersonalizablesRoute
   '/profile': typeof ProfileRoute
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
@@ -247,6 +254,7 @@ export interface FileRoutesByTo {
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
   '/orders': typeof OrdersRoute
+  '/personalizables': typeof PersonalizablesRoute
   '/profile': typeof ProfileRoute
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
@@ -282,6 +290,7 @@ export interface FileRoutesById {
   '/categorias': typeof CategoriasRouteWithChildren
   '/customize': typeof CustomizeRoute
   '/orders': typeof OrdersRoute
+  '/personalizables': typeof PersonalizablesRoute
   '/profile': typeof ProfileRoute
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
@@ -318,6 +327,7 @@ export interface FileRouteTypes {
     | '/categorias'
     | '/customize'
     | '/orders'
+    | '/personalizables'
     | '/profile'
     | '/registrar-marca'
     | '/search'
@@ -351,6 +361,7 @@ export interface FileRouteTypes {
     | '/categorias'
     | '/customize'
     | '/orders'
+    | '/personalizables'
     | '/profile'
     | '/registrar-marca'
     | '/search'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/categorias'
     | '/customize'
     | '/orders'
+    | '/personalizables'
     | '/profile'
     | '/registrar-marca'
     | '/search'
@@ -420,6 +432,7 @@ export interface RootRouteChildren {
   CategoriasRoute: typeof CategoriasRouteWithChildren
   CustomizeRoute: typeof CustomizeRoute
   OrdersRoute: typeof OrdersRoute
+  PersonalizablesRoute: typeof PersonalizablesRoute
   ProfileRoute: typeof ProfileRoute
   RegistrarMarcaRoute: typeof RegistrarMarcaRoute
   SearchRoute: typeof SearchRoute
@@ -455,6 +468,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/personalizables': {
+      id: '/personalizables'
+      path: '/personalizables'
+      fullPath: '/personalizables'
+      preLoaderRoute: typeof PersonalizablesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders': {
@@ -740,6 +760,7 @@ const rootRouteChildren: RootRouteChildren = {
   CategoriasRoute: CategoriasRouteWithChildren,
   CustomizeRoute: CustomizeRoute,
   OrdersRoute: OrdersRoute,
+  PersonalizablesRoute: PersonalizablesRoute,
   ProfileRoute: ProfileRoute,
   RegistrarMarcaRoute: RegistrarMarcaRoute,
   SearchRoute: SearchRoute,
