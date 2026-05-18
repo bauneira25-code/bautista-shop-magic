@@ -56,11 +56,22 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>) => ({
+    similar: typeof s.similar === "string" ? s.similar : undefined,
+  }),
   component: Home,
 });
 
 function Home() {
   const { gender, views } = useUserPrefs();
+  const { similar: similarSlug } = Route.useSearch();
+  const similarBase = similarSlug ? MOCK_PRODUCTS.find(p => p.slug === similarSlug) : undefined;
+  const similarProducts = similarBase
+    ? [
+        ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category === similarBase.category),
+        ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category !== similarBase.category),
+      ].slice(0, 8)
+    : [];
   const liveNow = useLiveViewers("home");
   const user = useUserAuth((s) => s.user);
   // Bias: orden de categorías priorizadas según género o vistas más altas
@@ -171,6 +182,33 @@ function Home() {
       </header>
 
       <main className="space-y-5 px-5 pt-3">
+        {/* Productos similares al recién agregado */}
+        {similarBase && similarProducts.length > 0 && (
+          <section className="rounded-2xl border-2 border-[#e8451c]/30 bg-gradient-to-br from-orange-50 to-white p-3.5">
+            <div className="flex items-center gap-2">
+              <span className="grid h-8 w-8 place-items-center rounded-xl text-lg" style={{ background: similarBase.gradient }}>
+                {similarBase.emoji}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#e8451c]">✓ Agregado al carrito</p>
+                <p className="line-clamp-1 font-display text-sm leading-tight">Te puede interesar también</p>
+              </div>
+              <Link to="/cart" className="rounded-full bg-[#e8451c] px-2.5 py-1 text-[10px] font-black text-white">Ir al carrito</Link>
+            </div>
+            <div className="-mx-3.5 mt-3 flex gap-2.5 overflow-x-auto px-3.5 pb-1 scrollbar-hide">
+              {similarProducts.map((p) => (
+                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[110px] shrink-0">
+                  <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
+                    <span>{p.emoji}</span>
+                  </div>
+                  <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
+                  <p className="text-[10px] font-bold text-[#e8451c] leading-none">{formatARS(p.price.individual)}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Live ticker */}
         <div className="overflow-hidden rounded-2xl border border-border bg-card/50">
           <div className="flex items-center gap-2 border-b border-border px-3 py-1.5">
