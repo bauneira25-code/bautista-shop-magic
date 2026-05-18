@@ -185,51 +185,54 @@ function Home() {
           </div>
         </div>
 
-        {/* Destacados */}
-        <section>
-          <div className="mb-2 flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <h3 className="font-display text-sm">Destacados</h3>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {forYou.slice(0, 4).map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
-                <div className="relative aspect-square overflow-hidden rounded-xl text-4xl grid place-items-center" style={{ background: p.gradient }}>
-                  <span>{p.emoji}</span>
-                  {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
-                </div>
-                <p className="mt-1 line-clamp-1 text-[11px] font-medium">{p.title}</p>
-                <p className="text-[11px] font-bold text-primary leading-none">{formatARS(p.price.individual)}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* Flash deals */}
-        <section>
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-warning" />
-                <h3 className="font-display text-lg">Oferta relámpago</h3>
+        {/* Combo: Oferta relámpago (izq) + Destacados (der) */}
+        <section className="grid grid-cols-5 gap-3">
+          <Link
+            to="/products/$slug"
+            params={{ slug: FLASH_DEALS[0]?.slug ?? "" }}
+            className="col-span-2 block"
+          >
+            <div
+              className="relative h-full min-h-[210px] overflow-hidden rounded-2xl p-3.5"
+              style={{
+                background: "linear-gradient(150deg,#ff6a2c 0%,#e8451c 55%,#b81f1f 100%)",
+                boxShadow: "0 14px 30px -12px rgba(232,69,28,0.55)",
+              }}
+            >
+              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/15 blur-2xl" />
+              <div className="absolute -left-6 -bottom-6 h-24 w-24 rounded-full bg-yellow-300/20 blur-2xl" />
+              <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white backdrop-blur">
+                <Zap className="h-2.5 w-2.5" /> Flash
+              </span>
+              <h2 className="mt-2 font-display text-lg leading-tight text-white">
+                Oferta<br />relámpago
+              </h2>
+              <p className="mt-1 text-[10px] font-medium text-white/85">Termina en 02:14:38</p>
+              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-black text-[#e8451c]">
+                Ver ahora <ChevronRight className="h-3 w-3" />
               </div>
-              <p className="text-[11px] text-muted-foreground">Termina en 02:14:38</p>
+              <div className="absolute right-2 bottom-2 text-5xl drop-shadow">⚡</div>
             </div>
-          </div>
-          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
-            {FLASH_DEALS.map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[160px] shrink-0">
-                <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
-                  <span>{p.emoji}</span>
-                  <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">-{Math.round((1 - p.price.group / p.price.individual) * 100)}%</span>
-                </div>
-                <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm font-bold text-primary">{formatARS(p.price.group)}</span>
-                  <span className="text-[10px] text-muted-foreground line-through">{formatARS(p.price.individual)}</span>
-                </div>
-              </Link>
-            ))}
+          </Link>
+
+          <div className="col-span-3 relative pl-3">
+            <span className="pointer-events-none absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-primary to-transparent" />
+            <div className="mb-2 flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <h3 className="font-display text-sm">Destacados</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {forYou.slice(0, 4).map((p) => (
+                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
+                  <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
+                    <span>{p.emoji}</span>
+                    {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
+                  </div>
+                  <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
+                  <p className="text-[10px] font-bold text-primary leading-none">{formatARS(p.price.individual)}</p>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
 
