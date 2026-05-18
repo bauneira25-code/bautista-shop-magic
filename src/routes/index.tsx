@@ -64,6 +64,14 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { gender, views } = useUserPrefs();
+  const { similar: similarSlug } = Route.useSearch();
+  const similarBase = similarSlug ? MOCK_PRODUCTS.find(p => p.slug === similarSlug) : undefined;
+  const similarProducts = similarBase
+    ? [
+        ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category === similarBase.category),
+        ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category !== similarBase.category),
+      ].slice(0, 8)
+    : [];
   const liveNow = useLiveViewers("home");
   const user = useUserAuth((s) => s.user);
   // Bias: orden de categorías priorizadas según género o vistas más altas
