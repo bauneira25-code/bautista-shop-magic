@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MobileShell } from "@/components/MobileShell";
 import { LIVE_MACHINES } from "@/lib/liveMachines";
 import { MachineCard, LiveBadge } from "@/components/live/MachineFeed";
-import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
+import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 import { Eye } from "lucide-react";
 
 export const Route = createFileRoute("/en-vivo")({
