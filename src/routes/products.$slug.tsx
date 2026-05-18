@@ -387,7 +387,7 @@ function ProductPage() {
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 border-t border-orange-100 bg-white px-3 py-2.5 shadow-[0_-8px_24px_-8px_rgba(0,0,0,0.08)]">
         <div className="flex items-center gap-2.5">
           <div className="shrink-0 px-1">
-            <p className="text-[9px] uppercase leading-none text-neutral-500">{mode === "group" ? "Grupal" : mode === "wholesale" ? "Mayorista" : "Individual"}</p>
+            <p className="text-[9px] uppercase leading-none text-neutral-500">{mode === "wholesale" ? "Mayorista" : "Individual"}</p>
             <p className="font-display text-base leading-tight text-[#e8451c]">{formatARS(price * qty)}</p>
             {savings > 0 && <p className="text-[9px] leading-none text-emerald-600">Ahorrás {formatARS(savings * qty)}</p>}
           </div>
