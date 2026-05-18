@@ -28,11 +28,6 @@ export interface UserOrder {
   status: "processing" | "customization" | "packaging" | "shipping" | "delivered";
   progress: number;
   eta: string;
-  // Group-specific
-  groupTarget?: number;
-  groupJoined?: number;
-  groupEndsAt?: number; // timestamp ms
-  whatsappNotify?: boolean;
 }
 
 interface UserOrdersState {
