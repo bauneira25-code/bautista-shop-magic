@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Radio, Eye } from "lucide-react";
 import type { LiveMachine } from "@/lib/liveMachines";
-import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
+import { useMachineViewers, formatViewers } from "@/lib/liveViewers";
 
 /**
  * "Cinematic" simulated live feed. Pure CSS/SVG — looks tech, futurista, premium.
