@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Flame, Zap, Users, Clock, TrendingUp, Sparkles, ChevronRight, Eye, ShieldCheck, LogIn, UserPlus } from "lucide-react";
+import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
 import { OnboardingGender } from "@/components/OnboardingGender";
@@ -21,10 +21,10 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NEIBA — Compras grupales y productos personalizados" },
-      { name: "description", content: "Sumate a grupos en vivo, ahorrá hasta 45% y personalizá productos con IA. Tecnología, hogar, belleza y más." },
-      { property: "og:title", content: "NEIBA — Compras grupales y productos personalizados" },
-      { property: "og:description", content: "Sumate a grupos en vivo, ahorrá hasta 45% y personalizá productos con IA." },
+      { title: "NEIBA — Productos personalizados y ofertas" },
+      { name: "description", content: "Personalizá productos con IA y descubrí ofertas en tecnología, hogar, belleza y más." },
+      { property: "og:title", content: "NEIBA — Productos personalizados y ofertas" },
+      { property: "og:description", content: "Personalizá productos con IA y descubrí ofertas exclusivas." },
       { property: "og:url", content: "/" },
       { property: "og:type", content: "website" },
     ],
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
           "@type": "Organization",
           name: "NEIBA",
           url: "/",
-          description: "Marketplace de compras grupales y productos personalizables con IA.",
+          description: "Marketplace de productos personalizables con IA.",
         }),
       },
       {
@@ -185,42 +185,23 @@ function Home() {
           </div>
         </div>
 
-        {/* Combo: Hero grupal grande (izq) + productos destacados (der) */}
-        <section className="grid grid-cols-5 gap-3">
-          <Link to="/grupos" className="col-span-2 block">
-            <div className="relative h-full min-h-[200px] overflow-hidden rounded-2xl p-3.5" style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}>
-              <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10 blur-2xl" />
-              <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur">
-                <Flame className="h-2.5 w-2.5" /> Drop grupal
-              </span>
-              <h2 className="mt-2 font-display text-lg leading-tight text-white">Comprá en grupo y ahorrá hasta 45%</h2>
-              <p className="mt-1 text-[10px] text-white/80">Sumate antes de que cierre</p>
-              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-primary">
-                Ver grupos <ChevronRight className="h-3 w-3" />
-              </div>
-              <div className="absolute right-2 bottom-2 text-5xl">👥</div>
-            </div>
-          </Link>
-
-          {/* Divisor naranja */}
-          <div className="col-span-3 relative pl-3">
-            <span className="pointer-events-none absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-primary to-transparent" />
-            <div className="mb-2 flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              <h3 className="font-display text-sm">Destacados</h3>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {forYou.slice(0, 4).map((p) => (
-                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
-                  <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
-                    <span>{p.emoji}</span>
-                    {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
-                  </div>
-                  <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
-                  <p className="text-[10px] font-bold text-primary leading-none">{formatARS(p.price.group)}</p>
-                </Link>
-              ))}
-            </div>
+        {/* Destacados */}
+        <section>
+          <div className="mb-2 flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <h3 className="font-display text-sm">Destacados</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {forYou.slice(0, 4).map((p) => (
+              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
+                <div className="relative aspect-square overflow-hidden rounded-xl text-4xl grid place-items-center" style={{ background: p.gradient }}>
+                  <span>{p.emoji}</span>
+                  {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
+                </div>
+                <p className="mt-1 line-clamp-1 text-[11px] font-medium">{p.title}</p>
+                <p className="text-[11px] font-bold text-primary leading-none">{formatARS(p.price.individual)}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -252,74 +233,6 @@ function Home() {
           </div>
         </section>
 
-        {/* Group deals (live) */}
-        <section>
-          <div className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-primary" />
-            <h3 className="font-display text-lg">Compras grupales en vivo</h3>
-            <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-success" /> 3 activos
-            </span>
-          </div>
-          <div className="mt-3 space-y-3">
-            {MOCK_PRODUCTS.slice(0, 3).map((p) => {
-              const pct = (p.groupJoined / p.groupTarget) * 100;
-              const missing = p.groupTarget - p.groupJoined;
-              const almost = pct >= 70;
-              return (
-                <Link key={p.id} to="/group/$slug" params={{ slug: p.slug }} className="block">
-                  <div className="relative flex gap-3 overflow-hidden rounded-2xl border border-border bg-card p-3">
-                    {almost && <span className="absolute right-2 top-2 rounded-full bg-rose-500 px-2 py-0.5 text-[9px] font-black uppercase text-white animate-pulse">Casi completo</span>}
-                    <div className="grid h-20 w-20 shrink-0 place-items-center rounded-xl text-3xl" style={{ background: p.gradient }}>{p.emoji}</div>
-                    <div className="min-w-0 flex-1">
-                      <p className="line-clamp-1 text-sm font-semibold">{p.title}</p>
-                      <div className="mt-0.5 flex items-baseline gap-1.5">
-                        <span className="text-base font-black text-primary">{formatARS(p.price.group)}</span>
-                        <span className="text-[10px] text-muted-foreground line-through">{formatARS(p.price.individual)}</span>
-                      </div>
-                      <div className="mt-2">
-                        <div className="flex items-baseline justify-between">
-                          <p className="font-display text-lg font-black leading-none">
-                            <span className="text-primary">{p.groupJoined}</span><span className="text-muted-foreground">/{p.groupTarget}</span>
-                          </p>
-                          <span className="text-[10px] font-bold text-rose-400">faltan {missing}</span>
-                        </div>
-                        <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
-                          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: "linear-gradient(90deg,#a855f7,#ec4899)" }} />
-                        </div>
-                        <div className="mt-1 flex items-center justify-between text-[10px] text-muted-foreground">
-                          <span className="inline-flex items-center gap-1"><Eye className="h-2.5 w-2.5" />{(180 + p.groupJoined * 27)} mirando</span>
-                          <span className="inline-flex items-center gap-1 text-rose-400"><Clock className="h-2.5 w-2.5" />cierra {p.groupTimeLeft}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Se está agotando */}
-        <section>
-          <SectionHeader title="🚨 Se está vendiendo rápido" icon={<Flame className="h-4 w-4 text-rose-400" />} />
-          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
-            {MOCK_PRODUCTS.slice(2, 7).map((p) => {
-              const sl = stockLabel(p.stock);
-              const tone = sl.tone === "low" ? "bg-rose-500" : sl.tone === "mid" ? "bg-amber-500" : "bg-emerald-500";
-              return (
-                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">
-                  <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
-                    <span>{p.emoji}</span>
-                    <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-black text-white ${tone}`}>{sl.label}</span>
-                  </div>
-                  <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
-                  <p className="text-[10px] text-muted-foreground">Desde {formatARS(p.price.group)}</p>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
 
         {/* Trending */}
         <section>
@@ -422,7 +335,7 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
         <span className="text-sm font-bold">{formatARS(p.price.individual)}</span>
         <span className="text-[10px] text-muted-foreground">⭐ {p.rating}</span>
       </div>
-      <p className="text-[10px] text-success">Grupo desde {formatARS(p.price.group)}</p>
+      <p className="text-[10px] text-success">Desde {formatARS(p.price.group)}</p>
     </Link>
   );
 }
