@@ -136,11 +136,6 @@ function UserOrderCard({ order }: { order: UserOrder }) {
         ))}
       </div>
 
-      {/* Group countdown */}
-      {order.mode === "group" && order.groupEndsAt && (
-        <GroupCountdown order={order} />
-      )}
-
       {/* Timeline */}
       <div className="mt-4">
         <div className="flex items-center justify-between">
@@ -177,50 +172,6 @@ function UserOrderCard({ order }: { order: UserOrder }) {
         <p className="flex items-center gap-1.5 text-[11px]"><CreditCard className="h-3 w-3 shrink-0 text-primary" /> {order.paymentMethod}{order.cardLast4 ? ` ···· ${order.cardLast4}` : ""}</p>
         <p className="pt-1 text-[11px] font-bold text-primary">Total · {formatARS(order.total)} · {totalQty} unidad{totalQty === 1 ? "" : "es"}</p>
       </div>
-
-      {order.whatsappNotify && (
-        <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-success/10 px-2.5 py-1.5">
-          <p className="flex items-center gap-1.5 text-[11px] font-semibold text-success">
-            <MessageCircle className="h-3 w-3" /> Te avisaremos con una notificación cuando se complete el grupo
-          </p>
-          <NotifyButton />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function GroupCountdown({ order }: { order: UserOrder }) {
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(t);
-  }, []);
-  const remaining = Math.max(0, (order.groupEndsAt ?? 0) - now);
-  const h = Math.floor(remaining / 3600000);
-  const m = Math.floor((remaining % 3600000) / 60000);
-  const s = Math.floor((remaining % 60000) / 1000);
-  const fmt = (n: number) => String(n).padStart(2, "0");
-  const joined = order.groupJoined ?? 0;
-  const target = order.groupTarget ?? 0;
-  const pct = target ? (joined / target) * 100 : 0;
-
-  return (
-    <div className="mt-3 rounded-2xl border-2 border-primary/30 bg-primary/5 p-3">
-      <div className="flex items-center justify-between">
-        <p className="flex items-center gap-1.5 text-[11px] font-bold text-primary">
-          <Users className="h-3.5 w-3.5" /> {joined} de {target} en el grupo
-        </p>
-        <p className="flex items-center gap-1 text-[11px] font-bold text-primary">
-          <Clock className="h-3 w-3" /> {fmt(h)}:{fmt(m)}:{fmt(s)}
-        </p>
-      </div>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-secondary">
-        <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
-      </div>
-      <p className="mt-1.5 text-[10px] text-muted-foreground">
-        {remaining > 0 ? <>Cierra en {h}h {m}m</> : "Cerrado · procesando"}
-      </p>
     </div>
   );
 }
