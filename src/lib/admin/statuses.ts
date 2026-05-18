@@ -3,7 +3,9 @@ export type FullOrderStatus =
   | "pedido_creado"
   | "pago_pendiente"
   | "pago_confirmado"
+  | "picking"
   | "pendiente_personalizacion"
+  | "en_personalizacion"
   | "diseno_aprobado"
   | "cola_produccion"
   | "enviando_maquina"
@@ -21,10 +23,12 @@ export type FullOrderStatus =
   | "reembolsado";
 
 export const STATUS_LABEL: Record<FullOrderStatus, string> = {
-  pedido_creado: "Creado",
+  pedido_creado: "Pedido recibido",
   pago_pendiente: "Pago pendiente",
-  pago_confirmado: "Pago confirmado",
+  pago_confirmado: "Pedido recibido",
+  picking: "Picking",
   pendiente_personalizacion: "Pend. personalización",
+  en_personalizacion: "En personalización",
   diseno_aprobado: "Diseño aprobado",
   cola_produccion: "Cola producción",
   enviando_maquina: "Enviando a máquina",
@@ -47,7 +51,9 @@ export const STATUS_TONE: Record<FullOrderStatus, string> = {
   pedido_creado: "bg-neutral-200 text-neutral-700",
   pago_pendiente: "bg-amber-100 text-amber-800",
   pago_confirmado: "bg-emerald-100 text-emerald-800",
+  picking: "bg-blue-100 text-blue-800",
   pendiente_personalizacion: "bg-orange-100 text-orange-800",
+  en_personalizacion: "bg-orange-100 text-orange-800",
   diseno_aprobado: "bg-cyan-100 text-cyan-800",
   cola_produccion: "bg-blue-100 text-blue-800",
   enviando_maquina: "bg-blue-100 text-blue-800",
