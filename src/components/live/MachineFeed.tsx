@@ -123,7 +123,7 @@ export function MachineFeed({
 }
 
 export function MachineCard({ machine }: { machine: LiveMachine }) {
-  const viewers = useLiveViewers("machine:" + machine.id, 5000);
+  const viewers = useMachineViewers(machine.id, 5000);
   return (
     <Link
       to="/en-vivo/$machineId"
