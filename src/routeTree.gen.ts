@@ -42,6 +42,7 @@ import { Route as AdminPanelEmpaquetadoRouteImport } from './routes/admin-panel.
 import { Route as AdminPanelConfiguracionRouteImport } from './routes/admin-panel.configuracion'
 import { Route as AdminPanelClientesRouteImport } from './routes/admin-panel.clientes'
 import { Route as AdminPanelCalidadRouteImport } from './routes/admin-panel.calidad'
+import { Route as AdminPanelAnalisisRouteImport } from './routes/admin-panel.analisis'
 import { Route as ProductsSlugDesignRouteImport } from './routes/products.$slug.design'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -210,6 +211,11 @@ const AdminPanelCalidadRoute = AdminPanelCalidadRouteImport.update({
   path: '/calidad',
   getParentRoute: () => AdminPanelRoute,
 } as any)
+const AdminPanelAnalisisRoute = AdminPanelAnalisisRouteImport.update({
+  id: '/analisis',
+  path: '/analisis',
+  getParentRoute: () => AdminPanelRoute,
+} as any)
 const ProductsSlugDesignRoute = ProductsSlugDesignRouteImport.update({
   id: '/design',
   path: '/design',
@@ -232,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
   '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
@@ -267,6 +274,7 @@ export interface FileRoutesByTo {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
   '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
@@ -304,6 +312,7 @@ export interface FileRoutesById {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
   '/admin-panel/configuracion': typeof AdminPanelConfiguracionRoute
@@ -342,6 +351,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
     | '/admin-panel/configuracion'
@@ -377,6 +387,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
     | '/admin-panel/configuracion'
@@ -413,6 +424,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
     | '/admin-panel/configuracion'
@@ -686,6 +698,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPanelCalidadRouteImport
       parentRoute: typeof AdminPanelRoute
     }
+    '/admin-panel/analisis': {
+      id: '/admin-panel/analisis'
+      path: '/analisis'
+      fullPath: '/admin-panel/analisis'
+      preLoaderRoute: typeof AdminPanelAnalisisRouteImport
+      parentRoute: typeof AdminPanelRoute
+    }
     '/products/$slug/design': {
       id: '/products/$slug/design'
       path: '/design'
@@ -707,6 +726,7 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AdminPanelRouteChildren {
+  AdminPanelAnalisisRoute: typeof AdminPanelAnalisisRoute
   AdminPanelCalidadRoute: typeof AdminPanelCalidadRoute
   AdminPanelClientesRoute: typeof AdminPanelClientesRoute
   AdminPanelConfiguracionRoute: typeof AdminPanelConfiguracionRoute
@@ -725,6 +745,7 @@ interface AdminPanelRouteChildren {
 }
 
 const AdminPanelRouteChildren: AdminPanelRouteChildren = {
+  AdminPanelAnalisisRoute: AdminPanelAnalisisRoute,
   AdminPanelCalidadRoute: AdminPanelCalidadRoute,
   AdminPanelClientesRoute: AdminPanelClientesRoute,
   AdminPanelConfiguracionRoute: AdminPanelConfiguracionRoute,

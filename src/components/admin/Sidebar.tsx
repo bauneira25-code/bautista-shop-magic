@@ -1,27 +1,30 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, ShoppingBag, Sparkles, Factory, ShieldCheck, Layers3, PackageCheck,
-  Package, Users2, CreditCard, Truck, AlertTriangle, Boxes, UserCog, Settings, LogOut,
+  Package, Users2, CreditCard, Truck, AlertTriangle, Boxes, UserCog, Settings, LogOut, BarChart3,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ROLE_LABEL } from "@/lib/admin/statuses";
 import type { AdminProfile } from "@/hooks/useAdminAuth";
 
-type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean; primary?: boolean };
 const items: NavItem[] = [
+  // Núcleo conectado a la operación
+  { to: "/admin-panel", label: "Resumen", icon: LayoutDashboard, exact: true, primary: true },
+  { to: "/admin-panel/analisis", label: "Análisis", icon: BarChart3, primary: true },
+  { to: "/admin-panel/pedidos", label: "Pedidos", icon: ShoppingBag, primary: true },
+  { to: "/admin-panel/produccion", label: "Producción", icon: Factory, primary: true },
+  { to: "/admin-panel/stock", label: "Stock", icon: Boxes, primary: true },
+  // Resto
   { to: "/admin-panel/todo", label: "Todo", icon: Layers3 },
-  { to: "/admin-panel", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin-panel/pedidos", label: "Pedidos", icon: ShoppingBag },
-  { to: "/admin-panel/produccion", label: "Producción", icon: Factory },
+  { to: "/admin-panel/personalizados", label: "Personalizados", icon: Sparkles },
   { to: "/admin-panel/calidad", label: "Control de calidad", icon: ShieldCheck },
+  { to: "/admin-panel/empaquetado", label: "Empaquetado", icon: PackageCheck },
   { to: "/admin-panel/productos", label: "Productos", icon: Package },
   { to: "/admin-panel/clientes", label: "Clientes", icon: Users2 },
   { to: "/admin-panel/pagos", label: "Pagos", icon: CreditCard },
   { to: "/admin-panel/envios", label: "Envíos", icon: Truck },
   { to: "/admin-panel/reclamos", label: "Reclamos", icon: AlertTriangle },
-  { to: "/admin-panel/stock", label: "Stock", icon: Boxes },
-  { to: "/admin-panel/personalizados", label: "Personalizados", icon: Sparkles },
-  { to: "/admin-panel/empaquetado", label: "Empaquetado", icon: PackageCheck },
   { to: "/admin-panel/empleados", label: "Empleados", icon: UserCog },
   { to: "/admin-panel/configuracion", label: "Configuración", icon: Settings },
 ];
