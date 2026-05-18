@@ -59,3 +59,53 @@ export function useLiveViewers(seed = "global", intervalMs = 4000) {
 }
 
 export const formatViewers = (n: number) => n.toLocaleString("es-AR");
+
+// Fracción de los espectadores totales (home) por máquina.
+// Siempre suma < 1 para que el total en /en-vivo y cada máquina sea
+// menor que el contador del inicio.
+const MACHINE_WEIGHTS: Record<string, number> = {
+  laser: 0.23,
+  uv: 0.10,
+  sublimacion: 0.08,
+};
+
+export function computeMachineViewers(machineId: string, now = new Date()) {
+  const home = computeLiveViewers("home", now);
+  const w = MACHINE_WEIGHTS[machineId] ?? 0.07;
+  // micro-oscilación determinista por máquina
+  const bucket = Math.floor(Date.now() / 8000);
+  const noise = ((hashStr(machineId + ":" + bucket) % 1000) / 1000 - 0.5) * 200;
+  const v = Math.round(home * w + noise);
+  // floor mínimo razonable y cap por debajo del home
+  return Math.max(400, Math.min(home - 200, v));
+}
+
+export function computeLiveTotal(now = new Date()) {
+  const home = computeLiveViewers("home", now);
+  const sum = Object.keys(MACHINE_WEIGHTS).reduce(
+    (a, id) => a + computeMachineViewers(id, now),
+    0,
+  );
+  // total general (página /en-vivo): suma de máquinas, garantizado < home
+  return Math.min(home - 100, sum);
+}
+
+export function useMachineViewers(machineId: string, intervalMs = 4000) {
+  const [n, setN] = useState<number>(500);
+  useEffect(() => {
+    setN(computeMachineViewers(machineId));
+    const id = setInterval(() => setN(computeMachineViewers(machineId)), intervalMs);
+    return () => clearInterval(id);
+  }, [machineId, intervalMs]);
+  return n;
+}
+
+export function useLiveTotalViewers(intervalMs = 4000) {
+  const [n, setN] = useState<number>(1000);
+  useEffect(() => {
+    setN(computeLiveTotal());
+    const id = setInterval(() => setN(computeLiveTotal()), intervalMs);
+    return () => clearInterval(id);
+  }, [intervalMs]);
+  return n;
+}
