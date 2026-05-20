@@ -160,20 +160,20 @@ function Home() {
             transition: "max-height 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          <div className="grid grid-cols-6 gap-1 pt-2">
-            {CATEGORIES.map((c) => {
+          <div className="grid grid-cols-5 gap-2 pt-2">
+            {CATEGORIES.filter((c) => c.id !== "gym").map((c) => {
               const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
               return (
                 <Link
                   key={c.id}
                   to="/search"
                   search={{ q: "", cat: c.id }}
-                  className="relative flex h-11 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-md p-0.5 transition-transform active:scale-95"
+                  className="relative flex aspect-square flex-col items-center justify-center gap-1 overflow-hidden rounded-xl p-1 transition-transform active:scale-95"
                   style={{ background: s.bg, border: `1px solid ${s.border}` }}
                 >
-                  <span className="text-[11px] leading-none">{c.emoji}</span>
-                  <span className="text-[6px] font-bold leading-none text-center" style={{ color: s.text }}>{c.name}</span>
-                  <span className="pointer-events-none absolute -right-2 -bottom-2 h-4 w-4 rounded-full opacity-50 blur-md" style={{ background: s.glow }} />
+                  <span className="text-[16px] leading-none">{c.emoji}</span>
+                  <span className="text-[8px] font-bold leading-none text-center" style={{ color: s.text }}>{c.name}</span>
+                  <span className="pointer-events-none absolute -right-2 -bottom-2 h-5 w-5 rounded-full opacity-50 blur-md" style={{ background: s.glow }} />
                 </Link>
               );
             })}
