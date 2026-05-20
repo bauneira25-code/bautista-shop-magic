@@ -13,7 +13,6 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
   tech:        { bg: "linear-gradient(135deg,#0a1530,#1e3a8a)", border: "#38bdf8", glow: "#38bdf8", text: "#e0f2fe" },
   electronica: { bg: "linear-gradient(135deg,#f1f5f9,#e0f2fe)", border: "#0ea5e9", glow: "#7dd3fc", text: "#0c4a6e" },
   hogar:       { bg: "linear-gradient(135deg,#e8d4b4,#c9a079)", border: "#a06c49", glow: "#a06c49", text: "#3d2616" },
-  gym:         { bg: "linear-gradient(135deg,#14210d,#1a2e10)", border: "#a3e635", glow: "#a3e635", text: "#ecfccb" },
   belleza:     { bg: "linear-gradient(135deg,#ffe0ee,#ffd0e6)", border: "#ec4899", glow: "#f472b6", text: "#831843" },
   joyeria:     { bg: "linear-gradient(135deg,#1a1410,#2a1f15)", border: "#d4af37", glow: "#d4af37", text: "#fef3c7" },
 };
