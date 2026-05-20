@@ -126,22 +126,24 @@ function Home() {
             </div>
           </Link>
 
-          <Link
-            to="/personalizables"
-            className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#e8451c]/10 to-[#ff7a3d]/10 border border-[#e8451c]/20 px-2.5 py-1"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e8451c] opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#e8451c]" />
-            </span>
-            <Sparkles className="h-3 w-3 text-[#e8451c]" />
-            <span className="text-[9px] font-bold text-[#e8451c] leading-none">Personalizá</span>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/personalizables"
+              className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#e8451c]/10 to-[#ff7a3d]/10 border border-[#e8451c]/20 px-2.5 py-1"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e8451c] opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#e8451c]" />
+              </span>
+              <Sparkles className="h-3 w-3 text-[#e8451c]" />
+              <span className="text-[9px] font-bold text-[#e8451c] leading-none">En vivo</span>
+            </Link>
 
-          <button className="relative grid h-8 w-8 place-items-center rounded-full bg-orange-50">
-            <Bell className="h-3.5 w-3.5 text-[#e8451c]" />
-            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#e8451c]" />
-          </button>
+            <button className="relative grid h-8 w-8 place-items-center rounded-full bg-orange-50">
+              <Bell className="h-3.5 w-3.5 text-[#e8451c]" />
+              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#e8451c]" />
+            </button>
+          </div>
         </div>
 
         {!user && (
