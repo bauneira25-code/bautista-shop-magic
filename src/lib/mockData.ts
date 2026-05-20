@@ -210,7 +210,6 @@ export const CATEGORIES = [
   { id: "tech", name: "Tecnología", emoji: "📱" },
   { id: "electronica", name: "Electrónica", emoji: "🍳" },
   { id: "hogar", name: "Hogar", emoji: "🏠" },
-  { id: "gym", name: "Gym", emoji: "🏋️" },
   { id: "belleza", name: "Belleza", emoji: "💄" },
   { id: "joyeria", name: "Joyería", emoji: "💍" },
 ];

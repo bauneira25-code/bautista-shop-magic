@@ -13,7 +13,6 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
   tech:        { bg: "linear-gradient(135deg,#0a1530,#1e3a8a)", border: "#38bdf8", glow: "#38bdf8", text: "#e0f2fe" },
   electronica: { bg: "linear-gradient(135deg,#f1f5f9,#e0f2fe)", border: "#0ea5e9", glow: "#7dd3fc", text: "#0c4a6e" },
   hogar:       { bg: "linear-gradient(135deg,#e8d4b4,#c9a079)", border: "#a06c49", glow: "#a06c49", text: "#3d2616" },
-  gym:         { bg: "linear-gradient(135deg,#14210d,#1a2e10)", border: "#a3e635", glow: "#a3e635", text: "#ecfccb" },
   belleza:     { bg: "linear-gradient(135deg,#ffe0ee,#ffd0e6)", border: "#ec4899", glow: "#f472b6", text: "#831843" },
   joyeria:     { bg: "linear-gradient(135deg,#1a1410,#2a1f15)", border: "#d4af37", glow: "#d4af37", text: "#fef3c7" },
 };
@@ -160,20 +159,20 @@ function Home() {
             transition: "max-height 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          <div className="grid grid-cols-6 gap-1 pt-2">
-            {CATEGORIES.map((c) => {
+          <div className="grid grid-cols-5 gap-2 pt-2">
+            {CATEGORIES.filter((c) => c.id !== "gym").map((c) => {
               const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
               return (
                 <Link
                   key={c.id}
                   to="/search"
                   search={{ q: "", cat: c.id }}
-                  className="relative flex h-11 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-md p-0.5 transition-transform active:scale-95"
+                  className="relative flex aspect-square flex-col items-center justify-center gap-1 overflow-hidden rounded-xl p-1 transition-transform active:scale-95"
                   style={{ background: s.bg, border: `1px solid ${s.border}` }}
                 >
-                  <span className="text-[11px] leading-none">{c.emoji}</span>
-                  <span className="text-[6px] font-bold leading-none text-center" style={{ color: s.text }}>{c.name}</span>
-                  <span className="pointer-events-none absolute -right-2 -bottom-2 h-4 w-4 rounded-full opacity-50 blur-md" style={{ background: s.glow }} />
+                  <span className="text-[16px] leading-none">{c.emoji}</span>
+                  <span className="text-[8px] font-bold leading-none text-center" style={{ color: s.text }}>{c.name}</span>
+                  <span className="pointer-events-none absolute -right-2 -bottom-2 h-5 w-5 rounded-full opacity-50 blur-md" style={{ background: s.glow }} />
                 </Link>
               );
             })}
