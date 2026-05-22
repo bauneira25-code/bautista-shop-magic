@@ -73,8 +73,8 @@ const make = (
     gradient: grad(gradColors[0], gradColors[1]),
     description: opts.description ?? `${title} — calidad premium con envío rápido.`,
     liveActivity: [
-      { name: "Lucas", action: "se unió al grupo", time: "hace 2 min" },
-      { name: "Mica", action: "compró 1 unidad", time: "hace 4 min" },
+      { name: "Lucas", action: `está personalizando su ${title}`, time: "hace 2 min" },
+      { name: "Mica", action: `diseñó su ${title} ahora`, time: "hace 4 min" },
     ],
   };
 };
@@ -219,10 +219,10 @@ export const TRENDING = MOCK_PRODUCTS.filter((p) => !!p.badge).slice(0, 8);
 export const VIRAL = MOCK_PRODUCTS.filter((p) => p.badge?.includes("Viral") || p.badge?.includes("TikTok")).slice(0, 6);
 
 export const LIVE_FEED = [
-  "⚡ Mica compró Auriculares Pro ANC",
-  "✨ Sofi personalizó un collar minimalista",
-  "🎯 Tomás se unió al grupo de Smartwatch X9",
-  "💜 Naza compró Lámpara puesta de sol",
+  "✨ Lucas está personalizando su Funda iPhone Magsafe",
+  "🎨 Mica diseñó su Pulsera plata 925",
+  "🔥 Tomás eligió colores para su Collar acero minimalista",
+  "💜 Sofi agregó texto a su Dije inicial personalizada",
 ];
 
 export const AI_STYLES = [
