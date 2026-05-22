@@ -16,7 +16,7 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
   belleza:     { bg: "linear-gradient(135deg,#ffe0ee,#ffd0e6)", border: "#ec4899", glow: "#f472b6", text: "#831843" },
   joyeria:     { bg: "linear-gradient(135deg,#1a1410,#2a1f15)", border: "#d4af37", glow: "#d4af37", text: "#fef3c7" },
   animales:    { bg: "linear-gradient(135deg,#f0fdf4,#bbf7d0)", border: "#4a7c59", glow: "#22c55e", text: "#14532d" },
-  moda:        { bg: "linear-gradient(135deg,#fdf2f8,#fbcfe8)", border: "#ec4899", glow: "#f472b6", text: "#831843" },
+  moda:        { bg: "linear-gradient(135deg,#faf5f7,#f3e8ed)", border: "#8b3a5b", glow: "#c4959a", text: "#5c1a2e" },
 };
 
 export const Route = createFileRoute("/")({
