@@ -15,6 +15,8 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
   hogar:       { bg: "linear-gradient(135deg,#e8d4b4,#c9a079)", border: "#a06c49", glow: "#a06c49", text: "#3d2616" },
   belleza:     { bg: "linear-gradient(135deg,#ffe0ee,#ffd0e6)", border: "#ec4899", glow: "#f472b6", text: "#831843" },
   joyeria:     { bg: "linear-gradient(135deg,#1a1410,#2a1f15)", border: "#d4af37", glow: "#d4af37", text: "#fef3c7" },
+  animales:    { bg: "linear-gradient(135deg,#f0fdf4,#bbf7d0)", border: "#4a7c59", glow: "#22c55e", text: "#14532d" },
+  moda:        { bg: "linear-gradient(135deg,#fdf2f8,#fbcfe8)", border: "#ec4899", glow: "#f472b6", text: "#831843" },
 };
 
 export const Route = createFileRoute("/")({
@@ -174,7 +176,7 @@ function Home() {
             transition: "max-height 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          <div className="grid grid-cols-5 gap-2 pt-2">
+          <div className="grid grid-cols-6 gap-2 pt-2">
             {CATEGORIES.filter((c) => c.id !== "gym").map((c) => {
               const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
               return (

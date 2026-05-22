@@ -1,6 +1,6 @@
 // Per-category visual themes — each category feels like its own world.
 import type { ComponentType, CSSProperties } from "react";
-import { Cpu, Zap, Home, Dumbbell, Sparkles, Gem } from "lucide-react";
+import { Cpu, Zap, Home, Dumbbell, Sparkles, Gem, Cat, Shirt } from "lucide-react";
 
 export type CategoryTheme = {
   id: string;
@@ -126,6 +126,42 @@ export const CATEGORY_THEMES: Record<string, CategoryTheme> = {
     vibe: "✦ ATELIER NEIBA",
     badges: ["GRABABLE", "ORO", "PLATA", "PREMIUM"],
     cta: "Reservar pieza →",
+  },
+  animales: {
+    id: "animales",
+    name: "Animales",
+    tagline: "Todo para tu mejor amigo",
+    emoji: "🐾",
+    icon: Cat,
+    bg: "linear-gradient(180deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%)",
+    surface: "linear-gradient(135deg, rgba(74,124,89,0.16), rgba(34,197,94,0.08))",
+    accent: "#4a7c59",
+    accent2: "#22c55e",
+    textOn: "#ffffff",
+    font: "font-display",
+    pattern: "dots",
+    vibe: "♥ PET FRIENDLY",
+    badges: ["PET", "NATURAL", "JUGUETE", "CÓMODO"],
+    cta: "Mimarlos →",
+    isLight: true,
+  },
+  moda: {
+    id: "moda",
+    name: "Moda",
+    tagline: "Tu estilo, tu regla",
+    emoji: "👗",
+    icon: Shirt,
+    bg: "linear-gradient(180deg, #fdf2f8 0%, #fce7f3 50%, #fbcfe8 100%)",
+    surface: "linear-gradient(135deg, rgba(236,72,153,0.16), rgba(244,114,182,0.08))",
+    accent: "#ec4899",
+    accent2: "#f472b6",
+    textOn: "#ffffff",
+    font: "font-display",
+    pattern: "sparkle",
+    vibe: "✨ FASHION",
+    badges: ["TREND", "OUTFIT", "PREMIUM", "NUEVO"],
+    cta: "Vestirme →",
+    isLight: true,
   },
 };
 
