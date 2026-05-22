@@ -197,6 +197,26 @@ const _RAW: MockProduct[] = [
   make("joyeria", "Set anillos apilables", "💍", 22000, 0.24, ["#1a1410", "#d4af37"]),
   make("joyeria", "Pulsera cuero grabada", "🪢", 12000, 0.25, ["#0a0a0a", "#c0c0c0"], { customizable: true, badge: "Grabable" }),
   make("joyeria", "Cadena cubana plata", "🔗", 48000, 0.20, ["#1a1410", "#c0c0c0"]),
+
+  // ============ ANIMALES ============
+  make("animales", "Comedero automático Wi-Fi", "🐱", 45000, 0.20, ["#f0fdf4", "#4a7c59"], { badge: "Smart" }),
+  make("animales", "Cama ortopédica perro", "🐶", 28000, 0.22, ["#dcfce7", "#22c55e"]),
+  make("animales", "Rascador torre gato", "🐱", 18000, 0.24, ["#f0fdf4", "#4a7c59"], { badge: "Best seller" }),
+  make("animales", "Transportadora premium", "🐾", 22000, 0.22, ["#dcfce7", "#22c55e"]),
+  make("animales", "Juguete interactivo", "🎾", 8500, 0.25, ["#f0fdf4", "#4a7c59"], { badge: "Viral" }),
+  make("animales", "Collar GPS mascota", "📍", 32000, 0.22, ["#dcfce7", "#22c55e"]),
+  make("animales", "Shampoo natural 5L", "🧴", 12000, 0.24, ["#f0fdf4", "#4a7c59"]),
+  make("animales", "Dispensador agua fuente", "💧", 15000, 0.23, ["#dcfce7", "#22c55e"]),
+
+  // ============ MODA ============
+  make("moda", "Remera oversize unisex", "👕", 12000, 0.22, ["#fdf2f8", "#ec4899"], { customizable: true, badge: "Personalizable" }),
+  make("moda", "Zapatillas urbanas", "👟", 45000, 0.20, ["#fce7f3", "#f472b6"], { badge: "Trending" }),
+  make("moda", "Bolso tote cuero vegano", "👜", 18000, 0.24, ["#fdf2f8", "#ec4899"]),
+  make("moda", "Bufanda tejida premium", "🧣", 9500, 0.25, ["#fce7f3", "#f472b6"], { badge: "Cozy" }),
+  make("moda", "Gorra bordada", "🧢", 8500, 0.25, ["#fdf2f8", "#ec4899"], { customizable: true, badge: "Personalizable" }),
+  make("moda", "Lentes sol retro", "🕶️", 22000, 0.22, ["#fce7f3", "#f472b6"]),
+  make("moda", "Cinturón reversible", "🪢", 11000, 0.24, ["#fdf2f8", "#ec4899"]),
+  make("moda", "Set medias x6 diseños", "🧦", 7500, 0.25, ["#fce7f3", "#f472b6"], { badge: "Pack" }),
 ];
 
 // Aplicamos lista oficial de personalizables (fuerza customizable: true a los del listado)
