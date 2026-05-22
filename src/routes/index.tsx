@@ -176,7 +176,7 @@ function Home() {
             transition: "max-height 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          <div className="grid grid-cols-6 gap-2 pt-2">
+          <div className="grid grid-cols-5 gap-2 pt-2">
             {CATEGORIES.filter((c) => c.id !== "gym").map((c) => {
               const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
               return (

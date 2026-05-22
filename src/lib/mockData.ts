@@ -232,8 +232,8 @@ export const CATEGORIES = [
   { id: "hogar", name: "Hogar", emoji: "🏠" },
   { id: "belleza", name: "Belleza", emoji: "💄" },
   { id: "joyeria", name: "Joyería", emoji: "💍" },
-  { id: "animales", name: "Animales", emoji: "🐾" },
   { id: "moda", name: "Moda", emoji: "👗" },
+  { id: "animales", name: "Animales", emoji: "🐾" },
 ];
 
 export const FLASH_DEALS = MOCK_PRODUCTS.slice(0, 6);
