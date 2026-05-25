@@ -1,13 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
-  ArrowLeft, Heart, Share2, Star, Users, Clock, Truck, ShieldCheck, Sparkles,
+  ArrowLeft, Heart, Share2, Star, Truck, ShieldCheck, Sparkles,
   Plus, Minus,
 } from "lucide-react";
-import { findProduct, formatARS, AI_STYLES, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
+import { findProduct, formatARS, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
-import { MultiDesignSheet, type DesignData } from "@/components/MultiDesignSheet";
-import { FullCustomizeSheet } from "@/components/FullCustomizeSheet";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
@@ -79,36 +77,6 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
-  const [showCustom, setShowCustom] = useState(false);
-  const [customText, setCustomText] = useState("");
-  const [customStyle, setCustomStyle] = useState(AI_STYLES[0].id);
-  const [customImage, setCustomImage] = useState<string | null>(null);
-  const [customImageData, setCustomImageData] = useState<string | null>(null);
-  const [customAdded, setCustomAdded] = useState(false);
-  const [wsCustomQty, setWsCustomQty] = useState(50);
-  const [wsTotalQty, setWsTotalQty] = useState(100);
-  const [wsDesignsArr, setWsDesignsArr] = useState<number[]>([50]);
-  const [showWsCustom, setShowWsCustom] = useState(false);
-  const [showMulti, setShowMulti] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const addDesignToCart = (d: DesignData, idx: number) => {
-    if (!product) return;
-    const id = `${product.slug}-${mode}-${variant}-${color}-design${idx}-${Date.now()}`;
-    addToCart({
-      id,
-      slug: product.slug,
-      title: product.title,
-      emoji: product.emoji,
-      gradient: product.gradient,
-      mode,
-      unitPrice: price,
-      quantity: d.units,
-      variant: product.variants?.[variant],
-      color: product.colors?.[color],
-      customization: { text: d.text, style: customStyle, imageName: d.imageName },
-    });
-  };
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
@@ -116,14 +84,10 @@ function ProductPage() {
 
   const price = product.price[mode];
   const savings = product.price.individual - price;
-
   const cta = mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
-    const customization = customText || customImage
-      ? { text: customText || undefined, style: customStyle, imageName: customImage || undefined }
-      : undefined;
-    const id = `${product.slug}-${mode}-${variant}-${color}-${customization ? "custom" : "std"}`;
+    const id = `${product.slug}-${mode}-${variant}-${color}`;
     addToCart({
       id,
       slug: product.slug,
@@ -135,7 +99,6 @@ function ProductPage() {
       quantity: qty,
       variant: product.variants?.[variant],
       color: product.colors?.[color],
-      customization,
     });
   };
 
@@ -152,30 +115,11 @@ function ProductPage() {
     navigate({ to: "/cart" });
   };
 
-  const onPickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) handlePickImageFile(f);
-  };
-
-  const handlePickImageFile = (f: File | undefined) => {
-    if (!f) return;
-    setCustomImage(f.name);
-    const r = new FileReader();
-    r.onload = () => setCustomImageData(typeof r.result === "string" ? r.result : null);
-    r.readAsDataURL(f);
-    toast.success("Imagen subida ✨", { description: f.name });
-  };
-
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] pb-32">
       {/* Hero image */}
       <div className="relative aspect-square w-full" style={{ background: product.gradient }}>
         <div className="absolute inset-0 grid place-items-center text-[10rem]">{product.emoji}</div>
-        {customText && (
-          <div className="absolute inset-x-0 bottom-20 text-center font-display text-3xl text-white drop-shadow-lg">
-            {customText}
-          </div>
-        )}
         <div className="absolute left-0 right-0 top-0 flex items-center justify-between p-4">
           <button onClick={() => navigate({ to: "/" })} className="grid h-10 w-10 place-items-center rounded-full bg-black/40 backdrop-blur">
             <ArrowLeft className="h-4 w-4 text-white" />
@@ -251,17 +195,6 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Wholesale custom — botón "Personalizar con fuego" */}
-        {mode === "wholesale" && product.customizable && (
-          <button
-            onClick={() => setShowWsCustom(true)}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 font-display text-sm font-black tracking-wider text-primary-foreground shadow-[var(--shadow-glow)]"
-            style={{ background: "var(--gradient-primary)" }}
-          >
-            PERSONALIZAR
-          </button>
-        )}
-
         {/* Variants */}
         {product.variants && (
           <div>
@@ -286,34 +219,10 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Personalizar — individual y grupal (fullscreen) */}
-        {product.customizable && mode === "individual" && (
-          <button
-            onClick={() => {
-              if (qty >= 2) setShowMulti(true);
-              else setShowCustom(true);
-            }}
-            className="flex w-full items-center justify-between rounded-2xl p-4 text-white shadow-[var(--shadow-glow)]"
-            style={{ background: "var(--gradient-primary)" }}
-          >
-            <div className="text-left">
-              <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
-                {qty >= 2 ? `Hasta ${qty} diseños distintos` : "Texto, imagen y color"}
-              </p>
-              <p className="font-display text-lg">PERSONALIZAR</p>
-            </div>
-            {customAdded && (
-              <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold backdrop-blur">
-                ✓ Listo
-              </span>
-            )}
-          </button>
-        )}
-
         {/* Pasos por modo */}
         <PurchaseSteps mode={mode} />
 
-        {/* Quantity — siempre visible */}
+        {/* Quantity */}
         <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3">
           <div>
             <p className="text-sm font-semibold">Cantidad</p>
@@ -411,81 +320,6 @@ function ProductPage() {
           </div>
         </div>
       </div>
-
-      {/* WHOLESALE CUSTOM SHEET */}
-      {showWsCustom && product.customizable && (
-        <WholesaleCustomSheet
-          product={product}
-          totalQty={wsTotalQty}
-          setTotalQty={setWsTotalQty}
-          customQty={wsCustomQty}
-          setCustomQty={setWsCustomQty}
-          designs={wsDesignsArr}
-          setDesigns={setWsDesignsArr}
-          customText={customText}
-          setCustomText={setCustomText}
-          customImage={customImage}
-          onPickImage={onPickImage}
-          fileRef={fileRef}
-          onClose={() => setShowWsCustom(false)}
-          onAddToCart={() => {
-            setQty(wsTotalQty);
-            doAdd();
-            setShowWsCustom(false);
-            toast.success("Agregado al carrito 🛒", { description: `${wsTotalQty} × ${product.title} · ${wsCustomQty} personalizadas` });
-          }}
-          onBuyNow={() => {
-            setQty(wsTotalQty);
-            doAdd();
-            setShowWsCustom(false);
-            navigate({ to: "/cart" });
-          }}
-          onOpenMulti={() => { setShowWsCustom(false); setShowMulti(true); }}
-        />
-      )}
-
-      {/* MULTI DESIGN SHEET — individual / grupal con qty >= 2 o mayorista */}
-      {showMulti && product.customizable && (
-        <MultiDesignSheet
-          productTitle={product.title}
-          productEmoji={product.emoji}
-          productGradient={product.gradient}
-          totalUnits={mode === "wholesale" ? wsCustomQty : qty}
-          onClose={() => setShowMulti(false)}
-          onDesignAdded={addDesignToCart}
-          onAllDone={() => {
-            setShowMulti(false);
-            toast.success("Diseños añadidos al resumen ✨");
-            navigate({ to: "/cart" });
-          }}
-        />
-      )}
-
-      {/* FULLSCREEN CUSTOM SHEET — individual / grupal con 1 unidad */}
-      {showCustom && product.customizable && (
-        <FullCustomizeSheet
-          productTitle={product.title}
-          productEmoji={product.emoji}
-          productGradient={product.gradient}
-          text={customText}
-          setText={setCustomText}
-          imageName={customImage}
-          imageData={customImageData}
-          onPickImage={handlePickImageFile}
-          colors={product.colors}
-          selectedColor={product.colors?.[color]}
-          onSelectColor={(c) => {
-            const idx = product.colors?.indexOf(c) ?? -1;
-            if (idx >= 0) setColor(idx);
-          }}
-          onClose={() => setShowCustom(false)}
-          onConfirm={() => {
-            setCustomAdded(true);
-            setShowCustom(false);
-            toast.success("Diseño guardado ✨", { description: "Listo para comprar" });
-          }}
-        />
-      )}
     </div>
   );
 }
@@ -510,161 +344,3 @@ function ModeCard({
     </button>
   );
 }
-
-function WholesaleCustomSheet({
-  product, totalQty, setTotalQty, customQty, setCustomQty, designs, setDesigns,
-  customText, setCustomText, customImage, onPickImage, fileRef, onClose, onAddToCart, onBuyNow, onOpenMulti,
-}: {
-  product: ReturnType<typeof findProduct> & {};
-  totalQty: number; setTotalQty: (n: number) => void;
-  customQty: number; setCustomQty: (n: number) => void;
-  designs: number[]; setDesigns: (a: number[]) => void;
-  customText: string; setCustomText: (s: string) => void;
-  customImage: string | null;
-  onPickImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  fileRef: React.RefObject<HTMLInputElement | null>;
-  onClose: () => void; onAddToCart: () => void; onBuyNow: () => void;
-  onOpenMulti: () => void;
-}) {
-  if (!product) return null;
-  const sumDesigns = designs.reduce((a, b) => a + b, 0);
-  const stockQty = Math.max(0, totalQty - customQty);
-  const valid = customQty > 0 && customQty <= totalQty && sumDesigns === customQty;
-  const updateDesign = (i: number, v: number) => {
-    const next = [...designs];
-    next[i] = Math.max(0, Math.floor(v));
-    setDesigns(next);
-  };
-  const addDesign = () => setDesigns([...designs, 0]);
-  const removeDesign = (i: number) => setDesigns(designs.filter((_, idx) => idx !== i));
-
-  return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative mx-auto max-h-[92vh] w-full max-w-[480px] overflow-y-auto rounded-t-[28px] border-t border-primary/20 bg-background p-5 pb-8 shadow-2xl">
-        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-muted" />
-        <div className="mb-3 flex items-start justify-between">
-          <div>
-            <h3 className="font-display text-xl">🔥 Personalizar mayorista</h3>
-            <p className="text-[11px] text-muted-foreground">Diseñá libremente cuántas y cuántos diseños distintos.</p>
-          </div>
-          <button onClick={onClose} className="grid h-8 w-8 place-items-center rounded-full bg-muted">×</button>
-        </div>
-
-        {/* Preview producto */}
-        <div className="relative mb-3 grid aspect-[16/9] place-items-center overflow-hidden rounded-2xl text-7xl" style={{ background: product.gradient }}>
-          <span>{product.emoji}</span>
-          {customText && (
-            <div className="absolute inset-x-0 bottom-3 text-center font-display text-2xl text-white drop-shadow-lg">{customText}</div>
-          )}
-          {customImage && (
-            <span className="absolute right-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">📎 {customImage}</span>
-          )}
-        </div>
-
-        {/* Texto */}
-        <div className="mb-3">
-          <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Texto / marca</label>
-          <input
-            value={customText}
-            onChange={(e) => setCustomText(e.target.value.slice(0, 24))}
-            placeholder="Ej: TU MARCA"
-            className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
-          />
-        </div>
-
-        {/* Imagen */}
-        <div className="mb-3">
-          <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Imagen / logo</label>
-          <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
-          <button onClick={() => fileRef.current?.click()} className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card py-3 text-xs">
-            🖼 {customImage ? customImage : "Subir imagen / logo"}
-          </button>
-        </div>
-
-        {/* Total */}
-        <div className="mb-3 rounded-xl border border-border bg-card p-3">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-semibold">Total a comprar</label>
-            <QtyInput
-              value={totalQty}
-              onChange={setTotalQty}
-              className="w-20 rounded-lg border border-border bg-background px-2 py-1 text-right text-sm"
-            />
-          </div>
-          <input
-            type="range" min={10} max={1000} step={10} value={totalQty}
-            onChange={(e) => setTotalQty(Number(e.target.value))}
-            className="mt-2 w-full accent-primary"
-          />
-        </div>
-
-        {/* Personalizar cantidad */}
-        <div className="mb-3 rounded-xl border border-primary/30 bg-primary/5 p-3">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-semibold">¿Cuántas personalizar?</label>
-            <QtyInput
-              value={customQty}
-              min={0}
-              max={totalQty}
-              onChange={setCustomQty}
-              className="w-20 rounded-lg border border-primary/40 bg-background px-2 py-1 text-right text-sm"
-            />
-          </div>
-          <input
-            type="range" min={0} max={totalQty} step={1} value={customQty}
-            onChange={(e) => setCustomQty(Number(e.target.value))}
-            className="mt-2 w-full accent-primary"
-          />
-          <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
-            <span>{customQty} personalizadas</span>
-            <span>{stockQty} stock estándar</span>
-          </div>
-        </div>
-
-        {/* Diseños — distribución libre */}
-        <div className="mb-3 rounded-xl border border-dashed border-primary/30 bg-card p-3">
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs font-semibold">Diseños distintos ({designs.length})</p>
-            <button onClick={addDesign} className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground">+ diseño</button>
-          </div>
-          <div className="space-y-1.5">
-            {designs.map((d, i) => (
-              <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary px-2 py-1.5">
-                <span className="text-[11px] font-semibold">Diseño {i + 1}</span>
-                <QtyInput
-                  value={d}
-                  min={0}
-                  onChange={(n) => updateDesign(i, n)}
-                  className="ml-auto w-20 rounded-md border border-border bg-background px-2 py-1 text-right text-xs"
-                />
-                <span className="text-[10px] text-muted-foreground">u.</span>
-                {designs.length > 1 && (
-                  <button onClick={() => removeDesign(i)} className="text-[10px] text-muted-foreground hover:text-destructive">✕</button>
-                )}
-              </div>
-            ))}
-          </div>
-          <p className={`mt-2 text-[10px] ${sumDesigns === customQty ? "text-success" : "text-warning"}`}>
-            Asignadas {sumDesigns} de {customQty} unidades personalizadas
-          </p>
-        </div>
-
-        {customQty >= 2 && (
-          <button
-            onClick={onOpenMulti}
-            className="mb-2 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/50 bg-primary/5 py-2.5 text-xs font-bold text-primary"
-          >
-            🎨 Diseñar uno por uno ({customQty} pantallas)
-          </button>
-        )}
-
-        <div className="grid grid-cols-2 gap-2">
-          <button onClick={onAddToCart} disabled={!valid} className="rounded-xl border border-primary/40 bg-primary/10 py-3 text-xs font-bold text-primary disabled:opacity-40">AL CARRITO</button>
-          <button onClick={onBuyNow} disabled={!valid} className="rounded-xl py-3 font-display text-xs tracking-wider text-primary-foreground shadow-[var(--shadow-glow)] disabled:opacity-40" style={{ background: "var(--gradient-primary)" }}>COMPRAR AHORA</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
