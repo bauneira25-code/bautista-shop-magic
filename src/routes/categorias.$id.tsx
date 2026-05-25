@@ -195,22 +195,12 @@ function CategoryPage() {
                 }}
               >
                 <span>{p.emoji}</span>
-                {!p.customizable && (
-                  <span
-                    className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-bold ${theme.font}`}
-                    style={{ background: theme.accent, color: "#fff" }}
-                  >
-                    {"−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
-                  </span>
-                )}
-                {p.customizable && (
-                  <span className="absolute left-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">
-                    Personalizable
-                  </span>
-                )}
-                {p.customizable && (
-                  <Sparkles className="absolute right-2 top-2 h-4 w-4" style={{ color: theme.accent }} />
-                )}
+                <span
+                  className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[9px] font-bold ${theme.font}`}
+                  style={{ background: theme.accent, color: "#fff" }}
+                >
+                  {"−" + Math.round((1 - p.price.group / p.price.individual) * 100) + "%"}
+                </span>
               </div>
               <p className={`mt-2 line-clamp-1 text-xs font-medium ${theme.font === "font-mono" ? "font-mono" : ""}`} style={{ color: TXT }}>
                 {p.title}

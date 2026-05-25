@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { PurchaseMode } from "@/lib/mockData";
 
 export interface LocalCartItem {
-  id: string; // product slug + mode + variant
+  id: string;
   slug: string;
   title: string;
   emoji: string;
@@ -13,7 +13,6 @@ export interface LocalCartItem {
   quantity: number;
   variant?: string;
   color?: string;
-  customization?: { text?: string; style?: string; imageName?: string };
 }
 
 interface LocalCart {

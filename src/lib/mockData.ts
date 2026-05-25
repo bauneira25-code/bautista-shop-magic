@@ -7,7 +7,7 @@ export interface MockProduct {
   slug: string;
   title: string;
   emoji: string;
-  category: string; // tech | electronica | hogar | gym | belleza | joyeria
+  category: string;
   price: { individual: number; group: number; wholesale: number };
   groupTarget: number;
   groupJoined: number;
@@ -16,7 +16,6 @@ export interface MockProduct {
   reviews: number;
   sold: number;
   stock: number;
-  customizable: boolean;
   badge?: string;
   colors?: string[];
   variants?: string[];
@@ -46,10 +45,8 @@ const make = (
     .replace(/^-|-$/g, "");
   const group = Math.round(individual * (1 - groupPct));
   const wholesale = Math.round(individual * (1 - groupPct - 0.15));
-  // Demanda simulada (0-100). Mayor demanda => target más bajo (4) para cerrar rápido.
   const demand = (_id * 37) % 100;
   const target = demand > 66 ? 4 : demand > 33 ? 6 : 8;
-  // Siempre grupo activo: faltan entre 1 y target-1
   const missing = 1 + ((_id * 13) % (target - 1));
   const joined = target - missing;
   return {
@@ -66,46 +63,21 @@ const make = (
     reviews: 200 + _id * 73,
     sold: 800 + _id * 211,
     stock: 5 + (_id % 30),
-    customizable: opts.customizable ?? false,
     badge: opts.badge,
     colors: opts.colors,
     variants: opts.variants,
     gradient: grad(gradColors[0], gradColors[1]),
     description: opts.description ?? `${title} — calidad premium con envío rápido.`,
     liveActivity: [
-      { name: "Lucas", action: `está personalizando su ${title}`, time: "hace 2 min" },
-      { name: "Mica", action: `diseñó su ${title} ahora`, time: "hace 4 min" },
+      { name: "Lucas", action: `compró un ${title}`, time: "hace 2 min" },
+      { name: "Mica", action: `agregó ${title} al carrito`, time: "hace 4 min" },
     ],
   };
 };
 
-// Lista oficial de productos personalizables (regex parcial sobre title.toLowerCase())
-const CUSTOMIZABLE_PATTERNS = [
-  // Tecnología
-  "funda iphone", "funda samsung", "mousepad", "smart glasses", "parlante",
-  "auriculares", "cargador", "soporte celular", "tira led", "proyector",
-  // Gamer (mousepad ya cubierto)
-  "silla gamer", "teclado", "ratón gamer", "mouse gamer",
-  // Hogar
-  "cuadro", "vela", "difusor", "toalla", "vajilla", "caja organizadora",
-  "lámpara puesta de sol", "proyector estrellas",
-  // Gym
-  "pelota", "banda elástica", "soga", "cono", "guantes boxeo", "botella",
-  // Belleza
-  "neceser", "botella rocia", "brocha", "vincha", "skincare", "uñas",
-  "máscara led", "masajeador",
-  // Joyería
-  "anillo", "pulsera", "collar", "dije", "reloj", "lentes", "caja de joyería",
-];
-
-const isCustomizable = (title: string) => {
-  const t = title.toLowerCase();
-  return CUSTOMIZABLE_PATTERNS.some((p) => t.includes(p));
-};
-
 const _RAW: MockProduct[] = [
   // ============ TECNOLOGÍA ============
-  make("tech", "Funda iPhone Magsafe", "📱", 14000, 0.22, ["#0a1530", "#38bdf8"], { customizable: true, badge: "Viral", variants: ["iPhone 13", "iPhone 14", "iPhone 15", "iPhone 15 Pro", "iPhone 16"], colors: ["#000", "#7c3aed", "#ec4899"] }),
+  make("tech", "Funda iPhone Magsafe", "📱", 14000, 0.22, ["#0a1530", "#38bdf8"], { badge: "Viral", variants: ["iPhone 13", "iPhone 14", "iPhone 15", "iPhone 15 Pro", "iPhone 16"], colors: ["#000", "#7c3aed", "#ec4899"] }),
   make("tech", "Auriculares Pro ANC", "🎧", 45000, 0.20, ["#0a1530", "#3b82f6"], { badge: "Nuevo" }),
   make("tech", "Smartwatch X9 AMOLED", "⌚", 38000, 0.21, ["#05060a", "#38bdf8"], { badge: "Stock bajo" }),
   make("tech", "Parlante Bluetooth 360°", "🔊", 22000, 0.23, ["#0a1530", "#c0c8d4"]),
@@ -165,7 +137,7 @@ const _RAW: MockProduct[] = [
   make("gym", "Set 6 conos entrenamiento", "🔶", 8500, 0.25, ["#0a0f08", "#a3e635"]),
   make("gym", "Soga saltar pro", "🪢", 9500, 0.24, ["#0a0f08", "#fb923c"]),
   make("gym", "Rueda abdominal doble", "⚙️", 12000, 0.24, ["#0a0f08", "#a3e635"]),
-  make("gym", "Botella deportiva 1L", "💧", 9500, 0.26, ["#0a0f08", "#a3e635"], { customizable: true, badge: "Personalizable" }),
+  make("gym", "Botella deportiva 1L", "💧", 9500, 0.26, ["#0a0f08", "#a3e635"]),
   make("gym", "Toalla microfibra gym", "🧖", 7500, 0.25, ["#0a0f08", "#fb923c"]),
 
   // ============ BELLEZA ============
@@ -188,14 +160,14 @@ const _RAW: MockProduct[] = [
 
   // ============ JOYERÍA ============
   make("joyeria", "Anillo oro 18k minimalista", "💍", 65000, 0.18, ["#1a1410", "#d4af37"], { badge: "Premium" }),
-  make("joyeria", "Pulsera plata 925", "📿", 28000, 0.22, ["#1a1410", "#c0c0c0"], { customizable: true, badge: "Grabable" }),
-  make("joyeria", "Collar acero minimalista", "🔗", 18000, 0.22, ["#0a0a0a", "#d4af37"], { customizable: true, badge: "Grabable" }),
+  make("joyeria", "Pulsera plata 925", "📿", 28000, 0.22, ["#1a1410", "#c0c0c0"]),
+  make("joyeria", "Collar acero minimalista", "🔗", 18000, 0.22, ["#0a0a0a", "#d4af37"]),
   make("joyeria", "Aros argollas oro", "💫", 32000, 0.22, ["#1a1410", "#d4af37"]),
   make("joyeria", "Reloj clásico cuero", "⌚", 85000, 0.20, ["#0a0a0a", "#d4af37"], { badge: "Premium" }),
   make("joyeria", "Lentes sol polarizados", "🕶️", 28000, 0.22, ["#1a1410", "#c0c0c0"]),
-  make("joyeria", "Dije inicial personalizada", "✨", 14000, 0.24, ["#0a0a0a", "#d4af37"], { customizable: true, badge: "Personalizable" }),
+  make("joyeria", "Dije inicial", "✨", 14000, 0.24, ["#0a0a0a", "#d4af37"]),
   make("joyeria", "Set anillos apilables", "💍", 22000, 0.24, ["#1a1410", "#d4af37"]),
-  make("joyeria", "Pulsera cuero grabada", "🪢", 12000, 0.25, ["#0a0a0a", "#c0c0c0"], { customizable: true, badge: "Grabable" }),
+  make("joyeria", "Pulsera cuero", "🪢", 12000, 0.25, ["#0a0a0a", "#c0c0c0"]),
   make("joyeria", "Cadena cubana plata", "🔗", 48000, 0.20, ["#1a1410", "#c0c0c0"]),
 
   // ============ ANIMALES ============
@@ -209,22 +181,17 @@ const _RAW: MockProduct[] = [
   make("animales", "Dispensador agua fuente", "💧", 15000, 0.23, ["#dcfce7", "#22c55e"]),
 
   // ============ MODA ============
-  make("moda", "Remera oversize unisex", "👕", 12000, 0.22, ["#fdf2f8", "#ec4899"], { customizable: true, badge: "Personalizable" }),
+  make("moda", "Remera oversize unisex", "👕", 12000, 0.22, ["#fdf2f8", "#ec4899"]),
   make("moda", "Zapatillas urbanas", "👟", 45000, 0.20, ["#fce7f3", "#f472b6"], { badge: "Trending" }),
   make("moda", "Bolso tote cuero vegano", "👜", 18000, 0.24, ["#fdf2f8", "#ec4899"]),
   make("moda", "Bufanda tejida premium", "🧣", 9500, 0.25, ["#fce7f3", "#f472b6"], { badge: "Cozy" }),
-  make("moda", "Gorra bordada", "🧢", 8500, 0.25, ["#fdf2f8", "#ec4899"], { customizable: true, badge: "Personalizable" }),
+  make("moda", "Gorra bordada", "🧢", 8500, 0.25, ["#fdf2f8", "#ec4899"]),
   make("moda", "Lentes sol retro", "🕶️", 22000, 0.22, ["#fce7f3", "#f472b6"]),
   make("moda", "Cinturón reversible", "🪢", 11000, 0.24, ["#fdf2f8", "#ec4899"]),
   make("moda", "Set medias x6 diseños", "🧦", 7500, 0.25, ["#fce7f3", "#f472b6"], { badge: "Pack" }),
 ];
 
-// Aplicamos lista oficial de personalizables (fuerza customizable: true a los del listado)
-export const MOCK_PRODUCTS: MockProduct[] = _RAW.map((p) => ({
-  ...p,
-  customizable: p.customizable || isCustomizable(p.title),
-  badge: p.badge ?? (isCustomizable(p.title) ? "Personalizable" : undefined),
-}));
+export const MOCK_PRODUCTS: MockProduct[] = _RAW;
 
 export const CATEGORIES = [
   { id: "tech", name: "Tecnología", emoji: "📱" },
@@ -241,21 +208,10 @@ export const TRENDING = MOCK_PRODUCTS.filter((p) => !!p.badge).slice(0, 8);
 export const VIRAL = MOCK_PRODUCTS.filter((p) => p.badge?.includes("Viral") || p.badge?.includes("TikTok")).slice(0, 6);
 
 export const LIVE_FEED = [
-  "✨ Lucas está personalizando su Funda iPhone Magsafe",
-  "🎨 Mica diseñó su Pulsera plata 925",
-  "🔥 Tomás eligió colores para su Collar acero minimalista",
-  "💜 Sofi agregó texto a su Dije inicial personalizada",
-];
-
-export const AI_STYLES = [
-  { id: "minimal", name: "Minimal", emoji: "⚪" },
-  { id: "gamer", name: "Gamer", emoji: "🎮" },
-  { id: "luxury", name: "Premium", emoji: "💎" },
-  { id: "vintage", name: "Vintage", emoji: "📷" },
-  { id: "anime", name: "Anime", emoji: "🌸" },
-  { id: "aesthetic", name: "Aesthetic", emoji: "🌙" },
-  { id: "tiktok", name: "TikTok", emoji: "🎵" },
-  { id: "modern", name: "Moderno", emoji: "✨" },
+  "🔥 Lucas compró una Funda iPhone Magsafe",
+  "💜 Mica agregó Pulsera plata 925 al carrito",
+  "⚡ Tomás se unió al grupo de Auriculares Pro",
+  "✨ Sofi compró un Collar acero minimalista",
 ];
 
 export const MOCK_ORDERS = [
@@ -271,8 +227,8 @@ export const MOCK_ORDERS = [
   {
     id: "NB-10247",
     product: MOCK_PRODUCTS[15],
-    status: "customization" as const,
-    progress: 35,
+    status: "packaging" as const,
+    progress: 55,
     eta: "Llega en 5 días",
     mode: "individual" as PurchaseMode,
     qty: 1,

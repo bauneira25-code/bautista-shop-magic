@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Package, Truck, CheckCircle2, Sparkles, Clock, MapPin, Phone, CreditCard, Radio } from "lucide-react";
+import { Package, Truck, CheckCircle2, Clock, MapPin, Phone, CreditCard } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { MOCK_ORDERS, formatARS } from "@/lib/mockData";
 import { useUserOrders, type UserOrder } from "@/stores/userOrders";
 import { CustomerLiveOrders } from "@/components/CustomerLiveOrders";
-import { machineForProduct } from "@/lib/liveMachines";
 
 export const Route = createFileRoute("/orders")({
   component: Orders,
@@ -12,7 +11,6 @@ export const Route = createFileRoute("/orders")({
 
 const STATUS_STEPS = [
   { id: "processing", label: "Procesando", icon: Clock },
-  { id: "customization", label: "Personalización", icon: Sparkles },
   { id: "packaging", label: "Empaquetado", icon: Package },
   { id: "shipping", label: "En camino", icon: Truck },
   { id: "delivered", label: "Entregado", icon: CheckCircle2 },
@@ -130,7 +128,6 @@ function UserOrderCard({ order }: { order: UserOrder }) {
               <p className="line-clamp-1 text-sm font-semibold">{it.title}</p>
               <p className="text-[11px] text-muted-foreground">
                 {it.quantity} × {formatARS(it.unitPrice)}
-                {it.customization && <span className="ml-1 rounded bg-primary/15 px-1 text-[9px] font-bold text-primary">PERSONALIZADO</span>}
               </p>
             </div>
           </div>
@@ -159,23 +156,8 @@ function UserOrderCard({ order }: { order: UserOrder }) {
         <p className="mt-2 text-[11px] text-muted-foreground">⏱ {order.eta}</p>
       </div>
 
-      {/* Ver producción en vivo */}
-      {(() => {
-        const liveItem = order.items.find((i) => i.customization);
-        const inProd = order.status === "processing" || order.status === "customization";
-        if (!liveItem || !inProd) return null;
-        const machineId = machineForProduct(liveItem.title, liveItem.slug);
-        return (
-          <Link
-            to="/en-vivo/$machineId"
-            params={{ machineId }}
-            className="mt-3 flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-black uppercase tracking-wider text-white shadow-md transition active:scale-[0.98]"
-            style={{ background: "linear-gradient(135deg, #ff8a4d, #e8451c)" }}
-          >
-            <Radio className="h-4 w-4 animate-pulse" /> 🔥 Ver producción en vivo
-          </Link>
-        );
-      })()}
+
+
 
       {/* Shipping details */}
       <div className="mt-4 space-y-1.5 rounded-2xl border border-border bg-secondary/30 p-3">

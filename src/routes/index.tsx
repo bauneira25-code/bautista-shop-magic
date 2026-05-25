@@ -22,10 +22,10 @@ const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; tex
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NEIBA — Productos personalizados y ofertas" },
-      { name: "description", content: "Personalizá productos con IA y descubrí ofertas en tecnología, hogar, belleza y más." },
-      { property: "og:title", content: "NEIBA — Productos personalizados y ofertas" },
-      { property: "og:description", content: "Personalizá productos con IA y descubrí ofertas exclusivas." },
+      { title: "NEIBA — Compras grupales y ofertas" },
+      { name: "description", content: "Compras grupales y mayoristas con descuentos en tecnología, hogar, belleza y más." },
+      { property: "og:title", content: "NEIBA — Compras grupales y ofertas" },
+      { property: "og:description", content: "Compras grupales y mayoristas con descuentos exclusivos." },
       { property: "og:url", content: "/" },
       { property: "og:type", content: "website" },
     ],
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
           "@type": "Organization",
           name: "NEIBA",
           url: "/",
-          description: "Marketplace de productos personalizables con IA.",
+          description: "Marketplace de compras grupales y mayoristas.",
         }),
       },
       {
@@ -129,18 +129,6 @@ function Home() {
           </Link>
 
           <div className="flex items-center gap-2">
-            <Link
-              to="/personalizables"
-              className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#e8451c]/10 to-[#ff7a3d]/10 border border-[#e8451c]/20 px-2.5 py-1"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e8451c] opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#e8451c]" />
-              </span>
-              <Sparkles className="h-3 w-3 text-[#e8451c]" />
-              <span className="text-[9px] font-bold text-[#e8451c] leading-none">En vivo</span>
-            </Link>
-
             <button className="relative grid h-8 w-8 place-items-center rounded-full bg-orange-50">
               <Bell className="h-3.5 w-3.5 text-[#e8451c]" />
               <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#e8451c]" />
@@ -289,59 +277,8 @@ function Home() {
           </div>
         </section>
 
-        {/* Combo: Personaliza tu producto (izq) + productos personalizables (der) */}
-        {(() => {
-          const order = gender === "hombre"
-            ? ["tech", "electronica", "gym", "joyeria", "hogar", "belleza"]
-            : ["belleza", "hogar", "joyeria", "electronica", "tech"];
-          const customs = MOCK_PRODUCTS.filter(p => p.customizable);
-          const sorted = [...customs].sort((a, b) => {
-            const ai = order.indexOf(a.category); const bi = order.indexOf(b.category);
-            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-          });
-          return (
-            <section className="grid grid-cols-5 gap-3">
-              <Link to="/personalizables" className="col-span-2 block">
-                <div
-                  className="relative aspect-square overflow-hidden rounded-2xl p-3.5"
-                  style={{
-                    background: "linear-gradient(150deg,#ff6a2c 0%,#e8451c 55%,#b81f1f 100%)",
-                    boxShadow: "0 14px 30px -12px rgba(232,69,28,0.55)",
-                  }}
-                >
-                  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/15 blur-2xl" />
-                  <div className="absolute right-2 bottom-2 text-5xl drop-shadow">🎨</div>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white backdrop-blur">
-                    <Sparkles className="h-2.5 w-2.5" /> IA
-                  </span>
-                  <h2 className="mt-2 font-display text-base leading-tight text-white">
-                    Personaliza<br />tu producto
-                  </h2>
-                  <p className="mt-1 text-[10px] font-medium text-white/85">A tu medida</p>
-                  <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-black text-[#e8451c]">
-                    Ver ahora <ChevronRight className="h-3 w-3" />
-                  </div>
-                </div>
-              </Link>
 
-              <div className="col-span-3 relative pl-3">
-                <span className="pointer-events-none absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-primary to-transparent" />
-                <div className="grid grid-cols-2 gap-2">
-                  {sorted.slice(0, 4).map((p) => (
-                    <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
-                      <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
-                        <span>{p.emoji}</span>
-                        <span className="absolute left-1 top-1 rounded bg-[#e8451c] px-1 py-0.5 text-[8px] font-black text-white">Personaliz.</span>
-                      </div>
-                      <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
-                      <p className="text-[10px] font-bold text-primary leading-none">{formatARS(p.price.individual)}</p>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </section>
-          );
-        })()}
+
 
         {/* Trending */}
         <section>
@@ -369,22 +306,8 @@ function Home() {
           </div>
         </section>
 
-        {/* Personalizables */}
-        <section>
-          <SectionHeader title="🎨 Personalizalo a tu manera" />
-          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
-            {MOCK_PRODUCTS.filter(p => p.customizable).map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[150px] shrink-0">
-                <div className="relative aspect-square overflow-hidden rounded-2xl text-5xl grid place-items-center" style={{ background: p.gradient }}>
-                  <span>{p.emoji}</span>
-                  <span className="absolute left-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable</span>
-                </div>
-                <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
-                <p className="text-[10px] text-muted-foreground">Desde {formatARS(p.price.group)}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
+
+
 
         {/* Recomendados */}
         <section>
@@ -436,8 +359,7 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
     <Link to="/products/$slug" params={{ slug: p.slug }} className="group">
       <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
         <span>{p.emoji}</span>
-        {p.badge && p.badge !== "Personalizable" && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{p.badge}</span>}
-        {p.customizable && <span className="absolute right-2 top-2 rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[9px] font-black text-white">Personalizable</span>}
+        {p.badge && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{p.badge}</span>}
       </div>
       <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
       <div className="flex items-center justify-between">

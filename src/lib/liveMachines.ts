@@ -7,10 +7,8 @@ export interface LiveMachine {
   short: string;
   products: string[];
   tagline: string;
-  /** key tokens to match a product to this machine */
   matches: string[];
   activity: string[];
-  // visual tokens
   hue: { from: string; via: string; to: string };
   accent: string;
 }
@@ -25,7 +23,7 @@ export const LIVE_MACHINES: LiveMachine[] = [
     tagline: "Grabado láser de precisión sobre metal",
     matches: ["termo", "joyer", "llaver", "placa", "collar", "anillo", "pulser", "metal"],
     activity: [
-      "Grabando termo personalizado",
+      "Grabando termo",
       "Grabando collar premium",
       "Tallando llavero metálico",
       "Detallando placa de acero",
@@ -59,7 +57,7 @@ export const LIVE_MACHINES: LiveMachine[] = [
     tagline: "Transferencia térmica sobre superficies curvas",
     matches: ["botella", "taza", "mug", "cilindr", "vaso", "matero"],
     activity: [
-      "Sublimando botella personalizada",
+      "Sublimando botella",
       "Girando taza en prensa térmica",
       "Retirando vaso terminado",
       "Calibrando prensa rotativa",

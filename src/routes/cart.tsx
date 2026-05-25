@@ -14,7 +14,7 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
 });
 
-const CUSTOM_FEE = 2300;
+
 const SHIPPING_FEE = 1800;
 const ORANGE = "#e8451c";
 
@@ -33,10 +33,8 @@ function CartPage() {
   const [paid, setPaid] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
-  const customQty = items.reduce((s, i) => s + (i.customization ? i.quantity : 0), 0);
-  const customFee = customQty * CUSTOM_FEE;
   const shippingFee = delivery === "envio" ? SHIPPING_FEE : 0;
-  const total = subtotal + customFee + shippingFee;
+  const total = subtotal + shippingFee;
   const count = items.reduce((s, i) => s + i.quantity, 0);
 
   const modeLabel = (m: string) =>
@@ -67,11 +65,10 @@ function CartPage() {
       cost: Math.round(i.unitPrice * 0.4),
       quantity: i.quantity,
       status: "pago_confirmado" as const,
-      is_customized: !!i.customization,
+      is_customized: false,
       notes: [
         i.variant ? `Variante: ${i.variant}` : null,
         i.color ? `Color: ${i.color}` : null,
-        i.customization ? `Personalizado: ${i.customization.text ?? ""}` : null,
         `Modo: ${i.mode}`,
         `Entrega: ${delivery}${user?.direccion ? ` · ${user.direccion}` : ""}`,
         `Pago: ${info.method}${info.cardLast4 ? ` ····${info.cardLast4}` : ""}`,
@@ -91,7 +88,6 @@ function CartPage() {
     Object.entries(byMode).forEach(([mode, list]) => {
       const orderTotal =
         list.reduce((s, i) => s + i.unitPrice * i.quantity, 0) +
-        list.reduce((s, i) => s + (i.customization ? i.quantity * CUSTOM_FEE : 0), 0) +
         (delivery === "envio" ? SHIPPING_FEE : 0);
       addOrder({
         id: `NB-${Date.now().toString().slice(-6)}-${mode.slice(0, 1).toUpperCase()}`,
@@ -106,7 +102,6 @@ function CartPage() {
           quantity: i.quantity,
           variant: i.variant,
           color: i.color,
-          customization: i.customization,
         })),
         total: orderTotal,
         paymentMethod: info.method,
@@ -193,9 +188,6 @@ function CartPage() {
                     <span className="rounded-md bg-[#e8451c] px-1.5 py-0.5 text-[10px] font-bold text-white">{modeLabel(it.mode)}</span>
                     {it.variant && <span className="rounded-md bg-orange-50 px-1.5 py-0.5 text-[10px] text-neutral-700">{it.variant}</span>}
                     {it.color && <span className="grid h-4 w-4 rounded-full border border-neutral-300" style={{ background: it.color }} />}
-                    {it.customization && (
-                      <span className="rounded-md bg-orange-200 px-1.5 py-0.5 text-[10px] font-bold text-[#e8451c]">Personalizado</span>
-                    )}
                   </div>
                   <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -245,9 +237,6 @@ function CartPage() {
           <div className="rounded-2xl border border-orange-100 bg-orange-50/40 p-4 text-sm">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Resumen</p>
             <Row label={`Productos (${count})`} value={formatARS(subtotal)} />
-            {customFee > 0 && (
-              <Row label={`Personalización (${customQty})`} value={formatARS(customFee)} />
-            )}
             <Row
               label="Envío"
               value={delivery === "envio" ? formatARS(SHIPPING_FEE) : <span className="font-bold text-[#e8451c]">Gratis</span>}
