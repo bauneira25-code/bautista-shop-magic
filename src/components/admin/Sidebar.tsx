@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, ShoppingBag, Sparkles, Factory, ShieldCheck, Layers3, PackageCheck,
+  LayoutDashboard, ShoppingBag, Factory, ShieldCheck, Layers3, PackageCheck,
   Package, Users2, CreditCard, Truck, AlertTriangle, Boxes, UserCog, Settings, LogOut, BarChart3, Radio,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +9,6 @@ import type { AdminProfile } from "@/hooks/useAdminAuth";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean; primary?: boolean };
 const items: NavItem[] = [
-  // Núcleo conectado a la operación
   { to: "/admin-panel", label: "Resumen", icon: LayoutDashboard, exact: true, primary: true },
   { to: "/admin-panel/analisis", label: "Análisis", icon: BarChart3, primary: true },
   { to: "/admin-panel/productos", label: "Productos", icon: Package, primary: true },
@@ -17,9 +16,7 @@ const items: NavItem[] = [
   { to: "/admin-panel/produccion", label: "Producción", icon: Factory, primary: true },
   { to: "/admin-panel/en-vivo", label: "En Vivo", icon: Radio, primary: true },
   { to: "/admin-panel/stock", label: "Stock", icon: Boxes, primary: true },
-  // Resto
   { to: "/admin-panel/todo", label: "Todo", icon: Layers3 },
-  { to: "/admin-panel/personalizados", label: "Personalizados", icon: Sparkles },
   { to: "/admin-panel/calidad", label: "Control de calidad", icon: ShieldCheck },
   { to: "/admin-panel/empaquetado", label: "Empaquetado", icon: PackageCheck },
   { to: "/admin-panel/clientes", label: "Clientes", icon: Users2 },
@@ -94,7 +91,6 @@ export function AdminSidebar({ profile }: { profile: AdminProfile }) {
 }
 
 export function AdminMobileBar() {
-  // Simple top bar with horizontal scroll for mobile
   const path = useRouterState({ select: (r) => r.location.pathname });
   return (
     <div className="md:hidden sticky top-0 z-30 bg-neutral-950 border-b border-white/5 text-white">

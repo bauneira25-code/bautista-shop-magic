@@ -2,7 +2,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Lock, LogOut } from "lucide-react";
 
 const PINS: Record<string, string> = {
-  personalizados: "4321",
   empaquetado: "5678",
 };
 

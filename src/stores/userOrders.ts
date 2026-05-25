@@ -11,7 +11,6 @@ export interface UserOrderItem {
   quantity: number;
   variant?: string;
   color?: string;
-  customization?: { text?: string; style?: string; imageName?: string };
 }
 
 export interface UserOrder {
@@ -25,7 +24,7 @@ export interface UserOrder {
   delivery: "envio" | "retiro";
   shippingAddress?: string;
   receiver?: { nombre: string; apellido: string; telefono: string };
-  status: "processing" | "customization" | "packaging" | "shipping" | "delivered";
+  status: "processing" | "packaging" | "shipping" | "delivered";
   progress: number;
   eta: string;
 }
