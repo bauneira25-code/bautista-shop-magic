@@ -105,7 +105,7 @@ function PedidosPage() {
 function OrderDetail({ id, onClose, onUpdate }: { id: string; onClose: () => void; onUpdate: () => void }) {
   const [order, setOrder] = useState<any>(null);
   const [history, setHistory] = useState<any[]>([]);
-  const [cust, setCust] = useState<any>(null);
+  
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<FullOrderStatus>("pago_confirmado");
   const [saving, setSaving] = useState(false);
