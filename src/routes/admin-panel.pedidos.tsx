@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, X, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
+
 import { STATUS_LABEL, type FullOrderStatus } from "@/lib/admin/statuses";
 import { toast } from "sonner";
 
@@ -72,7 +72,6 @@ function PedidosPage() {
         <table className="w-full text-sm">
           <thead className="bg-white/[0.04] text-[11px] uppercase tracking-wider text-white/50">
             <tr>
-              <th className="text-left px-4 py-3">Tipo</th>
               <th className="text-left px-4 py-3">Pedido</th>
               <th className="text-left px-4 py-3">Cliente</th>
               <th className="text-left px-4 py-3">Producto</th>
@@ -82,11 +81,10 @@ function PedidosPage() {
             </tr>
           </thead>
           <tbody>
-            {loading && <tr><td colSpan={7} className="px-4 py-10 text-center text-white/40">Cargando...</td></tr>}
-            {!loading && visible.length === 0 && <tr><td colSpan={7} className="px-4 py-10 text-center text-white/40">Sin pedidos</td></tr>}
+            {loading && <tr><td colSpan={6} className="px-4 py-10 text-center text-white/40">Cargando...</td></tr>}
+            {!loading && visible.length === 0 && <tr><td colSpan={6} className="px-4 py-10 text-center text-white/40">Sin pedidos</td></tr>}
             {visible.map(o => (
               <tr key={o.id} onClick={() => setSelectedId(o.id)} className="border-t border-white/5 hover:bg-white/[0.04] cursor-pointer">
-                <td className="px-4 py-3"><PersonalizedBadge on={!!o.is_customized} /></td>
                 <td className="px-4 py-3 font-mono text-[11px] text-white/60">#{o.id.slice(0, 8)}</td>
                 <td className="px-4 py-3">{o.customer_name}</td>
                 <td className="px-4 py-3 text-white/70">{o.product_emoji} {o.product_title}</td>
@@ -107,19 +105,18 @@ function PedidosPage() {
 function OrderDetail({ id, onClose, onUpdate }: { id: string; onClose: () => void; onUpdate: () => void }) {
   const [order, setOrder] = useState<any>(null);
   const [history, setHistory] = useState<any[]>([]);
-  const [cust, setCust] = useState<any>(null);
+  
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<FullOrderStatus>("pago_confirmado");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const [{ data: o }, { data: h }, { data: c }] = await Promise.all([
+      const [{ data: o }, { data: h }] = await Promise.all([
         supabase.from("orders").select("*").eq("id", id).single(),
         supabase.from("order_status_history").select("*").eq("order_id", id).order("changed_at", { ascending: false }),
-        supabase.from("customizations").select("*").eq("order_id", id).maybeSingle(),
       ]);
-      setOrder(o); setHistory(h ?? []); setCust(c);
+      setOrder(o); setHistory(h ?? []);
       setNotes(o?.internal_notes ?? "");
       setStatus((o?.status ?? "pago_confirmado") as FullOrderStatus);
     })();
@@ -155,13 +152,7 @@ function OrderDetail({ id, onClose, onUpdate }: { id: string; onClose: () => voi
               <p className="text-white/50 text-sm">{Number(order.unit_price).toLocaleString("es-AR")} c/u</p>
             </Section>
 
-            {cust && (
-              <Section label="Personalización">
-                <p className="text-sm">Texto: <span className="text-white">"{cust.text}"</span></p>
-                <p className="text-sm text-white/60">Fuente: {cust.font} · Color: <span className="inline-block w-3 h-3 rounded align-middle" style={{ background: cust.color }} /> {cust.color}</p>
-                {cust.svg_url && <a href={cust.svg_url} target="_blank" rel="noreferrer" className="text-xs text-orange-300 hover:underline">Ver archivo SVG →</a>}
-              </Section>
-            )}
+
 
             <Section label="Cambiar estado">
               <select value={status} onChange={(e) => setStatus(e.target.value as FullOrderStatus)}

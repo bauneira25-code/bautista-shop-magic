@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { PackageCheck, Truck, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
+
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin-panel/empaquetado")({ component: EmpaquetadoPage });
@@ -67,7 +67,6 @@ function EmpaquetadoPage() {
             <div key={o.id} className="rounded-3xl bg-white/[0.04] border border-white/10 p-5 flex flex-col gap-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <PersonalizedBadge on={!!o.is_customized} />
                   <p className="font-display text-lg mt-2">{o.product_emoji} {o.product_title}</p>
                   <p className="text-xs text-white/60">{o.customer_name}{o.customer_phone ? ` · ${o.customer_phone}` : ""}</p>
                   <p className="text-[10px] text-white/40 font-mono mt-0.5">#{o.id.slice(0, 8)}</p>

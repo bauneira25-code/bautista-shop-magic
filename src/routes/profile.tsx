@@ -40,7 +40,7 @@ function Profile() {
         {[
           { icon: Package, label: "Pedidos", to: "/orders" },
           { icon: Users, label: "Mis grupos", to: "/orders" },
-          { icon: Sparkles, label: "Diseños", to: "/customize" },
+          { icon: Heart, label: "Favoritos", to: "/orders" },
         ].map((a) => (
           <Link key={a.label} to={a.to} className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card py-3 text-xs">
             <a.icon className="h-4 w-4 text-primary" />
@@ -66,7 +66,7 @@ function Profile() {
           </button>
         ))}
 
-        <Link to="/admin" className="flex w-full items-center gap-3 rounded-2xl border border-primary/40 bg-primary/10 p-4 text-left">
+        <Link to="/admin-login" className="flex w-full items-center gap-3 rounded-2xl border border-primary/40 bg-primary/10 p-4 text-left">
           <Settings className="h-4 w-4 text-primary" />
           <span className="flex-1 text-sm font-semibold">Panel admin</span>
           <ChevronRight className="h-4 w-4 text-primary" />
