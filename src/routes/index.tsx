@@ -334,7 +334,7 @@ function Home() {
           </div>
         </Link>
 
-        <Link to="/admin" className="block rounded-2xl border border-border bg-card p-4 text-center text-xs text-muted-foreground">
+        <Link to="/admin-login" className="block rounded-2xl border border-border bg-card p-4 text-center text-xs text-muted-foreground">
           🛠 Acceder al panel admin
         </Link>
       </main>
