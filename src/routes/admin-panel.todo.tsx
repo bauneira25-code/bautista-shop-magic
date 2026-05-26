@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Layers3, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { PersonalizedBadge } from "@/components/admin/PersonalizedBadge";
+
 
 export const Route = createFileRoute("/admin-panel/todo")({ component: TodoPage });
 
