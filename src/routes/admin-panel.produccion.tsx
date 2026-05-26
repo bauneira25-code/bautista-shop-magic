@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Factory, Play, Check, AlertTriangle, Camera, X, Download } from "lucide-react";
+import { Factory, Play, Check, AlertTriangle, Camera, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { generateSVG, downloadSVG } from "@/lib/generateSVG";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { toast } from "sonner";
 
@@ -19,12 +18,7 @@ function ProduccionPage() {
   const load = async () => {
     const { data: orders } = await supabase.from("orders").select("*")
       .in("status", ACTIVE as any).order("created_at", { ascending: true });
-    const ids = (orders ?? []).map(o => o.id);
-    const { data: custs } = ids.length
-      ? await supabase.from("customizations").select("*").in("order_id", ids)
-      : { data: [] };
-    const byOrder = new Map(custs?.map(c => [c.order_id, c]));
-    setJobs((orders ?? []).map(o => ({ order: o, cust: byOrder.get(o.id) })));
+    setJobs((orders ?? []).map(o => ({ order: o })));
   };
 
   useEffect(() => {
@@ -97,29 +91,12 @@ function ProduccionPage() {
                   <p className="text-[10px] text-white/40 font-mono">#{job.order.id.slice(0, 8)}</p>
                   <p className="font-display text-lg mt-0.5">{job.order.product_emoji} {job.order.product_title}</p>
                   <p className="text-xs text-white/60">{job.order.customer_name}</p>
-                </div>
                 <StatusBadge status={job.order.status} />
               </div>
-
-              {job.cust && (
-                <div className="rounded-2xl bg-black/40 p-6 text-center">
-                  <p style={{ fontFamily: job.cust.font, color: job.cust.color, fontSize: 28, transform: `rotate(${job.cust.rotation_deg}deg)` }}>"{job.cust.text}"</p>
-                  <p className="text-[10px] text-white/40 mt-3">{job.cust.font} · {job.cust.size}px · pos ({job.cust.pos_x},{job.cust.pos_y})</p>
-                </div>
-              )}
 
               {lockedByOther && <p className="text-xs text-amber-400">⚠ En proceso por otro empleado</p>}
 
               <div className="flex gap-2 mt-auto">
-                {job.cust && (
-                  <button onClick={() => downloadSVG(`design-${job.order.id.slice(0,8)}`, generateSVG({
-                    text: job.cust.text, color: job.cust.color, font: job.cust.font,
-                    size: job.cust.size, rotationDeg: job.cust.rotation_deg,
-                    posX: job.cust.pos_x, posY: job.cust.pos_y,
-                  }))} className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-white/5 hover:bg-white/10 py-3 text-xs">
-                    <Download className="h-3.5 w-3.5" /> SVG
-                  </button>
-                )}
                 {!inProgress && (
                   <button onClick={() => start(job.order.id)}
                     className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 py-3 text-xs font-bold">
