@@ -91,6 +91,7 @@ function ProduccionPage() {
                   <p className="text-[10px] text-white/40 font-mono">#{job.order.id.slice(0, 8)}</p>
                   <p className="font-display text-lg mt-0.5">{job.order.product_emoji} {job.order.product_title}</p>
                   <p className="text-xs text-white/60">{job.order.customer_name}</p>
+                </div>
                 <StatusBadge status={job.order.status} />
               </div>
 
