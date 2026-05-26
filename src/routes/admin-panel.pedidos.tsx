@@ -112,12 +112,11 @@ function OrderDetail({ id, onClose, onUpdate }: { id: string; onClose: () => voi
 
   useEffect(() => {
     (async () => {
-      const [{ data: o }, { data: h }, { data: c }] = await Promise.all([
+      const [{ data: o }, { data: h }] = await Promise.all([
         supabase.from("orders").select("*").eq("id", id).single(),
         supabase.from("order_status_history").select("*").eq("order_id", id).order("changed_at", { ascending: false }),
-        supabase.from("customizations").select("*").eq("order_id", id).maybeSingle(),
       ]);
-      setOrder(o); setHistory(h ?? []); setCust(c);
+      setOrder(o); setHistory(h ?? []);
       setNotes(o?.internal_notes ?? "");
       setStatus((o?.status ?? "pago_confirmado") as FullOrderStatus);
     })();
@@ -153,13 +152,7 @@ function OrderDetail({ id, onClose, onUpdate }: { id: string; onClose: () => voi
               <p className="text-white/50 text-sm">{Number(order.unit_price).toLocaleString("es-AR")} c/u</p>
             </Section>
 
-            {cust && (
-              <Section label="Personalización">
-                <p className="text-sm">Texto: <span className="text-white">"{cust.text}"</span></p>
-                <p className="text-sm text-white/60">Fuente: {cust.font} · Color: <span className="inline-block w-3 h-3 rounded align-middle" style={{ background: cust.color }} /> {cust.color}</p>
-                {cust.svg_url && <a href={cust.svg_url} target="_blank" rel="noreferrer" className="text-xs text-orange-300 hover:underline">Ver archivo SVG →</a>}
-              </Section>
-            )}
+
 
             <Section label="Cambiar estado">
               <select value={status} onChange={(e) => setStatus(e.target.value as FullOrderStatus)}
