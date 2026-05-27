@@ -255,8 +255,22 @@ function ProductPage() {
             {product.customizable && (
               <button onClick={() => setCustomizeOpen(true)} className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
                 ✨ Personalizar este producto
-                {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
+                {product.customizationFee ? ` · +${formatARS(product.customizationFee)} c/u` : ""}
               </button>
+            )}
+            {product.customizable && customQty > 0 && (
+              <div className="col-span-2 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-fuchsia-700">Personalización aplicada</span>
+                  <button onClick={() => setCustomQty(0)} className="text-[10px] text-fuchsia-700 underline">Quitar</button>
+                </div>
+                <p className="mt-1 text-neutral-700">
+                  {qty} unidades en total · <b>{customQty} personalizadas</b> · {qty - customQty} sin personalizar
+                </p>
+                <p className="mt-1 text-fuchsia-700">
+                  Costo extra personalización: <b>+{formatARS(customCost)}</b> ({formatARS(fee)} × {customQty})
+                </p>
+              </div>
             )}
             {product.sellerKind === "importer" && (
               <button onClick={() => setChatOpen(true)} className="col-span-2 rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">
