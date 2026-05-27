@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft, Heart, Share2, Star, Truck, ShieldCheck, Sparkles,
   Plus, Minus,
@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 import { ProductBadges } from "@/components/ProductBadges";
 import { CustomizeSheet } from "@/components/CustomizeSheet";
+import { ImporterChat } from "@/components/ImporterChat";
 
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => {
@@ -80,7 +81,18 @@ function ProductPage() {
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
   const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
+
+  // Lote forzado: importador a pedido con mínimo
+  const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
+
+  useEffect(() => {
+    if (wholesaleOnly && product?.minOrder) {
+      setMode("wholesale");
+      setQty((q) => (q < product.minOrder! ? product.minOrder! : q));
+    }
+  }, [wholesaleOnly, product?.minOrder]);
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
@@ -205,8 +217,8 @@ function ProductPage() {
               </div>
             </div>
             {product.sellerKind === "importer" && (
-              <button className="rounded-full border border-emerald-600 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
-                Hablar con importador
+              <button onClick={() => setChatOpen(true)} className="rounded-full border border-emerald-600 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
+                💬 Hablar con importador
               </button>
             )}
           </div>
@@ -216,14 +228,21 @@ function ProductPage() {
             <ProductBadges product={product} variant="detail" />
           </div>
 
-          {/* Total según cantidad */}
+          {/* Seguro de pago */}
+          <div className="mt-3 flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50/70 px-3 py-2">
+            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-emerald-800 leading-tight">Seguro de pago NEIBA</p>
+              <p className="text-[10px] text-emerald-700/80 leading-tight">Tu compra está protegida de punta a punta.</p>
+            </div>
+          </div>
+
+          {/* Compra por lote (mínimo) */}
           {product.minOrder && (
             <div className="mt-3 rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-3">
               <p className="text-[10px] uppercase tracking-wider text-amber-700 font-bold">Compra por lote</p>
-              <p className="mt-1 text-xs text-amber-900">Mínimo {product.minOrder} unidades · {formatARS(product.price.wholesale)} c/u</p>
-              <p className="mt-2 font-display text-lg text-amber-900">
-                Total: {formatARS(product.price.wholesale * (qty < product.minOrder ? product.minOrder : qty))}
-              </p>
+              <p className="mt-1 text-sm font-bold text-amber-900">Mínimo {product.minOrder} unidades</p>
+              <p className="text-[11px] text-amber-800/80">Producción a pedido · Entrega {product.deliveryLabel}</p>
             </div>
           )}
 
@@ -235,16 +254,16 @@ function ProductPage() {
                 {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
               </button>
             )}
-            {product.sellerKind === "importer" && product.stockLocation === "factory" && (
-              <>
-                <button className="rounded-xl bg-emerald-600 py-2.5 text-xs font-black text-white">📦 Comprar lote</button>
-                <button className="rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">💬 Pedir cotización</button>
-              </>
+            {product.sellerKind === "importer" && (
+              <button onClick={() => setChatOpen(true)} className="col-span-2 rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">
+                💬 Hablar con importador
+              </button>
             )}
           </div>
         </div>
 
-        {/* 2 PURCHASE MODES */}
+        {/* 2 PURCHASE MODES (oculto si es lote-only) */}
+        {!wholesaleOnly && (
         <div>
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
           <div className="grid gap-2 grid-cols-2">
@@ -261,6 +280,7 @@ function ProductPage() {
             />
           </div>
         </div>
+        )}
 
         {/* Wholesale tiers */}
         {mode === "wholesale" && (
@@ -326,8 +346,9 @@ function ProductPage() {
         </div>
 
         {/* Trust badges */}
-        <div className="grid grid-cols-3 gap-2 text-[10px] text-muted-foreground">
-          <div className="rounded-xl border border-border bg-card p-2 text-center"><Truck className="mx-auto mb-1 h-4 w-4 text-primary" />Envío 48h</div>
+        <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-foreground">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2 text-center text-emerald-700"><ShieldCheck className="mx-auto mb-1 h-4 w-4" />Seguro de pago</div>
+          <div className="rounded-xl border border-border bg-card p-2 text-center"><Truck className="mx-auto mb-1 h-4 w-4 text-primary" />Envío rastreado</div>
           <div className="rounded-xl border border-border bg-card p-2 text-center"><ShieldCheck className="mx-auto mb-1 h-4 w-4 text-primary" />Garantía</div>
           <div className="rounded-xl border border-border bg-card p-2 text-center"><Sparkles className="mx-auto mb-1 h-4 w-4 text-primary" />MercadoPago</div>
         </div>
@@ -408,6 +429,7 @@ function ProductPage() {
       </div>
 
       <CustomizeSheet product={product} open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
+      <ImporterChat product={product} open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }

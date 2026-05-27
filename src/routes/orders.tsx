@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Package, Truck, CheckCircle2, Clock, MapPin, Phone, CreditCard } from "lucide-react";
+import { Package, Truck, CheckCircle2, Clock, MapPin, Phone, CreditCard, Factory, Plane, ShieldCheck } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { MOCK_ORDERS, formatARS } from "@/lib/mockData";
 import { useUserOrders, type UserOrder } from "@/stores/userOrders";
@@ -12,6 +12,15 @@ export const Route = createFileRoute("/orders")({
 const STATUS_STEPS = [
   { id: "processing", label: "Procesando", icon: Clock },
   { id: "packaging", label: "Empaquetado", icon: Package },
+  { id: "shipping", label: "En camino", icon: Truck },
+  { id: "delivered", label: "Entregado", icon: CheckCircle2 },
+];
+
+const IMPORT_STEPS = [
+  { id: "processing", label: "Pago confirmado", icon: CheckCircle2 },
+  { id: "production", label: "En fábrica", icon: Factory },
+  { id: "transit", label: "Importando", icon: Plane },
+  { id: "packaging", label: "En aduana", icon: Package },
   { id: "shipping", label: "En camino", icon: Truck },
   { id: "delivered", label: "Entregado", icon: CheckCircle2 },
 ];
@@ -100,18 +109,31 @@ function Orders() {
 }
 
 function UserOrderCard({ order }: { order: UserOrder }) {
-  const stepIndex = STATUS_STEPS.findIndex((s) => s.id === order.status);
+  const steps = order.isImport ? IMPORT_STEPS : STATUS_STEPS;
+  // En import: el "processing" inicial cuenta como completado, simulamos un avance parcial
+  const stepIndex = order.isImport
+    ? Math.max(0, Math.floor((order.progress / 100) * (IMPORT_STEPS.length - 1)))
+    : STATUS_STEPS.findIndex((s) => s.id === order.status);
   const totalQty = order.items.reduce((s, i) => s + i.quantity, 0);
 
   return (
-    <div className="rounded-3xl border-2 border-primary/40 bg-card p-4 shadow-sm">
+    <div className={`rounded-3xl border-2 ${order.isImport ? "border-emerald-300" : "border-primary/40"} bg-card p-4 shadow-sm`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <span className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-black uppercase text-primary-foreground">
-          {MODE_BADGE[order.mode]} {MODE_LABEL[order.mode]}
+        <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase ${order.isImport ? "bg-emerald-600 text-white" : "bg-primary text-primary-foreground"}`}>
+          {order.isImport ? "🌍 Importación" : `${MODE_BADGE[order.mode]} ${MODE_LABEL[order.mode]}`}
         </span>
         <span className="text-[10px] font-bold uppercase text-muted-foreground">#{order.id}</span>
       </div>
+
+      {order.isImport && (
+        <div className="mt-2 flex items-center gap-1.5 rounded-xl bg-emerald-50 px-2 py-1.5">
+          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+          <p className="text-[10px] font-bold text-emerald-800">
+            Seguro de pago NEIBA · Importador: {order.importerName ?? "verificado"}
+          </p>
+        </div>
+      )}
 
       <p className="mt-1 text-[10px] text-muted-foreground">
         {new Date(order.createdAt).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" })}
@@ -136,16 +158,16 @@ function UserOrderCard({ order }: { order: UserOrder }) {
 
       {/* Timeline */}
       <div className="mt-4">
-        <div className="flex items-center justify-between">
-          {STATUS_STEPS.map((s, i) => {
+        <div className="flex items-center justify-between gap-1">
+          {steps.map((s, i) => {
             const done = i <= stepIndex;
             const Icon = s.icon;
             return (
-              <div key={s.id} className="flex flex-col items-center gap-1">
+              <div key={s.id} className="flex flex-1 flex-col items-center gap-1">
                 <span className={`grid h-8 w-8 place-items-center rounded-full ${done ? "text-primary-foreground" : "bg-secondary text-muted-foreground"}`} style={done ? { background: "var(--gradient-primary)" } : undefined}>
                   <Icon className="h-3.5 w-3.5" />
                 </span>
-                <span className={`text-[8.5px] ${done ? "text-foreground" : "text-muted-foreground"}`}>{s.label}</span>
+                <span className={`text-center text-[8px] leading-tight ${done ? "text-foreground" : "text-muted-foreground"}`}>{s.label}</span>
               </div>
             );
           })}
@@ -153,8 +175,11 @@ function UserOrderCard({ order }: { order: UserOrder }) {
         <div className="relative mt-1 h-1 overflow-hidden rounded-full bg-secondary">
           <div className="absolute inset-y-0 left-0" style={{ width: `${order.progress}%`, background: "var(--gradient-primary)" }} />
         </div>
-        <p className="mt-2 text-[11px] text-muted-foreground">⏱ {order.eta}</p>
+        <p className={`mt-2 text-[11px] font-bold ${order.isImport ? "text-emerald-700" : "text-muted-foreground"}`}>
+          ⏱ {order.eta}
+        </p>
       </div>
+
 
 
 
