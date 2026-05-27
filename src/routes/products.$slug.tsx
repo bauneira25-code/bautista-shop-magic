@@ -422,7 +422,8 @@ function ProductPage() {
         <div className="flex items-center gap-2.5">
           <div className="shrink-0 px-1">
             <p className="text-[9px] uppercase leading-none text-neutral-500">{mode === "wholesale" ? "Mayorista" : "Individual"}</p>
-            <p className="font-display text-base leading-tight text-[#e8451c]">{formatARS(price * qty)}</p>
+            <p className="font-display text-base leading-tight text-[#e8451c]">{formatARS(lineTotal)}</p>
+            {customCost > 0 && <p className="text-[9px] leading-none text-fuchsia-600">incluye +{formatARS(customCost)} personalización</p>}
             {savings > 0 && <p className="text-[9px] leading-none text-emerald-600">Ahorrás {formatARS(savings * qty)}</p>}
           </div>
           <div className="flex flex-1 gap-2">
