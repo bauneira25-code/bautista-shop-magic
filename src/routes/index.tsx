@@ -319,7 +319,7 @@ function Home() {
                   key={p.id}
                   to="/products/$slug"
                   params={{ slug: p.slug }}
-                  search={{ custom: 1 }}
+                  
                   className="group relative block overflow-hidden rounded-lg border border-border bg-card"
                 >
                   <div className="relative aspect-square grid place-items-center text-xl" style={{ background: p.gradient }}>
