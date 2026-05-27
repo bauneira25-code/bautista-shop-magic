@@ -1,11 +1,26 @@
 import { Link } from "@tanstack/react-router";
 import { Radio, Eye } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { LiveMachine } from "@/lib/liveMachines";
 import { useMachineViewers, formatViewers } from "@/lib/liveViewers";
 
+function useTimecode() {
+  const [t, setT] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setT(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const hh = String(t.getHours()).padStart(2, "0");
+  const mm = String(t.getMinutes()).padStart(2, "0");
+  const ss = String(t.getSeconds()).padStart(2, "0");
+  const ff = String(Math.floor((t.getMilliseconds() / 1000) * 30)).padStart(2, "0");
+  return `${hh}:${mm}:${ss}:${ff}`;
+}
+
 /**
- * "Cinematic" simulated live feed. Pure CSS/SVG — looks tech, futurista, premium.
- * Animaciones: scan line láser, partículas, pulso de máquina.
+ * Cámara HD simulada — look "broadcast": HUD con REC, timecode, resolución,
+ * crosshair, vignette de lente, scanlines y grano. Mantiene la animación
+ * cinematográfica del láser/pieza/brazo.
  */
 export function MachineFeed({
   machine,
@@ -15,6 +30,7 @@ export function MachineFeed({
   big?: boolean;
 }) {
   const { from, via, to } = machine.hue;
+  const tc = useTimecode();
   return (
     <div
       className="relative w-full overflow-hidden rounded-2xl"
@@ -44,11 +60,17 @@ export function MachineFeed({
             animation: "neibaPulse 2.4s ease-in-out infinite",
           }}
         />
-        {/* Punto de trabajo (láser / cabezal) */}
         <span
           className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
           style={{ background: to, boxShadow: `0 0 24px 6px ${to}` }}
         />
+      </div>
+
+      {/* Crosshair de cámara */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 opacity-70">
+        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/40" />
+        <div className="absolute top-1/2 left-0 w-full h-px -translate-y-1/2 bg-white/40" />
+        <div className="absolute inset-0 border border-white/30 rounded-sm" />
       </div>
 
       {/* Haz láser / barrido */}
@@ -61,7 +83,7 @@ export function MachineFeed({
         }}
       />
 
-      {/* Humo / niebla */}
+      {/* Humo */}
       <div
         className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none"
         style={{
@@ -71,9 +93,9 @@ export function MachineFeed({
         }}
       />
 
-      {/* Brazo robótico estilizado */}
+      {/* Brazo robótico */}
       <svg
-        className="absolute right-3 top-3 h-10 w-10 opacity-80"
+        className="absolute right-3 top-10 h-10 w-10 opacity-80"
         viewBox="0 0 40 40"
         fill="none"
         style={{ animation: "neibaArm 4s ease-in-out infinite", transformOrigin: "32px 8px" }}
@@ -83,23 +105,69 @@ export function MachineFeed({
         <circle cx="10" cy="30" r="2.5" fill="#fff" />
       </svg>
 
-      {/* HUD: EN VIVO + viewers */}
+      {/* Scanlines HD */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, rgba(255,255,255,0.18) 0px, rgba(255,255,255,0.18) 1px, transparent 1px, transparent 3px)",
+        }}
+      />
+
+      {/* Grano / noise sutil */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.12] mix-blend-screen"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.9'/></svg>\")",
+          animation: "neibaNoise 0.6s steps(2) infinite",
+        }}
+      />
+
+      {/* Vignette de lente */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%)",
+        }}
+      />
+
+      {/* HUD top-left: REC + timecode */}
       <div className="absolute left-3 top-3 flex items-center gap-1.5">
         <span className="flex items-center gap-1 rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-lg">
           <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-          En vivo
+          REC
+        </span>
+        <span className="rounded-md bg-black/50 px-1.5 py-0.5 font-mono text-[10px] text-white/90 backdrop-blur">
+          {tc}
+        </span>
+      </div>
+
+      {/* HUD top-right: resolución + señal */}
+      <div className="absolute right-3 top-3 flex items-center gap-1.5">
+        <span className="rounded-md bg-black/50 px-1.5 py-0.5 font-mono text-[9px] font-bold text-white/90 backdrop-blur">
+          HD · 1080p
+        </span>
+        <span className="flex items-end gap-[2px] rounded-md bg-black/50 px-1.5 py-1 backdrop-blur">
+          <span className="h-1 w-[2px] bg-white/80" />
+          <span className="h-1.5 w-[2px] bg-white/80" />
+          <span className="h-2 w-[2px] bg-white/80" />
+          <span className="h-2.5 w-[2px] bg-white animate-pulse" />
         </span>
       </div>
 
       {/* Bottom HUD */}
       <div className="absolute inset-x-3 bottom-3 flex items-end justify-between text-white">
         <div>
-          <p className="text-[10px] font-mono uppercase opacity-70">CAM · {machine.id.toUpperCase()}-01</p>
+          <p className="text-[10px] font-mono uppercase opacity-80">CAM · {machine.id.toUpperCase()}-01 · LIVE</p>
           <p className="font-display text-base leading-tight drop-shadow">{machine.emoji} {machine.name}</p>
         </div>
+        <span className="rounded bg-black/50 px-1.5 py-0.5 font-mono text-[9px] text-white/80 backdrop-blur">
+          f/2.8 · ISO 400
+        </span>
       </div>
 
-      {/* keyframes */}
       <style>{`
         @keyframes neibaScan {
           0% { transform: translateY(-60%); }
@@ -116,6 +184,13 @@ export function MachineFeed({
         @keyframes neibaArm {
           0%, 100% { transform: rotate(-6deg); }
           50% { transform: rotate(8deg); }
+        }
+        @keyframes neibaNoise {
+          0% { transform: translate(0,0); }
+          25% { transform: translate(-2px,1px); }
+          50% { transform: translate(1px,-2px); }
+          75% { transform: translate(-1px,2px); }
+          100% { transform: translate(2px,1px); }
         }
       `}</style>
     </div>
