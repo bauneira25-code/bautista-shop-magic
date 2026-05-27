@@ -101,6 +101,9 @@ function ProductPage() {
 
   const price = product.price[mode];
   const savings = product.price.individual - price;
+  const fee = product.customizationFee ?? 0;
+  const customCost = fee * customQty;
+  const lineTotal = price * qty + customCost;
   const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
