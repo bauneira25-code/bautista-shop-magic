@@ -214,6 +214,12 @@ function CartPage() {
                     </div>
                     <p className="font-display text-base text-[#e8451c]">{formatARS(it.unitPrice * it.quantity)}</p>
                   </div>
+                  {it.customQty && it.customFee ? (
+                    <div className="mt-2 flex items-center justify-between rounded-lg bg-fuchsia-50 px-2 py-1.5 text-[10px] text-fuchsia-700">
+                      <span>Personaliza tu producto por {formatARS(it.customFee)} · {it.customQty} u.</span>
+                      <span className="font-bold">+{formatARS(it.customFee * it.customQty)}</span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ))}
