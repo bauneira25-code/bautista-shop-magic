@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus } from "lucide-react";
+import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
+import { ProductBadges, ctaForProduct } from "@/components/ProductBadges";
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
@@ -320,6 +321,20 @@ function Home() {
         {/* Explorar todo — scroll infinito */}
         <InfiniteAll />
 
+        {/* Importadores */}
+        <Link to="/importadores" className="block rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-3.5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-100 text-emerald-700">
+              <Factory className="h-4 w-4" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold">Importadores verificados</p>
+              <p className="text-[10px] text-muted-foreground">Catálogos mayoristas de fábricas chinas · stock AR y a pedido</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-emerald-600" />
+          </div>
+        </Link>
+
         {/* Para emprendedores — discreto */}
         <Link to="/registrar-marca" className="block rounded-2xl border border-border bg-card p-3.5">
           <div className="flex items-center gap-3">
@@ -355,18 +370,35 @@ function SectionHeader({ title, link, icon }: { title: string; link?: string; ic
 }
 
 function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) {
+  const cta = ctaForProduct(p);
+  const priceLabel = p.minOrder ? `${formatARS(p.price.wholesale)} c/u` : formatARS(p.price.individual);
   return (
-    <Link to="/products/$slug" params={{ slug: p.slug }} className="group">
+    <Link to="/products/$slug" params={{ slug: p.slug }} className="group block">
       <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
         <span>{p.emoji}</span>
-        {p.badge && <span className="absolute left-2 top-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur">{p.badge}</span>}
+        <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${p.sellerKind === "neiba" ? "bg-[#e8451c] text-white" : "bg-emerald-600 text-white"}`}>
+          {p.sellerKind === "neiba" ? "NEIBA" : "Importador"}
+        </span>
+        {p.customizable && (
+          <span className="absolute right-2 top-2 rounded-md bg-fuchsia-600 px-1.5 py-0.5 text-[8px] font-black leading-none text-white">
+            Personalizable
+          </span>
+        )}
       </div>
-      <p className="mt-2 line-clamp-1 text-xs font-medium">{p.title}</p>
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-bold">{formatARS(p.price.individual)}</span>
-        <span className="text-[10px] text-muted-foreground">⭐ {p.rating}</span>
+      <p className="mt-1.5 line-clamp-1 text-xs font-semibold text-neutral-900">{p.title}</p>
+      {p.sellerKind === "importer" && (
+        <p className="text-[9px] text-neutral-500 line-clamp-1">por {p.sellerName}</p>
+      )}
+      <p className="text-sm font-black text-[#e8451c] leading-tight">{priceLabel}</p>
+      <div className="mt-1">
+        <ProductBadges product={p} variant="card" max={2} />
       </div>
-      <p className="text-[10px] text-success">Desde {formatARS(p.price.group)}</p>
+      <div className="mt-1.5 flex gap-1">
+        <span className="flex-1 rounded-md bg-[#e8451c] py-1 text-center text-[10px] font-black text-white">{cta.primary}</span>
+        {cta.secondary && (
+          <span className="rounded-md border border-[#e8451c] bg-white px-1.5 py-1 text-[10px] font-bold text-[#e8451c]">{cta.secondary}</span>
+        )}
+      </div>
     </Link>
   );
 }

@@ -2,6 +2,28 @@
 
 export type PurchaseMode = "individual" | "wholesale";
 
+export type SellerKind = "neiba" | "importer";
+export type StockLocation = "ar" | "factory" | "transit" | "customs" | "nationalized";
+
+export interface Importer {
+  id: string;
+  name: string;
+  verified: boolean;
+  city: string;
+  rating: number;
+  productsCount: number;
+  emoji: string;
+  specialty: string;
+}
+
+export const IMPORTERS: Importer[] = [
+  { id: "imp1", name: "Asia Trade SA",      verified: true,  city: "CABA",    rating: 4.8, productsCount: 142, emoji: "🏭", specialty: "Tecnología y electrónica" },
+  { id: "imp2", name: "Shenzhen Direct AR", verified: true,  city: "Córdoba", rating: 4.7, productsCount: 89,  emoji: "📦", specialty: "Smartwatches y wearables" },
+  { id: "imp3", name: "Pacific Imports",    verified: true,  city: "Rosario", rating: 4.6, productsCount: 67,  emoji: "🚢", specialty: "Hogar y deco" },
+  { id: "imp4", name: "Global Link",        verified: false, city: "Mendoza", rating: 4.4, productsCount: 38,  emoji: "🌐", specialty: "Moda y accesorios" },
+  { id: "imp5", name: "China Express AR",   verified: true,  city: "CABA",    rating: 4.9, productsCount: 211, emoji: "⚡", specialty: "Personalización y branding" },
+];
+
 export interface MockProduct {
   id: string;
   slug: string;
@@ -22,6 +44,15 @@ export interface MockProduct {
   gradient: string;
   description: string;
   liveActivity: { name: string; action: string; time: string }[];
+  sellerKind: SellerKind;
+  sellerName: string;
+  sellerVerified: boolean;
+  stockLocation: StockLocation;
+  deliveryLabel: string;
+  minOrder?: number;
+  customizable?: boolean;
+  quotable?: boolean;
+  importStatus?: string;
 }
 
 const grad = (a: string, b: string) => `linear-gradient(135deg, ${a}, ${b})`;
@@ -49,6 +80,45 @@ const make = (
   const target = demand > 66 ? 4 : demand > 33 ? 6 : 8;
   const missing = 1 + ((_id * 13) % (target - 1));
   const joined = target - missing;
+
+  // Asignación determinística del tipo de vendedor / entrega
+  // 0 → NEIBA, 1 → importador stock AR, 2 → importador a pedido (lote), 3 → NEIBA personalizable
+  const kindIdx = _id % 4;
+  const importerPool = ["Asia Trade SA", "Shenzhen Direct AR", "Pacific Imports", "Global Link", "China Express AR"];
+  let sellerKind: SellerKind = "neiba";
+  let sellerName = "NEIBA";
+  let sellerVerified = true;
+  let stockLocation: StockLocation = "ar";
+  let deliveryLabel = "24/48 hs";
+  let minOrder: number | undefined;
+  let customizable = false;
+  let quotable = false;
+  let importStatus: string | undefined;
+
+  if (kindIdx === 1) {
+    sellerKind = "importer";
+    sellerName = importerPool[_id % importerPool.length];
+    sellerVerified = true;
+    stockLocation = "ar";
+    deliveryLabel = "24/48 hs";
+  } else if (kindIdx === 2) {
+    sellerKind = "importer";
+    sellerName = importerPool[(_id + 1) % importerPool.length];
+    sellerVerified = _id % 7 !== 0;
+    stockLocation = "factory";
+    deliveryLabel = "30 días";
+    minOrder = 100;
+    quotable = true;
+    const statuses = ["En fábrica", "En tránsito", "En aduana", "Nacionalizado"];
+    importStatus = statuses[_id % statuses.length];
+  } else if (kindIdx === 3) {
+    sellerKind = "neiba";
+    sellerName = "NEIBA";
+    stockLocation = "ar";
+    deliveryLabel = "24/48 hs";
+    customizable = true;
+  }
+
   return {
     id: `p${_id}`,
     slug,
@@ -72,6 +142,15 @@ const make = (
       { name: "Lucas", action: `compró un ${title}`, time: "hace 2 min" },
       { name: "Mica", action: `agregó ${title} al carrito`, time: "hace 4 min" },
     ],
+    sellerKind,
+    sellerName,
+    sellerVerified,
+    stockLocation,
+    deliveryLabel,
+    minOrder,
+    customizable,
+    quotable,
+    importStatus,
   };
 };
 
