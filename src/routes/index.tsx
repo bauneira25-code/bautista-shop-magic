@@ -279,34 +279,37 @@ function Home() {
           </div>
         </section>
 
-        {/* Personalizado en vivo con NEIBA — cuadrado */}
-        <Link
-          to="/en-vivo"
-          className="relative block aspect-square overflow-hidden rounded-3xl border border-fuchsia-300/40 bg-gradient-to-br from-fuchsia-600 via-pink-500 to-[#e8451c] p-5 text-white shadow-[0_18px_40px_-14px_rgba(232,69,28,0.6)]"
-        >
-          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-3xl" />
-          <div className="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-yellow-300/20 blur-3xl" />
-          <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/35 px-2 py-0.5 backdrop-blur">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
-            <span className="text-[10px] font-black uppercase tracking-wider">LIVE</span>
-          </div>
-          <div className="relative flex h-full flex-col">
-            <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/15 text-4xl backdrop-blur">🎨</div>
-            <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/85">Personalizado con NEIBA</p>
-            <h3 className="mt-1 font-display text-2xl font-black leading-[1.05]">
-              Comprá y mirá en vivo cómo personalizamos tu producto
-            </h3>
-            <div className="mt-auto flex items-end justify-between">
-              <div className="text-[11px] text-white/90">
-                <p className="tabular-nums">👁 {formatViewers(liveNow)} viendo</p>
-                <p>Taller en vivo ahora</p>
-              </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[12px] font-black text-[#e8451c]">
-                Ver en vivo <ChevronRight className="h-3 w-3" />
-              </span>
+        {/* Personalizado en vivo con NEIBA — cuadrado chico, izquierda */}
+        <div className="grid grid-cols-5 gap-3">
+          <Link
+            to="/en-vivo"
+            className="col-span-2 relative block overflow-hidden rounded-2xl border border-fuchsia-300/40 bg-gradient-to-br from-fuchsia-600 via-pink-500 to-[#e8451c] p-3 text-white shadow-[0_10px_24px_-10px_rgba(232,69,28,0.55)]"
+          >
+            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/15 blur-2xl" />
+            <div className="absolute -left-4 -bottom-4 h-16 w-16 rounded-full bg-yellow-300/20 blur-2xl" />
+            <div className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/35 px-1.5 py-0.5 backdrop-blur">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
+              <span className="text-[8px] font-black uppercase tracking-wider">LIVE</span>
             </div>
-          </div>
-        </Link>
+            <div className="relative flex flex-col">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/15 text-2xl backdrop-blur">🎨</div>
+              <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.15em] text-white/85">Personalizado con NEIBA</p>
+              <h3 className="mt-0.5 font-display text-sm font-black leading-tight">
+                Comprá y mirá en vivo cómo personalizamos tu producto
+              </h3>
+              <div className="mt-2 flex items-center justify-between">
+                <div className="text-[10px] text-white/90">
+                  <p className="tabular-nums">👁 {formatViewers(liveNow)} viendo</p>
+                </div>
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-white px-2 py-1 text-[10px] font-black text-[#e8451c]">
+                  Ver <ChevronRight className="h-2.5 w-2.5" />
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          <div className="col-span-3" />
+        </div>
 
 
 
