@@ -405,6 +405,8 @@ function ProductPage() {
           </div>
         </div>
       </div>
+
+      <CustomizeSheet product={product} open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
     </div>
   );
 }
