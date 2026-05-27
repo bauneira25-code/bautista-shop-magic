@@ -236,7 +236,7 @@ function Home() {
             className="col-span-2 block"
           >
             <div
-              className="relative h-full min-h-[160px] overflow-hidden rounded-2xl p-3"
+              className="relative h-full min-h-[130px] overflow-hidden rounded-2xl p-2.5"
               style={{
                 background: "linear-gradient(150deg,#ff6a2c 0%,#e8451c 55%,#b81f1f 100%)",
                 boxShadow: "0 14px 30px -12px rgba(232,69,28,0.55)",
@@ -247,14 +247,14 @@ function Home() {
               <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white backdrop-blur">
                 <Zap className="h-2.5 w-2.5" /> Flash
               </span>
-              <h2 className="mt-2 font-display text-lg leading-tight text-white">
+              <h2 className="mt-1.5 font-display text-base leading-tight text-white">
                 Oferta<br />relámpago
               </h2>
-              <p className="mt-1 text-[10px] font-medium text-white/85">Termina en 02:14:38</p>
-              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-black text-[#e8451c]">
+              <p className="mt-0.5 text-[10px] font-medium text-white/85">Termina en 02:14:38</p>
+              <div className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-[#e8451c]">
                 Ver ahora <ChevronRight className="h-3 w-3" />
               </div>
-              <div className="absolute right-2 bottom-2 text-5xl drop-shadow">⚡</div>
+              <div className="absolute right-1.5 bottom-1.5 text-4xl drop-shadow">⚡</div>
             </div>
           </Link>
 
