@@ -230,7 +230,7 @@ function ProductPage() {
           {/* Botones acción extra */}
           <div className="mt-3 grid grid-cols-2 gap-2">
             {product.customizable && (
-              <button className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
+              <button onClick={() => setCustomizeOpen(true)} className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
                 ✨ Personalizar este producto
               </button>
             )}
