@@ -438,7 +438,7 @@ function ProductPage() {
               AL CARRITO
             </button>
             <button
-              onClick={mode === "wholesale" ? handleCta : handleBuyNow}
+              onClick={handleBuyNow}
               className="flex-1 rounded-xl bg-[#e8451c] py-3 font-display text-xs font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
             >
               {mode === "individual" ? "COMPRAR" : cta}
