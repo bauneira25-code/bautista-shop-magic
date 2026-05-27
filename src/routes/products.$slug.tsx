@@ -447,7 +447,14 @@ function ProductPage() {
         </div>
       </div>
 
-      <CustomizeSheet product={product} open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
+      <CustomizeSheet
+        product={product}
+        open={customizeOpen}
+        onClose={() => setCustomizeOpen(false)}
+        totalQty={qty}
+        initialCustomQty={customQty}
+        onSave={(n) => setCustomQty(n)}
+      />
       <ImporterChat product={product} open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
