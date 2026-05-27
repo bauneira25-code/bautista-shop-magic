@@ -236,7 +236,7 @@ function Home() {
             className="col-span-2 block"
           >
             <div
-              className="relative h-full min-h-[210px] overflow-hidden rounded-2xl p-3.5"
+              className="relative h-full min-h-[160px] overflow-hidden rounded-2xl p-3"
               style={{
                 background: "linear-gradient(150deg,#ff6a2c 0%,#e8451c 55%,#b81f1f 100%)",
                 boxShadow: "0 14px 30px -12px rgba(232,69,28,0.55)",
