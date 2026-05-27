@@ -16,6 +16,15 @@ const STATUS_STEPS = [
   { id: "delivered", label: "Entregado", icon: CheckCircle2 },
 ];
 
+const IMPORT_STEPS = [
+  { id: "processing", label: "Pago confirmado", icon: CheckCircle2 },
+  { id: "production", label: "En fábrica", icon: Factory },
+  { id: "transit", label: "Importando", icon: Plane },
+  { id: "packaging", label: "En aduana", icon: Package },
+  { id: "shipping", label: "En camino", icon: Truck },
+  { id: "delivered", label: "Entregado", icon: CheckCircle2 },
+];
+
 const MODE_LABEL = {
   individual: "Compra individual",
   wholesale: "Pedido mayorista",
