@@ -162,6 +162,7 @@ const make = (
     deliveryLabel,
     minOrder,
     customizable,
+    customizationFee,
     quotable,
     importStatus,
   };
