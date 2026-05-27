@@ -37,6 +37,17 @@ function MachineLivePage() {
   const others = LIVE_MACHINES.filter((m) => m.id !== machine.id);
   const remaining = Math.max(30 - (elapsed % 180), 5);
 
+  // Productos personalizables que matchean esta máquina
+  const matched = useMemo(
+    () =>
+      MOCK_PRODUCTS.filter((p) => {
+        const t = (p.title + " " + p.slug).toLowerCase();
+        return p.customizable !== false && machine.matches.some((k) => t.includes(k));
+      }).slice(0, 24),
+    [machine.matches],
+  );
+  const reel = matched.length > 0 ? [...matched, ...matched] : [];
+
   return (
     <MobileShell>
       <header className="flex items-center justify-between px-5 pb-2 pt-5">
@@ -54,9 +65,43 @@ function MachineLivePage() {
         <p className="text-xs text-muted-foreground">{machine.tagline}</p>
       </div>
 
-      {/* Cámara principal */}
+      {/* Cámara (izq) + reel de personalizables (der) */}
       <div className="px-5 pt-3">
-        <MachineFeed machine={machine} big />
+        <div className="grid grid-cols-5 gap-2.5">
+          <div className="col-span-3">
+            <MachineFeed machine={machine} big />
+          </div>
+          <div className="col-span-2 flex flex-col">
+            <div className="mb-1.5 flex items-center gap-1">
+              <Sparkles className="h-3 w-3 text-primary" />
+              <p className="text-[9px] font-black uppercase tracking-wider text-primary">Personalizá ahora</p>
+            </div>
+            <div className="relative h-[260px] overflow-hidden rounded-2xl border border-border bg-card/40">
+              <div className="absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-background to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-background to-transparent" />
+              <div className="flex flex-col gap-2 p-2 animate-[scroll-y_24s_linear_infinite]">
+                {reel.map((p, i) => (
+                  <Link
+                    key={`${p.id}-${i}`}
+                    to="/products/$slug"
+                    params={{ slug: p.slug }}
+                    search={{ customize: 1 } as never}
+                    className="flex items-center gap-2 rounded-xl border border-border bg-background p-1.5 hover:border-primary"
+                  >
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-xl" style={{ background: p.gradient }}>
+                      {p.emoji}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-1 text-[10px] font-semibold leading-tight">{p.title}</p>
+                      <p className="text-[10px] font-black text-primary leading-none">{formatARS(p.price.individual)}</p>
+                    </div>
+                    <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Actividad en vivo */}
@@ -76,15 +121,34 @@ function MachineLivePage() {
         </div>
       </section>
 
-      {/* Productos que personaliza */}
-      <section className="px-5 pt-4">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Esta máquina personaliza</p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {machine.products.map((p) => (
-            <span key={p} className="rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold">{p}</span>
-          ))}
-        </div>
-      </section>
+      {/* Grid completo de personalizables */}
+      {matched.length > 0 && (
+        <section className="px-5 pt-4">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            Todos los productos para esta máquina
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {matched.slice(0, 9).map((p) => (
+              <Link
+                key={p.id}
+                to="/products/$slug"
+                params={{ slug: p.slug }}
+                search={{ customize: 1 } as never}
+                className="overflow-hidden rounded-xl border border-border bg-card"
+              >
+                <div className="aspect-square grid place-items-center text-3xl" style={{ background: p.gradient }}>
+                  {p.emoji}
+                </div>
+                <div className="p-1.5">
+                  <p className="line-clamp-1 text-[9.5px] font-semibold leading-tight">{p.title}</p>
+                  <p className="text-[9.5px] font-black text-primary">{formatARS(p.price.individual)}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
 
       {/* Cámaras secundarias */}
       <section className="px-5 pt-5">
