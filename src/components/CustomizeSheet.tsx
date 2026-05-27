@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { X, Upload, Type, Image as ImageIcon, Check } from "lucide-react";
-import type { MockProduct } from "@/lib/mockData";
+import { formatARS, type MockProduct } from "@/lib/mockData";
 import { toast } from "sonner";
 
 interface Props {
@@ -25,9 +25,14 @@ export function CustomizeSheet({ product, open, onClose }: Props) {
     reader.readAsDataURL(f);
   };
 
+  const fee = product.customizationFee ?? 0;
+  const total = product.price.individual + fee;
+
   const save = () => {
     toast.success("Personalización guardada ✨", {
-      description: text ? `Texto: "${text}"` : "Lista para agregar al carrito",
+      description: fee > 0
+        ? `Se suma ${formatARS(fee)} al precio final`
+        : text ? `Texto: "${text}"` : "Lista para agregar al carrito",
     });
     onClose();
   };
@@ -121,10 +126,33 @@ export function CustomizeSheet({ product, open, onClose }: Props) {
           </div>
         </div>
 
+        {/* Resumen de costo */}
+        <div className="mt-5 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/60 p-3">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-neutral-600">Precio del producto</span>
+            <span className="font-bold">{formatARS(product.price.individual)}</span>
+          </div>
+          <div className="mt-1 flex items-center justify-between text-xs">
+            <span className="text-fuchsia-700">
+              Costo de personalización
+              {product.sellerKind === "importer" && (
+                <span className="ml-1 text-[9px] text-neutral-500">(del importador)</span>
+              )}
+            </span>
+            <span className="font-bold text-fuchsia-700">
+              {fee > 0 ? `+ ${formatARS(fee)}` : "Sin costo extra"}
+            </span>
+          </div>
+          <div className="mt-2 flex items-center justify-between border-t border-fuchsia-200 pt-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Total final</span>
+            <span className="font-display text-base text-fuchsia-700">{formatARS(total)}</span>
+          </div>
+        </div>
+
         {/* Guardar */}
         <button
           onClick={save}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-fuchsia-600 py-3.5 text-sm font-black text-white shadow-lg"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-fuchsia-600 py-3.5 text-sm font-black text-white shadow-lg"
         >
           <Check className="h-4 w-4" /> Guardar personalización
         </button>
