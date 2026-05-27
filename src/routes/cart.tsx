@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Minus, Plus, Trash2, Lock, CreditCard, Truck, Store, Check, X, User, Mail, Phone, MapPin } from "lucide-react";
 import { useLocalCart } from "@/stores/localCart";
-import { formatARS } from "@/lib/mockData";
+import { formatARS, findProduct } from "@/lib/mockData";
 import { useUserAuth } from "@/stores/userAuth";
 import { PaymentMethodsSheet } from "@/components/PaymentMethodsSheet";
 import { useUserOrders } from "@/stores/userOrders";
