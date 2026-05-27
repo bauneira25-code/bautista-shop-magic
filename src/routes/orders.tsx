@@ -116,6 +116,8 @@ function UserOrderCard({ order }: { order: UserOrder }) {
     ? Math.max(0, Math.floor((order.progress / 100) * (IMPORT_STEPS.length - 1)))
     : STATUS_STEPS.findIndex((s) => s.id === order.status);
   const totalQty = order.items.reduce((s, i) => s + i.quantity, 0);
+  const customItem = !order.isImport ? order.items.find((i) => (i.customQty ?? 0) > 0) : undefined;
+  const liveMachineId = customItem ? machineForProduct(customItem.title, customItem.slug) : null;
 
   return (
     <div className={`rounded-3xl border-2 ${order.isImport ? "border-emerald-300" : "border-primary/40"} bg-card p-4 shadow-sm`}>
