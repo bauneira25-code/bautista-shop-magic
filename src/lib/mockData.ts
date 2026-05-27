@@ -51,6 +51,7 @@ export interface MockProduct {
   deliveryLabel: string;
   minOrder?: number;
   customizable?: boolean;
+  customizationFee?: number;
   quotable?: boolean;
   importStatus?: string;
 }
