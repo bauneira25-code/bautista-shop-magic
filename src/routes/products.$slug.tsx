@@ -156,6 +156,58 @@ function ProductPage() {
           </div>
           <h1 className="mt-2 font-display text-2xl leading-tight">{product.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
+
+          {/* Vendedor */}
+          <div className="mt-3 flex items-center justify-between rounded-2xl border border-border bg-card px-3 py-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-black text-white ${product.sellerKind === "neiba" ? "bg-[#e8451c]" : "bg-emerald-600"}`}>
+                {product.sellerKind === "neiba" ? "N" : "🏭"}
+              </span>
+              <div className="min-w-0">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">Vendido por</p>
+                <p className="text-xs font-bold leading-tight flex items-center gap-1">
+                  {product.sellerName}
+                  {product.sellerVerified && <ShieldCheck className="h-3 w-3 text-emerald-600" />}
+                </p>
+              </div>
+            </div>
+            {product.sellerKind === "importer" && (
+              <button className="rounded-full border border-emerald-600 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
+                Hablar con importador
+              </button>
+            )}
+          </div>
+
+          {/* Badges marketplace */}
+          <div className="mt-3">
+            <ProductBadges product={product} variant="detail" />
+          </div>
+
+          {/* Total según cantidad */}
+          {product.minOrder && (
+            <div className="mt-3 rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-3">
+              <p className="text-[10px] uppercase tracking-wider text-amber-700 font-bold">Compra por lote</p>
+              <p className="mt-1 text-xs text-amber-900">Mínimo {product.minOrder} unidades · {formatARS(product.price.wholesale)} c/u</p>
+              <p className="mt-2 font-display text-lg text-amber-900">
+                Total: {formatARS(product.price.wholesale * (qty < product.minOrder ? product.minOrder : qty))}
+              </p>
+            </div>
+          )}
+
+          {/* Botones acción extra */}
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {product.customizable && (
+              <button className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
+                ✨ Personalizar este producto
+              </button>
+            )}
+            {product.sellerKind === "importer" && product.stockLocation === "factory" && (
+              <>
+                <button className="rounded-xl bg-emerald-600 py-2.5 text-xs font-black text-white">📦 Comprar lote</button>
+                <button className="rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">💬 Pedir cotización</button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* 2 PURCHASE MODES */}
