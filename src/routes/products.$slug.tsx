@@ -217,8 +217,8 @@ function ProductPage() {
               </div>
             </div>
             {product.sellerKind === "importer" && (
-              <button className="rounded-full border border-emerald-600 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
-                Hablar con importador
+              <button onClick={() => setChatOpen(true)} className="rounded-full border border-emerald-600 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
+                💬 Hablar con importador
               </button>
             )}
           </div>
@@ -228,14 +228,21 @@ function ProductPage() {
             <ProductBadges product={product} variant="detail" />
           </div>
 
-          {/* Total según cantidad */}
+          {/* Seguro de pago */}
+          <div className="mt-3 flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50/70 px-3 py-2">
+            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-emerald-800 leading-tight">Seguro de pago NEIBA</p>
+              <p className="text-[10px] text-emerald-700/80 leading-tight">Tu compra está protegida de punta a punta.</p>
+            </div>
+          </div>
+
+          {/* Compra por lote (mínimo) */}
           {product.minOrder && (
             <div className="mt-3 rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-3">
               <p className="text-[10px] uppercase tracking-wider text-amber-700 font-bold">Compra por lote</p>
-              <p className="mt-1 text-xs text-amber-900">Mínimo {product.minOrder} unidades · {formatARS(product.price.wholesale)} c/u</p>
-              <p className="mt-2 font-display text-lg text-amber-900">
-                Total: {formatARS(product.price.wholesale * (qty < product.minOrder ? product.minOrder : qty))}
-              </p>
+              <p className="mt-1 text-sm font-bold text-amber-900">Mínimo {product.minOrder} unidades</p>
+              <p className="text-[11px] text-amber-800/80">Producción a pedido · Entrega {product.deliveryLabel}</p>
             </div>
           )}
 
@@ -247,16 +254,16 @@ function ProductPage() {
                 {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
               </button>
             )}
-            {product.sellerKind === "importer" && product.stockLocation === "factory" && (
-              <>
-                <button className="rounded-xl bg-emerald-600 py-2.5 text-xs font-black text-white">📦 Comprar lote</button>
-                <button className="rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">💬 Pedir cotización</button>
-              </>
+            {product.sellerKind === "importer" && (
+              <button onClick={() => setChatOpen(true)} className="col-span-2 rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">
+                💬 Hablar con importador
+              </button>
             )}
           </div>
         </div>
 
-        {/* 2 PURCHASE MODES */}
+        {/* 2 PURCHASE MODES (oculto si es lote-only) */}
+        {!wholesaleOnly && (
         <div>
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
           <div className="grid gap-2 grid-cols-2">
