@@ -84,14 +84,15 @@ function ProductPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
 
-  // Lote forzado: importador con producción a pedido y mínimo
+  // Lote forzado: importador a pedido con mínimo
   const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
-  // Pre-set qty al mínimo si es lote forzado
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useState(() => {
-    if (wholesaleOnly && product?.minOrder && qty < product.minOrder) setQty(product.minOrder);
-    return 0;
-  });
+
+  useEffect(() => {
+    if (wholesaleOnly && product?.minOrder) {
+      setMode("wholesale");
+      setQty((q) => (q < product.minOrder! ? product.minOrder! : q));
+    }
+  }, [wholesaleOnly, product?.minOrder]);
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
