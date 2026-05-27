@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { X, Upload, Type, Image as ImageIcon, Check } from "lucide-react";
-import type { MockProduct } from "@/lib/mockData";
+import { formatARS, type MockProduct } from "@/lib/mockData";
 import { toast } from "sonner";
 
 interface Props {
