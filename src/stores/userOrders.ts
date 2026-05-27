@@ -11,6 +11,7 @@ export interface UserOrderItem {
   quantity: number;
   variant?: string;
   color?: string;
+  customQty?: number;
 }
 
 export interface UserOrder {
