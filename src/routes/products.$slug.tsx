@@ -429,6 +429,7 @@ function ProductPage() {
       </div>
 
       <CustomizeSheet product={product} open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
+      <ImporterChat product={product} open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }
