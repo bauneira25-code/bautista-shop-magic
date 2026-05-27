@@ -9,6 +9,7 @@ import { useLocalCart } from "@/stores/localCart";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
+import { ProductBadges } from "@/components/ProductBadges";
 
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => {
