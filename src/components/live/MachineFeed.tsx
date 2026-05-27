@@ -5,11 +5,13 @@ import type { LiveMachine } from "@/lib/liveMachines";
 import { useMachineViewers, formatViewers } from "@/lib/liveViewers";
 
 function useTimecode() {
-  const [t, setT] = useState(() => new Date());
+  const [t, setT] = useState<Date | null>(null);
   useEffect(() => {
+    setT(new Date());
     const id = setInterval(() => setT(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
+  if (!t) return "--:--:--:--";
   const hh = String(t.getHours()).padStart(2, "0");
   const mm = String(t.getMinutes()).padStart(2, "0");
   const ss = String(t.getSeconds()).padStart(2, "0");
