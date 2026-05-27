@@ -85,7 +85,7 @@ function MachineLivePage() {
                     key={`${p.id}-${i}`}
                     to="/products/$slug"
                     params={{ slug: p.slug }}
-                    search={{ customize: 1 } as never}
+                   
                     className="flex items-center gap-2 rounded-xl border border-border bg-background p-1.5 hover:border-primary"
                   >
                     <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-xl" style={{ background: p.gradient }}>
@@ -133,7 +133,7 @@ function MachineLivePage() {
                 key={p.id}
                 to="/products/$slug"
                 params={{ slug: p.slug }}
-                search={{ customize: 1 } as never}
+               
                 className="overflow-hidden rounded-xl border border-border bg-card"
               >
                 <div className="aspect-square grid place-items-center text-3xl" style={{ background: p.gradient }}>
