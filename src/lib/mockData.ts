@@ -2,6 +2,28 @@
 
 export type PurchaseMode = "individual" | "wholesale";
 
+export type SellerKind = "neiba" | "importer";
+export type StockLocation = "ar" | "factory" | "transit" | "customs" | "nationalized";
+
+export interface Importer {
+  id: string;
+  name: string;
+  verified: boolean;
+  city: string;
+  rating: number;
+  productsCount: number;
+  emoji: string;
+  specialty: string;
+}
+
+export const IMPORTERS: Importer[] = [
+  { id: "imp1", name: "Asia Trade SA",      verified: true,  city: "CABA",    rating: 4.8, productsCount: 142, emoji: "🏭", specialty: "Tecnología y electrónica" },
+  { id: "imp2", name: "Shenzhen Direct AR", verified: true,  city: "Córdoba", rating: 4.7, productsCount: 89,  emoji: "📦", specialty: "Smartwatches y wearables" },
+  { id: "imp3", name: "Pacific Imports",    verified: true,  city: "Rosario", rating: 4.6, productsCount: 67,  emoji: "🚢", specialty: "Hogar y deco" },
+  { id: "imp4", name: "Global Link",        verified: false, city: "Mendoza", rating: 4.4, productsCount: 38,  emoji: "🌐", specialty: "Moda y accesorios" },
+  { id: "imp5", name: "China Express AR",   verified: true,  city: "CABA",    rating: 4.9, productsCount: 211, emoji: "⚡", specialty: "Personalización y branding" },
+];
+
 export interface MockProduct {
   id: string;
   slug: string;
@@ -22,6 +44,15 @@ export interface MockProduct {
   gradient: string;
   description: string;
   liveActivity: { name: string; action: string; time: string }[];
+  sellerKind: SellerKind;
+  sellerName: string;
+  sellerVerified: boolean;
+  stockLocation: StockLocation;
+  deliveryLabel: string;
+  minOrder?: number;
+  customizable?: boolean;
+  quotable?: boolean;
+  importStatus?: string;
 }
 
 const grad = (a: string, b: string) => `linear-gradient(135deg, ${a}, ${b})`;
