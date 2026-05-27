@@ -321,6 +321,20 @@ function Home() {
         {/* Explorar todo — scroll infinito */}
         <InfiniteAll />
 
+        {/* Importadores */}
+        <Link to="/importadores" className="block rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-3.5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-100 text-emerald-700">
+              <Factory className="h-4 w-4" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold">Importadores verificados</p>
+              <p className="text-[10px] text-muted-foreground">Catálogos mayoristas de fábricas chinas · stock AR y a pedido</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-emerald-600" />
+          </div>
+        </Link>
+
         {/* Para emprendedores — discreto */}
         <Link to="/registrar-marca" className="block rounded-2xl border border-border bg-card p-3.5">
           <div className="flex items-center gap-3">

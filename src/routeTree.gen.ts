@@ -15,6 +15,8 @@ import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as OfertasRouteImport } from './routes/ofertas'
+import { Route as ImportadoresRouteImport } from './routes/importadores'
+import { Route as ImportadorPanelRouteImport } from './routes/importador-panel'
 import { Route as EnVivoRouteImport } from './routes/en-vivo'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as CartRouteImport } from './routes/cart'
@@ -70,6 +72,16 @@ const OrdersRoute = OrdersRouteImport.update({
 const OfertasRoute = OfertasRouteImport.update({
   id: '/ofertas',
   path: '/ofertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportadoresRoute = ImportadoresRouteImport.update({
+  id: '/importadores',
+  path: '/importadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportadorPanelRoute = ImportadorPanelRouteImport.update({
+  id: '/importador-panel',
+  path: '/importador-panel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnVivoRoute = EnVivoRouteImport.update({
@@ -211,6 +223,8 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/en-vivo': typeof EnVivoRouteWithChildren
+  '/importador-panel': typeof ImportadorPanelRoute
+  '/importadores': typeof ImportadoresRoute
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
@@ -244,6 +258,8 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/en-vivo': typeof EnVivoRouteWithChildren
+  '/importador-panel': typeof ImportadorPanelRoute
+  '/importadores': typeof ImportadoresRoute
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
@@ -279,6 +295,8 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categorias': typeof CategoriasRouteWithChildren
   '/en-vivo': typeof EnVivoRouteWithChildren
+  '/importador-panel': typeof ImportadorPanelRoute
+  '/importadores': typeof ImportadoresRoute
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
@@ -315,6 +333,8 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/en-vivo'
+    | '/importador-panel'
+    | '/importadores'
     | '/ofertas'
     | '/orders'
     | '/profile'
@@ -348,6 +368,8 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/en-vivo'
+    | '/importador-panel'
+    | '/importadores'
     | '/ofertas'
     | '/orders'
     | '/profile'
@@ -382,6 +404,8 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categorias'
     | '/en-vivo'
+    | '/importador-panel'
+    | '/importadores'
     | '/ofertas'
     | '/orders'
     | '/profile'
@@ -417,6 +441,8 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriasRoute: typeof CategoriasRouteWithChildren
   EnVivoRoute: typeof EnVivoRouteWithChildren
+  ImportadorPanelRoute: typeof ImportadorPanelRoute
+  ImportadoresRoute: typeof ImportadoresRoute
   OfertasRoute: typeof OfertasRoute
   OrdersRoute: typeof OrdersRoute
   ProfileRoute: typeof ProfileRoute
@@ -468,6 +494,20 @@ declare module '@tanstack/react-router' {
       path: '/ofertas'
       fullPath: '/ofertas'
       preLoaderRoute: typeof OfertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/importadores': {
+      id: '/importadores'
+      path: '/importadores'
+      fullPath: '/importadores'
+      preLoaderRoute: typeof ImportadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/importador-panel': {
+      id: '/importador-panel'
+      path: '/importador-panel'
+      fullPath: '/importador-panel'
+      preLoaderRoute: typeof ImportadorPanelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en-vivo': {
@@ -728,6 +768,8 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriasRoute: CategoriasRouteWithChildren,
   EnVivoRoute: EnVivoRouteWithChildren,
+  ImportadorPanelRoute: ImportadorPanelRoute,
+  ImportadoresRoute: ImportadoresRoute,
   OfertasRoute: OfertasRoute,
   OrdersRoute: OrdersRoute,
   ProfileRoute: ProfileRoute,
