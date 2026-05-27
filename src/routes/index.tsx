@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
-import { ProductBadges, ctaForProduct } from "@/components/ProductBadges";
+import { ProductBadges } from "@/components/ProductBadges";
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
@@ -370,7 +370,6 @@ function SectionHeader({ title, link, icon }: { title: string; link?: string; ic
 }
 
 function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) {
-  const cta = ctaForProduct(p);
   const priceLabel = p.minOrder ? `${formatARS(p.price.wholesale)} c/u` : formatARS(p.price.individual);
   return (
     <Link to="/products/$slug" params={{ slug: p.slug }} className="group block">
@@ -392,12 +391,6 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
       <p className="text-sm font-black text-[#e8451c] leading-tight">{priceLabel}</p>
       <div className="mt-1">
         <ProductBadges product={p} variant="card" max={2} />
-      </div>
-      <div className="mt-1.5 flex gap-1">
-        <span className="flex-1 rounded-md bg-[#e8451c] py-1 text-center text-[10px] font-black text-white">{cta.primary}</span>
-        {cta.secondary && (
-          <span className="rounded-md border border-[#e8451c] bg-white px-1.5 py-1 text-[10px] font-bold text-[#e8451c]">{cta.secondary}</span>
-        )}
       </div>
     </Link>
   );

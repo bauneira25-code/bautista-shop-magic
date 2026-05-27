@@ -10,6 +10,7 @@ import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 import { ProductBadges } from "@/components/ProductBadges";
+import { CustomizeSheet } from "@/components/CustomizeSheet";
 
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => {
@@ -78,6 +79,8 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [activePhoto, setActivePhoto] = useState(0);
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
@@ -118,34 +121,63 @@ function ProductPage() {
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] pb-32">
-      {/* Hero image */}
-      <div className="relative aspect-square w-full" style={{ background: product.gradient }}>
-        <div className="absolute inset-0 grid place-items-center text-[10rem]">{product.emoji}</div>
-        <div className="absolute left-0 right-0 top-0 flex items-center justify-between p-4">
-          <button onClick={() => navigate({ to: "/" })} className="grid h-10 w-10 place-items-center rounded-full bg-black/40 backdrop-blur">
+      {/* Hero: carrusel horizontal de 5 fotos (swipe / scroll-snap) */}
+      <div className="relative">
+        <div
+          className="flex aspect-square w-full snap-x snap-mandatory overflow-x-auto scrollbar-hide"
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            const i = Math.round(el.scrollLeft / el.clientWidth);
+            if (i !== activePhoto) setActivePhoto(i);
+          }}
+        >
+          {[0, 1, 2, 3, 4].map((i) => {
+            const tints = [
+              product.gradient,
+              `linear-gradient(135deg, #fff, ${product.colors?.[0] ?? "#fde68a"})`,
+              `linear-gradient(160deg, #0f172a, #1e293b)`,
+              `linear-gradient(135deg, #fef3c7, #fde68a)`,
+              `linear-gradient(135deg, #fce7f3, #fbcfe8)`,
+            ];
+            return (
+              <div
+                key={i}
+                className="relative grid aspect-square w-full shrink-0 snap-center place-items-center text-[10rem]"
+                style={{ background: tints[i] }}
+              >
+                <span style={{ transform: `rotate(${(i - 2) * 4}deg)` }}>{product.emoji}</span>
+                <span className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
+                  {i + 1}/5
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Top overlay (back / share / heart) */}
+        <div className="pointer-events-none absolute left-0 right-0 top-0 flex items-center justify-between p-4">
+          <button onClick={() => navigate({ to: "/" })} className="pointer-events-auto grid h-10 w-10 place-items-center rounded-full bg-black/40 backdrop-blur">
             <ArrowLeft className="h-4 w-4 text-white" />
           </button>
-          <div className="flex gap-2">
+          <div className="pointer-events-auto flex gap-2">
             <button className="grid h-10 w-10 place-items-center rounded-full bg-black/40 backdrop-blur"><Share2 className="h-4 w-4 text-white" /></button>
             <button className="grid h-10 w-10 place-items-center rounded-full bg-black/40 backdrop-blur"><Heart className="h-4 w-4 text-white" /></button>
           </div>
         </div>
-        <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-black/50 px-3 py-1.5 backdrop-blur">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-success" />
-          <span className="text-[11px] text-white">{product.liveActivity[0]?.name} {product.liveActivity[0]?.action}</span>
+
+        {/* Dots */}
+        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <span
+              key={i}
+              className={`h-1.5 rounded-full transition-all ${i === activePhoto ? "w-5 bg-white" : "w-1.5 bg-white/50"}`}
+            />
+          ))}
         </div>
-        <div className="absolute right-4 bottom-4 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
+
+        <div className="absolute left-4 top-16 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
           {stockLabel(product.stock).label}
         </div>
-      </div>
-
-      {/* Thumbnails */}
-      <div className="-mt-3 flex gap-2 overflow-x-auto px-4 scrollbar-hide">
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-border bg-card text-xl" style={{ background: i === 0 ? product.gradient : undefined }}>
-            {i === 0 ? product.emoji : i === 3 ? "▶" : "🖼"}
-          </div>
-        ))}
       </div>
 
       <div className="space-y-4 px-4 pt-4">
@@ -198,7 +230,7 @@ function ProductPage() {
           {/* Botones acción extra */}
           <div className="mt-3 grid grid-cols-2 gap-2">
             {product.customizable && (
-              <button className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
+              <button onClick={() => setCustomizeOpen(true)} className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
                 ✨ Personalizar este producto
               </button>
             )}
@@ -373,6 +405,8 @@ function ProductPage() {
           </div>
         </div>
       </div>
+
+      <CustomizeSheet product={product} open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
     </div>
   );
 }
