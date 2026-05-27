@@ -280,6 +280,7 @@ function ProductPage() {
             />
           </div>
         </div>
+        )}
 
         {/* Wholesale tiers */}
         {mode === "wholesale" && (
