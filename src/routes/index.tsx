@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory } from "lucide-react";
+import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory, Clock } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
 import { ProductBadges } from "@/components/ProductBadges";
@@ -388,6 +388,31 @@ function Home() {
               <p className="text-[10px] text-muted-foreground">Catálogos mayoristas de fábricas chinas · stock AR y a pedido</p>
             </div>
             <ChevronRight className="h-4 w-4 text-emerald-600" />
+          </div>
+        </Link>
+
+        {/* A pedido */}
+        <Link to="/importadores" className="block rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-white p-3.5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-amber-100 text-amber-700">
+              <Clock className="h-4 w-4" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold">A pedido</p>
+              <p className="text-[10px] text-muted-foreground">Productos de fábrica · envío en 30 días · mínimos desde 100 u.</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-amber-600" />
+          </div>
+          <div className="mt-2.5 flex gap-2 overflow-x-auto scrollbar-hide">
+            {MOCK_PRODUCTS.filter((p) => p.stockLocation === "factory").slice(0, 5).map((p) => (
+              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[72px] shrink-0">
+                <div className="aspect-square overflow-hidden rounded-xl text-xl grid place-items-center" style={{ background: p.gradient }}>
+                  <span>{p.emoji}</span>
+                </div>
+                <p className="mt-1 line-clamp-1 text-[9px] font-medium">{p.title}</p>
+                <p className="text-[9px] font-bold text-amber-700 leading-none">{formatARS(p.price.wholesale)}</p>
+              </Link>
+            ))}
           </div>
         </Link>
 
