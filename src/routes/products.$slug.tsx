@@ -83,6 +83,7 @@ function ProductPage() {
   const [customizeOpen, setCustomizeOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
+  const [customQty, setCustomQty] = useState(0);
 
   // Lote forzado: importador a pedido con mínimo
   const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
@@ -100,7 +101,10 @@ function ProductPage() {
 
   const price = product.price[mode];
   const savings = product.price.individual - price;
-  const cta = mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
+  const fee = product.customizationFee ?? 0;
+  const customCost = fee * customQty;
+  const lineTotal = price * qty + customCost;
+  const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
     const id = `${product.slug}-${mode}-${variant}-${color}`;
@@ -251,8 +255,22 @@ function ProductPage() {
             {product.customizable && (
               <button onClick={() => setCustomizeOpen(true)} className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
                 ✨ Personalizar este producto
-                {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
+                {product.customizationFee ? ` · +${formatARS(product.customizationFee)} c/u` : ""}
               </button>
+            )}
+            {product.customizable && customQty > 0 && (
+              <div className="col-span-2 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-fuchsia-700">Personalización aplicada</span>
+                  <button onClick={() => setCustomQty(0)} className="text-[10px] text-fuchsia-700 underline">Quitar</button>
+                </div>
+                <p className="mt-1 text-neutral-700">
+                  {qty} unidades en total · <b>{customQty} personalizadas</b> · {qty - customQty} sin personalizar
+                </p>
+                <p className="mt-1 text-fuchsia-700">
+                  Costo extra personalización: <b>+{formatARS(customCost)}</b> ({formatARS(fee)} × {customQty})
+                </p>
+              </div>
             )}
             {product.sellerKind === "importer" && (
               <button onClick={() => setChatOpen(true)} className="col-span-2 rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">
@@ -404,7 +422,8 @@ function ProductPage() {
         <div className="flex items-center gap-2.5">
           <div className="shrink-0 px-1">
             <p className="text-[9px] uppercase leading-none text-neutral-500">{mode === "wholesale" ? "Mayorista" : "Individual"}</p>
-            <p className="font-display text-base leading-tight text-[#e8451c]">{formatARS(price * qty)}</p>
+            <p className="font-display text-base leading-tight text-[#e8451c]">{formatARS(lineTotal)}</p>
+            {customCost > 0 && <p className="text-[9px] leading-none text-fuchsia-600">incluye +{formatARS(customCost)} personalización</p>}
             {savings > 0 && <p className="text-[9px] leading-none text-emerald-600">Ahorrás {formatARS(savings * qty)}</p>}
           </div>
           <div className="flex flex-1 gap-2">
@@ -428,7 +447,14 @@ function ProductPage() {
         </div>
       </div>
 
-      <CustomizeSheet product={product} open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
+      <CustomizeSheet
+        product={product}
+        open={customizeOpen}
+        onClose={() => setCustomizeOpen(false)}
+        totalQty={qty}
+        initialCustomQty={customQty}
+        onSave={(n) => setCustomQty(n)}
+      />
       <ImporterChat product={product} open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
