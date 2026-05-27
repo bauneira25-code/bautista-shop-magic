@@ -119,6 +119,8 @@ function ProductPage() {
       quantity: qty,
       variant: product.variants?.[variant],
       color: product.colors?.[color],
+      customQty: customQty > 0 ? customQty : undefined,
+      customFee: customQty > 0 ? fee : undefined,
     });
   };
 

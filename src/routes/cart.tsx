@@ -33,8 +33,9 @@ function CartPage() {
   const [paid, setPaid] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
+  const designTotal = items.reduce((s, i) => s + (i.customFee ?? 0) * (i.customQty ?? 0), 0);
   const shippingFee = delivery === "envio" ? SHIPPING_FEE : 0;
-  const total = subtotal + shippingFee;
+  const total = subtotal + designTotal + shippingFee;
   const count = items.reduce((s, i) => s + i.quantity, 0);
 
   const modeLabel = (m: string) =>
@@ -213,6 +214,12 @@ function CartPage() {
                     </div>
                     <p className="font-display text-base text-[#e8451c]">{formatARS(it.unitPrice * it.quantity)}</p>
                   </div>
+                  {it.customQty && it.customFee ? (
+                    <div className="mt-2 flex items-center justify-between rounded-lg bg-fuchsia-50 px-2 py-1.5 text-[10px] text-fuchsia-700">
+                      <span>Personaliza tu producto por {formatARS(it.customFee)} · {it.customQty} u.</span>
+                      <span className="font-bold">+{formatARS(it.customFee * it.customQty)}</span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ))}
@@ -249,6 +256,12 @@ function CartPage() {
           <div className="rounded-2xl border border-orange-100 bg-orange-50/40 p-4 text-sm">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Resumen</p>
             <Row label={`Productos (${count})`} value={formatARS(subtotal)} />
+            {designTotal > 0 && (
+              <Row
+                label={<span className="text-fuchsia-700">Personalización</span>}
+                value={<span className="font-bold text-fuchsia-700">+{formatARS(designTotal)}</span>}
+              />
+            )}
             <Row
               label="Envío"
               value={delivery === "envio" ? formatARS(SHIPPING_FEE) : <span className="font-bold text-[#e8451c]">Gratis</span>}
