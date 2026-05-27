@@ -25,9 +25,14 @@ export function CustomizeSheet({ product, open, onClose }: Props) {
     reader.readAsDataURL(f);
   };
 
+  const fee = product.customizationFee ?? 0;
+  const total = product.price.individual + fee;
+
   const save = () => {
     toast.success("Personalización guardada ✨", {
-      description: text ? `Texto: "${text}"` : "Lista para agregar al carrito",
+      description: fee > 0
+        ? `Se suma ${formatARS(fee)} al precio final`
+        : text ? `Texto: "${text}"` : "Lista para agregar al carrito",
     });
     onClose();
   };
