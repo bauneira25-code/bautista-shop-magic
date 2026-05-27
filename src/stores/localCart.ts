@@ -13,6 +13,8 @@ export interface LocalCartItem {
   quantity: number;
   variant?: string;
   color?: string;
+  customQty?: number;
+  customFee?: number;
 }
 
 interface LocalCart {
