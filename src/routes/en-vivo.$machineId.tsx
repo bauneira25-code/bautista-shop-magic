@@ -42,7 +42,12 @@ function MachineLivePage() {
     () =>
       MOCK_PRODUCTS.filter((p) => {
         const t = (p.title + " " + p.slug).toLowerCase();
-        return p.customizable !== false && machine.matches.some((k) => t.includes(k));
+        return (
+          p.customizable !== false &&
+          p.sellerKind === "neiba" &&
+          p.stock > 0 &&
+          machine.matches.some((k) => t.includes(k))
+        );
       }).slice(0, 24),
     [machine.matches],
   );
