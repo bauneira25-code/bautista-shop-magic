@@ -83,6 +83,7 @@ function ProductPage() {
   const [customizeOpen, setCustomizeOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
+  const [customQty, setCustomQty] = useState(0);
 
   // Lote forzado: importador a pedido con mínimo
   const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
