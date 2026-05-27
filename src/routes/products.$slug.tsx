@@ -81,7 +81,17 @@ function ProductPage() {
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
   const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
+
+  // Lote forzado: importador con producción a pedido y mínimo
+  const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
+  // Pre-set qty al mínimo si es lote forzado
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useState(() => {
+    if (wholesaleOnly && product?.minOrder && qty < product.minOrder) setQty(product.minOrder);
+    return 0;
+  });
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
