@@ -232,6 +232,7 @@ function ProductPage() {
             {product.customizable && (
               <button onClick={() => setCustomizeOpen(true)} className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
                 ✨ Personalizar este producto
+                {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
               </button>
             )}
             {product.sellerKind === "importer" && product.stockLocation === "factory" && (
