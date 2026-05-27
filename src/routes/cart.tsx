@@ -111,6 +111,7 @@ function CartPage() {
           quantity: i.quantity,
           variant: i.variant,
           color: i.color,
+          customQty: i.customQty,
         })),
         total: orderTotal,
         paymentMethod: info.method,

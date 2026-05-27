@@ -225,4 +225,10 @@
     0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); }
   }
   .eq-bar { transform-origin: bottom; animation: equalizer 0.9s ease-in-out infinite; }
+
+  @keyframes scroll-y {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
 }
+
