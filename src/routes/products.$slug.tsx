@@ -100,7 +100,7 @@ function ProductPage() {
 
   const price = product.price[mode];
   const savings = product.price.individual - price;
-  const cta = mode === "wholesale" ? "PEDIR MAYORISTA" : "AGREGAR AL CARRITO";
+  const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
     const id = `${product.slug}-${mode}-${variant}-${color}`;
