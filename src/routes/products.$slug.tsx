@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { QtyInput } from "@/components/QtyInput";
 import { ProductBadges } from "@/components/ProductBadges";
 import { CustomizeSheet } from "@/components/CustomizeSheet";
+import { ImporterChat } from "@/components/ImporterChat";
 
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => {
