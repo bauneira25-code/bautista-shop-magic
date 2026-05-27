@@ -38,20 +38,18 @@ function MachineLivePage() {
   const remaining = Math.max(30 - (elapsed % 180), 5);
 
   // Productos personalizables que matchean esta máquina
-  const matched = useMemo(
-    () =>
-      MOCK_PRODUCTS.filter((p) => {
-        const t = (p.title + " " + p.slug).toLowerCase();
-        return (
-          p.customizable !== false &&
-          p.sellerKind === "neiba" &&
-          p.stock > 0 &&
-          machine.matches.some((k) => t.includes(k))
-        );
-      }).slice(0, 24),
-    [machine.matches],
-  );
-  const reel = matched.length > 0 ? [...matched, ...matched] : [];
+  const matched = useMemo(() => {
+    const base = MOCK_PRODUCTS.filter(
+      (p) => p.customizable !== false && p.sellerKind === "neiba" && p.stock > 0,
+    );
+    const specific = base.filter((p) => {
+      const t = (p.title + " " + p.slug).toLowerCase();
+      return machine.matches.some((k) => t.includes(k));
+    });
+    return (specific.length > 0 ? specific : base).slice(0, 24);
+  }, [machine.matches]);
+  // triplicado para que el loop quede siempre lleno y la animación se vea constante
+  const reel = matched.length > 0 ? [...matched, ...matched, ...matched] : [];
 
   return (
     <MobileShell>
