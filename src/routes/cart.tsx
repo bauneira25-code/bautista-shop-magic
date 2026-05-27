@@ -33,8 +33,9 @@ function CartPage() {
   const [paid, setPaid] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
+  const designTotal = items.reduce((s, i) => s + (i.customFee ?? 0) * (i.customQty ?? 0), 0);
   const shippingFee = delivery === "envio" ? SHIPPING_FEE : 0;
-  const total = subtotal + shippingFee;
+  const total = subtotal + designTotal + shippingFee;
   const count = items.reduce((s, i) => s + i.quantity, 0);
 
   const modeLabel = (m: string) =>
