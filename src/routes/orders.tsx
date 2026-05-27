@@ -183,6 +183,30 @@ function UserOrderCard({ order }: { order: UserOrder }) {
         </p>
       </div>
 
+      {liveMachineId && (
+        <Link
+          to="/en-vivo/$machineId"
+          params={{ machineId: liveMachineId }}
+          className="mt-3 flex items-center justify-between rounded-2xl border border-fuchsia-300/50 bg-gradient-to-r from-fuchsia-600 via-pink-500 to-[#e8451c] px-3 py-2.5 text-white shadow-[0_10px_24px_-12px_rgba(232,69,28,0.55)]"
+        >
+          <span className="flex items-center gap-2">
+            <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 backdrop-blur">
+              <Radio className="h-3.5 w-3.5" />
+            </span>
+            <span>
+              <span className="block text-[9px] font-black uppercase tracking-wider text-white/85">Personalización NEIBA en vivo</span>
+              <span className="block text-[12px] font-bold leading-tight">Ver cómo se está personalizando</span>
+            </span>
+          </span>
+          <span className="flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-black text-[#e8451c]">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
+            Ver en vivo
+          </span>
+        </Link>
+      )}
+
+
+
 
 
 
