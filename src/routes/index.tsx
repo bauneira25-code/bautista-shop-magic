@@ -308,7 +308,28 @@ function Home() {
             </div>
           </Link>
 
-          <div className="col-span-3" />
+          <div className="col-span-3 flex flex-col">
+            <div className="mb-1 flex items-center justify-between px-0.5">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Personalizables</p>
+              <Link to="/en-vivo" className="text-[9px] font-semibold text-primary">Ver todos</Link>
+            </div>
+            <div className="grid flex-1 grid-cols-3 gap-1.5">
+              {MOCK_PRODUCTS.filter((p) => p.customizable).slice(0, 6).map((p) => (
+                <Link
+                  key={p.id}
+                  to="/products/$slug"
+                  params={{ slug: p.slug }}
+                  
+                  className="group relative block overflow-hidden rounded-lg border border-border bg-card"
+                >
+                  <div className="relative aspect-square grid place-items-center text-xl" style={{ background: p.gradient }}>
+                    <span>{p.emoji}</span>
+                    <span className="absolute left-0.5 top-0.5 rounded bg-fuchsia-600 px-1 py-0.5 text-[7px] font-black uppercase text-white">🎨</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
 
 
