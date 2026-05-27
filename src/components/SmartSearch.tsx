@@ -5,7 +5,7 @@ import { searchProducts, formatARS } from "@/lib/mockData";
 
 const TRENDING_QUERIES = ["iPhone 15", "Auriculares ANC", "Smartwatch", "Freidora aire", "Máscara LED"];
 
-export function SmartSearch({ placeholder = "Buscar productos, marcas..." }: { placeholder?: string }) {
+export function SmartSearch({ placeholder = "Buscar productos, marcas o importadores…" }: { placeholder?: string }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
