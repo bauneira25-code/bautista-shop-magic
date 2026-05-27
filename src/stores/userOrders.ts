@@ -27,6 +27,8 @@ export interface UserOrder {
   status: "processing" | "packaging" | "shipping" | "delivered";
   progress: number;
   eta: string;
+  isImport?: boolean;
+  importerName?: string;
 }
 
 interface UserOrdersState {
