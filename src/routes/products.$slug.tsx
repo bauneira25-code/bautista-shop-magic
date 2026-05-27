@@ -346,8 +346,9 @@ function ProductPage() {
         </div>
 
         {/* Trust badges */}
-        <div className="grid grid-cols-3 gap-2 text-[10px] text-muted-foreground">
-          <div className="rounded-xl border border-border bg-card p-2 text-center"><Truck className="mx-auto mb-1 h-4 w-4 text-primary" />Envío 48h</div>
+        <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-foreground">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2 text-center text-emerald-700"><ShieldCheck className="mx-auto mb-1 h-4 w-4" />Seguro de pago</div>
+          <div className="rounded-xl border border-border bg-card p-2 text-center"><Truck className="mx-auto mb-1 h-4 w-4 text-primary" />Envío rastreado</div>
           <div className="rounded-xl border border-border bg-card p-2 text-center"><ShieldCheck className="mx-auto mb-1 h-4 w-4 text-primary" />Garantía</div>
           <div className="rounded-xl border border-border bg-card p-2 text-center"><Sparkles className="mx-auto mb-1 h-4 w-4 text-primary" />MercadoPago</div>
         </div>
