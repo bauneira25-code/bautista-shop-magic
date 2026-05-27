@@ -89,6 +89,14 @@ function CartPage() {
       const orderTotal =
         list.reduce((s, i) => s + i.unitPrice * i.quantity, 0) +
         (delivery === "envio" ? SHIPPING_FEE : 0);
+
+      // Detectar si algún item es de importador a pedido (requiere importación)
+      const importerItem = list
+        .map((i) => findProduct(i.slug))
+        .find((p) => p && p.sellerKind === "importer" && p.stockLocation === "factory");
+      const isImport = !!importerItem;
+      const importerName = importerItem?.sellerName;
+
       addOrder({
         id: `NB-${Date.now().toString().slice(-6)}-${mode.slice(0, 1).toUpperCase()}`,
         createdAt: Date.now(),
@@ -112,8 +120,12 @@ function CartPage() {
           ? { nombre: user.nombre, apellido: user.apellido, telefono: user.telefono }
           : undefined,
         status: "processing",
-        progress: 10,
-        eta: delivery === "envio" ? "Llega en 3 a 5 días" : "Listo para retirar en 48h",
+        progress: isImport ? 8 : 10,
+        eta: isImport
+          ? "Entre 15 y 30 días llega tu producto"
+          : delivery === "envio" ? "Llega en 3 a 5 días" : "Listo para retirar en 48h",
+        isImport,
+        importerName,
       });
     });
 
