@@ -64,9 +64,12 @@ export function ProductBadges({ product, variant = "card", max }: { product: Moc
   }
 
   if (product.customizable) {
+    const feeLabel = product.customizationFee
+      ? `Personalizable +$${product.customizationFee.toLocaleString("es-AR")}`
+      : "Personalizable";
     items.push({
       key: "perso",
-      label: "Personalizable",
+      label: feeLabel,
       cls: "bg-fuchsia-50 text-fuchsia-700 border border-fuchsia-200",
       icon: <Sparkles className="h-2.5 w-2.5" />,
     });
