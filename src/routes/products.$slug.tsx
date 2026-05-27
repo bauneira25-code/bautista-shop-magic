@@ -79,6 +79,8 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
   const [variant, setVariant] = useState(0);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [activePhoto, setActivePhoto] = useState(0);
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
