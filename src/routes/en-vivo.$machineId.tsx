@@ -79,13 +79,12 @@ function MachineLivePage() {
             <div className="relative h-[260px] overflow-hidden rounded-2xl border border-border bg-card/40">
               <div className="absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-background to-transparent" />
               <div className="absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-background to-transparent" />
-              <div className="flex flex-col gap-2 p-2 animate-[scroll-y_24s_linear_infinite]">
+              <div className="flex flex-col gap-2 p-2 animate-[scroll-y_10s_linear_infinite]">
                 {reel.map((p, i) => (
                   <Link
                     key={`${p.id}-${i}`}
                     to="/products/$slug"
                     params={{ slug: p.slug }}
-                   
                     className="flex items-center gap-2 rounded-xl border border-border bg-background p-1.5 hover:border-primary"
                   >
                     <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-xl" style={{ background: p.gradient }}>
