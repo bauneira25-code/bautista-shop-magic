@@ -228,6 +228,33 @@ function Home() {
           </div>
         </div>
 
+        {/* Personalizando NEIBA en vivo */}
+        <Link
+          to="/"
+          className="relative block overflow-hidden rounded-2xl border border-fuchsia-300/40 bg-gradient-to-br from-fuchsia-600 via-pink-500 to-[#e8451c] p-4 text-white shadow-[0_12px_30px_-12px_rgba(232,69,28,0.55)]"
+        >
+          <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/30 px-2 py-0.5 backdrop-blur">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
+            <span className="text-[10px] font-black uppercase tracking-wider">LIVE</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/15 text-3xl backdrop-blur">
+              🎨
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">Personalizado NEIBA al momento</p>
+              <p className="mt-0.5 font-display text-[15px] font-black leading-tight">
+                Compra y mirá en vivo cómo personalizamos tu producto
+              </p>
+              <div className="mt-1.5 flex items-center gap-2 text-[10px] text-white/85">
+                <span className="tabular-nums">👁 {formatViewers(liveNow)} viendo</span>
+                <span>·</span>
+                <span>Taller en vivo ahora</span>
+              </div>
+            </div>
+          </div>
+        </Link>
+
         {/* Combo: Oferta relámpago (izq) + Destacados (der) */}
         <section className="grid grid-cols-5 gap-3">
           <Link
