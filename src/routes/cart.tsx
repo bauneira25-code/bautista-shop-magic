@@ -256,6 +256,12 @@ function CartPage() {
           <div className="rounded-2xl border border-orange-100 bg-orange-50/40 p-4 text-sm">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Resumen</p>
             <Row label={`Productos (${count})`} value={formatARS(subtotal)} />
+            {designTotal > 0 && (
+              <Row
+                label={<span className="text-fuchsia-700">Personalización</span>}
+                value={<span className="font-bold text-fuchsia-700">+{formatARS(designTotal)}</span>}
+              />
+            )}
             <Row
               label="Envío"
               value={delivery === "envio" ? formatARS(SHIPPING_FEE) : <span className="font-bold text-[#e8451c]">Gratis</span>}
