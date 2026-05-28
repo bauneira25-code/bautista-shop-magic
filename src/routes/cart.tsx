@@ -234,6 +234,15 @@ function CartPage() {
                       <span className="font-bold">+{formatARS(it.customFee * it.customQty)}</span>
                     </div>
                   ) : null}
+                  {it.importShipping && it.importShippingFee ? (
+                    <div className="mt-2 flex items-center justify-between rounded-lg bg-amber-50 px-2 py-1.5 text-[10px] text-amber-800">
+                      <span>
+                        {it.importShipping === "aire" ? "✈️ Por avión · 15-30 días" : "🚢 Por barco · 30-45 días"}
+                        {" "}({formatARS(it.importShippingFee)}/u)
+                      </span>
+                      <span className="font-bold">+{formatARS(it.importShippingFee * it.quantity)}</span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ))}
