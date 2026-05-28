@@ -8,10 +8,10 @@ const ORANGE = "#e8451c";
 const sideItems = {
   left: [
     { to: "/", label: "Inicio", icon: Home, exact: true },
-    { to: "/orders", label: "Pedidos", icon: Package, exact: false },
+    { to: "/en-vivo", label: "En Vivo", icon: Radio, exact: false },
   ],
   right: [
-    { to: "/en-vivo", label: "En Vivo", icon: Radio, exact: false },
+    { to: "/orders", label: "Pedidos", icon: Package, exact: false },
     { to: "/profile", label: "Perfil", icon: User, exact: false },
   ],
 };
