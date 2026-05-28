@@ -84,9 +84,12 @@ function ProductPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
   const [customQty, setCustomQty] = useState(0);
+  const [importShipping, setImportShipping] = useState<"aire" | "barco">("barco");
 
   // Lote forzado: importador a pedido con mínimo
   const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
+  // Producto a pedido (importación): aplica selección avión/barco
+  const isImport = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory");
 
   useEffect(() => {
     if (wholesaleOnly && product?.minOrder) {
