@@ -216,44 +216,33 @@ function ProductPage() {
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="rounded-md bg-primary/15 px-1.5 py-0.5 font-bold text-primary">{product.badge ?? "TENDENCIA"}</span>
             <span className="inline-flex items-center gap-1"><Star className="h-3 w-3 fill-warning text-warning" /> {product.rating} ({product.reviews})</span>
+            <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-[10px] font-bold text-foreground">
+              {product.sellerKind === "neiba" ? "N" : "🏭"} {product.sellerName}
+              {product.sellerVerified && <ShieldCheck className="h-2.5 w-2.5 text-emerald-600" />}
+            </span>
           </div>
           <h1 className="mt-2 font-display text-2xl leading-tight">{product.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
 
           {/* Precio unitario + cantidad mínima */}
           <div className="mt-3 flex items-stretch gap-2">
-            <div className="flex-1 rounded-2xl border border-orange-200 bg-orange-50/60 px-3 py-2">
+            <div className="flex-1 rounded-xl border border-orange-200 bg-orange-50/60 px-2.5 py-1.5">
               <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500 leading-none">Precio por unidad</p>
-              <p className="mt-1 font-display text-lg leading-none text-[#e8451c]">{formatARS(price)}</p>
+              <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
             </div>
             {product.minOrder && (
-              <div className="flex-1 rounded-2xl border border-amber-200 bg-amber-50/60 px-3 py-2">
+              <div className="flex-1 rounded-xl border border-amber-200 bg-amber-50/60 px-2.5 py-1.5">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Cantidad mínima</p>
-                <p className="mt-1 font-display text-lg leading-none text-amber-900">{product.minOrder} u.</p>
+                <p className="mt-1 font-display text-base leading-none text-amber-900">{product.minOrder} u.</p>
               </div>
             )}
           </div>
 
-          {/* Bloque vendedor unificado: vendedor → seguro → badges → lote → cantidad */}
+          {/* Bloque unificado: seguro → badges → lote → cantidad */}
           <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
-            {/* Vendedor */}
-            <div className="flex items-center justify-between px-3 py-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-black text-white ${product.sellerKind === "neiba" ? "bg-[#e8451c]" : "bg-emerald-600"}`}>
-                  {product.sellerKind === "neiba" ? "N" : "🏭"}
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">Vendido por</p>
-                  <p className="text-xs font-bold leading-tight flex items-center gap-1">
-                    {product.sellerName}
-                    {product.sellerVerified && <ShieldCheck className="h-3 w-3 text-emerald-600" />}
-                  </p>
-                </div>
-              </div>
-            </div>
 
             {/* Seguro de pago NEIBA */}
-            <div className="flex items-center gap-2 border-t border-border bg-emerald-50/50 px-3 py-2">
+            <div className="flex items-center gap-2 bg-emerald-50/50 px-3 py-2">
               <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
               <div className="min-w-0">
                 <p className="text-[11px] font-bold text-emerald-800 leading-tight">Seguro de pago NEIBA</p>
@@ -319,25 +308,25 @@ function ProductPage() {
             })()}
           </div>
 
-          {/* Botones acción extra */}
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="mt-3 flex items-center gap-2">
             {product.customizable && (
-              <button onClick={() => setCustomizeOpen(true)} className={`${product.sellerKind === "importer" ? "col-span-2" : "col-span-3"} rounded-xl bg-fuchsia-600 py-3 text-sm font-black text-white`}>
+              <button onClick={() => setCustomizeOpen(true)} className="flex-1 rounded-lg bg-fuchsia-600 py-2 text-[11px] font-black text-white">
                 ✨ Personalizar
-                {product.customizationFee ? ` · +${formatARS(product.customizationFee)} c/u` : ""}
+                {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
               </button>
             )}
             {product.sellerKind === "importer" && (
               <button
                 onClick={() => setChatOpen(true)}
-                className={`${product.customizable ? "" : "col-span-3"} aspect-square rounded-xl border-2 border-emerald-600 bg-white p-2 text-[10px] font-black text-emerald-700 leading-tight flex flex-col items-center justify-center gap-1`}
+                className="flex-1 rounded-lg border border-emerald-600 bg-white py-2 text-[11px] font-black text-emerald-700 flex items-center justify-center gap-1"
               >
-                <span className="text-lg leading-none">💬</span>
-                <span>Hablar con<br />importador</span>
+                💬 Hablar importador
               </button>
             )}
+          </div>
+          <div>
             {product.customizable && customQty > 0 && (
-              <div className="col-span-3 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
+              <div className="mt-2 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-fuchsia-700">Personalización aplicada</span>
                   <button onClick={() => setCustomQty(0)} className="text-[10px] text-fuchsia-700 underline">Quitar</button>

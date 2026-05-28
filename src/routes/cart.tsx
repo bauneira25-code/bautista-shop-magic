@@ -217,15 +217,26 @@ function CartPage() {
                     {it.color && <span className="grid h-4 w-4 rounded-full border border-neutral-300" style={{ background: it.color }} />}
                   </div>
                   <div className="mt-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => setQty(it.id, it.quantity - 1)} className="grid h-7 w-7 place-items-center rounded-full bg-orange-50 text-[#e8451c]"><Minus className="h-3 w-3" /></button>
-                      <QtyInput
-                        value={it.quantity}
-                        onChange={(n) => setQty(it.id, n)}
-                        className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center text-sm font-bold text-neutral-900 focus:border-[#e8451c] focus:outline-none"
-                      />
-                      <button onClick={() => setQty(it.id, it.quantity + 1)} className="grid h-7 w-7 place-items-center rounded-full bg-[#e8451c] text-white"><Plus className="h-3 w-3" /></button>
-                    </div>
+                    {(() => {
+                      const prod = findProduct(it.slug);
+                      const minQty = it.mode === "wholesale" && prod?.minOrder ? prod.minOrder : 1;
+                      return (
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setQty(it.id, Math.max(minQty, it.quantity - 1))}
+                            disabled={it.quantity <= minQty}
+                            className="grid h-7 w-7 place-items-center rounded-full bg-orange-50 text-[#e8451c] disabled:opacity-40"
+                          ><Minus className="h-3 w-3" /></button>
+                          <QtyInput
+                            value={it.quantity}
+                            onChange={(n) => setQty(it.id, Math.max(minQty, n))}
+                            min={minQty}
+                            className="w-14 rounded-md border border-orange-200 bg-white py-0.5 text-center text-sm font-bold text-neutral-900 focus:border-[#e8451c] focus:outline-none"
+                          />
+                          <button onClick={() => setQty(it.id, it.quantity + 1)} className="grid h-7 w-7 place-items-center rounded-full bg-[#e8451c] text-white"><Plus className="h-3 w-3" /></button>
+                        </div>
+                      );
+                    })()}
                     <p className="font-display text-base text-[#e8451c]">{formatARS(it.unitPrice * it.quantity)}</p>
                   </div>
                   {it.customQty && it.customFee ? (
