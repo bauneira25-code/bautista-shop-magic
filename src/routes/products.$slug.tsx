@@ -106,11 +106,18 @@ function ProductPage() {
   const savings = product.price.individual - price;
   const fee = product.customizationFee ?? 0;
   const customCost = fee * customQty;
-  const lineTotal = price * qty + customCost;
+
+  // Tarifas estimativas de importación por unidad
+  const aireFee = useMemo(() => Math.max(800, Math.round(price * 0.18)), [price]);
+  const barcoFee = useMemo(() => Math.max(250, Math.round(price * 0.05)), [price]);
+  const importFee = isImport ? (importShipping === "aire" ? aireFee : barcoFee) : 0;
+  const importCost = importFee * qty;
+
+  const lineTotal = price * qty + customCost + importCost;
   const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
-    const id = `${product.slug}-${mode}-${variant}-${color}`;
+    const id = `${product.slug}-${mode}-${variant}-${color}${isImport ? `-${importShipping}` : ""}`;
     addToCart({
       id,
       slug: product.slug,
@@ -124,6 +131,8 @@ function ProductPage() {
       color: product.colors?.[color],
       customQty: customQty > 0 ? customQty : undefined,
       customFee: customQty > 0 ? fee : undefined,
+      importShipping: isImport ? importShipping : undefined,
+      importShippingFee: isImport ? importFee : undefined,
     });
   };
 
