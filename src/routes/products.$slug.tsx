@@ -242,7 +242,7 @@ function ProductPage() {
           <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
 
             {/* Seguro de pago NEIBA */}
-            <div className="flex items-center gap-2 border-t border-border bg-emerald-50/50 px-3 py-2">
+            <div className="flex items-center gap-2 bg-emerald-50/50 px-3 py-2">
               <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
               <div className="min-w-0">
                 <p className="text-[11px] font-bold text-emerald-800 leading-tight">Seguro de pago NEIBA</p>
