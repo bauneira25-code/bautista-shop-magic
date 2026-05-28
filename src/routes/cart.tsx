@@ -90,6 +90,8 @@ function CartPage() {
     Object.entries(byMode).forEach(([mode, list]) => {
       const orderTotal =
         list.reduce((s, i) => s + i.unitPrice * i.quantity, 0) +
+        list.reduce((s, i) => s + (i.importShippingFee ?? 0) * i.quantity, 0) +
+        list.reduce((s, i) => s + (i.customFee ?? 0) * (i.customQty ?? 0), 0) +
         (delivery === "envio" ? SHIPPING_FEE : 0);
 
       // Detectar si algún item es de importador a pedido (requiere importación)
@@ -98,6 +100,16 @@ function CartPage() {
         .find((p) => p && p.sellerKind === "importer" && p.stockLocation === "factory");
       const isImport = !!importerItem;
       const importerName = importerItem?.sellerName;
+
+      // ETA basada en método de importación elegido + personalización (+4 días)
+      const importItem = list.find((i) => i.importShipping);
+      const hasCustom = list.some((i) => (i.customQty ?? 0) > 0);
+      const extra = hasCustom ? " (+4 días por personalización)" : "";
+      const importEta = importItem?.importShipping === "aire"
+        ? `Entre 15 y 30 días por avión${extra}`
+        : importItem?.importShipping === "barco"
+        ? `Entre 30 y 45 días por barco${extra}`
+        : `Entre 15 y 30 días llega tu producto${extra}`;
 
       addOrder({
         id: `NB-${Date.now().toString().slice(-6)}-${mode.slice(0, 1).toUpperCase()}`,
@@ -125,7 +137,7 @@ function CartPage() {
         status: "processing",
         progress: isImport ? 8 : 10,
         eta: isImport
-          ? "Entre 15 y 30 días llega tu producto"
+          ? importEta
           : delivery === "envio" ? "Llega en 3 a 5 días" : "Listo para retirar en 48h",
         isImport,
         importerName,
