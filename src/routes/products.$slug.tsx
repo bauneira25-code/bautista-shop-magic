@@ -308,25 +308,25 @@ function ProductPage() {
             })()}
           </div>
 
-          {/* Botones acción extra */}
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="mt-3 flex items-center gap-2">
             {product.customizable && (
-              <button onClick={() => setCustomizeOpen(true)} className={`${product.sellerKind === "importer" ? "col-span-2" : "col-span-3"} rounded-xl bg-fuchsia-600 py-3 text-sm font-black text-white`}>
+              <button onClick={() => setCustomizeOpen(true)} className="flex-1 rounded-lg bg-fuchsia-600 py-2 text-[11px] font-black text-white">
                 ✨ Personalizar
-                {product.customizationFee ? ` · +${formatARS(product.customizationFee)} c/u` : ""}
+                {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
               </button>
             )}
             {product.sellerKind === "importer" && (
               <button
                 onClick={() => setChatOpen(true)}
-                className={`${product.customizable ? "" : "col-span-3"} aspect-square rounded-xl border-2 border-emerald-600 bg-white p-2 text-[10px] font-black text-emerald-700 leading-tight flex flex-col items-center justify-center gap-1`}
+                className="flex-1 rounded-lg border border-emerald-600 bg-white py-2 text-[11px] font-black text-emerald-700 flex items-center justify-center gap-1"
               >
-                <span className="text-lg leading-none">💬</span>
-                <span>Hablar con<br />importador</span>
+                💬 Hablar importador
               </button>
             )}
+          </div>
+          <div>
             {product.customizable && customQty > 0 && (
-              <div className="col-span-3 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
+              <div className="mt-2 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-fuchsia-700">Personalización aplicada</span>
                   <button onClick={() => setCustomQty(0)} className="text-[10px] text-fuchsia-700 underline">Quitar</button>
