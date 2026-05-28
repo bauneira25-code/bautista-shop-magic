@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, Heart, Share2, Star, Truck, ShieldCheck, Sparkles,
-  Plus, Minus,
+  Plus, Minus, Plane, Ship,
 } from "lucide-react";
 import { findProduct, formatARS, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
