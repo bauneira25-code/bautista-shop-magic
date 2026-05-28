@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { PurchaseMode } from "@/lib/mockData";
 
+export type ImportShipping = "aire" | "barco";
+
 export interface LocalCartItem {
   id: string;
   slug: string;
@@ -15,6 +17,8 @@ export interface LocalCartItem {
   color?: string;
   customQty?: number;
   customFee?: number;
+  importShipping?: ImportShipping;
+  importShippingFee?: number; // por unidad
 }
 
 interface LocalCart {
