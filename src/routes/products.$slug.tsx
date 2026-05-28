@@ -462,38 +462,6 @@ function ProductPage() {
         {/* Pasos por modo */}
         <PurchaseSteps mode={mode} />
 
-        {/* Quantity */}
-        {(() => {
-          const minQty = wholesaleOnly && product.minOrder ? product.minOrder : 1;
-          return (
-            <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3">
-              <div>
-                <p className="text-sm font-semibold">Cantidad</p>
-                <p className="text-[11px] text-muted-foreground">
-                  {wholesaleOnly ? `Mínimo ${product.minOrder} unidades` : "Elegí cuántas querés"}
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setQty(Math.max(minQty, qty - 1))}
-                  disabled={qty <= minQty}
-                  className="grid h-9 w-9 place-items-center rounded-full bg-secondary disabled:opacity-30"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <QtyInput
-                  value={qty}
-                  onChange={setQty}
-                  min={minQty}
-                  className="w-20 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
-                />
-                <button onClick={() => setQty(qty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          );
-        })()}
 
         {/* Trust badges */}
         <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-foreground">
