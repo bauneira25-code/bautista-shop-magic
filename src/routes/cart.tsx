@@ -34,8 +34,9 @@ function CartPage() {
 
   const subtotal = items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
   const designTotal = items.reduce((s, i) => s + (i.customFee ?? 0) * (i.customQty ?? 0), 0);
+  const importTotal = items.reduce((s, i) => s + (i.importShippingFee ?? 0) * i.quantity, 0);
   const shippingFee = delivery === "envio" ? SHIPPING_FEE : 0;
-  const total = subtotal + designTotal + shippingFee;
+  const total = subtotal + designTotal + importTotal + shippingFee;
   const count = items.reduce((s, i) => s + i.quantity, 0);
 
   const modeLabel = (m: string) =>
@@ -89,6 +90,8 @@ function CartPage() {
     Object.entries(byMode).forEach(([mode, list]) => {
       const orderTotal =
         list.reduce((s, i) => s + i.unitPrice * i.quantity, 0) +
+        list.reduce((s, i) => s + (i.importShippingFee ?? 0) * i.quantity, 0) +
+        list.reduce((s, i) => s + (i.customFee ?? 0) * (i.customQty ?? 0), 0) +
         (delivery === "envio" ? SHIPPING_FEE : 0);
 
       // Detectar si algún item es de importador a pedido (requiere importación)
@@ -97,6 +100,16 @@ function CartPage() {
         .find((p) => p && p.sellerKind === "importer" && p.stockLocation === "factory");
       const isImport = !!importerItem;
       const importerName = importerItem?.sellerName;
+
+      // ETA basada en método de importación elegido + personalización (+4 días)
+      const importItem = list.find((i) => i.importShipping);
+      const hasCustom = list.some((i) => (i.customQty ?? 0) > 0);
+      const extra = hasCustom ? " (+4 días por personalización)" : "";
+      const importEta = importItem?.importShipping === "aire"
+        ? `Entre 15 y 30 días por avión${extra}`
+        : importItem?.importShipping === "barco"
+        ? `Entre 30 y 45 días por barco${extra}`
+        : `Entre 15 y 30 días llega tu producto${extra}`;
 
       addOrder({
         id: `NB-${Date.now().toString().slice(-6)}-${mode.slice(0, 1).toUpperCase()}`,
@@ -124,7 +137,7 @@ function CartPage() {
         status: "processing",
         progress: isImport ? 8 : 10,
         eta: isImport
-          ? "Entre 15 y 30 días llega tu producto"
+          ? importEta
           : delivery === "envio" ? "Llega en 3 a 5 días" : "Listo para retirar en 48h",
         isImport,
         importerName,
@@ -221,6 +234,15 @@ function CartPage() {
                       <span className="font-bold">+{formatARS(it.customFee * it.customQty)}</span>
                     </div>
                   ) : null}
+                  {it.importShipping && it.importShippingFee ? (
+                    <div className="mt-2 flex items-center justify-between rounded-lg bg-amber-50 px-2 py-1.5 text-[10px] text-amber-800">
+                      <span>
+                        {it.importShipping === "aire" ? "✈️ Por avión · 15-30 días" : "🚢 Por barco · 30-45 días"}
+                        {" "}({formatARS(it.importShippingFee)}/u)
+                      </span>
+                      <span className="font-bold">+{formatARS(it.importShippingFee * it.quantity)}</span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ))}
@@ -261,6 +283,12 @@ function CartPage() {
               <Row
                 label={<span className="text-fuchsia-700">Personalización</span>}
                 value={<span className="font-bold text-fuchsia-700">+{formatARS(designTotal)}</span>}
+              />
+            )}
+            {importTotal > 0 && (
+              <Row
+                label={<span className="text-amber-800">Importación (a pedido)</span>}
+                value={<span className="font-bold text-amber-800">+{formatARS(importTotal)}</span>}
               />
             )}
             <Row

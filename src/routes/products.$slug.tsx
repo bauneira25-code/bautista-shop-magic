@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, Heart, Share2, Star, Truck, ShieldCheck, Sparkles,
-  Plus, Minus,
+  Plus, Minus, Plane, Ship,
 } from "lucide-react";
 import { findProduct, formatARS, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
@@ -84,9 +84,12 @@ function ProductPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
   const [customQty, setCustomQty] = useState(0);
+  const [importShipping, setImportShipping] = useState<"aire" | "barco">("barco");
 
   // Lote forzado: importador a pedido con mínimo
   const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
+  // Producto a pedido (importación): aplica selección avión/barco
+  const isImport = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory");
 
   useEffect(() => {
     if (wholesaleOnly && product?.minOrder) {
@@ -103,11 +106,18 @@ function ProductPage() {
   const savings = product.price.individual - price;
   const fee = product.customizationFee ?? 0;
   const customCost = fee * customQty;
-  const lineTotal = price * qty + customCost;
+
+  // Tarifas estimativas de importación por unidad
+  const aireFee = useMemo(() => Math.max(800, Math.round(price * 0.18)), [price]);
+  const barcoFee = useMemo(() => Math.max(250, Math.round(price * 0.05)), [price]);
+  const importFee = isImport ? (importShipping === "aire" ? aireFee : barcoFee) : 0;
+  const importCost = importFee * qty;
+
+  const lineTotal = price * qty + customCost + importCost;
   const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
-    const id = `${product.slug}-${mode}-${variant}-${color}`;
+    const id = `${product.slug}-${mode}-${variant}-${color}${isImport ? `-${importShipping}` : ""}`;
     addToCart({
       id,
       slug: product.slug,
@@ -121,6 +131,8 @@ function ProductPage() {
       color: product.colors?.[color],
       customQty: customQty > 0 ? customQty : undefined,
       customFee: customQty > 0 ? fee : undefined,
+      importShipping: isImport ? importShipping : undefined,
+      importShippingFee: isImport ? importFee : undefined,
     });
   };
 
@@ -342,6 +354,49 @@ function ProductPage() {
                 <button key={c} onClick={() => setColor(i)} className={`h-9 w-9 rounded-full border-2 transition ${color === i ? "border-primary scale-110" : "border-border"}`} style={{ background: c }} />
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Envío de importación (a pedido: avión / barco) */}
+        {isImport && (
+          <div>
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              ¿Cómo lo traemos? <span className="text-amber-700">· Producto a pedido</span>
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => setImportShipping("aire")}
+                className={`flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition ${importShipping === "aire" ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Plane className="h-4 w-4 text-primary" />
+                  <span className="text-[12px] font-black">Por avión</span>
+                  <span className="rounded bg-primary/15 px-1 py-0.5 text-[8px] font-bold text-primary">RÁPIDO</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground">Entre 15 y 30 días</p>
+                <p className="font-display text-sm text-primary">+{formatARS(aireFee)} <span className="text-[9px] text-muted-foreground font-sans">/ unidad</span></p>
+              </button>
+              <button
+                onClick={() => setImportShipping("barco")}
+                className={`flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition ${importShipping === "barco" ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Ship className="h-4 w-4 text-emerald-600" />
+                  <span className="text-[12px] font-black">Por barco</span>
+                  <span className="rounded bg-emerald-100 px-1 py-0.5 text-[8px] font-bold text-emerald-700">MÁS BARATO</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground">Entre 30 y 45 días</p>
+                <p className="font-display text-sm text-emerald-700">+{formatARS(barcoFee)} <span className="text-[9px] text-muted-foreground font-sans">/ unidad</span></p>
+              </button>
+            </div>
+            {product.customizable && customQty > 0 && (
+              <p className="mt-2 rounded-lg bg-fuchsia-50 px-2.5 py-1.5 text-[10px] text-fuchsia-700">
+                ✨ La personalización suma <b>+4 días</b> al tiempo de entrega.
+              </p>
+            )}
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              Total estimado de envío: <b className="text-foreground">{formatARS(importCost)}</b> ({qty} u.)
+            </p>
           </div>
         )}
 
