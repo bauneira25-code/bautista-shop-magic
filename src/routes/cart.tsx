@@ -285,6 +285,12 @@ function CartPage() {
                 value={<span className="font-bold text-fuchsia-700">+{formatARS(designTotal)}</span>}
               />
             )}
+            {importTotal > 0 && (
+              <Row
+                label={<span className="text-amber-800">Importación (a pedido)</span>}
+                value={<span className="font-bold text-amber-800">+{formatARS(importTotal)}</span>}
+              />
+            )}
             <Row
               label="Envío"
               value={delivery === "envio" ? formatARS(SHIPPING_FEE) : <span className="font-bold text-[#e8451c]">Gratis</span>}
