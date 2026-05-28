@@ -283,7 +283,7 @@ function Home() {
         <div className="grid grid-cols-5 gap-3">
           <Link
             to="/en-vivo"
-            className="col-span-2 relative block overflow-hidden rounded-2xl border border-fuchsia-300/40 bg-gradient-to-br from-fuchsia-600 via-pink-500 to-[#e8451c] p-3 text-white shadow-[0_10px_24px_-10px_rgba(232,69,28,0.55)]"
+            className="col-span-2 relative block h-full overflow-hidden rounded-2xl border border-fuchsia-300/40 bg-gradient-to-br from-fuchsia-600 via-pink-500 to-[#e8451c] p-3 text-white shadow-[0_10px_24px_-10px_rgba(232,69,28,0.55)]"
           >
             <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/15 blur-2xl" />
             <div className="absolute -left-4 -bottom-4 h-16 w-16 rounded-full bg-yellow-300/20 blur-2xl" />
