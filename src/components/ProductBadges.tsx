@@ -3,7 +3,7 @@ import type { MockProduct } from "@/lib/mockData";
 
 type Variant = "card" | "detail";
 
-export function ProductBadges({ product, variant = "card", max }: { product: MockProduct; variant?: Variant; max?: number }) {
+export function ProductBadges({ product, variant = "card", max, deliveryOverride, hideCustomizable, hideImportStatus }: { product: MockProduct; variant?: Variant; max?: number; deliveryOverride?: string; hideCustomizable?: boolean; hideImportStatus?: boolean }) {
   const items: { key: string; label: string; cls: string; icon?: React.ReactNode }[] = [];
 
   // Vendedor
@@ -39,7 +39,14 @@ export function ProductBadges({ product, variant = "card", max }: { product: Moc
     });
   }
 
-  if (product.deliveryLabel === "24/48 hs") {
+  if (deliveryOverride) {
+    items.push({
+      key: "entrega-dyn",
+      label: `Entrega: ${deliveryOverride}`,
+      cls: "bg-amber-50 text-amber-700 border border-amber-200",
+      icon: <Clock className="h-2.5 w-2.5" />,
+    });
+  } else if (product.deliveryLabel === "24/48 hs") {
     items.push({
       key: "entrega-rapida",
       label: "Entrega 24/48 hs",
@@ -63,7 +70,7 @@ export function ProductBadges({ product, variant = "card", max }: { product: Moc
     });
   }
 
-  if (product.customizable) {
+  if (product.customizable && !hideCustomizable) {
     const feeLabel = product.customizationFee
       ? `Personalizable +$${product.customizationFee.toLocaleString("es-AR")}`
       : "Personalizable";
@@ -75,7 +82,7 @@ export function ProductBadges({ product, variant = "card", max }: { product: Moc
     });
   }
 
-  if (variant === "detail" && product.importStatus) {
+  if (variant === "detail" && product.importStatus && !hideImportStatus) {
     items.push({
       key: "import-status",
       label: product.importStatus,

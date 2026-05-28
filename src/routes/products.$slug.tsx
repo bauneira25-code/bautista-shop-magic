@@ -220,60 +220,124 @@ function ProductPage() {
           <h1 className="mt-2 font-display text-2xl leading-tight">{product.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
 
-          {/* Vendedor */}
-          <div className="mt-3 flex items-center justify-between rounded-2xl border border-border bg-card px-3 py-2">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-black text-white ${product.sellerKind === "neiba" ? "bg-[#e8451c]" : "bg-emerald-600"}`}>
-                {product.sellerKind === "neiba" ? "N" : "🏭"}
-              </span>
-              <div className="min-w-0">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">Vendido por</p>
-                <p className="text-xs font-bold leading-tight flex items-center gap-1">
-                  {product.sellerName}
-                  {product.sellerVerified && <ShieldCheck className="h-3 w-3 text-emerald-600" />}
-                </p>
-              </div>
+          {/* Precio unitario + cantidad mínima */}
+          <div className="mt-3 flex items-stretch gap-2">
+            <div className="flex-1 rounded-2xl border border-orange-200 bg-orange-50/60 px-3 py-2">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500 leading-none">Precio por unidad</p>
+              <p className="mt-1 font-display text-lg leading-none text-[#e8451c]">{formatARS(price)}</p>
             </div>
-            {product.sellerKind === "importer" && (
-              <button onClick={() => setChatOpen(true)} className="rounded-full border border-emerald-600 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
-                💬 Hablar con importador
-              </button>
+            {product.minOrder && (
+              <div className="flex-1 rounded-2xl border border-amber-200 bg-amber-50/60 px-3 py-2">
+                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Cantidad mínima</p>
+                <p className="mt-1 font-display text-lg leading-none text-amber-900">{product.minOrder} u.</p>
+              </div>
             )}
           </div>
 
-          {/* Badges marketplace */}
-          <div className="mt-3">
-            <ProductBadges product={product} variant="detail" />
-          </div>
-
-          {/* Seguro de pago */}
-          <div className="mt-3 flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50/70 px-3 py-2">
-            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
-            <div className="min-w-0">
-              <p className="text-[11px] font-bold text-emerald-800 leading-tight">Seguro de pago NEIBA</p>
-              <p className="text-[10px] text-emerald-700/80 leading-tight">Tu compra está protegida de punta a punta.</p>
+          {/* Bloque vendedor unificado: vendedor → seguro → badges → lote → cantidad */}
+          <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
+            {/* Vendedor */}
+            <div className="flex items-center justify-between px-3 py-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-black text-white ${product.sellerKind === "neiba" ? "bg-[#e8451c]" : "bg-emerald-600"}`}>
+                  {product.sellerKind === "neiba" ? "N" : "🏭"}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">Vendido por</p>
+                  <p className="text-xs font-bold leading-tight flex items-center gap-1">
+                    {product.sellerName}
+                    {product.sellerVerified && <ShieldCheck className="h-3 w-3 text-emerald-600" />}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Compra por lote (mínimo) */}
-          {product.minOrder && (
-            <div className="mt-3 rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-3">
-              <p className="text-[10px] uppercase tracking-wider text-amber-700 font-bold">Compra por lote</p>
-              <p className="mt-1 text-sm font-bold text-amber-900">Mínimo {product.minOrder} unidades</p>
-              <p className="text-[11px] text-amber-800/80">Producción a pedido · Entrega {product.deliveryLabel}</p>
+            {/* Seguro de pago NEIBA */}
+            <div className="flex items-center gap-2 border-t border-border bg-emerald-50/50 px-3 py-2">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold text-emerald-800 leading-tight">Seguro de pago NEIBA</p>
+                <p className="text-[10px] text-emerald-700/80 leading-tight">Tu compra está protegida de punta a punta.</p>
+              </div>
             </div>
-          )}
+
+            {/* Badges marketplace */}
+            <div className="border-t border-border px-3 py-2">
+              <ProductBadges
+                product={product}
+                variant="detail"
+                hideCustomizable
+                hideImportStatus
+                deliveryOverride={isImport ? (importShipping === "aire" ? "15-30 días (avión)" : "30-45 días (barco)") : undefined}
+              />
+            </div>
+
+            {/* Compra por lote (compacto) */}
+            {product.minOrder && (
+              <div className="border-t border-border bg-amber-50/40 px-3 py-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-[9px] uppercase tracking-wider text-amber-700 font-bold leading-none">Compra por lote</p>
+                    <p className="mt-1 text-[12px] font-bold text-amber-900 leading-none">Mínimo {product.minOrder} unidades</p>
+                  </div>
+                  <span className="text-[10px] text-amber-800/80">Entrega {product.deliveryLabel}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Cantidad (justo debajo de Compra por lote) */}
+            {(() => {
+              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : 1;
+              return (
+                <div className="flex items-center justify-between border-t border-border px-3 py-2">
+                  <div>
+                    <p className="text-[12px] font-semibold leading-none">Cantidad</p>
+                    <p className="mt-1 text-[10px] text-muted-foreground leading-none">
+                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : "Elegí cuántas querés"}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setQty(Math.max(minQty, qty - 1))}
+                      disabled={qty <= minQty}
+                      className="grid h-8 w-8 place-items-center rounded-full bg-secondary disabled:opacity-30"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <QtyInput
+                      value={qty}
+                      onChange={setQty}
+                      min={minQty}
+                      className="w-16 rounded-lg border border-border bg-background py-1 text-center font-display text-sm text-foreground focus:border-primary focus:outline-none"
+                    />
+                    <button onClick={() => setQty(qty + 1)} className="grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground">
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
 
           {/* Botones acción extra */}
-          <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="mt-3 grid grid-cols-3 gap-2">
             {product.customizable && (
-              <button onClick={() => setCustomizeOpen(true)} className="col-span-2 rounded-xl bg-fuchsia-600 py-2.5 text-xs font-black text-white">
-                ✨ Personalizar este producto
+              <button onClick={() => setCustomizeOpen(true)} className={`${product.sellerKind === "importer" ? "col-span-2" : "col-span-3"} rounded-xl bg-fuchsia-600 py-3 text-sm font-black text-white`}>
+                ✨ Personalizar
                 {product.customizationFee ? ` · +${formatARS(product.customizationFee)} c/u` : ""}
               </button>
             )}
+            {product.sellerKind === "importer" && (
+              <button
+                onClick={() => setChatOpen(true)}
+                className={`${product.customizable ? "" : "col-span-3"} aspect-square rounded-xl border-2 border-emerald-600 bg-white p-2 text-[10px] font-black text-emerald-700 leading-tight flex flex-col items-center justify-center gap-1`}
+              >
+                <span className="text-lg leading-none">💬</span>
+                <span>Hablar con<br />importador</span>
+              </button>
+            )}
             {product.customizable && customQty > 0 && (
-              <div className="col-span-2 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
+              <div className="col-span-3 rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-3 text-[11px]">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-fuchsia-700">Personalización aplicada</span>
                   <button onClick={() => setCustomQty(0)} className="text-[10px] text-fuchsia-700 underline">Quitar</button>
@@ -285,11 +349,6 @@ function ProductPage() {
                   Costo extra personalización: <b>+{formatARS(customCost)}</b> ({formatARS(fee)} × {customQty})
                 </p>
               </div>
-            )}
-            {product.sellerKind === "importer" && (
-              <button onClick={() => setChatOpen(true)} className="col-span-2 rounded-xl border-2 border-emerald-600 bg-white py-2.5 text-xs font-black text-emerald-700">
-                💬 Hablar con importador
-              </button>
             )}
           </div>
         </div>
@@ -314,8 +373,8 @@ function ProductPage() {
         </div>
         )}
 
-        {/* Wholesale tiers */}
-        {mode === "wholesale" && (
+        {/* Wholesale tiers (oculto para importador a pedido con mínimo) */}
+        {mode === "wholesale" && !wholesaleOnly && (
           <div className="rounded-2xl border border-border bg-card p-3 float-up space-y-1">
             <p className="text-[10px] font-bold uppercase text-muted-foreground">Precios mayoristas</p>
             {[
@@ -403,38 +462,6 @@ function ProductPage() {
         {/* Pasos por modo */}
         <PurchaseSteps mode={mode} />
 
-        {/* Quantity */}
-        {(() => {
-          const minQty = wholesaleOnly && product.minOrder ? product.minOrder : 1;
-          return (
-            <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3">
-              <div>
-                <p className="text-sm font-semibold">Cantidad</p>
-                <p className="text-[11px] text-muted-foreground">
-                  {wholesaleOnly ? `Mínimo ${product.minOrder} unidades` : "Elegí cuántas querés"}
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setQty(Math.max(minQty, qty - 1))}
-                  disabled={qty <= minQty}
-                  className="grid h-9 w-9 place-items-center rounded-full bg-secondary disabled:opacity-30"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <QtyInput
-                  value={qty}
-                  onChange={setQty}
-                  min={minQty}
-                  className="w-20 rounded-lg border border-border bg-background py-1 text-center font-display text-base text-foreground focus:border-primary focus:outline-none"
-                />
-                <button onClick={() => setQty(qty + 1)} className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          );
-        })()}
 
         {/* Trust badges */}
         <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-foreground">
