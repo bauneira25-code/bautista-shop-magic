@@ -3,7 +3,7 @@ import type { MockProduct } from "@/lib/mockData";
 
 type Variant = "card" | "detail";
 
-export function ProductBadges({ product, variant = "card", max }: { product: MockProduct; variant?: Variant; max?: number }) {
+export function ProductBadges({ product, variant = "card", max, deliveryOverride, hideCustomizable, hideImportStatus }: { product: MockProduct; variant?: Variant; max?: number; deliveryOverride?: string; hideCustomizable?: boolean; hideImportStatus?: boolean }) {
   const items: { key: string; label: string; cls: string; icon?: React.ReactNode }[] = [];
 
   // Vendedor
