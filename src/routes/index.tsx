@@ -244,17 +244,19 @@ function Home() {
             >
               <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl" />
               <div className="absolute -left-4 -bottom-4 h-16 w-16 rounded-full bg-yellow-300/20 blur-2xl" />
-              <span className="inline-flex w-fit items-center gap-1 rounded-full bg-black/30 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider text-white backdrop-blur">
-                <Zap className="h-2 w-2" /> Flash
+              <span className="inline-flex w-fit items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white backdrop-blur">
+                <Zap className="h-2.5 w-2.5" /> Flash
               </span>
-              <h2 className="mt-1.5 font-display text-sm leading-tight text-white">
+              <h2 className="mt-1.5 font-display text-base leading-tight text-white">
                 Oferta<br />relámpago
               </h2>
-              <p className="mt-0.5 text-[9px] font-medium text-white/85">Termina en 02:14:38</p>
-              <div className="mt-auto inline-flex w-fit items-center gap-1 rounded-full bg-white px-1.5 py-0.5 text-[9px] font-black text-[#e8451c]">
-                Ver <ChevronRight className="h-2.5 w-2.5" />
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wide text-yellow-200">
+                ¡Termina en 02:14:38!
+              </p>
+              <div className="mt-auto inline-flex w-fit items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-[#e8451c]">
+                Ver ahora <ChevronRight className="h-3 w-3" />
               </div>
-              <div className="absolute right-1 bottom-1 text-3xl drop-shadow">⚡</div>
+              <div className="absolute right-1.5 bottom-1.5 text-4xl drop-shadow">⚡</div>
             </div>
           </Link>
 
