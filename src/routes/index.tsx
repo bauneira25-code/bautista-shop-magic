@@ -74,7 +74,7 @@ function Home() {
         ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category !== similarBase.category),
       ].slice(0, 8)
     : [];
-  const liveNow = useLiveViewers("home");
+  const liveNow = useLiveTotalViewers();
   const user = useUserAuth((s) => s.user);
   // Bias: orden de categorías priorizadas según género o vistas más altas
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
