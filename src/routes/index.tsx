@@ -8,7 +8,7 @@ import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
 import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
-import { useLiveViewers, formatViewers } from "@/lib/liveViewers";
+import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 
 const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; text: string }> = {
   tech:        { bg: "linear-gradient(135deg,#0a1530,#1e3a8a)", border: "#38bdf8", glow: "#38bdf8", text: "#e0f2fe" },
@@ -74,7 +74,7 @@ function Home() {
         ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category !== similarBase.category),
       ].slice(0, 8)
     : [];
-  const liveNow = useLiveViewers("home");
+  const liveNow = useLiveTotalViewers();
   const user = useUserAuth((s) => s.user);
   // Bias: orden de categorías priorizadas según género o vistas más altas
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
