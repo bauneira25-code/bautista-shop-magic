@@ -2,7 +2,7 @@
 
 export type PurchaseMode = "individual" | "wholesale";
 
-export type SellerKind = "neiba" | "importer";
+export type SellerKind = "neiba" | "importer" | "local";
 export type StockLocation = "ar" | "factory" | "transit" | "customs" | "nationalized";
 
 export interface Importer {
@@ -22,6 +22,28 @@ export const IMPORTERS: Importer[] = [
   { id: "imp3", name: "Pacific Imports",    verified: true,  city: "Rosario", rating: 4.6, productsCount: 67,  emoji: "🚢", specialty: "Hogar y deco" },
   { id: "imp4", name: "Global Link",        verified: false, city: "Mendoza", rating: 4.4, productsCount: 38,  emoji: "🌐", specialty: "Moda y accesorios" },
   { id: "imp5", name: "China Express AR",   verified: true,  city: "CABA",    rating: 4.9, productsCount: 211, emoji: "⚡", specialty: "Personalización y branding" },
+];
+
+export interface Local {
+  id: string;
+  name: string;
+  verified: boolean;
+  city: string;
+  rating: number;
+  emoji: string;
+  category: string; // categoría principal del local
+  tagline: string;
+}
+
+export const LOCALS: Local[] = [
+  { id: "loc1", name: "Casa Norte Deco",    verified: true,  city: "CABA",      rating: 4.8, emoji: "🏠", category: "hogar",       tagline: "Deco y textiles" },
+  { id: "loc2", name: "Tech Garage",        verified: true,  city: "Córdoba",   rating: 4.7, emoji: "🔧", category: "tech",        tagline: "Gadgets y accesorios" },
+  { id: "loc3", name: "Glow Beauty Store",  verified: true,  city: "CABA",      rating: 4.9, emoji: "💄", category: "belleza",     tagline: "Skincare y makeup" },
+  { id: "loc4", name: "Brilla Joyas",       verified: true,  city: "Rosario",   rating: 4.8, emoji: "💎", category: "joyeria",     tagline: "Plata 925 y oro 18k" },
+  { id: "loc5", name: "Urban Style AR",     verified: false, city: "Mendoza",   rating: 4.5, emoji: "👟", category: "moda",        tagline: "Streetwear" },
+  { id: "loc6", name: "Cocina Pro",         verified: true,  city: "Tigre",     rating: 4.6, emoji: "🍳", category: "electronica", tagline: "Electrodomésticos" },
+  { id: "loc7", name: "Tropic Pets",        verified: true,  city: "La Plata",  rating: 4.7, emoji: "🐾", category: "animales",    tagline: "Todo para tu mascota" },
+  { id: "loc8", name: "Iron Fit Shop",      verified: true,  city: "CABA",      rating: 4.6, emoji: "🏋️", category: "gym",         tagline: "Gym y deportes" },
 ];
 
 export interface MockProduct {
@@ -97,16 +119,25 @@ const make = (
   let quotable = false;
   let importStatus: string | undefined;
 
-  if (kindIdx === 1) {
+  // kindIdx 0 → LOCAL (tienda argentina por categoría)
+  if (kindIdx === 0) {
+    const matching = LOCALS.filter((l) => l.category === category);
+    const pool = matching.length > 0 ? matching : LOCALS;
+    const loc = pool[_id % pool.length];
+    sellerKind = "local";
+    sellerName = loc.name;
+    sellerVerified = loc.verified;
+    stockLocation = "ar";
+    deliveryLabel = "24/48 hs";
+  } else if (kindIdx === 1) {
     sellerKind = "importer";
     sellerName = importerPool[_id % importerPool.length];
     sellerVerified = true;
     stockLocation = "ar";
     deliveryLabel = "24/48 hs";
-    // Algunos importadores ofrecen personalización con costo extra
     if (_id % 3 === 0) {
       customizable = true;
-      customizationFee = 2500 + ((_id * 137) % 4) * 500; // 2500 / 3000 / 3500 / 4000
+      customizationFee = 2500 + ((_id * 137) % 4) * 500;
     }
   } else if (kindIdx === 2) {
     sellerKind = "importer";
@@ -118,10 +149,9 @@ const make = (
     quotable = true;
     const statuses = ["En fábrica", "En tránsito", "En aduana", "Nacionalizado"];
     importStatus = statuses[_id % statuses.length];
-    // Lotes a pedido: a veces con personalización (branding) más cara
     if (_id % 2 === 0) {
       customizable = true;
-      customizationFee = 3500 + ((_id * 91) % 5) * 500; // 3500 a 5500
+      customizationFee = 3500 + ((_id * 91) % 5) * 500;
     }
   } else if (kindIdx === 3) {
     sellerKind = "neiba";
@@ -129,7 +159,7 @@ const make = (
     stockLocation = "ar";
     deliveryLabel = "24/48 hs";
     customizable = true;
-    customizationFee = 1500 + ((_id * 53) % 4) * 500; // 1500 / 2000 / 2500 / 3000
+    customizationFee = 1500 + ((_id * 53) % 4) * 500;
   }
 
   return {
@@ -365,3 +395,29 @@ export const searchProducts = (q: string, limit = 6) => {
     p.description.toLowerCase().includes(query),
   ).slice(0, limit);
 };
+
+// Productos de un local específico (excluyendo opcionalmente uno)
+export const localProducts = (localName: string, excludeSlug?: string, limit = 8) =>
+  MOCK_PRODUCTS.filter(
+    (p) => p.sellerKind === "local" && p.sellerName === localName && p.slug !== excludeSlug,
+  ).slice(0, limit);
+
+// Productos de un importador
+export const importerProducts = (importerName: string, excludeSlug?: string, limit = 8) =>
+  MOCK_PRODUCTS.filter(
+    (p) => p.sellerKind === "importer" && p.sellerName === importerName && p.slug !== excludeSlug,
+  ).slice(0, limit);
+
+// Locales que tienen al menos un producto en una categoría
+export const localsByCategory = (categoryId: string): Local[] => {
+  const names = new Set(
+    MOCK_PRODUCTS.filter((p) => p.sellerKind === "local" && p.category === categoryId).map((p) => p.sellerName),
+  );
+  return LOCALS.filter((l) => names.has(l.name));
+};
+
+// Precios escalonados estimativos para importadores (1u vs 20u)
+export const importerTiers = (p: MockProduct) => ({
+  unit: p.price.individual,
+  bulk20: p.price.group,
+});

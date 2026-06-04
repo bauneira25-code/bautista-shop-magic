@@ -4,7 +4,7 @@ import {
   ArrowLeft, Heart, Share2, Star, Truck, ShieldCheck, Sparkles,
   Plus, Minus, Plane, Ship,
 } from "lucide-react";
-import { findProduct, formatARS, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
+import { findProduct, formatARS, stockLabel, relatedProducts, localProducts, importerProducts, LOCALS, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { toast } from "sonner";
@@ -217,7 +217,7 @@ function ProductPage() {
             <span className="rounded-md bg-primary/15 px-1.5 py-0.5 font-bold text-primary">{product.badge ?? "TENDENCIA"}</span>
             <span className="inline-flex items-center gap-1"><Star className="h-3 w-3 fill-warning text-warning" /> {product.rating} ({product.reviews})</span>
             <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-[10px] font-bold text-foreground">
-              {product.sellerKind === "neiba" ? "N" : "🏭"} {product.sellerName}
+              {product.sellerKind === "neiba" ? "N" : product.sellerKind === "local" ? "🏪" : "🏭"} {product.sellerName}
               {product.sellerVerified && <ShieldCheck className="h-2.5 w-2.5 text-emerald-600" />}
             </span>
           </div>
@@ -484,6 +484,48 @@ function ProductPage() {
             ))}
           </div>
         </div>
+
+        {/* Más de este local / importador */}
+        {(product.sellerKind === "local" || product.sellerKind === "importer") && (() => {
+          const more = product.sellerKind === "local"
+            ? localProducts(product.sellerName, product.slug, 6)
+            : importerProducts(product.sellerName, product.slug, 6);
+          if (more.length === 0) return null;
+          const loc = product.sellerKind === "local" ? LOCALS.find((l) => l.name === product.sellerName) : null;
+          const isLocal = product.sellerKind === "local";
+          return (
+            <div className={`rounded-2xl border p-3.5 ${isLocal ? "border-sky-200 bg-sky-50/40" : "border-emerald-200 bg-emerald-50/40"}`}>
+              <div className="flex items-center gap-2">
+                <span className={`grid h-9 w-9 place-items-center rounded-xl text-lg ${isLocal ? "bg-sky-100" : "bg-emerald-100"}`}>
+                  {loc?.emoji ?? (isLocal ? "🏪" : "🏭")}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    Más de este {isLocal ? "local" : "importador"}
+                  </p>
+                  <p className="font-display text-sm leading-tight">{product.sellerName}</p>
+                  {loc && <p className="text-[10px] text-muted-foreground">{loc.city} · {loc.tagline}</p>}
+                </div>
+                {isLocal && (
+                  <Link to="/locales" className="rounded-full bg-sky-600 px-2.5 py-1 text-[10px] font-black text-white">Ver locales</Link>
+                )}
+              </div>
+              <div className="-mx-3.5 mt-3 flex gap-2.5 overflow-x-auto px-3.5 pb-1 scrollbar-hide">
+                {more.map((r) => (
+                  <Link key={r.id} to="/products/$slug" params={{ slug: r.slug }} className="w-[110px] shrink-0">
+                    <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: r.gradient }}>
+                      <span>{r.emoji}</span>
+                    </div>
+                    <p className="mt-1 line-clamp-1 text-[10px] font-medium">{r.title}</p>
+                    <p className={`text-[10px] font-bold leading-none ${isLocal ? "text-sky-700" : "text-emerald-700"}`}>
+                      {formatARS(r.price.individual)}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* También te puede gustar */}
         <div>

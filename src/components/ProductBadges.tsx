@@ -13,6 +13,13 @@ export function ProductBadges({ product, variant = "card", max, deliveryOverride
       label: "NEIBA",
       cls: "bg-[#e8451c] text-white",
     });
+  } else if (product.sellerKind === "local") {
+    items.push({
+      key: "local",
+      label: product.sellerVerified ? "Local verificado" : "Local",
+      cls: product.sellerVerified ? "bg-sky-600 text-white" : "bg-neutral-600 text-white",
+      icon: product.sellerVerified ? <ShieldCheck className="h-2.5 w-2.5" /> : undefined,
+    });
   } else {
     items.push({
       key: "imp",

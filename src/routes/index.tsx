@@ -379,6 +379,31 @@ function Home() {
         {/* Explorar todo — scroll infinito */}
         <InfiniteAll />
 
+        {/* Locales argentinos */}
+        <Link to="/locales" className="block rounded-2xl border-2 border-sky-200 bg-gradient-to-br from-sky-50 to-white p-3.5">
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-sky-100 text-sky-700 text-base">
+              🏪
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold">Locales argentinos</p>
+              <p className="text-[10px] text-muted-foreground">Tiendas por categoría · publican sus productos con stock local</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-sky-600" />
+          </div>
+          <div className="mt-2.5 flex gap-2 overflow-x-auto scrollbar-hide">
+            {MOCK_PRODUCTS.filter((p) => p.sellerKind === "local").slice(0, 6).map((p) => (
+              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[72px] shrink-0">
+                <div className="aspect-square overflow-hidden rounded-xl text-xl grid place-items-center" style={{ background: p.gradient }}>
+                  <span>{p.emoji}</span>
+                </div>
+                <p className="mt-1 line-clamp-1 text-[9px] font-medium">{p.title}</p>
+                <p className="text-[9px] font-bold text-sky-700 leading-none">{formatARS(p.price.individual)}</p>
+              </Link>
+            ))}
+          </div>
+        </Link>
+
         {/* Importadores */}
         <Link to="/importadores" className="block rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-3.5">
           <div className="flex items-center gap-3">
@@ -458,8 +483,12 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
     <Link to="/products/$slug" params={{ slug: p.slug }} className="group block">
       <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
         <span>{p.emoji}</span>
-        <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${p.sellerKind === "neiba" ? "bg-[#e8451c] text-white" : "bg-emerald-600 text-white"}`}>
-          {p.sellerKind === "neiba" ? "NEIBA" : "Importador"}
+        <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${
+          p.sellerKind === "neiba" ? "bg-[#e8451c] text-white"
+          : p.sellerKind === "local" ? "bg-sky-600 text-white"
+          : "bg-emerald-600 text-white"
+        }`}>
+          {p.sellerKind === "neiba" ? "NEIBA" : p.sellerKind === "local" ? "Local" : "Importador"}
         </span>
         {p.customizable && (
           <span className="absolute right-2 top-2 rounded-md bg-fuchsia-600 px-1.5 py-0.5 text-[8px] font-black leading-none text-white">
@@ -468,7 +497,7 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
         )}
       </div>
       <p className="mt-1.5 line-clamp-1 text-xs font-semibold text-neutral-900">{p.title}</p>
-      {p.sellerKind === "importer" && (
+      {(p.sellerKind === "importer" || p.sellerKind === "local") && (
         <p className="text-[9px] text-neutral-500 line-clamp-1">por {p.sellerName}</p>
       )}
       <p className="text-sm font-black text-[#e8451c] leading-tight">{priceLabel}</p>
