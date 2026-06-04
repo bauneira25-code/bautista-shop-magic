@@ -284,8 +284,8 @@ function ProductPage() {
               />
             </div>
 
-            {/* Compra por lote (compacto) */}
-            {product.minOrder && (
+            {/* Compra por lote (compacto) - oculto para locales */}
+            {product.minOrder && !isLocal && (
               <div className="border-t border-border bg-amber-50/40 px-3 py-2">
                 <div className="flex items-center justify-between gap-2">
                   <div>
@@ -299,7 +299,7 @@ function ProductPage() {
 
             {/* Cantidad (justo debajo de Compra por lote) */}
             {(() => {
-              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : 1;
+              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : isLocal ? localMin : 1;
               return (
                 <div className="flex items-center justify-between border-t border-border px-3 py-2">
                   <div>
