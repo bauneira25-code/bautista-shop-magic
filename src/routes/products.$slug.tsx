@@ -157,8 +157,8 @@ function ProductPage() {
       color: product.colors?.[color],
       customQty: customQty > 0 ? customQty : undefined,
       customFee: customQty > 0 ? fee : undefined,
-      importShipping: isImport ? importShipping : undefined,
-      importShippingFee: isImport ? importFee : undefined,
+      importShipping: undefined,
+      importShippingFee: undefined,
     });
   };
 
