@@ -554,7 +554,7 @@ function ProductPage() {
           const loc = product.sellerKind === "local" ? LOCALS.find((l) => l.name === product.sellerName) : null;
           const isLocal = product.sellerKind === "local";
           return (
-            <div className={`rounded-2xl border p-3.5 ${isLocal ? "border-sky-200 bg-sky-50/40" : "border-emerald-200 bg-emerald-50/40"}`}>
+            <div id="more-from-seller" className={`rounded-2xl border p-3.5 ${isLocal ? "border-sky-200 bg-sky-50/40" : "border-emerald-200 bg-emerald-50/40"}`}>
               <div className="flex items-center gap-2">
                 <span className={`grid h-9 w-9 place-items-center rounded-xl text-lg ${isLocal ? "bg-sky-100" : "bg-emerald-100"}`}>
                   {loc?.emoji ?? (isLocal ? "🏪" : "🏭")}
