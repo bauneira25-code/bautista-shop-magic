@@ -167,8 +167,8 @@ function CartPage() {
       const msg = localShortfalls
         .map(([name, q]) => `${name}: ${q}/${LOCAL_MIN} u.`)
         .join(" · ");
-      toast.error("Pedido mínimo del local: 3 unidades", {
-        description: `Sumá productos del mismo local. ${msg}`,
+      toast.error("Pedido mínimo de la tienda: 3 unidades", {
+        description: `Sumá productos de la misma tienda. ${msg}`,
       });
       return;
     }
@@ -341,8 +341,8 @@ function CartPage() {
         <div className="fixed bottom-3 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 space-y-2 px-3">
           {hasLocalShortfall && (
             <div className="rounded-2xl border border-amber-300 bg-amber-50 px-3 py-2 text-[11px] text-amber-900 shadow">
-              <p className="font-bold">Pedido mínimo del local: 3 unidades</p>
-              <p className="mt-0.5 text-amber-800/90">Pueden ser productos distintos del mismo local. Sumá más para poder pagar:</p>
+              <p className="font-bold">Pedido mínimo de la tienda: 3 unidades</p>
+              <p className="mt-0.5 text-amber-800/90">Pueden ser productos distintos de la misma tienda. Sumá más para poder pagar:</p>
               <ul className="mt-1 space-y-0.5">
                 {localShortfalls.map(([name, q]) => (
                   <li key={name} className="flex justify-between">

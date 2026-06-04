@@ -6,9 +6,9 @@ import { LOCALS, MOCK_PRODUCTS, CATEGORIES, localsByCategory, formatARS } from "
 export const Route = createFileRoute("/locales")({
   head: () => ({
     meta: [
-      { title: "Locales argentinos — NEIBA" },
-      { name: "description", content: "Tiendas locales argentinas por categoría: hogar, tech, belleza, joyería, moda y más." },
-      { property: "og:title", content: "Locales argentinos — NEIBA" },
+      { title: "Tiendas argentinas — NEIBA" },
+      { name: "description", content: "Tiendas argentinas por categoría: hogar, tech, belleza, joyería, moda y más." },
+      { property: "og:title", content: "Tiendas argentinas — NEIBA" },
       { property: "og:description", content: "Comprá a tiendas locales verificadas con stock en Argentina." },
     ],
   }),
@@ -27,7 +27,7 @@ function LocalesPage() {
           <ArrowLeft className="h-4 w-4 text-sky-700" />
         </Link>
         <div className="flex-1 min-w-0">
-          <p className="font-display text-base leading-none">Locales argentinos</p>
+          <p className="font-display text-base leading-none">Tiendas argentinas</p>
           <p className="text-[10px] text-neutral-500">{LOCALS.length} tiendas · stock en Argentina · envío 24/48 hs</p>
         </div>
       </header>
@@ -37,10 +37,10 @@ function LocalesPage() {
         <div className="rounded-2xl bg-gradient-to-br from-sky-50 to-white border-2 border-sky-200 p-4">
           <div className="flex items-center gap-2">
             <span className="text-lg">🏪</span>
-            <p className="font-display text-sm text-sky-900">Comprá a tiendas locales</p>
+            <p className="font-display text-sm text-sky-900">Comprá a tiendas argentinas</p>
           </div>
           <p className="mt-1 text-[11px] text-sky-800">
-            Cada local elige su categoría y publica sus propios productos. Stock en Argentina con envío rápido.
+            Cada tienda elige su categoría y publica sus propios productos. Stock en Argentina con envío rápido.
           </p>
         </div>
       </section>
@@ -66,10 +66,10 @@ function LocalesPage() {
         </div>
       </section>
 
-      {/* Locales de la categoría */}
+      {/* Tiendas de la categoría */}
       <section className="px-4 pt-4">
         <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold mb-2">
-          {locsInCat.length} locales en {CATEGORIES.find((c) => c.id === cat)?.name}
+          {locsInCat.length} tiendas en {CATEGORIES.find((c) => c.id === cat)?.name}
         </p>
         <div className="space-y-3">
           {locsInCat.map((loc) => {
@@ -92,7 +92,7 @@ function LocalesPage() {
                     </div>
                   </div>
                   <button className="rounded-full border border-sky-600 px-2.5 py-1 text-[10px] font-bold text-sky-700">
-                    Ver local
+                    Ver tienda
                   </button>
                 </div>
                 {products.length > 0 && (
@@ -113,7 +113,7 @@ function LocalesPage() {
           })}
           {locsInCat.length === 0 && (
             <p className="rounded-xl border border-dashed border-neutral-200 p-6 text-center text-xs text-neutral-500">
-              Todavía no hay locales en esta categoría.
+              Todavía no hay tiendas en esta categoría.
             </p>
           )}
         </div>

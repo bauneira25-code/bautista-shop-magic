@@ -2,7 +2,7 @@
 
 export type PurchaseMode = "individual" | "wholesale";
 
-export type SellerKind = "neiba" | "importer" | "local";
+export type SellerKind = "neiba" | "importer" | "local" | "fabricante";
 export type StockLocation = "ar" | "factory" | "transit" | "customs" | "nationalized";
 
 export interface Importer {
@@ -44,6 +44,23 @@ export const LOCALS: Local[] = [
   { id: "loc6", name: "Cocina Pro",         verified: true,  city: "Tigre",     rating: 4.6, emoji: "🍳", category: "electronica", tagline: "Electrodomésticos" },
   { id: "loc7", name: "Tropic Pets",        verified: true,  city: "La Plata",  rating: 4.7, emoji: "🐾", category: "animales",    tagline: "Todo para tu mascota" },
   { id: "loc8", name: "Iron Fit Shop",      verified: true,  city: "CABA",      rating: 4.6, emoji: "🏋️", category: "gym",         tagline: "Gym y deportes" },
+];
+
+export interface Fabricante {
+  id: string;
+  name: string;
+  verified: boolean;
+  city: string;
+  rating: number;
+  emoji: string;
+  specialty: string;
+}
+
+export const FABRICANTES: Fabricante[] = [
+  { id: "fab1", name: "Textil Andina SA",    verified: true,  city: "Buenos Aires", rating: 4.8, emoji: "🧵", specialty: "Textiles y uniformes" },
+  { id: "fab2", name: "Plásticos del Sur",   verified: true,  city: "Rosario",      rating: 4.7, emoji: "🏗️", specialty: "Inyección y packaging" },
+  { id: "fab3", name: "Metalúrgica Pampa",   verified: true,  city: "Córdoba",      rating: 4.6, emoji: "⚙️", specialty: "Metalmecánica" },
+  { id: "fab4", name: "Electro Industrias",  verified: true,  city: "CABA",         rating: 4.7, emoji: "🔌", specialty: "Electrónica nacional" },
 ];
 
 export interface MockProduct {
@@ -105,10 +122,11 @@ const make = (
   const joined = target - missing;
 
   // Asignación determinística del tipo de vendedor / entrega
-  // NEIBA no vende productos. Solo locales, importadores stock AR e importadores a pedido (fábrica).
-  // 0 → LOCAL (sin personalización, stock AR 24/48 hs)
+  // NEIBA no vende productos. Solo tiendas (locales), importadores y fabricantes.
+  // 0 → TIENDA local (sin personalización, stock AR 24/48 hs)
   // 1 → IMPORTADOR stock AR (24/48 hs, sin personalización)
-  // 2,3 → IMPORTADOR a pedido (fábrica, mín. 100 u., entrega 20 a 40 días, personalizable opcional)
+  // 2 → IMPORTADOR a pedido (fábrica china, mín. 100 u., 20-40 días, personalizable opc.)
+  // 3 → FABRICANTE nacional (mín. 100 u., 7 días, personalizable al seleccionar el producto)
   const kindIdx = _id % 4;
   const importerPool = ["Asia Trade SA", "Shenzhen Direct AR", "Pacific Imports", "Global Link", "China Express AR"];
   let sellerKind: SellerKind = "local";
@@ -137,7 +155,7 @@ const make = (
     sellerVerified = true;
     stockLocation = "ar";
     deliveryLabel = "24/48 hs";
-  } else {
+  } else if (kindIdx === 2) {
     sellerKind = "importer";
     sellerName = importerPool[(_id + 1) % importerPool.length];
     sellerVerified = _id % 7 !== 0;
@@ -151,6 +169,17 @@ const make = (
       customizable = true;
       customizationFee = 3500 + ((_id * 91) % 5) * 500;
     }
+  } else {
+    const fab = FABRICANTES[_id % FABRICANTES.length];
+    sellerKind = "fabricante";
+    sellerName = fab.name;
+    sellerVerified = fab.verified;
+    stockLocation = "factory";
+    deliveryLabel = "7 días";
+    minOrder = 100;
+    quotable = true;
+    customizable = true;
+    customizationFee = 2500 + ((_id * 71) % 5) * 500;
   }
 
   return {

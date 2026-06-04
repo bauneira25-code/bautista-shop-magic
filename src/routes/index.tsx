@@ -315,14 +315,14 @@ function Home() {
         {/* Explorar todo — scroll infinito */}
         <InfiniteAll />
 
-        {/* Locales argentinos */}
+        {/* Tiendas argentinas */}
         <Link to="/locales" className="block rounded-2xl border-2 border-sky-200 bg-gradient-to-br from-sky-50 to-white p-3.5">
           <div className="flex items-center gap-3">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-sky-100 text-sky-700 text-base">
               🏪
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold">Locales argentinos</p>
+              <p className="text-xs font-bold">Tiendas argentinas</p>
               <p className="text-[10px] text-muted-foreground">Tiendas por categoría · publican sus productos con stock local</p>
             </div>
             <ChevronRight className="h-4 w-4 text-sky-600" />
