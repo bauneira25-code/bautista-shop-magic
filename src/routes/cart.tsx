@@ -167,8 +167,8 @@ function CartPage() {
       const msg = localShortfalls
         .map(([name, q]) => `${name}: ${q}/${LOCAL_MIN} u.`)
         .join(" · ");
-      toast.error("Pedido mínimo del local: 3 unidades", {
-        description: `Sumá productos del mismo local. ${msg}`,
+      toast.error("Pedido mínimo de la tienda: 3 unidades", {
+        description: `Sumá productos de la misma tienda. ${msg}`,
       });
       return;
     }
