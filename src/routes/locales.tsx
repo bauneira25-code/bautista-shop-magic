@@ -37,10 +37,10 @@ function LocalesPage() {
         <div className="rounded-2xl bg-gradient-to-br from-sky-50 to-white border-2 border-sky-200 p-4">
           <div className="flex items-center gap-2">
             <span className="text-lg">🏪</span>
-            <p className="font-display text-sm text-sky-900">Comprá a tiendas locales</p>
+            <p className="font-display text-sm text-sky-900">Comprá a tiendas argentinas</p>
           </div>
           <p className="mt-1 text-[11px] text-sky-800">
-            Cada local elige su categoría y publica sus propios productos. Stock en Argentina con envío rápido.
+            Cada tienda elige su categoría y publica sus propios productos. Stock en Argentina con envío rápido.
           </p>
         </div>
       </section>
