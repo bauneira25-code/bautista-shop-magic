@@ -380,18 +380,30 @@ function ProductPage() {
         {/* Wholesale tiers (oculto para importador a pedido con mínimo) */}
         {mode === "wholesale" && !wholesaleOnly && (
           <div className="rounded-2xl border border-border bg-card p-3 float-up space-y-1">
-            <p className="text-[10px] font-bold uppercase text-muted-foreground">Precios mayoristas</p>
-            {[
-              { range: "1 - 5 unidades", price: product.price.individual },
-              { range: "5 - 20 unidades", price: product.price.group },
-              { range: "20 - 100 unidades", price: Math.round((product.price.group + product.price.wholesale) / 2) },
-              { range: "100+ unidades", price: product.price.wholesale, best: true },
-            ].map((t) => (
-              <div key={t.range} className={`flex items-center justify-between rounded-lg px-2.5 py-1 ${t.best ? "bg-primary/15 border border-primary/30" : "bg-secondary"}`}>
-                <span className="text-[10px]">{t.range}</span>
-                <span className="text-[11px] font-bold">{formatARS(t.price)}</span>
-              </div>
-            ))}
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-bold uppercase text-muted-foreground">Precios mayoristas</p>
+              <p className="text-[9px] text-muted-foreground">Tocá para elegir</p>
+            </div>
+            {wholesaleTiers.map((t, i) => {
+              const isActive = i === activeTierIdx;
+              return (
+                <button
+                  key={t.range}
+                  type="button"
+                  onClick={() => setQty(t.min)}
+                  className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left transition ${
+                    isActive
+                      ? "bg-primary/20 border-2 border-primary"
+                      : t.best
+                        ? "bg-primary/10 border border-primary/30"
+                        : "bg-secondary border border-transparent"
+                  }`}
+                >
+                  <span className="text-[10px] font-semibold">{t.range}</span>
+                  <span className="text-[11px] font-bold">{formatARS(t.price)}</span>
+                </button>
+              );
+            })}
             <p className="pt-1 text-[10px] text-muted-foreground">📦 Packaging · 🏷 Branding · 🚚 Envío a tu local</p>
           </div>
         )}
