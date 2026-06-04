@@ -46,6 +46,23 @@ export const LOCALS: Local[] = [
   { id: "loc8", name: "Iron Fit Shop",      verified: true,  city: "CABA",      rating: 4.6, emoji: "🏋️", category: "gym",         tagline: "Gym y deportes" },
 ];
 
+export interface Fabricante {
+  id: string;
+  name: string;
+  verified: boolean;
+  city: string;
+  rating: number;
+  emoji: string;
+  specialty: string;
+}
+
+export const FABRICANTES: Fabricante[] = [
+  { id: "fab1", name: "Textil Andina SA",    verified: true,  city: "Buenos Aires", rating: 4.8, emoji: "🧵", specialty: "Textiles y uniformes" },
+  { id: "fab2", name: "Plásticos del Sur",   verified: true,  city: "Rosario",      rating: 4.7, emoji: "🏗️", specialty: "Inyección y packaging" },
+  { id: "fab3", name: "Metalúrgica Pampa",   verified: true,  city: "Córdoba",      rating: 4.6, emoji: "⚙️", specialty: "Metalmecánica" },
+  { id: "fab4", name: "Electro Industrias",  verified: true,  city: "CABA",         rating: 4.7, emoji: "🔌", specialty: "Electrónica nacional" },
+];
+
 export interface MockProduct {
   id: string;
   slug: string;
