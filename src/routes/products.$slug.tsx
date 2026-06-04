@@ -102,10 +102,25 @@ function ProductPage() {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
   }
 
-  const price = product.price[mode];
+  // Precio mayorista escalonado según cantidad
+  const tierMid = Math.round((product.price.group + product.price.wholesale) / 2);
+  const wholesalePriceFor = (q: number) => {
+    if (q >= 100) return product.price.wholesale;
+    if (q >= 20) return tierMid;
+    if (q >= 5) return product.price.group;
+    return product.price.individual;
+  };
+  const price = mode === "wholesale" ? wholesalePriceFor(qty) : product.price.individual;
   const savings = product.price.individual - price;
   const fee = product.customizationFee ?? 0;
   const customCost = fee * customQty;
+  const wholesaleTiers = [
+    { range: "1 - 4 unidades", price: product.price.individual, min: 1, max: 4 },
+    { range: "5 - 19 unidades", price: product.price.group, min: 5, max: 19 },
+    { range: "20 - 99 unidades", price: tierMid, min: 20, max: 99 },
+    { range: "100+ unidades", price: product.price.wholesale, min: 100, max: Infinity, best: true },
+  ];
+  const activeTierIdx = mode === "wholesale" ? wholesaleTiers.findIndex((t) => qty >= t.min && qty <= t.max) : -1;
 
   // Tarifas estimativas de importación por unidad
   const aireFee = useMemo(() => Math.max(800, Math.round(price * 0.18)), [price]);
