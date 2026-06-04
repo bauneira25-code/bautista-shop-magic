@@ -244,24 +244,20 @@ function ProductPage() {
           <h1 className="mt-2 font-display text-2xl leading-tight">{product.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
 
-          {/* Precio unitario + cantidad mínima */}
-          <div className="mt-3 flex items-stretch gap-2">
-            <div className="flex-1 rounded-xl border border-orange-200 bg-orange-50/60 px-2.5 py-1.5">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500 leading-none">Precio por unidad</p>
-              <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
-            </div>
-            {(product.minOrder || isLocal) && (
-              <div className="flex-1 rounded-xl border border-amber-200 bg-amber-50/60 px-2.5 py-1.5">
-                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">
-                  {isLocal ? "Pedido mínimo del local" : "Cantidad mínima"}
-                </p>
-                <p className="mt-1 font-display text-base leading-none text-amber-900">{isLocal ? localMin : product.minOrder} u.</p>
-                {isLocal && (
-                  <p className="mt-1 text-[9px] leading-tight text-amber-700/80">Pueden ser productos distintos de este local.</p>
-                )}
-              </div>
-            )}
+          {/* Precio unitario */}
+          <div className="mt-3 rounded-xl border border-orange-200 bg-orange-50/60 px-2.5 py-1.5">
+            <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500 leading-none">Precio por unidad</p>
+            <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
           </div>
+
+          {/* Pedido mínimo del local */}
+          {isLocal && (
+            <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/60 px-2.5 py-1.5">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Pedido mínimo del local</p>
+              <p className="mt-1 font-display text-base leading-none text-amber-900">{localMin} u.</p>
+              <p className="mt-1 text-[9px] leading-tight text-amber-700/80">Pueden ser productos distintos de este local.</p>
+            </div>
+          )}
 
           {/* Bloque unificado: seguro → badges → lote → cantidad */}
           <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
