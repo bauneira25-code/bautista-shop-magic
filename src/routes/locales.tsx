@@ -6,9 +6,9 @@ import { LOCALS, MOCK_PRODUCTS, CATEGORIES, localsByCategory, formatARS } from "
 export const Route = createFileRoute("/locales")({
   head: () => ({
     meta: [
-      { title: "Locales argentinos — NEIBA" },
-      { name: "description", content: "Tiendas locales argentinas por categoría: hogar, tech, belleza, joyería, moda y más." },
-      { property: "og:title", content: "Locales argentinos — NEIBA" },
+      { title: "Tiendas argentinas — NEIBA" },
+      { name: "description", content: "Tiendas argentinas por categoría: hogar, tech, belleza, joyería, moda y más." },
+      { property: "og:title", content: "Tiendas argentinas — NEIBA" },
       { property: "og:description", content: "Comprá a tiendas locales verificadas con stock en Argentina." },
     ],
   }),
