@@ -84,7 +84,7 @@ function ProductPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
   const [customQty, setCustomQty] = useState(0);
-  const [importShipping, setImportShipping] = useState<"aire" | "barco">("barco");
+  
 
   // Lote forzado: importador a pedido o fabricante con mínimo
   const wholesaleOnly = !!(
