@@ -263,11 +263,11 @@ function Home() {
           <div className="col-span-3 relative pl-3">
             <span className="pointer-events-none absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-primary to-transparent" />
             <div className="mb-2 flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              <h3 className="font-display text-sm">Destacados</h3>
+              <TrendingUp className="h-3.5 w-3.5 text-neon" />
+              <h3 className="font-display text-sm">Tendencias ahora</h3>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {forYou.slice(0, 4).map((p) => (
+              {trendingFor.slice(0, 4).map((p) => (
                 <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
                   <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
                     <span>{p.emoji}</span>
@@ -281,71 +281,7 @@ function Home() {
           </div>
         </section>
 
-        {/* Personalizado en vivo con NEIBA — cuadrado chico, izquierda */}
-        <div className="grid grid-cols-5 gap-3">
-          <Link
-            to="/en-vivo"
-            className="col-span-2 relative block h-full overflow-hidden rounded-2xl border border-fuchsia-300/40 bg-gradient-to-br from-fuchsia-600 via-pink-500 to-[#e8451c] p-3 text-white shadow-[0_10px_24px_-10px_rgba(232,69,28,0.55)]"
-          >
-            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/15 blur-2xl" />
-            <div className="absolute -left-4 -bottom-4 h-16 w-16 rounded-full bg-yellow-300/20 blur-2xl" />
-            <div className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/35 px-1.5 py-0.5 backdrop-blur">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
-              <span className="text-[8px] font-black uppercase tracking-wider">LIVE</span>
-            </div>
-            <div className="relative flex flex-col">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/15 text-2xl backdrop-blur">🎨</div>
-              <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.15em] text-white/85">Personalizado con NEIBA</p>
-              <h3 className="mt-0.5 font-display text-sm font-black leading-tight">
-                Comprá y mirá en vivo cómo personalizamos tu producto
-              </h3>
-              <div className="mt-2 flex items-center justify-between">
-                <div className="text-[10px] text-white/90">
-                  <p className="tabular-nums">👁 {formatViewers(liveNow)} viendo</p>
-                </div>
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-white px-2 py-1 text-[10px] font-black text-[#e8451c]">
-                  Ver <ChevronRight className="h-2.5 w-2.5" />
-                </span>
-              </div>
-            </div>
-          </Link>
 
-          <div className="col-span-3 flex flex-col">
-            <div className="mb-1 flex items-center justify-between px-0.5">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Personalizables</p>
-              <Link to="/en-vivo" className="text-[9px] font-semibold text-primary">Ver todos</Link>
-            </div>
-            <div className="grid flex-1 grid-cols-3 gap-1.5">
-              {MOCK_PRODUCTS.filter((p) => p.customizable).slice(0, 6).map((p) => (
-                <Link
-                  key={p.id}
-                  to="/products/$slug"
-                  params={{ slug: p.slug }}
-                  
-                  className="group relative block overflow-hidden rounded-lg border border-border bg-card"
-                >
-                  <div className="relative aspect-square grid place-items-center text-xl" style={{ background: p.gradient }}>
-                    <span>{p.emoji}</span>
-                    <span className="absolute left-0.5 top-0.5 rounded bg-fuchsia-600 px-1 py-0.5 text-[7px] font-black uppercase text-white">🎨</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-
-
-
-
-
-        {/* Trending */}
-        <section>
-          <SectionHeader title="Tendencias ahora" icon={<TrendingUp className="h-4 w-4 text-neon" />} />
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            {trendingFor.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
-          </div>
-        </section>
 
         {/* Viral / TikTok style */}
         <section>
@@ -426,7 +362,7 @@ function Home() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-xs font-bold">A pedido</p>
-              <p className="text-[10px] text-muted-foreground">Productos de fábrica · envío en 30 días · mínimos desde 100 u.</p>
+              <p className="text-[10px] text-muted-foreground">Productos de fábrica · entrega 20 a 40 días · mínimos desde 100 u.</p>
             </div>
             <ChevronRight className="h-4 w-4 text-amber-600" />
           </div>

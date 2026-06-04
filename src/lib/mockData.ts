@@ -105,11 +105,14 @@ const make = (
   const joined = target - missing;
 
   // Asignación determinística del tipo de vendedor / entrega
-  // 0 → NEIBA, 1 → importador stock AR, 2 → importador a pedido (lote), 3 → NEIBA personalizable
+  // NEIBA no vende productos. Solo locales, importadores stock AR e importadores a pedido (fábrica).
+  // 0 → LOCAL (sin personalización, stock AR 24/48 hs)
+  // 1 → IMPORTADOR stock AR (24/48 hs, sin personalización)
+  // 2,3 → IMPORTADOR a pedido (fábrica, mín. 100 u., entrega 20 a 40 días, personalizable opcional)
   const kindIdx = _id % 4;
   const importerPool = ["Asia Trade SA", "Shenzhen Direct AR", "Pacific Imports", "Global Link", "China Express AR"];
-  let sellerKind: SellerKind = "neiba";
-  let sellerName = "NEIBA";
+  let sellerKind: SellerKind = "local";
+  let sellerName = "";
   let sellerVerified = true;
   let stockLocation: StockLocation = "ar";
   let deliveryLabel = "24/48 hs";
@@ -119,7 +122,6 @@ const make = (
   let quotable = false;
   let importStatus: string | undefined;
 
-  // kindIdx 0 → LOCAL (tienda argentina por categoría)
   if (kindIdx === 0) {
     const matching = LOCALS.filter((l) => l.category === category);
     const pool = matching.length > 0 ? matching : LOCALS;
@@ -135,16 +137,12 @@ const make = (
     sellerVerified = true;
     stockLocation = "ar";
     deliveryLabel = "24/48 hs";
-    if (_id % 3 === 0) {
-      customizable = true;
-      customizationFee = 2500 + ((_id * 137) % 4) * 500;
-    }
-  } else if (kindIdx === 2) {
+  } else {
     sellerKind = "importer";
     sellerName = importerPool[(_id + 1) % importerPool.length];
     sellerVerified = _id % 7 !== 0;
     stockLocation = "factory";
-    deliveryLabel = "30 días";
+    deliveryLabel = "20 a 40 días";
     minOrder = 100;
     quotable = true;
     const statuses = ["En fábrica", "En tránsito", "En aduana", "Nacionalizado"];
@@ -153,13 +151,6 @@ const make = (
       customizable = true;
       customizationFee = 3500 + ((_id * 91) % 5) * 500;
     }
-  } else if (kindIdx === 3) {
-    sellerKind = "neiba";
-    sellerName = "NEIBA";
-    stockLocation = "ar";
-    deliveryLabel = "24/48 hs";
-    customizable = true;
-    customizationFee = 1500 + ((_id * 53) % 4) * 500;
   }
 
   return {
