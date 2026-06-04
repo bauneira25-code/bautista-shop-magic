@@ -639,6 +639,24 @@ function ProductPage() {
             <button
               onClick={() => {
                 doAdd();
+                if (isLocal) {
+                  const after = storeQtyInCart + qty;
+                  if (after < localMin) {
+                    const remaining = localMin - after;
+                    toast.success("Agregado 🛒", {
+                      description: remaining === 1
+                        ? "Te queda 1 producto para finalizar tu compra"
+                        : `Te quedan ${remaining} productos para completar tu compra`,
+                    });
+                    setTimeout(() => {
+                      document.getElementById("more-from-seller")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 50);
+                    return;
+                  }
+                  toast.success("¡Listo! Ya podés hacer tu compra ✅");
+                  navigate({ to: "/cart" });
+                  return;
+                }
                 toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` });
                 navigate({ to: "/", search: { similar: product.slug } });
               }}
