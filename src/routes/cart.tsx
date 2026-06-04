@@ -42,6 +42,18 @@ function CartPage() {
   const modeLabel = (m: string) =>
     m === "wholesale" ? "Mayorista" : "Individual";
 
+  // Validación: cada local exige mínimo 3 unidades (pueden ser productos distintos)
+  const LOCAL_MIN = 3;
+  const localTotals = items.reduce<Record<string, number>>((acc, it) => {
+    const p = findProduct(it.slug);
+    if (p?.sellerKind === "local") {
+      acc[p.sellerName] = (acc[p.sellerName] ?? 0) + it.quantity;
+    }
+    return acc;
+  }, {});
+  const localShortfalls = Object.entries(localTotals).filter(([, q]) => q < LOCAL_MIN);
+  const hasLocalShortfall = localShortfalls.length > 0;
+
   const addOrder = useUserOrders((s) => s.add);
 
   const finishPay = (info: { method: string; cardLast4?: string }) => {
