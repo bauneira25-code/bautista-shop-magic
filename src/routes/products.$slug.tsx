@@ -284,7 +284,7 @@ function ProductPage() {
                 variant="detail"
                 hideCustomizable
                 hideImportStatus
-                deliveryOverride={isImport ? (importShipping === "aire" ? "15-30 días (avión)" : "30-45 días (barco)") : undefined}
+                deliveryOverride={isImport ? "20 a 40 días" : undefined}
               />
             </div>
 
