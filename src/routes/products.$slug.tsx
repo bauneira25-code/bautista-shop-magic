@@ -243,7 +243,7 @@ function ProductPage() {
             <span className="rounded-md bg-primary/15 px-1.5 py-0.5 font-bold text-primary">{product.badge ?? "TENDENCIA"}</span>
             <span className="inline-flex items-center gap-1"><Star className="h-3 w-3 fill-warning text-warning" /> {product.rating} ({product.reviews})</span>
             <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-[10px] font-bold text-foreground">
-              {product.sellerKind === "neiba" ? "N" : product.sellerKind === "local" ? "🏪" : "🏭"} {product.sellerName}
+              {product.sellerKind === "neiba" ? "N" : product.sellerKind === "local" ? "🏪" : product.sellerKind === "fabricante" ? "🏗️" : "🏭"} {product.sellerName}
               {product.sellerVerified && <ShieldCheck className="h-2.5 w-2.5 text-emerald-600" />}
             </span>
           </div>
@@ -256,12 +256,12 @@ function ProductPage() {
             <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
           </div>
 
-          {/* Pedido mínimo del local */}
+          {/* Pedido mínimo de la tienda */}
           {isLocal && (
-            <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/60 px-2.5 py-1.5">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Pedido mínimo del local</p>
-              <p className="mt-1 font-display text-base leading-none text-amber-900">{localMin} u.</p>
-              <p className="mt-1 text-[9px] leading-tight text-amber-700/80">Pueden ser productos distintos de este local.</p>
+            <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/60 px-3 py-2">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Pedido mínimo de la tienda</p>
+              <p className="mt-1 font-display text-2xl leading-none text-amber-900">3 unidades mínimo</p>
+              <p className="mt-1 text-[10px] leading-tight text-amber-700/80">Pueden ser productos distintos de esta tienda.</p>
             </div>
           )}
 
