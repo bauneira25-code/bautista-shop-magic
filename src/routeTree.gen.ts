@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StockRouteImport } from './routes/stock'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
@@ -24,6 +25,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminPanelRouteImport } from './routes/admin-panel'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
+import { Route as APedidoRouteImport } from './routes/a-pedido'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminPanelIndexRouteImport } from './routes/admin-panel.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
@@ -45,6 +47,11 @@ import { Route as AdminPanelClientesRouteImport } from './routes/admin-panel.cli
 import { Route as AdminPanelCalidadRouteImport } from './routes/admin-panel.calidad'
 import { Route as AdminPanelAnalisisRouteImport } from './routes/admin-panel.analisis'
 
+const StockRoute = StockRouteImport.update({
+  id: '/stock',
+  path: '/stock',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -118,6 +125,11 @@ const AdminPanelRoute = AdminPanelRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin-login',
   path: '/admin-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const APedidoRoute = APedidoRouteImport.update({
+  id: '/a-pedido',
+  path: '/a-pedido',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -223,6 +235,7 @@ const AdminPanelAnalisisRoute = AdminPanelAnalisisRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-pedido': typeof APedidoRoute
   '/admin-login': typeof AdminLoginRoute
   '/admin-panel': typeof AdminPanelRouteWithChildren
   '/auth': typeof AuthRoute
@@ -238,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stock': typeof StockRoute
   '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
@@ -260,6 +274,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-pedido': typeof APedidoRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
@@ -274,6 +289,7 @@ export interface FileRoutesByTo {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stock': typeof StockRoute
   '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
@@ -297,6 +313,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-pedido': typeof APedidoRoute
   '/admin-login': typeof AdminLoginRoute
   '/admin-panel': typeof AdminPanelRouteWithChildren
   '/auth': typeof AuthRoute
@@ -312,6 +329,7 @@ export interface FileRoutesById {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stock': typeof StockRoute
   '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
@@ -336,6 +354,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/a-pedido'
     | '/admin-login'
     | '/admin-panel'
     | '/auth'
@@ -351,6 +370,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/stock'
     | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
@@ -373,6 +393,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/a-pedido'
     | '/admin-login'
     | '/auth'
     | '/cart'
@@ -387,6 +408,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/stock'
     | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
@@ -409,6 +431,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/a-pedido'
     | '/admin-login'
     | '/admin-panel'
     | '/auth'
@@ -424,6 +447,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/stock'
     | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
@@ -447,6 +471,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  APedidoRoute: typeof APedidoRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminPanelRoute: typeof AdminPanelRouteWithChildren
   AuthRoute: typeof AuthRoute
@@ -462,11 +487,19 @@ export interface RootRouteChildren {
   RegistrarMarcaRoute: typeof RegistrarMarcaRoute
   SearchRoute: typeof SearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StockRoute: typeof StockRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stock': {
+      id: '/stock'
+      path: '/stock'
+      fullPath: '/stock'
+      preLoaderRoute: typeof StockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -570,6 +603,13 @@ declare module '@tanstack/react-router' {
       path: '/admin-login'
       fullPath: '/admin-login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a-pedido': {
+      id: '/a-pedido'
+      path: '/a-pedido'
+      fullPath: '/a-pedido'
+      preLoaderRoute: typeof APedidoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -782,6 +822,7 @@ const EnVivoRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  APedidoRoute: APedidoRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminPanelRoute: AdminPanelRouteWithChildren,
   AuthRoute: AuthRoute,
@@ -797,6 +838,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegistrarMarcaRoute: RegistrarMarcaRoute,
   SearchRoute: SearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StockRoute: StockRoute,
   ProductsSlugRoute: ProductsSlugRoute,
 }
 export const routeTree = rootRouteImport
