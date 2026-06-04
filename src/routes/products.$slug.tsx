@@ -217,7 +217,7 @@ function ProductPage() {
             <span className="rounded-md bg-primary/15 px-1.5 py-0.5 font-bold text-primary">{product.badge ?? "TENDENCIA"}</span>
             <span className="inline-flex items-center gap-1"><Star className="h-3 w-3 fill-warning text-warning" /> {product.rating} ({product.reviews})</span>
             <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-[10px] font-bold text-foreground">
-              {product.sellerKind === "neiba" ? "N" : "🏭"} {product.sellerName}
+              {product.sellerKind === "neiba" ? "N" : product.sellerKind === "local" ? "🏪" : "🏭"} {product.sellerName}
               {product.sellerVerified && <ShieldCheck className="h-2.5 w-2.5 text-emerald-600" />}
             </span>
           </div>
