@@ -76,6 +76,7 @@ function ProductPage() {
   const product = findProduct(slug);
   const navigate = useNavigate();
   const addToCart = useLocalCart((s) => s.add);
+  const cartItems = useLocalCart((s) => s.items);
   const [mode, setMode] = useState<PurchaseMode>("individual");
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
@@ -84,7 +85,6 @@ function ProductPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
   const [customQty, setCustomQty] = useState(0);
-  
 
   // Lote forzado: importador a pedido o fabricante con mínimo
   const wholesaleOnly = !!(
@@ -93,12 +93,22 @@ function ProductPage() {
       product.sellerKind === "fabricante") &&
     product.minOrder
   );
-  // Producto a pedido (importación): aplica selección avión/barco (sólo importador)
   const isImport = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory");
-  // Tienda local: sin mayorista/grupal, precio único, mínimo 3 u. mezclados
   const isLocal = !!(product && product.sellerKind === "local");
   const isFabricante = !!(product && product.sellerKind === "fabricante");
   const localMin = 3;
+
+  // Total ya en carrito de esta misma tienda (suma de TODOS sus ítems)
+  const storeQtyInCart = useMemo(() => {
+    if (!isLocal || !product) return 0;
+    return cartItems.reduce((sum, it) => {
+      const p = findProduct(it.slug);
+      if (p?.sellerKind === "local" && p.sellerName === product.sellerName) {
+        return sum + it.quantity;
+      }
+      return sum;
+    }, 0);
+  }, [cartItems, isLocal, product]);
 
   useEffect(() => {
     if (wholesaleOnly && product?.minOrder) {
