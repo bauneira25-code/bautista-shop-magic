@@ -111,23 +111,27 @@ function Orders() {
 
 function UserOrderCard({ order }: { order: UserOrder }) {
   const steps = order.isImport ? IMPORT_STEPS : STATUS_STEPS;
-  // En import: el "processing" inicial cuenta como completado, simulamos un avance parcial
   const stepIndex = order.isImport
     ? Math.max(0, Math.floor((order.progress / 100) * (IMPORT_STEPS.length - 1)))
     : STATUS_STEPS.findIndex((s) => s.id === order.status);
   const totalQty = order.items.reduce((s, i) => s + i.quantity, 0);
   const customItem = !order.isImport ? order.items.find((i) => (i.customQty ?? 0) > 0) : undefined;
-  const liveMachineId = customItem ? machineForProduct(customItem.title, customItem.slug) : null;
+  const customProduct = customItem ? MOCK_PRODUCTS.find((p) => p.slug === customItem.slug) : undefined;
+  const isFabricante = customProduct?.sellerKind === "fabricante";
+  const liveMachineId = customItem && !isFabricante ? machineForProduct(customItem.title, customItem.slug) : null;
 
   return (
     <div className={`rounded-3xl border-2 ${order.isImport ? "border-emerald-300" : "border-primary/40"} bg-card p-4 shadow-sm`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase ${order.isImport ? "bg-emerald-600 text-white" : "bg-primary text-primary-foreground"}`}>
-          {order.isImport ? "🌍 Importación" : `${MODE_BADGE[order.mode]} ${MODE_LABEL[order.mode]}`}
-        </span>
+        {order.isImport ? (
+          <span className="rounded-full bg-emerald-600 px-2.5 py-0.5 text-[10px] font-black uppercase text-white">
+            🌍 Importación
+          </span>
+        ) : <span />}
         <span className="text-[10px] font-bold uppercase text-muted-foreground">#{order.id}</span>
       </div>
+
 
       {order.isImport && (
         <div className="mt-2 flex items-center gap-1.5 rounded-xl bg-emerald-50 px-2 py-1.5">
