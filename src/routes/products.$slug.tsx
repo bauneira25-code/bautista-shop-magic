@@ -365,8 +365,8 @@ function ProductPage() {
           </div>
         </div>
 
-        {/* 2 PURCHASE MODES (oculto si es lote-only) */}
-        {!wholesaleOnly && (
+        {/* 2 PURCHASE MODES (oculto si es lote-only o local) */}
+        {!wholesaleOnly && !isLocal && (
         <div>
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
           <div className="grid gap-2 grid-cols-2">
@@ -385,8 +385,8 @@ function ProductPage() {
         </div>
         )}
 
-        {/* Wholesale tiers (oculto para importador a pedido con mínimo) */}
-        {mode === "wholesale" && !wholesaleOnly && (
+        {/* Wholesale tiers (oculto para importador a pedido con mínimo o local) */}
+        {mode === "wholesale" && !wholesaleOnly && !isLocal && (
           <div className="rounded-2xl border border-border bg-card p-3 float-up space-y-1">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-bold uppercase text-muted-foreground">Precios mayoristas</p>
