@@ -86,12 +86,18 @@ function ProductPage() {
   const [customQty, setCustomQty] = useState(0);
   const [importShipping, setImportShipping] = useState<"aire" | "barco">("barco");
 
-  // Lote forzado: importador a pedido con mínimo
-  const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
-  // Producto a pedido (importación): aplica selección avión/barco
+  // Lote forzado: importador a pedido o fabricante con mínimo
+  const wholesaleOnly = !!(
+    product &&
+    ((product.sellerKind === "importer" && product.stockLocation === "factory") ||
+      product.sellerKind === "fabricante") &&
+    product.minOrder
+  );
+  // Producto a pedido (importación): aplica selección avión/barco (sólo importador)
   const isImport = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory");
-  // Local: sin mayorista/grupal, precio único, mínimo 3 u.
+  // Tienda local: sin mayorista/grupal, precio único, mínimo 3 u. mezclados
   const isLocal = !!(product && product.sellerKind === "local");
+  const isFabricante = !!(product && product.sellerKind === "fabricante");
   const localMin = 3;
 
   useEffect(() => {
