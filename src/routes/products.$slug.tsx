@@ -485,6 +485,47 @@ function ProductPage() {
           </div>
         </div>
 
+        {/* Más de este local / importador */}
+        {(product.sellerKind === "local" || product.sellerKind === "importer") && (() => {
+          const more = product.sellerKind === "local"
+            ? localProducts(product.sellerName, product.slug, 6)
+            : importerProducts(product.sellerName, product.slug, 6);
+          if (more.length === 0) return null;
+          const loc = product.sellerKind === "local" ? LOCALS.find((l) => l.name === product.sellerName) : null;
+          const tone = product.sellerKind === "local" ? "sky" : "emerald";
+          return (
+            <div className={`rounded-2xl border border-${tone}-200 bg-${tone}-50/40 p-3.5`}>
+              <div className="flex items-center gap-2">
+                <span className={`grid h-9 w-9 place-items-center rounded-xl bg-${tone}-100 text-lg`}>
+                  {loc?.emoji ?? (product.sellerKind === "local" ? "🏪" : "🏭")}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    Más de este {product.sellerKind === "local" ? "local" : "importador"}
+                  </p>
+                  <p className="font-display text-sm leading-tight">{product.sellerName}</p>
+                </div>
+                {product.sellerKind === "local" && (
+                  <Link to="/locales" className="rounded-full bg-sky-600 px-2.5 py-1 text-[10px] font-black text-white">Ver local</Link>
+                )}
+              </div>
+              <div className="-mx-3.5 mt-3 flex gap-2.5 overflow-x-auto px-3.5 pb-1 scrollbar-hide">
+                {more.map((r) => (
+                  <Link key={r.id} to="/products/$slug" params={{ slug: r.slug }} className="w-[110px] shrink-0">
+                    <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: r.gradient }}>
+                      <span>{r.emoji}</span>
+                    </div>
+                    <p className="mt-1 line-clamp-1 text-[10px] font-medium">{r.title}</p>
+                    <p className={`text-[10px] font-bold leading-none ${product.sellerKind === "local" ? "text-sky-700" : "text-emerald-700"}`}>
+                      {formatARS(r.price.individual)}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
         {/* También te puede gustar */}
         <div>
           <div className="mb-3 flex items-end justify-between">
