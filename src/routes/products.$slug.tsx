@@ -4,7 +4,7 @@ import {
   ArrowLeft, Heart, Share2, Star, Truck, ShieldCheck, Sparkles,
   Plus, Minus, Plane, Ship,
 } from "lucide-react";
-import { findProduct, formatARS, stockLabel, relatedProducts, type PurchaseMode } from "@/lib/mockData";
+import { findProduct, formatARS, stockLabel, relatedProducts, localProducts, importerProducts, LOCALS, type PurchaseMode } from "@/lib/mockData";
 import { useLocalCart } from "@/stores/localCart";
 import { PurchaseSteps } from "@/components/PurchaseSteps";
 import { toast } from "sonner";
