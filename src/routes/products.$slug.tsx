@@ -100,7 +100,6 @@ function ProductPage() {
       setQty((q) => (q < product.minOrder! ? product.minOrder! : q));
     } else if (isLocal) {
       setMode("individual");
-      setQty((q) => (q < localMin ? localMin : q));
     }
   }, [wholesaleOnly, product?.minOrder, isLocal]);
 
