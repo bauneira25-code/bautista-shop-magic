@@ -119,16 +119,25 @@ const make = (
   let quotable = false;
   let importStatus: string | undefined;
 
-  if (kindIdx === 1) {
+  // kindIdx 0 → LOCAL (tienda argentina por categoría)
+  if (kindIdx === 0) {
+    const matching = LOCALS.filter((l) => l.category === category);
+    const pool = matching.length > 0 ? matching : LOCALS;
+    const loc = pool[_id % pool.length];
+    sellerKind = "local";
+    sellerName = loc.name;
+    sellerVerified = loc.verified;
+    stockLocation = "ar";
+    deliveryLabel = "24/48 hs";
+  } else if (kindIdx === 1) {
     sellerKind = "importer";
     sellerName = importerPool[_id % importerPool.length];
     sellerVerified = true;
     stockLocation = "ar";
     deliveryLabel = "24/48 hs";
-    // Algunos importadores ofrecen personalización con costo extra
     if (_id % 3 === 0) {
       customizable = true;
-      customizationFee = 2500 + ((_id * 137) % 4) * 500; // 2500 / 3000 / 3500 / 4000
+      customizationFee = 2500 + ((_id * 137) % 4) * 500;
     }
   } else if (kindIdx === 2) {
     sellerKind = "importer";
@@ -140,10 +149,9 @@ const make = (
     quotable = true;
     const statuses = ["En fábrica", "En tránsito", "En aduana", "Nacionalizado"];
     importStatus = statuses[_id % statuses.length];
-    // Lotes a pedido: a veces con personalización (branding) más cara
     if (_id % 2 === 0) {
       customizable = true;
-      customizationFee = 3500 + ((_id * 91) % 5) * 500; // 3500 a 5500
+      customizationFee = 3500 + ((_id * 91) % 5) * 500;
     }
   } else if (kindIdx === 3) {
     sellerKind = "neiba";
@@ -151,7 +159,7 @@ const make = (
     stockLocation = "ar";
     deliveryLabel = "24/48 hs";
     customizable = true;
-    customizationFee = 1500 + ((_id * 53) % 4) * 500; // 1500 / 2000 / 2500 / 3000
+    customizationFee = 1500 + ((_id * 53) % 4) * 500;
   }
 
   return {
