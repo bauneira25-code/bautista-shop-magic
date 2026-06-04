@@ -90,13 +90,19 @@ function ProductPage() {
   const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
   // Producto a pedido (importación): aplica selección avión/barco
   const isImport = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory");
+  // Local: sin mayorista/grupal, precio único, mínimo 3 u.
+  const isLocal = !!(product && product.sellerKind === "local");
+  const localMin = 3;
 
   useEffect(() => {
     if (wholesaleOnly && product?.minOrder) {
       setMode("wholesale");
       setQty((q) => (q < product.minOrder! ? product.minOrder! : q));
+    } else if (isLocal) {
+      setMode("individual");
+      setQty((q) => (q < localMin ? localMin : q));
     }
-  }, [wholesaleOnly, product?.minOrder]);
+  }, [wholesaleOnly, product?.minOrder, isLocal]);
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
@@ -245,10 +251,12 @@ function ProductPage() {
               <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500 leading-none">Precio por unidad</p>
               <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
             </div>
-            {product.minOrder && (
+            {(product.minOrder || isLocal) && (
               <div className="flex-1 rounded-xl border border-amber-200 bg-amber-50/60 px-2.5 py-1.5">
-                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Cantidad mínima</p>
-                <p className="mt-1 font-display text-base leading-none text-amber-900">{product.minOrder} u.</p>
+                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">
+                  {isLocal ? "Pedido mínimo local" : "Cantidad mínima"}
+                </p>
+                <p className="mt-1 font-display text-base leading-none text-amber-900">{isLocal ? localMin : product.minOrder} u.</p>
               </div>
             )}
           </div>
@@ -276,8 +284,8 @@ function ProductPage() {
               />
             </div>
 
-            {/* Compra por lote (compacto) */}
-            {product.minOrder && (
+            {/* Compra por lote (compacto) - oculto para locales */}
+            {product.minOrder && !isLocal && (
               <div className="border-t border-border bg-amber-50/40 px-3 py-2">
                 <div className="flex items-center justify-between gap-2">
                   <div>
@@ -291,13 +299,13 @@ function ProductPage() {
 
             {/* Cantidad (justo debajo de Compra por lote) */}
             {(() => {
-              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : 1;
+              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : isLocal ? localMin : 1;
               return (
                 <div className="flex items-center justify-between border-t border-border px-3 py-2">
                   <div>
                     <p className="text-[12px] font-semibold leading-none">Cantidad</p>
                     <p className="mt-1 text-[10px] text-muted-foreground leading-none">
-                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : "Elegí cuántas querés"}
+                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : isLocal ? `Mínimo ${localMin} u.` : "Elegí cuántas querés"}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -357,8 +365,8 @@ function ProductPage() {
           </div>
         </div>
 
-        {/* 2 PURCHASE MODES (oculto si es lote-only) */}
-        {!wholesaleOnly && (
+        {/* 2 PURCHASE MODES (oculto si es lote-only o local) */}
+        {!wholesaleOnly && !isLocal && (
         <div>
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Elegí cómo comprar</p>
           <div className="grid gap-2 grid-cols-2">
@@ -377,8 +385,8 @@ function ProductPage() {
         </div>
         )}
 
-        {/* Wholesale tiers (oculto para importador a pedido con mínimo) */}
-        {mode === "wholesale" && !wholesaleOnly && (
+        {/* Wholesale tiers (oculto para importador a pedido con mínimo o local) */}
+        {mode === "wholesale" && !wholesaleOnly && !isLocal && (
           <div className="rounded-2xl border border-border bg-card p-3 float-up space-y-1">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-bold uppercase text-muted-foreground">Precios mayoristas</p>
