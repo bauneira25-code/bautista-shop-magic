@@ -42,6 +42,18 @@ function CartPage() {
   const modeLabel = (m: string) =>
     m === "wholesale" ? "Mayorista" : "Individual";
 
+  // Validación: cada local exige mínimo 3 unidades (pueden ser productos distintos)
+  const LOCAL_MIN = 3;
+  const localTotals = items.reduce<Record<string, number>>((acc, it) => {
+    const p = findProduct(it.slug);
+    if (p?.sellerKind === "local") {
+      acc[p.sellerName] = (acc[p.sellerName] ?? 0) + it.quantity;
+    }
+    return acc;
+  }, {});
+  const localShortfalls = Object.entries(localTotals).filter(([, q]) => q < LOCAL_MIN);
+  const hasLocalShortfall = localShortfalls.length > 0;
+
   const addOrder = useUserOrders((s) => s.add);
 
   const finishPay = (info: { method: string; cardLast4?: string }) => {
@@ -151,6 +163,15 @@ function CartPage() {
   };
 
   const handlePay = () => {
+    if (hasLocalShortfall) {
+      const msg = localShortfalls
+        .map(([name, q]) => `${name}: ${q}/${LOCAL_MIN} u.`)
+        .join(" · ");
+      toast.error("Pedido mínimo del local: 3 unidades", {
+        description: `Sumá productos del mismo local. ${msg}`,
+      });
+      return;
+    }
     if (!user) {
       setShowRegister(true);
       return;
@@ -318,9 +339,24 @@ function CartPage() {
       {/* Sticky pay CTA */}
       {items.length > 0 && (
         <div className="fixed bottom-3 left-1/2 z-40 w-full max-w-[480px] -translate-x-1/2 space-y-2 px-3">
+          {hasLocalShortfall && (
+            <div className="rounded-2xl border border-amber-300 bg-amber-50 px-3 py-2 text-[11px] text-amber-900 shadow">
+              <p className="font-bold">Pedido mínimo del local: 3 unidades</p>
+              <p className="mt-0.5 text-amber-800/90">Pueden ser productos distintos del mismo local. Sumá más para poder pagar:</p>
+              <ul className="mt-1 space-y-0.5">
+                {localShortfalls.map(([name, q]) => (
+                  <li key={name} className="flex justify-between">
+                    <span>🏪 {name}</span>
+                    <span className="font-bold">{q}/{LOCAL_MIN} u.</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <button
             onClick={handlePay}
-            className="w-full rounded-2xl bg-[#e8451c] py-4 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)]"
+            disabled={hasLocalShortfall}
+            className="w-full rounded-2xl bg-[#e8451c] py-4 font-display text-sm font-black tracking-wider text-white shadow-[0_10px_30px_-10px_rgba(232,69,28,0.6)] disabled:opacity-50"
           >
             <Lock className="mr-2 inline h-4 w-4" /> PAGAR · {formatARS(total)}
           </button>

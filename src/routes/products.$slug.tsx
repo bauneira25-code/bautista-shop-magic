@@ -100,7 +100,6 @@ function ProductPage() {
       setQty((q) => (q < product.minOrder! ? product.minOrder! : q));
     } else if (isLocal) {
       setMode("individual");
-      setQty((q) => (q < localMin ? localMin : q));
     }
   }, [wholesaleOnly, product?.minOrder, isLocal]);
 
@@ -254,9 +253,12 @@ function ProductPage() {
             {(product.minOrder || isLocal) && (
               <div className="flex-1 rounded-xl border border-amber-200 bg-amber-50/60 px-2.5 py-1.5">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">
-                  {isLocal ? "Pedido mínimo local" : "Cantidad mínima"}
+                  {isLocal ? "Pedido mínimo del local" : "Cantidad mínima"}
                 </p>
                 <p className="mt-1 font-display text-base leading-none text-amber-900">{isLocal ? localMin : product.minOrder} u.</p>
+                {isLocal && (
+                  <p className="mt-1 text-[9px] leading-tight text-amber-700/80">Pueden ser productos distintos de este local.</p>
+                )}
               </div>
             )}
           </div>
@@ -299,13 +301,13 @@ function ProductPage() {
 
             {/* Cantidad (justo debajo de Compra por lote) */}
             {(() => {
-              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : isLocal ? localMin : 1;
+              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : 1;
               return (
                 <div className="flex items-center justify-between border-t border-border px-3 py-2">
                   <div>
                     <p className="text-[12px] font-semibold leading-none">Cantidad</p>
                     <p className="mt-1 text-[10px] text-muted-foreground leading-none">
-                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : isLocal ? `Mínimo ${localMin} u.` : "Elegí cuántas querés"}
+                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : isLocal ? `Mín. 3 u. del local (mezclá productos)` : "Elegí cuántas querés"}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
