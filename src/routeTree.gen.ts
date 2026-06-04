@@ -15,6 +15,7 @@ import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as OfertasRouteImport } from './routes/ofertas'
+import { Route as LocalesRouteImport } from './routes/locales'
 import { Route as ImportadoresRouteImport } from './routes/importadores'
 import { Route as ImportadorPanelRouteImport } from './routes/importador-panel'
 import { Route as EnVivoRouteImport } from './routes/en-vivo'
@@ -72,6 +73,11 @@ const OrdersRoute = OrdersRouteImport.update({
 const OfertasRoute = OfertasRouteImport.update({
   id: '/ofertas',
   path: '/ofertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocalesRoute = LocalesRouteImport.update({
+  id: '/locales',
+  path: '/locales',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportadoresRoute = ImportadoresRouteImport.update({
@@ -225,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/en-vivo': typeof EnVivoRouteWithChildren
   '/importador-panel': typeof ImportadorPanelRoute
   '/importadores': typeof ImportadoresRoute
+  '/locales': typeof LocalesRoute
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
@@ -260,6 +267,7 @@ export interface FileRoutesByTo {
   '/en-vivo': typeof EnVivoRouteWithChildren
   '/importador-panel': typeof ImportadorPanelRoute
   '/importadores': typeof ImportadoresRoute
+  '/locales': typeof LocalesRoute
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
@@ -297,6 +305,7 @@ export interface FileRoutesById {
   '/en-vivo': typeof EnVivoRouteWithChildren
   '/importador-panel': typeof ImportadorPanelRoute
   '/importadores': typeof ImportadoresRoute
+  '/locales': typeof LocalesRoute
   '/ofertas': typeof OfertasRoute
   '/orders': typeof OrdersRoute
   '/profile': typeof ProfileRoute
@@ -335,6 +344,7 @@ export interface FileRouteTypes {
     | '/en-vivo'
     | '/importador-panel'
     | '/importadores'
+    | '/locales'
     | '/ofertas'
     | '/orders'
     | '/profile'
@@ -370,6 +380,7 @@ export interface FileRouteTypes {
     | '/en-vivo'
     | '/importador-panel'
     | '/importadores'
+    | '/locales'
     | '/ofertas'
     | '/orders'
     | '/profile'
@@ -406,6 +417,7 @@ export interface FileRouteTypes {
     | '/en-vivo'
     | '/importador-panel'
     | '/importadores'
+    | '/locales'
     | '/ofertas'
     | '/orders'
     | '/profile'
@@ -443,6 +455,7 @@ export interface RootRouteChildren {
   EnVivoRoute: typeof EnVivoRouteWithChildren
   ImportadorPanelRoute: typeof ImportadorPanelRoute
   ImportadoresRoute: typeof ImportadoresRoute
+  LocalesRoute: typeof LocalesRoute
   OfertasRoute: typeof OfertasRoute
   OrdersRoute: typeof OrdersRoute
   ProfileRoute: typeof ProfileRoute
@@ -494,6 +507,13 @@ declare module '@tanstack/react-router' {
       path: '/ofertas'
       fullPath: '/ofertas'
       preLoaderRoute: typeof OfertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locales': {
+      id: '/locales'
+      path: '/locales'
+      fullPath: '/locales'
+      preLoaderRoute: typeof LocalesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/importadores': {
@@ -770,6 +790,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnVivoRoute: EnVivoRouteWithChildren,
   ImportadorPanelRoute: ImportadorPanelRoute,
   ImportadoresRoute: ImportadoresRoute,
+  LocalesRoute: LocalesRoute,
   OfertasRoute: OfertasRoute,
   OrdersRoute: OrdersRoute,
   ProfileRoute: ProfileRoute,

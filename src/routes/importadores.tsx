@@ -72,12 +72,21 @@ function ImportadoresPage() {
                 {products.length > 0 && (
                   <div className="flex gap-2 overflow-x-auto px-3 pb-3 scrollbar-hide">
                     {products.map((p) => (
-                      <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[88px] shrink-0">
+                      <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[110px] shrink-0">
                         <div className="aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
                           {p.emoji}
                         </div>
-                        <p className="mt-1 line-clamp-1 text-[9px] font-medium">{p.title}</p>
-                        <p className="text-[9px] font-black text-[#e8451c]">{formatARS(p.price.wholesale)}</p>
+                        <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
+                        <div className="mt-0.5 space-y-0.5">
+                          <div className="flex items-center justify-between rounded bg-neutral-100 px-1.5 py-0.5 text-[8px]">
+                            <span className="text-neutral-600">1 u.</span>
+                            <span className="font-black text-neutral-900">{formatARS(p.price.individual)}</span>
+                          </div>
+                          <div className="flex items-center justify-between rounded bg-emerald-100 px-1.5 py-0.5 text-[8px]">
+                            <span className="text-emerald-700">20 u.</span>
+                            <span className="font-black text-emerald-800">{formatARS(p.price.group)}</span>
+                          </div>
+                        </div>
                       </Link>
                     ))}
                   </div>
