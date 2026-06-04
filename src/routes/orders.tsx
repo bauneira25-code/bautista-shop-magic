@@ -63,8 +63,8 @@ function Orders() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
                     <p className="text-[10px] font-bold uppercase text-muted-foreground">#{o.id}</p>
-                    <span className="rounded-md bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase text-primary">{o.mode}</span>
                   </div>
+
                   <p className="line-clamp-1 text-sm font-semibold">{o.product.title}</p>
                   <p className="text-xs text-muted-foreground">{o.qty} unidad · {formatARS(o.product.price[o.mode] * o.qty)}</p>
                 </div>
