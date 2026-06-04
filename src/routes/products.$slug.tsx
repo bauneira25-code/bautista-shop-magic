@@ -76,6 +76,7 @@ function ProductPage() {
   const product = findProduct(slug);
   const navigate = useNavigate();
   const addToCart = useLocalCart((s) => s.add);
+  const cartItems = useLocalCart((s) => s.items);
   const [mode, setMode] = useState<PurchaseMode>("individual");
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState(0);
@@ -84,7 +85,6 @@ function ProductPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
   const [customQty, setCustomQty] = useState(0);
-  
 
   // Lote forzado: importador a pedido o fabricante con mínimo
   const wholesaleOnly = !!(
@@ -93,12 +93,22 @@ function ProductPage() {
       product.sellerKind === "fabricante") &&
     product.minOrder
   );
-  // Producto a pedido (importación): aplica selección avión/barco (sólo importador)
   const isImport = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory");
-  // Tienda local: sin mayorista/grupal, precio único, mínimo 3 u. mezclados
   const isLocal = !!(product && product.sellerKind === "local");
   const isFabricante = !!(product && product.sellerKind === "fabricante");
   const localMin = 3;
+
+  // Total ya en carrito de esta misma tienda (suma de TODOS sus ítems)
+  const storeQtyInCart = useMemo(() => {
+    if (!isLocal || !product) return 0;
+    return cartItems.reduce((sum, it) => {
+      const p = findProduct(it.slug);
+      if (p?.sellerKind === "local" && p.sellerName === product.sellerName) {
+        return sum + it.quantity;
+      }
+      return sum;
+    }, 0);
+  }, [cartItems, isLocal, product]);
 
   useEffect(() => {
     if (wholesaleOnly && product?.minOrder) {
@@ -172,8 +182,26 @@ function ProductPage() {
 
   const handleBuyNow = () => {
     doAdd();
+    // Tienda local: si todavía no se llega al mínimo, mandamos a "Más de esta tienda"
+    if (isLocal) {
+      const after = storeQtyInCart + qty;
+      if (after < localMin) {
+        const remaining = localMin - after;
+        toast.info(
+          remaining === 1
+            ? "Te queda 1 producto para finalizar tu compra"
+            : `Te quedan ${remaining} productos para completar tu compra`,
+          { description: `Elegí más productos de ${product.sellerName}.` },
+        );
+        setTimeout(() => {
+          document.getElementById("more-from-seller")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 50);
+        return;
+      }
+    }
     navigate({ to: "/cart" });
   };
+
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] pb-32">
@@ -256,14 +284,41 @@ function ProductPage() {
             <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
           </div>
 
-          {/* Pedido mínimo de la tienda */}
-          {isLocal && (
-            <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/60 px-3 py-2">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Pedido mínimo de la tienda</p>
-              <p className="mt-1 font-display text-2xl leading-none text-amber-900">3 unidades mínimo</p>
-              <p className="mt-1 text-[10px] leading-tight text-amber-700/80">Pueden ser productos distintos de esta tienda.</p>
-            </div>
-          )}
+          {/* Pedido mínimo de la tienda (conectado al carrito) */}
+          {isLocal && (() => {
+            const inCart = storeQtyInCart;
+            const remaining = Math.max(0, localMin - inCart);
+            const done = remaining === 0;
+            return (
+              <div className={`mt-2 rounded-xl border px-3 py-2 ${done ? "border-emerald-200 bg-emerald-50/70" : "border-amber-200 bg-amber-50/60"}`}>
+                <p className={`text-[9px] font-bold uppercase tracking-wider leading-none ${done ? "text-emerald-700" : "text-amber-700"}`}>
+                  Pedido mínimo de la tienda
+                </p>
+                <p className={`mt-1 font-display text-2xl leading-none ${done ? "text-emerald-900" : "text-amber-900"}`}>
+                  3 unidades mínimo
+                </p>
+                <p className={`mt-1 text-[10px] leading-tight ${done ? "text-emerald-700/90" : "text-amber-700/80"}`}>
+                  Pueden ser productos distintos de esta tienda.
+                </p>
+                {/* Progreso */}
+                <div className="mt-2 flex gap-1">
+                  {Array.from({ length: localMin }).map((_, i) => (
+                    <span
+                      key={i}
+                      className={`h-1.5 flex-1 rounded-full ${i < inCart ? (done ? "bg-emerald-500" : "bg-amber-500") : "bg-neutral-200"}`}
+                    />
+                  ))}
+                </div>
+                <p className={`mt-1.5 text-[11px] font-bold ${done ? "text-emerald-800" : "text-amber-800"}`}>
+                  {done
+                    ? "¡Listo! Ya podés hacer tu compra ✅"
+                    : inCart === 0
+                    ? `Te faltan ${remaining} productos para completar tu compra.`
+                    : `Llevás ${inCart} · te ${remaining === 1 ? "queda 1 producto" : `quedan ${remaining} productos`} para ${remaining === 1 ? "finalizar" : "completar"} tu compra.`}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* Bloque unificado: seguro → badges → lote → cantidad */}
           <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
@@ -472,7 +527,7 @@ function ProductPage() {
         )}
 
         {/* Pasos por modo */}
-        <PurchaseSteps mode={mode} hidePersonalize={isLocal} />
+        <PurchaseSteps mode={mode} showPersonalize={!!product.customizable} />
 
 
         {/* Trust badges */}
@@ -517,7 +572,7 @@ function ProductPage() {
           const loc = product.sellerKind === "local" ? LOCALS.find((l) => l.name === product.sellerName) : null;
           const isLocal = product.sellerKind === "local";
           return (
-            <div className={`rounded-2xl border p-3.5 ${isLocal ? "border-sky-200 bg-sky-50/40" : "border-emerald-200 bg-emerald-50/40"}`}>
+            <div id="more-from-seller" className={`rounded-2xl border p-3.5 ${isLocal ? "border-sky-200 bg-sky-50/40" : "border-emerald-200 bg-emerald-50/40"}`}>
               <div className="flex items-center gap-2">
                 <span className={`grid h-9 w-9 place-items-center rounded-xl text-lg ${isLocal ? "bg-sky-100" : "bg-emerald-100"}`}>
                   {loc?.emoji ?? (isLocal ? "🏪" : "🏭")}
@@ -584,6 +639,24 @@ function ProductPage() {
             <button
               onClick={() => {
                 doAdd();
+                if (isLocal) {
+                  const after = storeQtyInCart + qty;
+                  if (after < localMin) {
+                    const remaining = localMin - after;
+                    toast.success("Agregado 🛒", {
+                      description: remaining === 1
+                        ? "Te queda 1 producto para finalizar tu compra"
+                        : `Te quedan ${remaining} productos para completar tu compra`,
+                    });
+                    setTimeout(() => {
+                      document.getElementById("more-from-seller")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 50);
+                    return;
+                  }
+                  toast.success("¡Listo! Ya podés hacer tu compra ✅");
+                  navigate({ to: "/cart" });
+                  return;
+                }
                 toast.success("Agregado al carrito 🛒", { description: `${qty} × ${product.title}` });
                 navigate({ to: "/", search: { similar: product.slug } });
               }}

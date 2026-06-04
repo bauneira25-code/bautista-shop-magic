@@ -2,48 +2,45 @@ import { Check, Package, Users, Wand2, CreditCard, Truck, Plus } from "lucide-re
 
 type Mode = "individual" | "group" | "wholesale";
 
-const STEPS: Record<Mode, { icon: React.ComponentType<{ className?: string }>; label: string }[]> = {
-  group: [
-    { icon: Package, label: "Elegís producto" },
-    { icon: Plus, label: "Elegís cantidad" },
-    { icon: Users, label: "Te sumás al grupo con otras personas" },
-    { icon: Wand2, label: "Personalizás (opcional)" },
-    { icon: CreditCard, label: "Pagás" },
-    { icon: Truck, label: "Recibís tu envío" },
-  ],
-  individual: [
-    { icon: Package, label: "Elegís producto" },
-    { icon: Plus, label: "Elegís cantidad" },
-    { icon: Wand2, label: "Personalizás (opcional)" },
-    { icon: CreditCard, label: "Pagás" },
-    { icon: Truck, label: "Recibís tu envío" },
-  ],
-  wholesale: [
-    { icon: Package, label: "Elegís producto" },
-    { icon: Plus, label: "Elegís cantidad" },
-    { icon: Wand2, label: "Personalizás (opcional)" },
-    { icon: CreditCard, label: "Pagás" },
-    { icon: Truck, label: "Recibís tu envío" },
-  ],
-};
-
 const TITLES: Record<Mode, string> = {
   group: "Cómo funciona la compra grupal",
   individual: "Cómo funciona tu compra",
   wholesale: "Cómo funciona el pedido mayorista",
 };
 
-export function PurchaseSteps({ mode, hidePersonalize = false }: { mode: Mode; hidePersonalize?: boolean }) {
-  const steps = STEPS[mode].filter(
-    (s) => !(hidePersonalize && s.label.toLowerCase().startsWith("personalizás")),
-  );
+export function PurchaseSteps({
+  mode,
+  hidePersonalize = false,
+  showPersonalize = false,
+}: {
+  mode: Mode;
+  /** @deprecated usar showPersonalize. Se mantiene por compat. */
+  hidePersonalize?: boolean;
+  /** Mostrar el paso "Personalizás" sólo si el producto es personalizable. */
+  showPersonalize?: boolean;
+}) {
+  const includePersonalize = showPersonalize && !hidePersonalize;
+
+  const base: { icon: React.ComponentType<{ className?: string }>; label: string }[] = [
+    { icon: Package, label: "Elegís producto" },
+    { icon: Plus, label: "Elegís cantidad" },
+  ];
+  if (mode === "group") {
+    base.push({ icon: Users, label: "Te sumás al grupo con otras personas" });
+  }
+  if (includePersonalize) {
+    base.push({ icon: Wand2, label: "Personalizás tu producto" });
+  }
+  base.push({ icon: CreditCard, label: "Pagás" });
+  base.push({ icon: Truck, label: "Recibís tu envío" });
+
   return (
     <div className="rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-white p-4">
       <p className="mb-3 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#e8451c]">
         <Check className="h-3 w-3" /> {TITLES[mode]}
       </p>
       <ol className="space-y-2">
-        {steps.map((s, i) => {
+        {base.map((s, i) => {
           const Icon = s.icon;
           return (
             <li key={i} className="flex items-center gap-3">
