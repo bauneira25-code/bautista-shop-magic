@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Package, Truck, CheckCircle2, Clock, MapPin, Phone, CreditCard, Factory, Plane, ShieldCheck, Radio } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
-import { MOCK_ORDERS, formatARS } from "@/lib/mockData";
+import { MOCK_ORDERS, MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useUserOrders, type UserOrder } from "@/stores/userOrders";
 import { CustomerLiveOrders } from "@/components/CustomerLiveOrders";
 import { machineForProduct } from "@/lib/liveMachines";
