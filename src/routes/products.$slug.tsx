@@ -84,7 +84,7 @@ function ProductPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
   const [customQty, setCustomQty] = useState(0);
-  const [importShipping, setImportShipping] = useState<"aire" | "barco">("barco");
+  
 
   // Lote forzado: importador a pedido o fabricante con mínimo
   const wholesaleOnly = !!(
@@ -133,17 +133,17 @@ function ProductPage() {
   ];
   const activeTierIdx = mode === "wholesale" ? wholesaleTiers.findIndex((t) => qty >= t.min && qty <= t.max) : -1;
 
-  // Tarifas estimativas de importación por unidad
-  const aireFee = useMemo(() => Math.max(800, Math.round(price * 0.18)), [price]);
-  const barcoFee = useMemo(() => Math.max(250, Math.round(price * 0.05)), [price]);
-  const importFee = isImport ? (importShipping === "aire" ? aireFee : barcoFee) : 0;
-  const importCost = importFee * qty;
+  // Importación a pedido: sin selección de envío. Entrega fija 20 a 40 días.
+  const aireFee = 0;
+  const barcoFee = 0;
+  const importFee = 0;
+  const importCost = 0;
 
   const lineTotal = price * qty + customCost + importCost;
   const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
-    const id = `${product.slug}-${mode}-${variant}-${color}${isImport ? `-${importShipping}` : ""}`;
+    const id = `${product.slug}-${mode}-${variant}-${color}`;
     addToCart({
       id,
       slug: product.slug,
@@ -157,8 +157,8 @@ function ProductPage() {
       color: product.colors?.[color],
       customQty: customQty > 0 ? customQty : undefined,
       customFee: customQty > 0 ? fee : undefined,
-      importShipping: isImport ? importShipping : undefined,
-      importShippingFee: isImport ? importFee : undefined,
+      importShipping: undefined,
+      importShippingFee: undefined,
     });
   };
 
@@ -284,7 +284,7 @@ function ProductPage() {
                 variant="detail"
                 hideCustomizable
                 hideImportStatus
-                deliveryOverride={isImport ? (importShipping === "aire" ? "15-30 días (avión)" : "30-45 días (barco)") : undefined}
+                deliveryOverride={isImport ? "20 a 40 días" : undefined}
               />
             </div>
 
@@ -458,46 +458,16 @@ function ProductPage() {
           </div>
         )}
 
-        {/* Envío de importación (a pedido: avión / barco) */}
+        {/* Producto a pedido (importación): entrega fija 20 a 40 días */}
         {isImport && (
-          <div>
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              ¿Cómo lo traemos? <span className="text-amber-700">· Producto a pedido</span>
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => setImportShipping("aire")}
-                className={`flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition ${importShipping === "aire" ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Plane className="h-4 w-4 text-primary" />
-                  <span className="text-[12px] font-black">Por avión</span>
-                  <span className="rounded bg-primary/15 px-1 py-0.5 text-[8px] font-bold text-primary">RÁPIDO</span>
-                </div>
-                <p className="text-[10px] text-muted-foreground">Entre 15 y 30 días</p>
-                <p className="font-display text-sm text-primary">+{formatARS(aireFee)} <span className="text-[9px] text-muted-foreground font-sans">/ unidad</span></p>
-              </button>
-              <button
-                onClick={() => setImportShipping("barco")}
-                className={`flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition ${importShipping === "barco" ? "border-primary bg-primary/10 shadow-[var(--shadow-glow)]" : "border-border bg-card"}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Ship className="h-4 w-4 text-emerald-600" />
-                  <span className="text-[12px] font-black">Por barco</span>
-                  <span className="rounded bg-emerald-100 px-1 py-0.5 text-[8px] font-bold text-emerald-700">MÁS BARATO</span>
-                </div>
-                <p className="text-[10px] text-muted-foreground">Entre 30 y 45 días</p>
-                <p className="font-display text-sm text-emerald-700">+{formatARS(barcoFee)} <span className="text-[9px] text-muted-foreground font-sans">/ unidad</span></p>
-              </button>
-            </div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-3">
+            <p className="text-[10px] uppercase tracking-wider text-amber-700 font-bold">Producto a pedido</p>
+            <p className="mt-1 text-[13px] font-black text-amber-900 leading-tight">Entrega entre 20 y 40 días</p>
             {product.customizable && customQty > 0 && (
-              <p className="mt-2 rounded-lg bg-fuchsia-50 px-2.5 py-1.5 text-[10px] text-fuchsia-700">
+              <p className="mt-1.5 text-[10px] text-fuchsia-700">
                 ✨ La personalización suma <b>+4 días</b> al tiempo de entrega.
               </p>
             )}
-            <p className="mt-1 text-[10px] text-muted-foreground">
-              Total estimado de envío: <b className="text-foreground">{formatARS(importCost)}</b> ({qty} u.)
-            </p>
           </div>
         )}
 

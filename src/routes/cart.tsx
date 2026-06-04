@@ -113,15 +113,10 @@ function CartPage() {
       const isImport = !!importerItem;
       const importerName = importerItem?.sellerName;
 
-      // ETA basada en método de importación elegido + personalización (+4 días)
-      const importItem = list.find((i) => i.importShipping);
+      // ETA para importación a pedido: 20 a 40 días (+4 días si hay personalización)
       const hasCustom = list.some((i) => (i.customQty ?? 0) > 0);
       const extra = hasCustom ? " (+4 días por personalización)" : "";
-      const importEta = importItem?.importShipping === "aire"
-        ? `Entre 15 y 30 días por avión${extra}`
-        : importItem?.importShipping === "barco"
-        ? `Entre 30 y 45 días por barco${extra}`
-        : `Entre 15 y 30 días llega tu producto${extra}`;
+      const importEta = `Entre 20 y 40 días llega tu producto${extra}`;
 
       addOrder({
         id: `NB-${Date.now().toString().slice(-6)}-${mode.slice(0, 1).toUpperCase()}`,
@@ -266,12 +261,9 @@ function CartPage() {
                       <span className="font-bold">+{formatARS(it.customFee * it.customQty)}</span>
                     </div>
                   ) : null}
-                  {it.importShipping && it.importShippingFee ? (
+                  {it.importShippingFee ? (
                     <div className="mt-2 flex items-center justify-between rounded-lg bg-amber-50 px-2 py-1.5 text-[10px] text-amber-800">
-                      <span>
-                        {it.importShipping === "aire" ? "✈️ Por avión · 15-30 días" : "🚢 Por barco · 30-45 días"}
-                        {" "}({formatARS(it.importShippingFee)}/u)
-                      </span>
+                      <span>📦 A pedido · Entre 20 y 40 días ({formatARS(it.importShippingFee)}/u)</span>
                       <span className="font-bold">+{formatARS(it.importShippingFee * it.quantity)}</span>
                     </div>
                   ) : null}

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory, Clock } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
-import { ProductBadges } from "@/components/ProductBadges";
+
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
@@ -415,17 +415,25 @@ function SectionHeader({ title, link, icon }: { title: string; link?: string; ic
 
 function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) {
   const priceLabel = p.minOrder ? `${formatARS(p.price.wholesale)} c/u` : formatARS(p.price.individual);
+  const kindLabel =
+    p.sellerKind === "neiba" ? "NEIBA"
+    : p.sellerKind === "local" ? "Tienda"
+    : p.sellerKind === "fabricante" ? "Fabricante"
+    : "Importador";
+  const kindCls =
+    p.sellerKind === "neiba" ? "bg-[#e8451c] text-white"
+    : p.sellerKind === "local" ? "bg-sky-100 text-sky-700 border border-sky-200"
+    : p.sellerKind === "fabricante" ? "bg-purple-100 text-purple-700 border border-purple-200"
+    : "bg-emerald-100 text-emerald-700 border border-emerald-200";
+  const isAPedido = p.sellerKind === "importer" && p.stockLocation === "factory";
+  const stockLabel = isAPedido ? "A pedido" : "Stock";
+  const stockCls = isAPedido
+    ? "bg-amber-100 text-amber-700 border border-amber-200"
+    : "bg-emerald-50 text-emerald-700 border border-emerald-200";
   return (
     <Link to="/products/$slug" params={{ slug: p.slug }} className="group block">
       <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
         <span>{p.emoji}</span>
-        <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${
-          p.sellerKind === "neiba" ? "bg-[#e8451c] text-white"
-          : p.sellerKind === "local" ? "bg-sky-600 text-white"
-          : "bg-emerald-600 text-white"
-        }`}>
-          {p.sellerKind === "neiba" ? "NEIBA" : p.sellerKind === "local" ? "Local" : "Importador"}
-        </span>
         {p.customizable && (
           <span className="absolute right-2 top-2 rounded-md bg-fuchsia-600 px-1.5 py-0.5 text-[8px] font-black leading-none text-white">
             Personalizable
@@ -433,12 +441,17 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
         )}
       </div>
       <p className="mt-1.5 line-clamp-1 text-xs font-semibold text-neutral-900">{p.title}</p>
-      {(p.sellerKind === "importer" || p.sellerKind === "local") && (
+      {p.sellerKind !== "neiba" && (
         <p className="text-[9px] text-neutral-500 line-clamp-1">por {p.sellerName}</p>
       )}
       <p className="text-sm font-black text-[#e8451c] leading-tight">{priceLabel}</p>
-      <div className="mt-1">
-        <ProductBadges product={p} variant="card" max={2} />
+      <div className="mt-1 flex flex-wrap gap-1">
+        <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${kindCls}`}>
+          {kindLabel}
+        </span>
+        <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${stockCls}`}>
+          {stockLabel}
+        </span>
       </div>
     </Link>
   );
