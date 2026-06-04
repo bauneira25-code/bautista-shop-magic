@@ -90,13 +90,19 @@ function ProductPage() {
   const wholesaleOnly = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory" && product.minOrder);
   // Producto a pedido (importación): aplica selección avión/barco
   const isImport = !!(product && product.sellerKind === "importer" && product.stockLocation === "factory");
+  // Local: sin mayorista/grupal, precio único, mínimo 3 u.
+  const isLocal = !!(product && product.sellerKind === "local");
+  const localMin = 3;
 
   useEffect(() => {
     if (wholesaleOnly && product?.minOrder) {
       setMode("wholesale");
       setQty((q) => (q < product.minOrder! ? product.minOrder! : q));
+    } else if (isLocal) {
+      setMode("individual");
+      setQty((q) => (q < localMin ? localMin : q));
     }
-  }, [wholesaleOnly, product?.minOrder]);
+  }, [wholesaleOnly, product?.minOrder, isLocal]);
 
   if (!product) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Producto no encontrado</div>;
