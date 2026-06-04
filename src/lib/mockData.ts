@@ -2,7 +2,7 @@
 
 export type PurchaseMode = "individual" | "wholesale";
 
-export type SellerKind = "neiba" | "importer" | "local";
+export type SellerKind = "neiba" | "importer" | "local" | "fabricante";
 export type StockLocation = "ar" | "factory" | "transit" | "customs" | "nationalized";
 
 export interface Importer {
