@@ -182,8 +182,26 @@ function ProductPage() {
 
   const handleBuyNow = () => {
     doAdd();
+    // Tienda local: si todavía no se llega al mínimo, mandamos a "Más de esta tienda"
+    if (isLocal) {
+      const after = storeQtyInCart + qty;
+      if (after < localMin) {
+        const remaining = localMin - after;
+        toast.info(
+          remaining === 1
+            ? "Te queda 1 producto para finalizar tu compra"
+            : `Te quedan ${remaining} productos para completar tu compra`,
+          { description: `Elegí más productos de ${product.sellerName}.` },
+        );
+        setTimeout(() => {
+          document.getElementById("more-from-seller")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 50);
+        return;
+      }
+    }
     navigate({ to: "/cart" });
   };
+
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-[480px] pb-32">
