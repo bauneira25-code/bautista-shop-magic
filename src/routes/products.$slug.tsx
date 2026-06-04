@@ -251,10 +251,12 @@ function ProductPage() {
               <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500 leading-none">Precio por unidad</p>
               <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
             </div>
-            {product.minOrder && (
+            {(product.minOrder || isLocal) && (
               <div className="flex-1 rounded-xl border border-amber-200 bg-amber-50/60 px-2.5 py-1.5">
-                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Cantidad mínima</p>
-                <p className="mt-1 font-display text-base leading-none text-amber-900">{product.minOrder} u.</p>
+                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">
+                  {isLocal ? "Pedido mínimo local" : "Cantidad mínima"}
+                </p>
+                <p className="mt-1 font-display text-base leading-none text-amber-900">{isLocal ? localMin : product.minOrder} u.</p>
               </div>
             )}
           </div>
