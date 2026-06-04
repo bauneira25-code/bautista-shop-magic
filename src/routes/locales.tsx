@@ -92,7 +92,7 @@ function LocalesPage() {
                     </div>
                   </div>
                   <button className="rounded-full border border-sky-600 px-2.5 py-1 text-[10px] font-bold text-sky-700">
-                    Ver local
+                    Ver tienda
                   </button>
                 </div>
                 {products.length > 0 && (
