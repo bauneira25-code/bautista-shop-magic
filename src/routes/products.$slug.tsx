@@ -492,21 +492,22 @@ function ProductPage() {
             : importerProducts(product.sellerName, product.slug, 6);
           if (more.length === 0) return null;
           const loc = product.sellerKind === "local" ? LOCALS.find((l) => l.name === product.sellerName) : null;
-          const tone = product.sellerKind === "local" ? "sky" : "emerald";
+          const isLocal = product.sellerKind === "local";
           return (
-            <div className={`rounded-2xl border border-${tone}-200 bg-${tone}-50/40 p-3.5`}>
+            <div className={`rounded-2xl border p-3.5 ${isLocal ? "border-sky-200 bg-sky-50/40" : "border-emerald-200 bg-emerald-50/40"}`}>
               <div className="flex items-center gap-2">
-                <span className={`grid h-9 w-9 place-items-center rounded-xl bg-${tone}-100 text-lg`}>
-                  {loc?.emoji ?? (product.sellerKind === "local" ? "🏪" : "🏭")}
+                <span className={`grid h-9 w-9 place-items-center rounded-xl text-lg ${isLocal ? "bg-sky-100" : "bg-emerald-100"}`}>
+                  {loc?.emoji ?? (isLocal ? "🏪" : "🏭")}
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Más de este {product.sellerKind === "local" ? "local" : "importador"}
+                    Más de este {isLocal ? "local" : "importador"}
                   </p>
                   <p className="font-display text-sm leading-tight">{product.sellerName}</p>
+                  {loc && <p className="text-[10px] text-muted-foreground">{loc.city} · {loc.tagline}</p>}
                 </div>
-                {product.sellerKind === "local" && (
-                  <Link to="/locales" className="rounded-full bg-sky-600 px-2.5 py-1 text-[10px] font-black text-white">Ver local</Link>
+                {isLocal && (
+                  <Link to="/locales" className="rounded-full bg-sky-600 px-2.5 py-1 text-[10px] font-black text-white">Ver locales</Link>
                 )}
               </div>
               <div className="-mx-3.5 mt-3 flex gap-2.5 overflow-x-auto px-3.5 pb-1 scrollbar-hide">
@@ -516,7 +517,7 @@ function ProductPage() {
                       <span>{r.emoji}</span>
                     </div>
                     <p className="mt-1 line-clamp-1 text-[10px] font-medium">{r.title}</p>
-                    <p className={`text-[10px] font-bold leading-none ${product.sellerKind === "local" ? "text-sky-700" : "text-emerald-700"}`}>
+                    <p className={`text-[10px] font-bold leading-none ${isLocal ? "text-sky-700" : "text-emerald-700"}`}>
                       {formatARS(r.price.individual)}
                     </p>
                   </Link>
