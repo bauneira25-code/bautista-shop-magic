@@ -342,14 +342,28 @@ function ProductPage() {
                 {product.customizationFee ? ` · +${formatARS(product.customizationFee)}` : ""}
               </button>
             )}
-            {product.sellerKind === "importer" && (
-              <button
-                onClick={() => setChatOpen(true)}
-                className="flex-1 rounded-lg border border-emerald-600 bg-white py-2 text-[11px] font-black text-emerald-700 flex items-center justify-center gap-1"
-              >
-                💬 Hablar importador
-              </button>
-            )}
+            {(product.sellerKind === "importer" || product.sellerKind === "local" || product.sellerKind === "fabricante") && (() => {
+              const chatStyle =
+                product.sellerKind === "local"
+                  ? "border-sky-600 text-sky-700"
+                  : product.sellerKind === "fabricante"
+                  ? "border-purple-600 text-purple-700"
+                  : "border-emerald-600 text-emerald-700";
+              const chatLabel =
+                product.sellerKind === "local"
+                  ? "Hablar con la tienda"
+                  : product.sellerKind === "fabricante"
+                  ? "Hablar con fabricante"
+                  : "Hablar con importador";
+              return (
+                <button
+                  onClick={() => setChatOpen(true)}
+                  className={`flex-1 rounded-lg border bg-white py-2 text-[11px] font-black flex items-center justify-center gap-1 ${chatStyle}`}
+                >
+                  💬 {chatLabel}
+                </button>
+              );
+            })()}
           </div>
           <div>
             {product.customizable && customQty > 0 && (
