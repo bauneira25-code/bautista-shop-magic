@@ -395,3 +395,29 @@ export const searchProducts = (q: string, limit = 6) => {
     p.description.toLowerCase().includes(query),
   ).slice(0, limit);
 };
+
+// Productos de un local específico (excluyendo opcionalmente uno)
+export const localProducts = (localName: string, excludeSlug?: string, limit = 8) =>
+  MOCK_PRODUCTS.filter(
+    (p) => p.sellerKind === "local" && p.sellerName === localName && p.slug !== excludeSlug,
+  ).slice(0, limit);
+
+// Productos de un importador
+export const importerProducts = (importerName: string, excludeSlug?: string, limit = 8) =>
+  MOCK_PRODUCTS.filter(
+    (p) => p.sellerKind === "importer" && p.sellerName === importerName && p.slug !== excludeSlug,
+  ).slice(0, limit);
+
+// Locales que tienen al menos un producto en una categoría
+export const localsByCategory = (categoryId: string): Local[] => {
+  const names = new Set(
+    MOCK_PRODUCTS.filter((p) => p.sellerKind === "local" && p.category === categoryId).map((p) => p.sellerName),
+  );
+  return LOCALS.filter((l) => names.has(l.name));
+};
+
+// Precios escalonados estimativos para importadores (1u vs 20u)
+export const importerTiers = (p: MockProduct) => ({
+  unit: p.price.individual,
+  bulk20: p.price.group,
+});
