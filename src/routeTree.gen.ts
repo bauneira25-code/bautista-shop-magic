@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StockRouteImport } from './routes/stock'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RegistrarMarcaRouteImport } from './routes/registrar-marca'
@@ -45,6 +46,11 @@ import { Route as AdminPanelClientesRouteImport } from './routes/admin-panel.cli
 import { Route as AdminPanelCalidadRouteImport } from './routes/admin-panel.calidad'
 import { Route as AdminPanelAnalisisRouteImport } from './routes/admin-panel.analisis'
 
+const StockRoute = StockRouteImport.update({
+  id: '/stock',
+  path: '/stock',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stock': typeof StockRoute
   '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
@@ -274,6 +281,7 @@ export interface FileRoutesByTo {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stock': typeof StockRoute
   '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
@@ -312,6 +320,7 @@ export interface FileRoutesById {
   '/registrar-marca': typeof RegistrarMarcaRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stock': typeof StockRoute
   '/admin-panel/analisis': typeof AdminPanelAnalisisRoute
   '/admin-panel/calidad': typeof AdminPanelCalidadRoute
   '/admin-panel/clientes': typeof AdminPanelClientesRoute
@@ -351,6 +360,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/stock'
     | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
@@ -387,6 +397,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/stock'
     | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
@@ -424,6 +435,7 @@ export interface FileRouteTypes {
     | '/registrar-marca'
     | '/search'
     | '/sitemap.xml'
+    | '/stock'
     | '/admin-panel/analisis'
     | '/admin-panel/calidad'
     | '/admin-panel/clientes'
@@ -462,11 +474,19 @@ export interface RootRouteChildren {
   RegistrarMarcaRoute: typeof RegistrarMarcaRoute
   SearchRoute: typeof SearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StockRoute: typeof StockRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stock': {
+      id: '/stock'
+      path: '/stock'
+      fullPath: '/stock'
+      preLoaderRoute: typeof StockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -797,6 +817,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegistrarMarcaRoute: RegistrarMarcaRoute,
   SearchRoute: SearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StockRoute: StockRoute,
   ProductsSlugRoute: ProductsSlugRoute,
 }
 export const routeTree = rootRouteImport
