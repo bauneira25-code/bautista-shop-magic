@@ -16,9 +16,16 @@ export function ProductBadges({ product, variant = "card", max, deliveryOverride
   } else if (product.sellerKind === "local") {
     items.push({
       key: "local",
-      label: product.sellerVerified ? "Local verificado" : "Local",
+      label: product.sellerVerified ? "Tienda verificada" : "Tienda",
       cls: product.sellerVerified ? "bg-sky-600 text-white" : "bg-neutral-600 text-white",
       icon: product.sellerVerified ? <ShieldCheck className="h-2.5 w-2.5" /> : undefined,
+    });
+  } else if (product.sellerKind === "fabricante") {
+    items.push({
+      key: "fab",
+      label: product.sellerVerified ? "Fabricante verificado" : "Fabricante",
+      cls: product.sellerVerified ? "bg-purple-600 text-white" : "bg-neutral-600 text-white",
+      icon: product.sellerVerified ? <ShieldCheck className="h-2.5 w-2.5" /> : <Factory className="h-2.5 w-2.5" />,
     });
   } else {
     items.push({
