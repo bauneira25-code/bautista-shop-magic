@@ -2,7 +2,7 @@
 
 export type PurchaseMode = "individual" | "wholesale";
 
-export type SellerKind = "neiba" | "importer";
+export type SellerKind = "neiba" | "importer" | "local";
 export type StockLocation = "ar" | "factory" | "transit" | "customs" | "nationalized";
 
 export interface Importer {
@@ -22,6 +22,28 @@ export const IMPORTERS: Importer[] = [
   { id: "imp3", name: "Pacific Imports",    verified: true,  city: "Rosario", rating: 4.6, productsCount: 67,  emoji: "🚢", specialty: "Hogar y deco" },
   { id: "imp4", name: "Global Link",        verified: false, city: "Mendoza", rating: 4.4, productsCount: 38,  emoji: "🌐", specialty: "Moda y accesorios" },
   { id: "imp5", name: "China Express AR",   verified: true,  city: "CABA",    rating: 4.9, productsCount: 211, emoji: "⚡", specialty: "Personalización y branding" },
+];
+
+export interface Local {
+  id: string;
+  name: string;
+  verified: boolean;
+  city: string;
+  rating: number;
+  emoji: string;
+  category: string; // categoría principal del local
+  tagline: string;
+}
+
+export const LOCALS: Local[] = [
+  { id: "loc1", name: "Casa Norte Deco",    verified: true,  city: "CABA",      rating: 4.8, emoji: "🏠", category: "hogar",       tagline: "Deco y textiles" },
+  { id: "loc2", name: "Tech Garage",        verified: true,  city: "Córdoba",   rating: 4.7, emoji: "🔧", category: "tech",        tagline: "Gadgets y accesorios" },
+  { id: "loc3", name: "Glow Beauty Store",  verified: true,  city: "CABA",      rating: 4.9, emoji: "💄", category: "belleza",     tagline: "Skincare y makeup" },
+  { id: "loc4", name: "Brilla Joyas",       verified: true,  city: "Rosario",   rating: 4.8, emoji: "💎", category: "joyeria",     tagline: "Plata 925 y oro 18k" },
+  { id: "loc5", name: "Urban Style AR",     verified: false, city: "Mendoza",   rating: 4.5, emoji: "👟", category: "moda",        tagline: "Streetwear" },
+  { id: "loc6", name: "Cocina Pro",         verified: true,  city: "Tigre",     rating: 4.6, emoji: "🍳", category: "electronica", tagline: "Electrodomésticos" },
+  { id: "loc7", name: "Tropic Pets",        verified: true,  city: "La Plata",  rating: 4.7, emoji: "🐾", category: "animales",    tagline: "Todo para tu mascota" },
+  { id: "loc8", name: "Iron Fit Shop",      verified: true,  city: "CABA",      rating: 4.6, emoji: "🏋️", category: "gym",         tagline: "Gym y deportes" },
 ];
 
 export interface MockProduct {
