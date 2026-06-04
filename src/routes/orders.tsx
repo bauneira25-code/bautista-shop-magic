@@ -26,15 +26,6 @@ const IMPORT_STEPS = [
   { id: "delivered", label: "Entregado", icon: CheckCircle2 },
 ];
 
-const MODE_LABEL = {
-  individual: "Compra individual",
-  wholesale: "Pedido mayorista",
-} as const;
-
-const MODE_BADGE = {
-  individual: "🛍",
-  wholesale: "📦",
-} as const;
 
 function Orders() {
   const orders = useUserOrders((s) => s.orders);
