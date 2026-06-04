@@ -143,7 +143,7 @@ function ProductPage() {
   const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
 
   const doAdd = () => {
-    const id = `${product.slug}-${mode}-${variant}-${color}${isImport ? `-${importShipping}` : ""}`;
+    const id = `${product.slug}-${mode}-${variant}-${color}`;
     addToCart({
       id,
       slug: product.slug,
