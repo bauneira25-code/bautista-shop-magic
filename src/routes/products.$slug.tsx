@@ -266,14 +266,41 @@ function ProductPage() {
             <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
           </div>
 
-          {/* Pedido mínimo de la tienda */}
-          {isLocal && (
-            <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/60 px-3 py-2">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700 leading-none">Pedido mínimo de la tienda</p>
-              <p className="mt-1 font-display text-2xl leading-none text-amber-900">3 unidades mínimo</p>
-              <p className="mt-1 text-[10px] leading-tight text-amber-700/80">Pueden ser productos distintos de esta tienda.</p>
-            </div>
-          )}
+          {/* Pedido mínimo de la tienda (conectado al carrito) */}
+          {isLocal && (() => {
+            const inCart = storeQtyInCart;
+            const remaining = Math.max(0, localMin - inCart);
+            const done = remaining === 0;
+            return (
+              <div className={`mt-2 rounded-xl border px-3 py-2 ${done ? "border-emerald-200 bg-emerald-50/70" : "border-amber-200 bg-amber-50/60"}`}>
+                <p className={`text-[9px] font-bold uppercase tracking-wider leading-none ${done ? "text-emerald-700" : "text-amber-700"}`}>
+                  Pedido mínimo de la tienda
+                </p>
+                <p className={`mt-1 font-display text-2xl leading-none ${done ? "text-emerald-900" : "text-amber-900"}`}>
+                  3 unidades mínimo
+                </p>
+                <p className={`mt-1 text-[10px] leading-tight ${done ? "text-emerald-700/90" : "text-amber-700/80"}`}>
+                  Pueden ser productos distintos de esta tienda.
+                </p>
+                {/* Progreso */}
+                <div className="mt-2 flex gap-1">
+                  {Array.from({ length: localMin }).map((_, i) => (
+                    <span
+                      key={i}
+                      className={`h-1.5 flex-1 rounded-full ${i < inCart ? (done ? "bg-emerald-500" : "bg-amber-500") : "bg-neutral-200"}`}
+                    />
+                  ))}
+                </div>
+                <p className={`mt-1.5 text-[11px] font-bold ${done ? "text-emerald-800" : "text-amber-800"}`}>
+                  {done
+                    ? "¡Listo! Ya podés hacer tu compra ✅"
+                    : inCart === 0
+                    ? `Te faltan ${remaining} productos para completar tu compra.`
+                    : `Llevás ${inCart} · te ${remaining === 1 ? "queda 1 producto" : `quedan ${remaining} productos`} para ${remaining === 1 ? "finalizar" : "completar"} tu compra.`}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* Bloque unificado: seguro → badges → lote → cantidad */}
           <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card">
