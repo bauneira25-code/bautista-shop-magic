@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
+
+@source "../src";
 
 
 @custom-variant dark (&:is(.dark *));
@@ -134,7 +135,6 @@
   .glass {
     background: oklch(0.2 0.04 295 / 0.6);
     backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
     border: 1px solid oklch(1 0 0 / 0.06);
   }
   .gradient-text {
