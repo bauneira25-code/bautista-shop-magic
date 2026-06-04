@@ -509,7 +509,7 @@ function ProductPage() {
         )}
 
         {/* Pasos por modo */}
-        <PurchaseSteps mode={mode} hidePersonalize={isLocal} />
+        <PurchaseSteps mode={mode} showPersonalize={!!product.customizable} />
 
 
         {/* Trust badges */}
