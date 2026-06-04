@@ -163,6 +163,15 @@ function CartPage() {
   };
 
   const handlePay = () => {
+    if (hasLocalShortfall) {
+      const msg = localShortfalls
+        .map(([name, q]) => `${name}: ${q}/${LOCAL_MIN} u.`)
+        .join(" · ");
+      toast.error("Pedido mínimo del local: 3 unidades", {
+        description: `Sumá productos del mismo local. ${msg}`,
+      });
+      return;
+    }
     if (!user) {
       setShowRegister(true);
       return;
