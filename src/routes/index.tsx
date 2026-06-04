@@ -263,11 +263,11 @@ function Home() {
           <div className="col-span-3 relative pl-3">
             <span className="pointer-events-none absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-primary to-transparent" />
             <div className="mb-2 flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              <h3 className="font-display text-sm">Destacados</h3>
+              <TrendingUp className="h-3.5 w-3.5 text-neon" />
+              <h3 className="font-display text-sm">Tendencias ahora</h3>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {forYou.slice(0, 4).map((p) => (
+              {trendingFor.slice(0, 4).map((p) => (
                 <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
                   <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
                     <span>{p.emoji}</span>
