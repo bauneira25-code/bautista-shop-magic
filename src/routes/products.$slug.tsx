@@ -309,7 +309,7 @@ function ProductPage() {
                   <div>
                     <p className="text-[12px] font-semibold leading-none">Cantidad</p>
                     <p className="mt-1 text-[10px] text-muted-foreground leading-none">
-                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : isLocal ? `Mín. 3 u. del local (mezclá productos)` : "Elegí cuántas querés"}
+                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : isLocal ? `Mín. 3 u. de la tienda (mezclá productos)` : "Elegí cuántas querés"}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
