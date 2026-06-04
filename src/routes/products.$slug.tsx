@@ -554,13 +554,13 @@ function ProductPage() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Más de este {isLocal ? "local" : "importador"}
+                    Más de esta {isLocal ? "tienda" : "importador"}
                   </p>
                   <p className="font-display text-sm leading-tight">{product.sellerName}</p>
                   {loc && <p className="text-[10px] text-muted-foreground">{loc.city} · {loc.tagline}</p>}
                 </div>
                 {isLocal && (
-                  <Link to="/locales" className="rounded-full bg-sky-600 px-2.5 py-1 text-[10px] font-black text-white">Ver locales</Link>
+                  <Link to="/locales" className="rounded-full bg-sky-600 px-2.5 py-1 text-[10px] font-black text-white">Ver tiendas</Link>
                 )}
               </div>
               <div className="-mx-3.5 mt-3 flex gap-2.5 overflow-x-auto px-3.5 pb-1 scrollbar-hide">
