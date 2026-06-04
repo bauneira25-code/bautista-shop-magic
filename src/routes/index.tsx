@@ -85,10 +85,24 @@ function Home() {
     const idx = biasOrder.indexOf(cat);
     return idx === -1 ? 99 : idx;
   };
-  const trendingFor = [...MOCK_PRODUCTS]
-    .filter((p) => !!p.badge)
-    .sort((a, b) => score(a.category) - score(b.category))
-    .slice(0, 8);
+  // Tendencias: mezcla de tienda, importadores y fabricantes — los más baratos y con badge primero
+  const trendingFor = (() => {
+    const kinds: Array<"local" | "importer" | "fabricante"> = ["local", "importer", "fabricante"];
+    const byKind = kinds.map((k) =>
+      [...MOCK_PRODUCTS]
+        .filter((p) => p.sellerKind === k)
+        .sort((a, b) => {
+          const badgeDiff = (b.badge ? 1 : 0) - (a.badge ? 1 : 0);
+          if (badgeDiff !== 0) return badgeDiff;
+          return a.price.individual - b.price.individual;
+        })
+        .slice(0, 4),
+    );
+    // Intercalar para que aparezcan los 3 tipos
+    const mixed: typeof MOCK_PRODUCTS = [];
+    for (let i = 0; i < 4; i++) for (const arr of byKind) if (arr[i]) mixed.push(arr[i]);
+    return mixed.slice(0, 8);
+  })();
   const forYou = [...MOCK_PRODUCTS]
     .sort((a, b) => score(a.category) - score(b.category))
     .slice(0, 10);
