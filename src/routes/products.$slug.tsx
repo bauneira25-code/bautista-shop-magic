@@ -301,13 +301,13 @@ function ProductPage() {
 
             {/* Cantidad (justo debajo de Compra por lote) */}
             {(() => {
-              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : isLocal ? localMin : 1;
+              const minQty = wholesaleOnly && product.minOrder ? product.minOrder : 1;
               return (
                 <div className="flex items-center justify-between border-t border-border px-3 py-2">
                   <div>
                     <p className="text-[12px] font-semibold leading-none">Cantidad</p>
                     <p className="mt-1 text-[10px] text-muted-foreground leading-none">
-                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : isLocal ? `Mínimo ${localMin} u.` : "Elegí cuántas querés"}
+                      {wholesaleOnly ? `Mínimo ${product.minOrder} u.` : isLocal ? `Mín. 3 u. del local (mezclá productos)` : "Elegí cuántas querés"}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
