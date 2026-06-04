@@ -133,11 +133,11 @@ function ProductPage() {
   ];
   const activeTierIdx = mode === "wholesale" ? wholesaleTiers.findIndex((t) => qty >= t.min && qty <= t.max) : -1;
 
-  // Tarifas estimativas de importación por unidad
-  const aireFee = useMemo(() => Math.max(800, Math.round(price * 0.18)), [price]);
-  const barcoFee = useMemo(() => Math.max(250, Math.round(price * 0.05)), [price]);
-  const importFee = isImport ? (importShipping === "aire" ? aireFee : barcoFee) : 0;
-  const importCost = importFee * qty;
+  // Importación a pedido: sin selección de envío. Entrega fija 20 a 40 días.
+  const aireFee = 0;
+  const barcoFee = 0;
+  const importFee = 0;
+  const importCost = 0;
 
   const lineTotal = price * qty + customCost + importCost;
   const cta = mode === "wholesale" ? "COMPRAR MAYORISTA" : "AGREGAR AL CARRITO";
