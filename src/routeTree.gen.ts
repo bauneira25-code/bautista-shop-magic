@@ -25,6 +25,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminPanelRouteImport } from './routes/admin-panel'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
+import { Route as APedidoRouteImport } from './routes/a-pedido'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminPanelIndexRouteImport } from './routes/admin-panel.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
@@ -124,6 +125,11 @@ const AdminPanelRoute = AdminPanelRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin-login',
   path: '/admin-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const APedidoRoute = APedidoRouteImport.update({
+  id: '/a-pedido',
+  path: '/a-pedido',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -229,6 +235,7 @@ const AdminPanelAnalisisRoute = AdminPanelAnalisisRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-pedido': typeof APedidoRoute
   '/admin-login': typeof AdminLoginRoute
   '/admin-panel': typeof AdminPanelRouteWithChildren
   '/auth': typeof AuthRoute
@@ -267,6 +274,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-pedido': typeof APedidoRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
@@ -305,6 +313,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-pedido': typeof APedidoRoute
   '/admin-login': typeof AdminLoginRoute
   '/admin-panel': typeof AdminPanelRouteWithChildren
   '/auth': typeof AuthRoute
@@ -345,6 +354,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/a-pedido'
     | '/admin-login'
     | '/admin-panel'
     | '/auth'
@@ -383,6 +393,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/a-pedido'
     | '/admin-login'
     | '/auth'
     | '/cart'
@@ -420,6 +431,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/a-pedido'
     | '/admin-login'
     | '/admin-panel'
     | '/auth'
@@ -459,6 +471,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  APedidoRoute: typeof APedidoRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminPanelRoute: typeof AdminPanelRouteWithChildren
   AuthRoute: typeof AuthRoute
@@ -590,6 +603,13 @@ declare module '@tanstack/react-router' {
       path: '/admin-login'
       fullPath: '/admin-login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a-pedido': {
+      id: '/a-pedido'
+      path: '/a-pedido'
+      fullPath: '/a-pedido'
+      preLoaderRoute: typeof APedidoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -802,6 +822,7 @@ const EnVivoRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  APedidoRoute: APedidoRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminPanelRoute: AdminPanelRouteWithChildren,
   AuthRoute: AuthRoute,
