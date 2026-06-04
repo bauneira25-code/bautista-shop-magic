@@ -362,7 +362,7 @@ function Home() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-xs font-bold">A pedido</p>
-              <p className="text-[10px] text-muted-foreground">Productos de fábrica · envío en 30 días · mínimos desde 100 u.</p>
+              <p className="text-[10px] text-muted-foreground">Productos de fábrica · entrega 20 a 40 días · mínimos desde 100 u.</p>
             </div>
             <ChevronRight className="h-4 w-4 text-amber-600" />
           </div>
