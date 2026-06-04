@@ -122,10 +122,11 @@ const make = (
   const joined = target - missing;
 
   // Asignación determinística del tipo de vendedor / entrega
-  // NEIBA no vende productos. Solo locales, importadores stock AR e importadores a pedido (fábrica).
-  // 0 → LOCAL (sin personalización, stock AR 24/48 hs)
+  // NEIBA no vende productos. Solo tiendas (locales), importadores y fabricantes.
+  // 0 → TIENDA local (sin personalización, stock AR 24/48 hs)
   // 1 → IMPORTADOR stock AR (24/48 hs, sin personalización)
-  // 2,3 → IMPORTADOR a pedido (fábrica, mín. 100 u., entrega 20 a 40 días, personalizable opcional)
+  // 2 → IMPORTADOR a pedido (fábrica china, mín. 100 u., 20-40 días, personalizable opc.)
+  // 3 → FABRICANTE nacional (mín. 100 u., 7 días, personalizable al seleccionar el producto)
   const kindIdx = _id % 4;
   const importerPool = ["Asia Trade SA", "Shenzhen Direct AR", "Pacific Imports", "Global Link", "China Express AR"];
   let sellerKind: SellerKind = "local";
@@ -154,7 +155,7 @@ const make = (
     sellerVerified = true;
     stockLocation = "ar";
     deliveryLabel = "24/48 hs";
-  } else {
+  } else if (kindIdx === 2) {
     sellerKind = "importer";
     sellerName = importerPool[(_id + 1) % importerPool.length];
     sellerVerified = _id % 7 !== 0;
@@ -168,6 +169,17 @@ const make = (
       customizable = true;
       customizationFee = 3500 + ((_id * 91) % 5) * 500;
     }
+  } else {
+    const fab = FABRICANTES[_id % FABRICANTES.length];
+    sellerKind = "fabricante";
+    sellerName = fab.name;
+    sellerVerified = fab.verified;
+    stockLocation = "factory";
+    deliveryLabel = "7 días";
+    minOrder = 100;
+    quotable = true;
+    customizable = true;
+    customizationFee = 2500 + ((_id * 71) % 5) * 500;
   }
 
   return {
