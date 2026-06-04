@@ -33,8 +33,10 @@ const TITLES: Record<Mode, string> = {
   wholesale: "Cómo funciona el pedido mayorista",
 };
 
-export function PurchaseSteps({ mode }: { mode: Mode }) {
-  const steps = STEPS[mode];
+export function PurchaseSteps({ mode, hidePersonalize = false }: { mode: Mode; hidePersonalize?: boolean }) {
+  const steps = STEPS[mode].filter(
+    (s) => !(hidePersonalize && s.label.toLowerCase().startsWith("personalizás")),
+  );
   return (
     <div className="rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-white p-4">
       <p className="mb-3 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#e8451c]">
