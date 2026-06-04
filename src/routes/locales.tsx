@@ -113,7 +113,7 @@ function LocalesPage() {
           })}
           {locsInCat.length === 0 && (
             <p className="rounded-xl border border-dashed border-neutral-200 p-6 text-center text-xs text-neutral-500">
-              Todavía no hay locales en esta categoría.
+              Todavía no hay tiendas en esta categoría.
             </p>
           )}
         </div>
