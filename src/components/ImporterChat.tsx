@@ -15,10 +15,41 @@ function now() {
 }
 
 export function ImporterChat({ product, open, onClose }: Props) {
-  const sellerName = product.sellerName || "Importador";
+  const kind = product.sellerKind;
+  const roleLabel =
+    kind === "local" ? "Tienda" : kind === "fabricante" ? "Fabricante" : "Importador";
+  const headerEmoji = kind === "local" ? "🏪" : kind === "fabricante" ? "🏗️" : "🏭";
+  const headerColor =
+    kind === "local"
+      ? "bg-sky-600"
+      : kind === "fabricante"
+      ? "bg-purple-600"
+      : "bg-emerald-600";
+  const verifiedColor =
+    kind === "local"
+      ? "text-sky-600"
+      : kind === "fabricante"
+      ? "text-purple-600"
+      : "text-emerald-600";
+  const sellerName = product.sellerName || roleLabel;
+
+  const intro =
+    kind === "local"
+      ? `¡Hola! Soy ${sellerName}. Te puedo ayudar con ${product.title}.`
+      : kind === "fabricante"
+      ? `¡Hola! Soy ${sellerName}. Fabricamos ${product.title} en Argentina.`
+      : `¡Hola! Soy ${sellerName}. ¿En qué te puedo ayudar con ${product.title}?`;
+
+  const second =
+    kind === "local"
+      ? `Stock en Argentina. Entrega ${product.deliveryLabel}. Pedido mínimo del local: 3 u. (pueden ser distintos productos).`
+      : kind === "fabricante"
+      ? `Producción nacional. Mínimo ${product.minOrder ?? 100} unidades. Entrega ${product.deliveryLabel}. Personalizable.`
+      : `Tenemos producción propia. Mínimo ${product.minOrder ?? 100} unidades. Entrega estimada: ${product.deliveryLabel}.`;
+
   const [msgs, setMsgs] = useState<Msg[]>([
-    { from: "imp", text: `¡Hola! Soy ${sellerName}. ¿En qué te puedo ayudar con ${product.title}?`, time: now() },
-    { from: "imp", text: `Tenemos producción propia. Mínimo ${product.minOrder ?? 100} unidades. Entrega estimada: ${product.deliveryLabel}.`, time: now() },
+    { from: "imp", text: intro, time: now() },
+    { from: "imp", text: second, time: now() },
   ]);
   const [text, setText] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -35,12 +66,25 @@ export function ImporterChat({ product, open, onClose }: Props) {
     setMsgs((m) => [...m, { from: "me", text: t, time: now() }]);
     setText("");
     setTimeout(() => {
-      const replies = [
-        "Perfecto, lo coordinamos. ¿Querés que te pase ficha técnica?",
-        "Sí, podemos personalizar con tu logo. Te paso muestras.",
-        "Si confirmás hoy, entra en la próxima producción.",
-        "Aceptamos transferencia y pago en partes.",
-      ];
+      const repliesByKind: Record<string, string[]> = {
+        local: [
+          "¡Sí! Lo tenemos en stock. ¿Pasás a retirar o coordinamos envío?",
+          "Podemos combinar distintos productos de la tienda para llegar a las 3 u.",
+          "Te confirmo precio final con el envío.",
+        ],
+        fabricante: [
+          "Producimos a medida. ¿Lo querés con tu logo?",
+          "Si confirmás hoy, entra en la próxima tanda (7 días).",
+          "Aceptamos transferencia y seña del 30%.",
+        ],
+        importer: [
+          "Perfecto, lo coordinamos. ¿Querés que te pase ficha técnica?",
+          "Sí, podemos personalizar con tu logo. Te paso muestras.",
+          "Si confirmás hoy, entra en la próxima producción.",
+          "Aceptamos transferencia y pago en partes.",
+        ],
+      };
+      const replies = repliesByKind[kind] ?? repliesByKind.importer;
       const r = replies[Math.floor(Math.random() * replies.length)];
       setMsgs((m) => [...m, { from: "imp", text: r, time: now() }]);
     }, 900);
@@ -55,13 +99,13 @@ export function ImporterChat({ product, open, onClose }: Props) {
       >
         {/* Header */}
         <div className="flex items-center gap-3 border-b border-neutral-200 px-4 py-3">
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-emerald-600 text-base font-black text-white">
-            🏭
+          <span className={`grid h-10 w-10 place-items-center rounded-full ${headerColor} text-base font-black text-white`}>
+            {headerEmoji}
           </span>
           <div className="min-w-0 flex-1">
             <p className="flex items-center gap-1 text-sm font-bold leading-tight">
               {sellerName}
-              {product.sellerVerified && <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />}
+              {product.sellerVerified && <ShieldCheck className={`h-3.5 w-3.5 ${verifiedColor}`} />}
             </p>
             <p className="text-[10px] text-emerald-600">● En línea · Responde en minutos</p>
           </div>
