@@ -27,7 +27,7 @@ function LocalesPage() {
           <ArrowLeft className="h-4 w-4 text-sky-700" />
         </Link>
         <div className="flex-1 min-w-0">
-          <p className="font-display text-base leading-none">Locales argentinos</p>
+          <p className="font-display text-base leading-none">Tiendas argentinas</p>
           <p className="text-[10px] text-neutral-500">{LOCALS.length} tiendas · stock en Argentina · envío 24/48 hs</p>
         </div>
       </header>
