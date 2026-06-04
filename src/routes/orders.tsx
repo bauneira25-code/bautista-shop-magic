@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Package, Truck, CheckCircle2, Clock, MapPin, Phone, CreditCard, Factory, Plane, ShieldCheck, Radio } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
-import { MOCK_ORDERS, formatARS } from "@/lib/mockData";
+import { MOCK_ORDERS, MOCK_PRODUCTS, formatARS } from "@/lib/mockData";
 import { useUserOrders, type UserOrder } from "@/stores/userOrders";
 import { CustomerLiveOrders } from "@/components/CustomerLiveOrders";
 import { machineForProduct } from "@/lib/liveMachines";
@@ -26,15 +26,6 @@ const IMPORT_STEPS = [
   { id: "delivered", label: "Entregado", icon: CheckCircle2 },
 ];
 
-const MODE_LABEL = {
-  individual: "Compra individual",
-  wholesale: "Pedido mayorista",
-} as const;
-
-const MODE_BADGE = {
-  individual: "🛍",
-  wholesale: "📦",
-} as const;
 
 function Orders() {
   const orders = useUserOrders((s) => s.orders);
@@ -72,8 +63,8 @@ function Orders() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
                     <p className="text-[10px] font-bold uppercase text-muted-foreground">#{o.id}</p>
-                    <span className="rounded-md bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase text-primary">{o.mode}</span>
                   </div>
+
                   <p className="line-clamp-1 text-sm font-semibold">{o.product.title}</p>
                   <p className="text-xs text-muted-foreground">{o.qty} unidad · {formatARS(o.product.price[o.mode] * o.qty)}</p>
                 </div>
@@ -111,23 +102,27 @@ function Orders() {
 
 function UserOrderCard({ order }: { order: UserOrder }) {
   const steps = order.isImport ? IMPORT_STEPS : STATUS_STEPS;
-  // En import: el "processing" inicial cuenta como completado, simulamos un avance parcial
   const stepIndex = order.isImport
     ? Math.max(0, Math.floor((order.progress / 100) * (IMPORT_STEPS.length - 1)))
     : STATUS_STEPS.findIndex((s) => s.id === order.status);
   const totalQty = order.items.reduce((s, i) => s + i.quantity, 0);
   const customItem = !order.isImport ? order.items.find((i) => (i.customQty ?? 0) > 0) : undefined;
-  const liveMachineId = customItem ? machineForProduct(customItem.title, customItem.slug) : null;
+  const customProduct = customItem ? MOCK_PRODUCTS.find((p) => p.slug === customItem.slug) : undefined;
+  const isFabricante = customProduct?.sellerKind === "fabricante";
+  const liveMachineId = customItem && !isFabricante ? machineForProduct(customItem.title, customItem.slug) : null;
 
   return (
     <div className={`rounded-3xl border-2 ${order.isImport ? "border-emerald-300" : "border-primary/40"} bg-card p-4 shadow-sm`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase ${order.isImport ? "bg-emerald-600 text-white" : "bg-primary text-primary-foreground"}`}>
-          {order.isImport ? "🌍 Importación" : `${MODE_BADGE[order.mode]} ${MODE_LABEL[order.mode]}`}
-        </span>
+        {order.isImport ? (
+          <span className="rounded-full bg-emerald-600 px-2.5 py-0.5 text-[10px] font-black uppercase text-white">
+            🌍 Importación
+          </span>
+        ) : <span />}
         <span className="text-[10px] font-bold uppercase text-muted-foreground">#{order.id}</span>
       </div>
+
 
       {order.isImport && (
         <div className="mt-2 flex items-center gap-1.5 rounded-xl bg-emerald-50 px-2 py-1.5">
