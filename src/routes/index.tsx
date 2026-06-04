@@ -458,8 +458,12 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
     <Link to="/products/$slug" params={{ slug: p.slug }} className="group block">
       <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
         <span>{p.emoji}</span>
-        <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${p.sellerKind === "neiba" ? "bg-[#e8451c] text-white" : "bg-emerald-600 text-white"}`}>
-          {p.sellerKind === "neiba" ? "NEIBA" : "Importador"}
+        <span className={`absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${
+          p.sellerKind === "neiba" ? "bg-[#e8451c] text-white"
+          : p.sellerKind === "local" ? "bg-sky-600 text-white"
+          : "bg-emerald-600 text-white"
+        }`}>
+          {p.sellerKind === "neiba" ? "NEIBA" : p.sellerKind === "local" ? "Local" : "Importador"}
         </span>
         {p.customizable && (
           <span className="absolute right-2 top-2 rounded-md bg-fuchsia-600 px-1.5 py-0.5 text-[8px] font-black leading-none text-white">
@@ -468,7 +472,7 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
         )}
       </div>
       <p className="mt-1.5 line-clamp-1 text-xs font-semibold text-neutral-900">{p.title}</p>
-      {p.sellerKind === "importer" && (
+      {(p.sellerKind === "importer" || p.sellerKind === "local") && (
         <p className="text-[9px] text-neutral-500 line-clamp-1">por {p.sellerName}</p>
       )}
       <p className="text-sm font-black text-[#e8451c] leading-tight">{priceLabel}</p>
