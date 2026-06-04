@@ -66,10 +66,10 @@ function LocalesPage() {
         </div>
       </section>
 
-      {/* Locales de la categoría */}
+      {/* Tiendas de la categoría */}
       <section className="px-4 pt-4">
         <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold mb-2">
-          {locsInCat.length} locales en {CATEGORIES.find((c) => c.id === cat)?.name}
+          {locsInCat.length} tiendas en {CATEGORIES.find((c) => c.id === cat)?.name}
         </p>
         <div className="space-y-3">
           {locsInCat.map((loc) => {
