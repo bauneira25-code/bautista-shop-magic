@@ -339,7 +339,7 @@ function Home() {
         </section>
 
         {/* Explorar todo — scroll infinito */}
-        <InfiniteAll />
+        <InfiniteAll priceSort={priceSort} />
 
         {/* Tiendas argentinas */}
         <Link to="/locales" className="block rounded-2xl border-2 border-sky-200 bg-gradient-to-br from-sky-50 to-white p-3.5">
