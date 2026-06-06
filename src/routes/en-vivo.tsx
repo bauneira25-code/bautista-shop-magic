@@ -284,8 +284,8 @@ function LiveCard({ stream }: { stream: LiveStream }) {
         {hearts.map((h) => (
           <Heart
             key={h.id}
-            className="absolute bottom-32 h-5 w-5 fill-red-400 text-red-400 animate-[float-up_2.5s_ease-out_forwards]"
-            style={{ left: `${h.left}%` }}
+            className="absolute bottom-32 h-5 w-5 fill-red-400 text-red-400"
+            style={{ left: `${h.left}%`, animation: "live-heart-rise 2.5s ease-out forwards" }}
           />
         ))}
       </div>
