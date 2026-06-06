@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory, Clock } from "lucide-react";
+import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory, Clock, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
 
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
-import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
+import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel, type MockProduct } from "@/lib/mockData";
 import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 
 const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; text: string }> = {
