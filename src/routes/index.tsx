@@ -68,14 +68,25 @@ function Home() {
   const { gender, views } = useUserPrefs();
   const { similar: similarSlug } = Route.useSearch();
   const similarBase = similarSlug ? MOCK_PRODUCTS.find(p => p.slug === similarSlug) : undefined;
-  const similarProducts = similarBase
+  const liveNow = useLiveTotalViewers();
+  const user = useUserAuth((s) => s.user);
+
+  // Ordenamiento por precio: none | asc (menor a mayor) | desc (mayor a menor)
+  const [priceSort, setPriceSort] = useState<"none" | "asc" | "desc">("none");
+  const sortProducts = (list: MockProduct[]) => {
+    if (priceSort === "none") return list;
+    return [...list].sort((a, b) =>
+      priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
+    );
+  };
+
+  const similarProducts = sortProducts(similarBase
     ? [
         ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category === similarBase.category),
         ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category !== similarBase.category),
       ].slice(0, 8)
-    : [];
-  const liveNow = useLiveTotalViewers();
-  const user = useUserAuth((s) => s.user);
+    : []);
+
   // Bias: orden de categorías priorizadas según género o vistas más altas
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
   const biasOrder = viewedTop.length > 0
@@ -86,7 +97,7 @@ function Home() {
     return idx === -1 ? 99 : idx;
   };
   // Tendencias: mezcla de tienda, importadores y fabricantes — los más baratos y con badge primero
-  const trendingFor = (() => {
+  const trendingFor = sortProducts((() => {
     const kinds: Array<"local" | "importer" | "fabricante"> = ["local", "importer", "fabricante"];
     const byKind = kinds.map((k) =>
       [...MOCK_PRODUCTS]
@@ -102,15 +113,7 @@ function Home() {
     const mixed: typeof MOCK_PRODUCTS = [];
     for (let i = 0; i < 4; i++) for (const arr of byKind) if (arr[i]) mixed.push(arr[i]);
     return mixed.slice(0, 8);
-  })();
-  // Ordenamiento por precio: none | asc (menor a mayor) | desc (mayor a menor)
-  const [priceSort, setPriceSort] = useState<"none" | "asc" | "desc">("none");
-  const sortProducts = (list: MockProduct[]) => {
-    if (priceSort === "none") return list;
-    return [...list].sort((a, b) =>
-      priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
-    );
-  };
+  })());
 
   const forYou = sortProducts([...MOCK_PRODUCTS]
     .sort((a, b) => score(a.category) - score(b.category))
