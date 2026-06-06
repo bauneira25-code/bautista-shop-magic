@@ -103,9 +103,18 @@ function Home() {
     for (let i = 0; i < 4; i++) for (const arr of byKind) if (arr[i]) mixed.push(arr[i]);
     return mixed.slice(0, 8);
   })();
-  const forYou = [...MOCK_PRODUCTS]
+  // Ordenamiento por precio: none | asc (menor a mayor) | desc (mayor a menor)
+  const [priceSort, setPriceSort] = useState<"none" | "asc" | "desc">("none");
+  const sortProducts = (list: MockProduct[]) => {
+    if (priceSort === "none") return list;
+    return [...list].sort((a, b) =>
+      priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
+    );
+  };
+
+  const forYou = sortProducts([...MOCK_PRODUCTS]
     .sort((a, b) => score(a.category) - score(b.category))
-    .slice(0, 10);
+    .slice(0, 10));
 
   // Scroll direction: ocultar categorías al bajar, mostrarlas al subir (con rebote)
   const [showCats, setShowCats] = useState(true);
