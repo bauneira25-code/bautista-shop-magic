@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory, Clock } from "lucide-react";
+import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory, Clock, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
 
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
-import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel } from "@/lib/mockData";
+import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel, type MockProduct } from "@/lib/mockData";
 import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 
 const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; text: string }> = {
@@ -68,14 +68,25 @@ function Home() {
   const { gender, views } = useUserPrefs();
   const { similar: similarSlug } = Route.useSearch();
   const similarBase = similarSlug ? MOCK_PRODUCTS.find(p => p.slug === similarSlug) : undefined;
-  const similarProducts = similarBase
+  const liveNow = useLiveTotalViewers();
+  const user = useUserAuth((s) => s.user);
+
+  // Ordenamiento por precio: none | asc (menor a mayor) | desc (mayor a menor)
+  const [priceSort, setPriceSort] = useState<"none" | "asc" | "desc">("none");
+  const sortProducts = (list: MockProduct[]) => {
+    if (priceSort === "none") return list;
+    return [...list].sort((a, b) =>
+      priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
+    );
+  };
+
+  const similarProducts = sortProducts(similarBase
     ? [
         ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category === similarBase.category),
         ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category !== similarBase.category),
       ].slice(0, 8)
-    : [];
-  const liveNow = useLiveTotalViewers();
-  const user = useUserAuth((s) => s.user);
+    : []);
+
   // Bias: orden de categorías priorizadas según género o vistas más altas
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
   const biasOrder = viewedTop.length > 0
@@ -86,7 +97,7 @@ function Home() {
     return idx === -1 ? 99 : idx;
   };
   // Tendencias: mezcla de tienda, importadores y fabricantes — los más baratos y con badge primero
-  const trendingFor = (() => {
+  const trendingFor = sortProducts((() => {
     const kinds: Array<"local" | "importer" | "fabricante"> = ["local", "importer", "fabricante"];
     const byKind = kinds.map((k) =>
       [...MOCK_PRODUCTS]
@@ -102,10 +113,11 @@ function Home() {
     const mixed: typeof MOCK_PRODUCTS = [];
     for (let i = 0; i < 4; i++) for (const arr of byKind) if (arr[i]) mixed.push(arr[i]);
     return mixed.slice(0, 8);
-  })();
-  const forYou = [...MOCK_PRODUCTS]
+  })());
+
+  const forYou = sortProducts([...MOCK_PRODUCTS]
     .sort((a, b) => score(a.category) - score(b.category))
-    .slice(0, 10);
+    .slice(0, 10));
 
   // Scroll direction: ocultar categorías al bajar, mostrarlas al subir (con rebote)
   const [showCats, setShowCats] = useState(true);
@@ -199,6 +211,38 @@ function Home() {
           </div>
         </div>
       </header>
+
+      {/* Ordenar por precio */}
+      <div className="px-5 pt-3">
+        <div className="flex items-center gap-2 rounded-2xl border border-orange-200 bg-white p-2.5 shadow-sm">
+          <div className="flex items-center gap-1.5 pl-1">
+            <ArrowUpDown className="h-3.5 w-3.5 text-[#e8451c]" />
+            <span className="text-xs font-bold text-neutral-800">Ordenar por precio</span>
+          </div>
+          <div className="ml-auto flex gap-1.5">
+            <button
+              onClick={() => setPriceSort(priceSort === "asc" ? "none" : "asc")}
+              className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[10px] font-bold transition-colors ${
+                priceSort === "asc"
+                  ? "bg-[#e8451c] text-white"
+                  : "bg-orange-50 text-[#e8451c] border border-orange-200"
+              }`}
+            >
+              <ArrowUp className="h-3 w-3" /> Menor precio
+            </button>
+            <button
+              onClick={() => setPriceSort(priceSort === "desc" ? "none" : "desc")}
+              className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[10px] font-bold transition-colors ${
+                priceSort === "desc"
+                  ? "bg-[#e8451c] text-white"
+                  : "bg-orange-50 text-[#e8451c] border border-orange-200"
+              }`}
+            >
+              <ArrowDown className="h-3 w-3" /> Mayor precio
+            </button>
+          </div>
+        </div>
+      </div>
 
       <main className="space-y-5 px-5 pt-3">
         {/* Productos similares al recién agregado */}
@@ -327,7 +371,7 @@ function Home() {
         </section>
 
         {/* Explorar todo — scroll infinito */}
-        <InfiniteAll />
+        <InfiniteAll priceSort={priceSort} />
 
         {/* Tiendas argentinas */}
         <Link to="/locales" className="block rounded-2xl border-2 border-sky-200 bg-gradient-to-br from-sky-50 to-white p-3.5">
@@ -471,14 +515,18 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
   );
 }
 
-function InfiniteAll() {
+function InfiniteAll({ priceSort }: { priceSort: "none" | "asc" | "desc" }) {
   const PAGE = 12;
   const [count, setCount] = useState(PAGE);
   const sentinel = useRef<HTMLDivElement>(null);
 
   // Lista repetida para simular catálogo infinito
-  const all = MOCK_PRODUCTS;
-  const items = Array.from({ length: count }).map((_, i) => all[i % all.length]);
+  const base = priceSort === "none"
+    ? MOCK_PRODUCTS
+    : [...MOCK_PRODUCTS].sort((a, b) =>
+        priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
+      );
+  const items = Array.from({ length: count }).map((_, i) => base[i % base.length]);
 
   useEffect(() => {
     const el = sentinel.current;
