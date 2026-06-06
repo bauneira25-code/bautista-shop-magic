@@ -483,14 +483,18 @@ function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) 
   );
 }
 
-function InfiniteAll() {
+function InfiniteAll({ priceSort }: { priceSort: "none" | "asc" | "desc" }) {
   const PAGE = 12;
   const [count, setCount] = useState(PAGE);
   const sentinel = useRef<HTMLDivElement>(null);
 
   // Lista repetida para simular catálogo infinito
-  const all = MOCK_PRODUCTS;
-  const items = Array.from({ length: count }).map((_, i) => all[i % all.length]);
+  const base = priceSort === "none"
+    ? MOCK_PRODUCTS
+    : [...MOCK_PRODUCTS].sort((a, b) =>
+        priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
+      );
+  const items = Array.from({ length: count }).map((_, i) => base[i % base.length]);
 
   useEffect(() => {
     const el = sentinel.current;
