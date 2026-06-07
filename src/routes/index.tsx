@@ -212,35 +212,29 @@ function Home() {
         </div>
       </header>
 
-      {/* Ordenar por precio */}
-      <div className="px-5 pt-3">
-        <div className="flex items-center gap-2 rounded-2xl border border-orange-200 bg-white p-2.5 shadow-sm">
-          <div className="flex items-center gap-1.5 pl-1">
-            <ArrowUpDown className="h-3.5 w-3.5 text-[#e8451c]" />
-            <span className="text-xs font-bold text-neutral-800">Ordenar por precio</span>
-          </div>
-          <div className="ml-auto flex gap-1.5">
-            <button
-              onClick={() => setPriceSort(priceSort === "asc" ? "none" : "asc")}
-              className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[10px] font-bold transition-colors ${
-                priceSort === "asc"
-                  ? "bg-[#e8451c] text-white"
-                  : "bg-orange-50 text-[#e8451c] border border-orange-200"
-              }`}
-            >
-              <ArrowUp className="h-3 w-3" /> Menor precio
-            </button>
-            <button
-              onClick={() => setPriceSort(priceSort === "desc" ? "none" : "desc")}
-              className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[10px] font-bold transition-colors ${
-                priceSort === "desc"
-                  ? "bg-[#e8451c] text-white"
-                  : "bg-orange-50 text-[#e8451c] border border-orange-200"
-              }`}
-            >
-              <ArrowDown className="h-3 w-3" /> Mayor precio
-            </button>
-          </div>
+      {/* Ordenar por precio — compacto a la derecha */}
+      <div className="px-5 pt-3 flex justify-end">
+        <div className="flex gap-1.5">
+          <button
+            onClick={() => setPriceSort(priceSort === "asc" ? "none" : "asc")}
+            className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold transition-colors ${
+              priceSort === "asc"
+                ? "bg-[#e8451c] text-white"
+                : "bg-orange-50 text-[#e8451c] border border-orange-200"
+            }`}
+          >
+            <ArrowUp className="h-3 w-3" /> Menor precio
+          </button>
+          <button
+            onClick={() => setPriceSort(priceSort === "desc" ? "none" : "desc")}
+            className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold transition-colors ${
+              priceSort === "desc"
+                ? "bg-[#e8451c] text-white"
+                : "bg-orange-50 text-[#e8451c] border border-orange-200"
+            }`}
+          >
+            <ArrowDown className="h-3 w-3" /> Mayor precio
+          </button>
         </div>
       </div>
 
