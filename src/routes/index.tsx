@@ -299,6 +299,24 @@ function Home() {
   );
 }
 
+function FlashTimer() {
+  const [t, setT] = useState({ h: 2, m: 14, s: 36 });
+  useEffect(() => {
+    const id = setInterval(() => {
+      setT(({ h, m, s }) => {
+        let ns = s - 1, nm = m, nh = h;
+        if (ns < 0) { ns = 59; nm--; }
+        if (nm < 0) { nm = 59; nh--; }
+        if (nh < 0) { nh = 2; nm = 14; ns = 36; }
+        return { h: nh, m: nm, s: ns };
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return <span className="tabular-nums">{pad(t.h)}:{pad(t.m)}:{pad(t.s)}</span>;
+}
+
 function FilterChip({ active, onClick, icon, label, color }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string; color: "sky" | "emerald" | "purple" }) {
   const palettes = {
     sky:      { activeBg: "#0ea5e9", activeText: "#fff", idleBg: "#e0f2fe", idleText: "#075985", border: "#bae6fd" },
