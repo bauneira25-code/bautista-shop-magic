@@ -305,7 +305,7 @@ function FilterChip({ active, onClick, icon, label, color }: { active: boolean; 
   );
 }
 
-function FlashSale({ product, original, price }: { product: MockProduct; original: number; price: number }) {
+function FlashTimer() {
   const [t, setT] = useState({ h: 2, m: 14, s: 36 });
   useEffect(() => {
     const id = setInterval(() => {
@@ -320,49 +320,7 @@ function FlashSale({ product, original, price }: { product: MockProduct; origina
     return () => clearInterval(id);
   }, []);
   const pad = (n: number) => n.toString().padStart(2, "0");
-  const off = Math.round((1 - price / original) * 100);
-
-  return (
-    <Link
-      to="/ofertas"
-      className="relative block overflow-hidden rounded-3xl p-4 text-white"
-      style={{
-        background: "linear-gradient(135deg, #7c3aed 0%, #c026d3 45%, #f97316 100%)",
-        boxShadow: "0 18px 36px -14px rgba(124,58,237,0.55)",
-      }}
-    >
-      <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/15 blur-3xl" />
-      <div className="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-orange-300/30 blur-3xl" />
-
-      <div className="relative flex items-center gap-3">
-        <div className="flex-1 min-w-0">
-          <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider backdrop-blur">
-            <Flame className="h-3 w-3" /> Flash sale
-          </span>
-          <h2 className="mt-2 font-display text-xl font-black leading-tight">Oferta relámpago</h2>
-          <p className="mt-0.5 line-clamp-1 text-[11px] font-bold text-white/90">{product.title}</p>
-
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black tabular-nums">{formatARS(price)}</span>
-            <span className="text-xs text-white/70 line-through tabular-nums">{formatARS(original)}</span>
-            <span className="rounded-md bg-black px-1.5 py-0.5 text-[10px] font-black">-{off}% OFF</span>
-          </div>
-
-          <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-black/40 px-2 py-1 text-[11px] font-black backdrop-blur">
-            <Clock className="h-3 w-3" />
-            <span className="tabular-nums">{pad(t.h)}:{pad(t.m)}:{pad(t.s)}</span>
-          </div>
-        </div>
-
-        <div
-          className="grid h-24 w-24 shrink-0 place-items-center rounded-2xl text-5xl"
-          style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(4px)" }}
-        >
-          {product.emoji}
-        </div>
-      </div>
-    </Link>
-  );
+  return <span className="tabular-nums">{pad(t.h)}:{pad(t.m)}:{pad(t.s)}</span>;
 }
 
 function ProductCard({ product: p }: { product: MockProduct }) {
