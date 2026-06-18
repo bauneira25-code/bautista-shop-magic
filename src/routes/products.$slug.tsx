@@ -13,6 +13,14 @@ import { ProductBadges } from "@/components/ProductBadges";
 import { CustomizeSheet } from "@/components/CustomizeSheet";
 import { ImporterChat } from "@/components/ImporterChat";
 
+const ORANGE_DETAIL = "#F97316";
+const QTY_TIERS: { qty: number; factor: number }[] = [
+  { qty: 2,  factor: 0.92 },
+  { qty: 4,  factor: 0.85 },
+  { qty: 10, factor: 0.77 },
+  { qty: 20, factor: 0.69 },
+];
+
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => {
     const product = findProduct(params.slug);
