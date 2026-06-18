@@ -135,26 +135,25 @@ function Home() {
       </header>
 
       <main className="space-y-5 px-4 pt-4 pb-4">
-        {/* CATEGORÍAS con fotos reales */}
+        {/* CATEGORÍAS con fotos reales — chips chicos horizontales */}
         <section>
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="flex gap-3 overflow-x-auto px-1 pb-1 scrollbar-hide">
             {CAT_ORDER.map((id) => {
               const c = CAT_IMAGES[id];
-              const dark = id === "joyeria";
               return (
                 <Link
                   key={id}
                   to="/search"
                   search={{ q: "", cat: id }}
-                  className="group block overflow-hidden rounded-2xl border border-neutral-100 bg-white transition-transform active:scale-[0.97]"
-                  style={{ boxShadow: "0 4px 12px -8px rgba(0,0,0,0.15)" }}
+                  className="flex shrink-0 flex-col items-center gap-1 transition-transform active:scale-90"
                 >
-                  <div className="aspect-[5/4] overflow-hidden" style={{ background: c.tint }}>
-                    <img src={c.img} alt={c.label} loading="lazy" width={512} height={512} className="h-full w-full object-cover" />
+                  <div
+                    className="h-14 w-14 overflow-hidden rounded-full border border-neutral-100"
+                    style={{ background: c.tint, boxShadow: "0 4px 10px -4px rgba(0,0,0,0.12)" }}
+                  >
+                    <img src={c.img} alt={c.label} loading="lazy" width={120} height={120} className="h-full w-full object-cover" />
                   </div>
-                  <div className={`px-2 py-1.5 text-center text-[11px] font-bold ${dark ? "text-neutral-900" : "text-neutral-900"}`}>
-                    {c.label}
-                  </div>
+                  <span className="text-[10px] font-bold text-neutral-700">{c.label}</span>
                 </Link>
               );
             })}
