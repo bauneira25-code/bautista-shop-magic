@@ -167,8 +167,50 @@ function Home() {
           <FilterChip active={kindFilter === "fabricante"} onClick={() => setKindFilter(kindFilter === "fabricante" ? "all" : "fabricante")} icon={<Factory className="h-3.5 w-3.5" />} label="Fabricante" color="purple" />
         </section>
 
-        {/* FLASH SALE */}
-        <FlashSale product={flashDeal} original={flashOriginal} price={flashPrice} />
+        {/* FLASH SALE — promo a la izquierda, productos a la derecha */}
+        <section className="flex gap-3 overflow-hidden rounded-3xl" style={{ background: "linear-gradient(135deg, #7c3aed 0%, #c026d3 55%, #f97316 100%)", boxShadow: "0 18px 36px -14px rgba(124,58,237,0.55)" }}>
+          {/* LEFT — promo */}
+          <div className="flex w-[38%] shrink-0 flex-col justify-between p-3 text-white">
+            <div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider backdrop-blur">
+                <Flame className="h-3 w-3" /> Flash sale
+              </span>
+              <h2 className="mt-1.5 font-display text-sm font-black leading-tight">Oferta relámpago</h2>
+            </div>
+            <div className="mt-2">
+              <p className="text-lg font-black tabular-nums leading-none">{formatARS(flashPrice)}</p>
+              <p className="text-[10px] text-white/70 line-through tabular-nums">{formatARS(flashOriginal)}</p>
+              <span className="mt-1 inline-block rounded bg-black px-1.5 py-0.5 text-[9px] font-black">-{Math.round((1 - flashPrice / flashOriginal) * 100)}% OFF</span>
+            </div>
+            <div className="mt-2 inline-flex items-center gap-1 rounded-md bg-black/40 px-2 py-1 text-[10px] font-black backdrop-blur self-start">
+              <Clock className="h-3 w-3" />
+              <FlashTimer />
+            </div>
+          </div>
+
+          {/* RIGHT — productos scroll horizontal */}
+          <div className="flex gap-2.5 overflow-x-auto py-3 pr-3 scrollbar-hide">
+            {FLASH_DEALS.map((p) => (
+              <Link
+                key={p.id}
+                to="/products/$slug"
+                params={{ slug: p.slug }}
+                className="flex w-[110px] shrink-0 flex-col gap-1"
+              >
+                <div className="relative aspect-square overflow-hidden rounded-xl bg-white/15 grid place-items-center text-4xl" style={{ backdropFilter: "blur(4px)" }}>
+                  <span>{p.emoji}</span>
+                  {p.badge && (
+                    <span className="absolute left-1 top-1 rounded bg-black/60 px-1 py-0.5 text-[8px] font-black text-white backdrop-blur">
+                      {p.badge}
+                    </span>
+                  )}
+                </div>
+                <p className="line-clamp-1 text-[10px] font-bold text-white/95">{p.title}</p>
+                <p className="text-xs font-black" style={{ color: "#fdba74" }}>{formatARS(p.price.individual)}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         {/* TENDENCIAS — 2 productos con badge TikTok viral */}
         {trending.length > 0 && (
