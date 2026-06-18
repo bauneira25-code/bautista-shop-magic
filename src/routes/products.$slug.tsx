@@ -286,34 +286,29 @@ function ProductPage() {
           <h1 className="mt-2 font-display text-2xl leading-tight">{product.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
 
-          {/* Precio unitario — grande y destacado */}
-          <div className="mt-4">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Precio por unidad</p>
-            <p className="mt-0.5 font-display text-4xl font-black leading-none" style={{ color: ORANGE_DETAIL }}>
-              {formatARS(product.price.individual)} <span className="text-lg font-black text-neutral-400">c/u</span>
+          {/* Precio unitario — grande y destacado, 2x más grande que las filas */}
+          <div className="mt-5">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">Precio unitario</p>
+            <p className="mt-1 font-display text-5xl font-black leading-none" style={{ color: ORANGE_DETAIL }}>
+              {formatARS(product.price.individual)} <span className="text-xl font-black text-neutral-400">c/u</span>
             </p>
           </div>
 
-          {/* Precios por cantidad — descuentos escalonados */}
-          <div className="mt-3 space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">Comprá más y ahorrá</p>
+          {/* Precios por cantidad — filas horizontales compactas */}
+          <div className="mt-4 space-y-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">Precios por cantidad</p>
             {QTY_TIERS.map((t) => {
               const unit = Math.round(product.price.individual * t.factor);
               const saves = (product.price.individual - unit) * t.qty;
               return (
-                <div key={t.qty} className="flex items-center gap-3 rounded-2xl bg-neutral-100 px-3 py-2.5">
-                  <div className="min-w-[64px]">
-                    <p className="font-display text-base font-black leading-none text-neutral-900">x{t.qty}</p>
-                    <p className="text-[10px] text-neutral-500 leading-none mt-0.5">unidades</p>
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-display text-base font-black leading-none" style={{ color: ORANGE_DETAIL }}>
-                      {formatARS(unit)} <span className="text-[11px] font-black text-neutral-400">c/u</span>
-                    </p>
-                    <p className="mt-0.5 text-[11px] font-bold leading-none text-emerald-600">
-                      Ahorrás {formatARS(saves)}
-                    </p>
-                  </div>
+                <div key={t.qty} className="flex items-center gap-2 rounded-xl bg-neutral-100 px-3 py-2.5">
+                  <p className="shrink-0 text-sm font-bold text-neutral-500">x{t.qty} <span className="text-[10px] font-medium">unidades</span></p>
+                  <p className="shrink-0 text-sm font-black" style={{ color: ORANGE_DETAIL }}>
+                    {formatARS(unit)} <span className="text-[10px] font-bold text-neutral-400">c/u</span>
+                  </p>
+                  <p className="min-w-0 flex-1 truncate text-right text-xs font-bold text-emerald-600">
+                    Ahorrás {formatARS(saves)}
+                  </p>
                   <button
                     onClick={() => {
                       setMode("wholesale");
@@ -335,10 +330,10 @@ function ProductPage() {
                         action: { label: "Ver carrito", onClick: () => navigate({ to: "/cart" }) },
                       });
                     }}
-                    className="shrink-0 rounded-full px-3 py-1.5 text-[11px] font-black text-white"
+                    className="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-black text-white"
                     style={{ background: ORANGE_DETAIL }}
                   >
-                    Agregar
+                    Elegir
                   </button>
                 </div>
               );
