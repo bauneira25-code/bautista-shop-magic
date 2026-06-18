@@ -75,10 +75,6 @@ function Home() {
     .sort((a, b) => score(a.category) - score(b.category))
     .slice(0, 10);
 
-  // Flash sale: primer auricular
-  const flashDeal = MOCK_PRODUCTS.find((p) => p.title.toLowerCase().includes("auriculares")) ?? MOCK_PRODUCTS[1];
-  const flashOriginal = 37990;
-  const flashPrice = 22490;
 
   return (
     <MobileShell>
