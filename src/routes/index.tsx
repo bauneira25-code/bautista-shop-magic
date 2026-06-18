@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Sparkles, Radio, Store, Factory, Building2, Clock, Flame, ChevronRight, ShieldCheck } from "lucide-react";
+import { Bell, Sparkles, Radio, Store, Factory, Building2, Flame, ChevronRight, ShieldCheck } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
 import { OnboardingGender } from "@/components/OnboardingGender";
