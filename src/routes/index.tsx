@@ -304,23 +304,6 @@ function FilterChip({ active, onClick, icon, label, color }: { active: boolean; 
   );
 }
 
-function FlashTimer() {
-  const [t, setT] = useState({ h: 2, m: 14, s: 36 });
-  useEffect(() => {
-    const id = setInterval(() => {
-      setT(({ h, m, s }) => {
-        let ns = s - 1, nm = m, nh = h;
-        if (ns < 0) { ns = 59; nm--; }
-        if (nm < 0) { nm = 59; nh--; }
-        if (nh < 0) { nh = 2; nm = 14; ns = 36; }
-        return { h: nh, m: nm, s: ns };
-      });
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  return <span className="tabular-nums">{pad(t.h)}:{pad(t.m)}:{pad(t.s)}</span>;
-}
 
 function ProductCard({ product: p }: { product: MockProduct }) {
   const priceLabel = p.minOrder ? `${formatARS(p.price.wholesale)} c/u` : formatARS(p.price.individual);
