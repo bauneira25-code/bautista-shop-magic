@@ -1,62 +1,42 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bell, Zap, TrendingUp, Sparkles, ChevronRight, ShieldCheck, LogIn, UserPlus, Factory, Clock, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { Bell, Sparkles, Radio, Store, Factory, Building2, Clock, Flame, ChevronRight, ShieldCheck } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { SmartSearch } from "@/components/SmartSearch";
-
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
-import { CATEGORIES, FLASH_DEALS, MOCK_PRODUCTS, VIRAL, LIVE_FEED, formatARS, stockLabel, type MockProduct } from "@/lib/mockData";
+import { CATEGORIES, MOCK_PRODUCTS, VIRAL, formatARS, type MockProduct, type SellerKind } from "@/lib/mockData";
 import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 
-const CAT_STYLES: Record<string, { bg: string; border: string; glow: string; text: string }> = {
-  tech:        { bg: "linear-gradient(135deg,#0a1530,#1e3a8a)", border: "#38bdf8", glow: "#38bdf8", text: "#e0f2fe" },
-  electronica: { bg: "linear-gradient(135deg,#f1f5f9,#e0f2fe)", border: "#0ea5e9", glow: "#7dd3fc", text: "#0c4a6e" },
-  hogar:       { bg: "linear-gradient(135deg,#e8d4b4,#c9a079)", border: "#a06c49", glow: "#a06c49", text: "#3d2616" },
-  belleza:     { bg: "linear-gradient(135deg,#ffe0ee,#ffd0e6)", border: "#ec4899", glow: "#f472b6", text: "#831843" },
-  joyeria:     { bg: "linear-gradient(135deg,#1a1410,#2a1f15)", border: "#d4af37", glow: "#d4af37", text: "#fef3c7" },
-  animales:    { bg: "linear-gradient(135deg,#f0fdf4,#bbf7d0)", border: "#4a7c59", glow: "#22c55e", text: "#14532d" },
-  moda:        { bg: "linear-gradient(135deg,#faf5f7,#f3e8ed)", border: "#8b3a5b", glow: "#c4959a", text: "#5c1a2e" },
+import imgTech from "@/assets/cat-tech.jpg";
+import imgElectronica from "@/assets/cat-electronica.jpg";
+import imgHogar from "@/assets/cat-hogar.jpg";
+import imgBelleza from "@/assets/cat-belleza.jpg";
+import imgJoyeria from "@/assets/cat-joyeria.jpg";
+import imgModa from "@/assets/cat-moda.jpg";
+
+const ORANGE = "#F97316";
+
+const CAT_IMAGES: Record<string, { img: string; label: string; tint: string }> = {
+  tech:        { img: imgTech,        label: "Tecnología",  tint: "#dbeafe" },
+  electronica: { img: imgElectronica, label: "Electrónica", tint: "#cffafe" },
+  hogar:       { img: imgHogar,       label: "Hogar",       tint: "#fef3c7" },
+  belleza:     { img: imgBelleza,     label: "Belleza",     tint: "#fce7f3" },
+  joyeria:     { img: imgJoyeria,     label: "Joyería",     tint: "#1f2937" },
+  moda:        { img: imgModa,        label: "Moda",        tint: "#fce7f3" },
 };
+const CAT_ORDER = ["tech", "electronica", "hogar", "belleza", "joyeria", "moda"];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "NEIBA — Compras grupales y ofertas" },
-      { name: "description", content: "Compras grupales y mayoristas con descuentos en tecnología, hogar, belleza y más." },
-      { property: "og:title", content: "NEIBA — Compras grupales y ofertas" },
-      { property: "og:description", content: "Compras grupales y mayoristas con descuentos exclusivos." },
-      { property: "og:url", content: "/" },
-      { property: "og:type", content: "website" },
+      { name: "description", content: "Marketplace con tiendas, importadores y fabricantes verificados." },
+      { property: "og:title", content: "NEIBA" },
+      { property: "og:description", content: "Compras grupales y mayoristas con descuentos." },
     ],
     links: [{ rel: "canonical", href: "/" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "NEIBA",
-          url: "/",
-          description: "Marketplace de compras grupales y mayoristas.",
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "NEIBA",
-          url: "/",
-          potentialAction: {
-            "@type": "SearchAction",
-            target: "/search?q={search_term_string}",
-            "query-input": "required name=search_term_string",
-          },
-        }),
-      },
-    ],
   }),
   validateSearch: (s: Record<string, unknown>) => ({
     similar: typeof s.similar === "string" ? s.similar : undefined,
@@ -64,30 +44,15 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+type KindFilter = "all" | SellerKind;
+
 function Home() {
   const { gender, views } = useUserPrefs();
-  const { similar: similarSlug } = Route.useSearch();
-  const similarBase = similarSlug ? MOCK_PRODUCTS.find(p => p.slug === similarSlug) : undefined;
   const liveNow = useLiveTotalViewers();
   const user = useUserAuth((s) => s.user);
+  const [kindFilter, setKindFilter] = useState<KindFilter>("all");
 
-  // Ordenamiento por precio: none | asc (menor a mayor) | desc (mayor a menor)
-  const [priceSort, setPriceSort] = useState<"none" | "asc" | "desc">("none");
-  const sortProducts = (list: MockProduct[]) => {
-    if (priceSort === "none") return list;
-    return [...list].sort((a, b) =>
-      priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
-    );
-  };
-
-  const similarProducts = sortProducts(similarBase
-    ? [
-        ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category === similarBase.category),
-        ...MOCK_PRODUCTS.filter(p => p.slug !== similarBase.slug && p.category !== similarBase.category),
-      ].slice(0, 8)
-    : []);
-
-  // Bias: orden de categorías priorizadas según género o vistas más altas
+  // Bias por género/views
   const viewedTop = Object.entries(views).sort((a, b) => b[1] - a[1]).map(([c]) => c);
   const biasOrder = viewedTop.length > 0
     ? [...new Set([...viewedTop, ...(gender ? GENDER_BIAS[gender] : [])])]
@@ -96,439 +61,321 @@ function Home() {
     const idx = biasOrder.indexOf(cat);
     return idx === -1 ? 99 : idx;
   };
-  // Tendencias: mezcla de tienda, importadores y fabricantes — los más baratos y con badge primero
-  const trendingFor = sortProducts((() => {
-    const kinds: Array<"local" | "importer" | "fabricante"> = ["local", "importer", "fabricante"];
-    const byKind = kinds.map((k) =>
-      [...MOCK_PRODUCTS]
-        .filter((p) => p.sellerKind === k)
-        .sort((a, b) => {
-          const badgeDiff = (b.badge ? 1 : 0) - (a.badge ? 1 : 0);
-          if (badgeDiff !== 0) return badgeDiff;
-          return a.price.individual - b.price.individual;
-        })
-        .slice(0, 4),
-    );
-    // Intercalar para que aparezcan los 3 tipos
-    const mixed: typeof MOCK_PRODUCTS = [];
-    for (let i = 0; i < 4; i++) for (const arr of byKind) if (arr[i]) mixed.push(arr[i]);
-    return mixed.slice(0, 8);
-  })());
 
-  const forYou = sortProducts([...MOCK_PRODUCTS]
+  const matchKind = (p: MockProduct) => kindFilter === "all" || p.sellerKind === kindFilter;
+
+  // Tendencias: 2 con badge viral
+  const trending = MOCK_PRODUCTS
+    .filter((p) => p.badge && (p.badge.toLowerCase().includes("viral") || p.badge.toLowerCase().includes("tiktok") || p.badge.toLowerCase().includes("trending")))
+    .filter(matchKind)
+    .slice(0, 2);
+
+  const forYou = [...MOCK_PRODUCTS]
+    .filter(matchKind)
     .sort((a, b) => score(a.category) - score(b.category))
-    .slice(0, 10));
+    .slice(0, 10);
 
-  // Scroll direction: ocultar categorías al bajar, mostrarlas al subir (con rebote)
-  const [showCats, setShowCats] = useState(true);
-  const lastY = useRef(0);
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (y < 60) { setShowCats(true); lastY.current = y; return; }
-      const dy = y - lastY.current;
-      if (dy > 8) setShowCats(false);
-      else if (dy < -8) setShowCats(true);
-      lastY.current = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Flash sale: primer auricular
+  const flashDeal = MOCK_PRODUCTS.find((p) => p.title.toLowerCase().includes("auriculares")) ?? MOCK_PRODUCTS[1];
+  const flashOriginal = 37990;
+  const flashPrice = 22490;
 
   return (
     <MobileShell>
       <OnboardingGender />
-      {/* Top bar — buscador siempre fijo */}
-      <header className="sticky top-0 z-30 border-b border-orange-100 bg-white/95 px-4 pb-2 pt-2 backdrop-blur-xl">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="grid h-7 w-7 place-items-center rounded-lg text-xs font-black text-white" style={{ background: "linear-gradient(135deg,#ff7a3d,#e8451c)" }}>N</span>
-            <div>
+
+      {/* HEADER */}
+      <header className="sticky top-0 z-30 border-b border-neutral-100 bg-white/95 px-4 pb-2 pt-2 backdrop-blur-xl">
+        <div className="flex items-center justify-between gap-2">
+          <Link to="/" className="flex items-center gap-2 min-w-0">
+            <span
+              className="grid h-9 w-9 place-items-center rounded-xl text-base font-black text-white shrink-0"
+              style={{ background: `linear-gradient(135deg, #fb923c, ${ORANGE})`, boxShadow: "0 6px 14px -4px rgba(249,115,22,0.5)" }}
+            >N</span>
+            <div className="min-w-0">
               <div className="flex items-center gap-1">
-                <p className="font-display text-sm leading-none text-neutral-900">NEIBA</p>
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[7px] font-semibold text-[#e8451c] leading-none">
-                  Productos internacionales
-                  <ShieldCheck className="h-2 w-2" />
-                </span>
+                <p className="font-display text-[15px] font-black leading-none text-neutral-900">NEIBA</p>
+                <ShieldCheck className="h-3 w-3 text-sky-500" />
               </div>
-              <p className="mt-0.5 text-[9px] text-neutral-400">Buenos Aires, AR · verificado</p>
+              <p className="mt-0.5 text-[10px] text-neutral-500 leading-none">Buenos Aires, AR · verificado</p>
             </div>
           </Link>
 
-          <div className="flex items-center gap-2">
-            <button className="relative grid h-8 w-8 place-items-center rounded-full bg-orange-50">
-              <Bell className="h-3.5 w-3.5 text-[#e8451c]" />
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#e8451c]" />
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Link
+              to="/en-vivo"
+              className="inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-[10px] font-black text-white"
+              style={{ background: `linear-gradient(135deg, #fb923c, ${ORANGE})`, boxShadow: "0 4px 10px -3px rgba(249,115,22,0.55)" }}
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+              </span>
+              <Radio className="h-3 w-3" />
+              <span className="tabular-nums">{formatViewers(liveNow)}</span>
+              <span className="opacity-90">mirando</span>
+            </Link>
+            <button className="relative grid h-9 w-9 place-items-center rounded-full bg-neutral-100">
+              <Bell className="h-4 w-4 text-neutral-700" />
+              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full" style={{ background: ORANGE }} />
             </button>
           </div>
         </div>
 
         {!user && (
-          <Link
-            to="/auth"
-            className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-[#e8451c]"
-          >
+          <Link to="/auth" className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold" style={{ color: ORANGE }}>
             Iniciar sesión <span className="text-neutral-300">/</span> Registrarse
           </Link>
         )}
-        {user && (
-          <Link to="/profile" className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-neutral-700">
-            Hola, <span className="text-[#e8451c]">{user.nombre}</span>
-          </Link>
-        )}
 
+        {/* SEARCH (incluye IA) */}
         <div className="mt-2">
           <SmartSearch />
         </div>
+      </header>
 
-        {/* Categorías — fijas debajo del buscador, se ocultan al bajar y vuelven con rebote al subir */}
-        <div
-          className="overflow-hidden"
-          style={{
-            maxHeight: showCats ? 80 : 0,
-            opacity: showCats ? 1 : 0,
-            transform: showCats ? "translateY(0)" : "translateY(-6px)",
-            transition: "max-height 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
-          }}
-        >
-          <div className="grid grid-cols-7 gap-1.5 pt-2">
-            {CATEGORIES.filter((c) => c.id !== "gym").map((c) => {
-              const s = CAT_STYLES[c.id] ?? CAT_STYLES.tech;
+      <main className="space-y-5 px-4 pt-4 pb-4">
+        {/* CATEGORÍAS con fotos reales */}
+        <section>
+          <div className="grid grid-cols-3 gap-2.5">
+            {CAT_ORDER.map((id) => {
+              const c = CAT_IMAGES[id];
+              const dark = id === "joyeria";
               return (
                 <Link
-                  key={c.id}
+                  key={id}
                   to="/search"
-                  search={{ q: "", cat: c.id }}
-                  className="relative flex h-12 flex-col items-center justify-center gap-0 overflow-hidden rounded-lg p-0.5 transition-transform active:scale-95"
-                  style={{ background: s.bg, border: `1px solid ${s.border}` }}
+                  search={{ q: "", cat: id }}
+                  className="group block overflow-hidden rounded-2xl border border-neutral-100 bg-white transition-transform active:scale-[0.97]"
+                  style={{ boxShadow: "0 4px 12px -8px rgba(0,0,0,0.15)" }}
                 >
-                  <span className="text-[12px] leading-none">{c.emoji}</span>
-                  <span className="text-[6px] font-bold leading-none text-center mt-px" style={{ color: s.text }}>{c.name}</span>
-                  <span className="pointer-events-none absolute -right-2 -bottom-2 h-4 w-4 rounded-full opacity-40 blur-sm" style={{ background: s.glow }} />
+                  <div className="aspect-[5/4] overflow-hidden" style={{ background: c.tint }}>
+                    <img src={c.img} alt={c.label} loading="lazy" width={512} height={512} className="h-full w-full object-cover" />
+                  </div>
+                  <div className={`px-2 py-1.5 text-center text-[11px] font-bold ${dark ? "text-neutral-900" : "text-neutral-900"}`}>
+                    {c.label}
+                  </div>
                 </Link>
               );
             })}
           </div>
-        </div>
-      </header>
+        </section>
 
-      {/* Ordenar por precio — compacto a la derecha */}
-      <div className="px-5 pt-3 flex justify-end">
-        <div className="flex gap-1.5">
-          <button
-            onClick={() => setPriceSort(priceSort === "asc" ? "none" : "asc")}
-            className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold transition-colors ${
-              priceSort === "asc"
-                ? "bg-[#e8451c] text-white"
-                : "bg-orange-50 text-[#e8451c] border border-orange-200"
-            }`}
-          >
-            <ArrowUp className="h-3 w-3" /> Menor precio
-          </button>
-          <button
-            onClick={() => setPriceSort(priceSort === "desc" ? "none" : "desc")}
-            className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold transition-colors ${
-              priceSort === "desc"
-                ? "bg-[#e8451c] text-white"
-                : "bg-orange-50 text-[#e8451c] border border-orange-200"
-            }`}
-          >
-            <ArrowDown className="h-3 w-3" /> Mayor precio
-          </button>
-        </div>
-      </div>
+        {/* FILTROS por tipo de vendedor */}
+        <section className="flex gap-2">
+          <FilterChip active={kindFilter === "local"}    onClick={() => setKindFilter(kindFilter === "local" ? "all" : "local")}        icon={<Store className="h-3.5 w-3.5" />}     label="Tienda"      color="sky" />
+          <FilterChip active={kindFilter === "importer"} onClick={() => setKindFilter(kindFilter === "importer" ? "all" : "importer")} icon={<Building2 className="h-3.5 w-3.5" />} label="Importador" color="emerald" />
+          <FilterChip active={kindFilter === "fabricante"} onClick={() => setKindFilter(kindFilter === "fabricante" ? "all" : "fabricante")} icon={<Factory className="h-3.5 w-3.5" />} label="Fabricante" color="purple" />
+        </section>
 
-      <main className="space-y-5 px-5 pt-3">
-        {/* Productos similares al recién agregado */}
-        {similarBase && similarProducts.length > 0 && (
-          <section className="rounded-2xl border-2 border-[#e8451c]/30 bg-gradient-to-br from-orange-50 to-white p-3.5">
-            <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-xl text-lg" style={{ background: similarBase.gradient }}>
-                {similarBase.emoji}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[#e8451c]">✓ Agregado al carrito</p>
-                <p className="line-clamp-1 font-display text-sm leading-tight">Te puede interesar también</p>
-              </div>
-              <Link to="/cart" className="rounded-full bg-[#e8451c] px-2.5 py-1 text-[10px] font-black text-white">Ir al carrito</Link>
+        {/* FLASH SALE */}
+        <FlashSale product={flashDeal} original={flashOriginal} price={flashPrice} />
+
+        {/* TENDENCIAS — 2 productos con badge TikTok viral */}
+        {trending.length > 0 && (
+          <section>
+            <div className="mb-2.5 flex items-center gap-1.5">
+              <Flame className="h-4 w-4" style={{ color: ORANGE }} />
+              <h3 className="font-display text-base font-black text-neutral-900">Tendencias</h3>
             </div>
-            <div className="-mx-3.5 mt-3 flex gap-2.5 overflow-x-auto px-3.5 pb-1 scrollbar-hide">
-              {similarProducts.map((p) => (
-                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[110px] shrink-0">
-                  <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
+            <div className="grid grid-cols-2 gap-3">
+              {trending.map((p) => (
+                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group block">
+                  <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
                     <span>{p.emoji}</span>
+                    <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-md bg-black px-1.5 py-0.5 text-[9px] font-black text-white">
+                      🎵 TikTok viral
+                    </span>
                   </div>
-                  <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
-                  <p className="text-[10px] font-bold text-[#e8451c] leading-none">{formatARS(p.price.individual)}</p>
+                  <p className="mt-1.5 line-clamp-1 text-xs font-bold text-neutral-900">{p.title}</p>
+                  <p className="text-sm font-black" style={{ color: ORANGE }}>{formatARS(p.price.individual)}</p>
                 </Link>
               ))}
             </div>
           </section>
         )}
 
-        {/* Live ticker */}
-        <div className="overflow-hidden rounded-2xl border border-border bg-card/50">
-          <div className="flex items-center gap-2 border-b border-border px-3 py-1.5">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-success" />
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-success">En vivo</span>
-            <span className="text-[11px] text-muted-foreground tabular-nums">{formatViewers(liveNow)} personas mirando ahora</span>
-          </div>
-          <div className="relative h-7 overflow-hidden">
-            <div className="absolute inset-0 flex animate-[shimmer_25s_linear_infinite] items-center gap-8 whitespace-nowrap px-4 text-[11px] text-foreground/80" style={{ animation: "none" }}>
-              {LIVE_FEED.map((m, i) => <span key={i}>{m}</span>)}
-            </div>
-          </div>
-        </div>
-
-
-        {/* Combo: Oferta relámpago (izq) + Destacados (der) */}
-        <section className="grid grid-cols-5 gap-3">
-          <Link
-            to="/ofertas"
-            className="col-span-2 block"
-          >
-            <div
-              className="relative h-full min-h-[150px] overflow-hidden rounded-2xl p-2.5 flex flex-col"
-              style={{
-                background: "linear-gradient(150deg,#ff6a2c 0%,#e8451c 55%,#b81f1f 100%)",
-                boxShadow: "0 14px 30px -12px rgba(232,69,28,0.55)",
-              }}
-            >
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl" />
-              <div className="absolute -left-4 -bottom-4 h-16 w-16 rounded-full bg-yellow-300/20 blur-2xl" />
-              <span className="inline-flex w-fit items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white backdrop-blur">
-                <Zap className="h-2.5 w-2.5" /> Flash
-              </span>
-              <h2 className="mt-1.5 font-display text-base leading-tight text-white">
-                Oferta<br />relámpago
-              </h2>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-wide text-yellow-200">
-                ¡Termina en 02:14:38!
-              </p>
-              <div className="mt-auto inline-flex w-fit items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-[#e8451c]">
-                Ver ahora <ChevronRight className="h-3 w-3" />
-              </div>
-              <div className="absolute right-1.5 bottom-1.5 text-4xl drop-shadow">⚡</div>
-            </div>
-          </Link>
-
-          <div className="col-span-3 relative pl-3">
-            <span className="pointer-events-none absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-primary to-transparent" />
-            <div className="mb-2 flex items-center gap-1.5">
-              <TrendingUp className="h-3.5 w-3.5 text-neon" />
-              <h3 className="font-display text-sm">Tendencias ahora</h3>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {trendingFor.slice(0, 4).map((p) => (
-                <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="group">
-                  <div className="relative aspect-square overflow-hidden rounded-xl text-3xl grid place-items-center" style={{ background: p.gradient }}>
-                    <span>{p.emoji}</span>
-                    {p.badge && <span className="absolute left-1 top-1 rounded bg-black/50 px-1 py-0.5 text-[8px] font-bold text-white backdrop-blur">{p.badge}</span>}
-                  </div>
-                  <p className="mt-1 line-clamp-1 text-[10px] font-medium">{p.title}</p>
-                  <p className="text-[10px] font-bold text-primary leading-none">{formatARS(p.price.individual)}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-
-
-        {/* Viral / TikTok style */}
+        {/* VIRAL EN TIKTOK — scroll horizontal cards fondo oscuro */}
         <section>
-          <SectionHeader title="Viral en TikTok" icon={<Sparkles className="h-4 w-4 text-neon" />} />
-          <div className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+          <div className="mb-2.5 flex items-center gap-1.5">
+            <Sparkles className="h-4 w-4 text-fuchsia-500" />
+            <h3 className="font-display text-base font-black text-neutral-900">Viral en TikTok</h3>
+          </div>
+          <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide">
             {VIRAL.map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="relative aspect-[9/14] w-[180px] shrink-0 overflow-hidden rounded-2xl" style={{ background: p.gradient }}>
-                <div className="absolute inset-0 grid place-items-center text-7xl">{p.emoji}</div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+              <Link
+                key={p.id}
+                to="/products/$slug"
+                params={{ slug: p.slug }}
+                className="relative aspect-[9/14] w-[170px] shrink-0 overflow-hidden rounded-2xl bg-neutral-900"
+              >
+                <div className="absolute inset-0 grid place-items-center text-7xl" style={{ background: p.gradient, opacity: 0.85 }}>
+                  {p.emoji}
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-md bg-black/70 px-1.5 py-0.5 text-[9px] font-black text-white backdrop-blur">
+                  🎵 {p.badge ?? "Viral"}
+                </div>
                 <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                  <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[9px] font-bold backdrop-blur">{p.badge ?? "TRENDING"}</span>
-                  <p className="mt-1.5 line-clamp-2 text-xs font-semibold">{p.title}</p>
-                  <p className="mt-0.5 text-sm font-black">{formatARS(p.price.group)}</p>
+                  <p className="line-clamp-2 text-xs font-bold leading-tight">{p.title}</p>
+                  <p className="mt-1 text-base font-black" style={{ color: "#fdba74" }}>{formatARS(p.price.group)}</p>
+                  <p className="mt-0.5 text-[9px] text-white/70 line-clamp-1">por {p.sellerName}</p>
                 </div>
               </Link>
             ))}
           </div>
         </section>
 
-
-
-
-        {/* Recomendados */}
+        {/* PARA VOS */}
         <section>
-          <SectionHeader title="Para vos" icon={<Sparkles className="h-4 w-4 text-primary" />} />
-          <div className="mt-3 grid grid-cols-2 gap-3">
+          <div className="mb-2.5 flex items-center gap-1.5">
+            <Sparkles className="h-4 w-4" style={{ color: ORANGE }} />
+            <h3 className="font-display text-base font-black text-neutral-900">Para vos</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
             {forYou.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
 
-        {/* Explorar todo — scroll infinito */}
-        <InfiniteAll priceSort={priceSort} />
-
-        {/* Tiendas argentinas */}
-        <Link to="/locales" className="block rounded-2xl border-2 border-sky-200 bg-gradient-to-br from-sky-50 to-white p-3.5">
-          <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-sky-100 text-sky-700 text-base">
-              🏪
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold">Tiendas argentinas</p>
-              <p className="text-[10px] text-muted-foreground">Tiendas por categoría · publican sus productos con stock local</p>
-            </div>
-            <ChevronRight className="h-4 w-4 text-sky-600" />
-          </div>
-          <div className="mt-2.5 flex gap-2 overflow-x-auto scrollbar-hide">
-            {MOCK_PRODUCTS.filter((p) => p.sellerKind === "local").slice(0, 6).map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[72px] shrink-0">
-                <div className="aspect-square overflow-hidden rounded-xl text-xl grid place-items-center" style={{ background: p.gradient }}>
-                  <span>{p.emoji}</span>
-                </div>
-                <p className="mt-1 line-clamp-1 text-[9px] font-medium">{p.title}</p>
-                <p className="text-[9px] font-bold text-sky-700 leading-none">{formatARS(p.price.individual)}</p>
-              </Link>
-            ))}
-          </div>
-        </Link>
-
-        {/* Importadores */}
-        <Link to="/importadores" className="block rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-3.5">
-          <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-100 text-emerald-700">
-              <Factory className="h-4 w-4" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold">Importadores verificados</p>
-              <p className="text-[10px] text-muted-foreground">Catálogos mayoristas de fábricas chinas · stock AR y a pedido</p>
-            </div>
-            <ChevronRight className="h-4 w-4 text-emerald-600" />
-          </div>
-        </Link>
-
-        {/* A pedido */}
-        <Link to="/importadores" className="block rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-white p-3.5">
-          <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-amber-100 text-amber-700">
-              <Clock className="h-4 w-4" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold">A pedido</p>
-              <p className="text-[10px] text-muted-foreground">Productos de fábrica · entrega 20 a 40 días · mínimos desde 100 u.</p>
-            </div>
-            <ChevronRight className="h-4 w-4 text-amber-600" />
-          </div>
-          <div className="mt-2.5 flex gap-2 overflow-x-auto scrollbar-hide">
-            {MOCK_PRODUCTS.filter((p) => p.stockLocation === "factory").slice(0, 5).map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="w-[72px] shrink-0">
-                <div className="aspect-square overflow-hidden rounded-xl text-xl grid place-items-center" style={{ background: p.gradient }}>
-                  <span>{p.emoji}</span>
-                </div>
-                <p className="mt-1 line-clamp-1 text-[9px] font-medium">{p.title}</p>
-                <p className="text-[9px] font-bold text-amber-700 leading-none">{formatARS(p.price.wholesale)}</p>
-              </Link>
-            ))}
-          </div>
-        </Link>
-
-        {/* Para emprendedores — discreto */}
-        <Link to="/registrar-marca" className="block rounded-2xl border border-border bg-card p-3.5">
-          <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary">
-              <ShieldCheck className="h-4 w-4" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold">Registrá tu marca con NEIBA</p>
-              <p className="text-[10px] text-muted-foreground">Para emprendedores · protegé tu logo y nombre</p>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </div>
-        </Link>
-
-        <Link to="/admin-login" className="block rounded-2xl border border-border bg-card p-4 text-center text-xs text-muted-foreground">
-          🛠 Acceder al panel admin
-        </Link>
+        <InfiniteAll kindFilter={kindFilter} />
       </main>
     </MobileShell>
   );
 }
 
-function SectionHeader({ title, link, icon }: { title: string; link?: string; icon?: React.ReactNode }) {
+function FilterChip({ active, onClick, icon, label, color }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string; color: "sky" | "emerald" | "purple" }) {
+  const palettes = {
+    sky:      { activeBg: "#0ea5e9", activeText: "#fff", idleBg: "#e0f2fe", idleText: "#075985", border: "#bae6fd" },
+    emerald:  { activeBg: "#10b981", activeText: "#fff", idleBg: "#d1fae5", idleText: "#065f46", border: "#a7f3d0" },
+    purple:   { activeBg: "#8b5cf6", activeText: "#fff", idleBg: "#ede9fe", idleText: "#5b21b6", border: "#ddd6fe" },
+  }[color];
   return (
-    <div className="flex items-end justify-between">
-      <div className="flex items-center gap-2">
-        {icon}
-        <h3 className="font-display text-lg">{title}</h3>
-      </div>
-      {link && <Link to={link} className="text-xs text-primary">Ver todo</Link>}
-    </div>
+    <button
+      onClick={onClick}
+      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-black transition-colors"
+      style={{
+        background: active ? palettes.activeBg : palettes.idleBg,
+        color: active ? palettes.activeText : palettes.idleText,
+        border: `1px solid ${active ? palettes.activeBg : palettes.border}`,
+      }}
+    >
+      {icon}{label}
+    </button>
   );
 }
 
-function ProductCard({ product: p }: { product: typeof MOCK_PRODUCTS[number] }) {
-  const priceLabel = p.minOrder ? `${formatARS(p.price.wholesale)} c/u` : formatARS(p.price.individual);
-  const kindLabel =
-    p.sellerKind === "neiba" ? "NEIBA"
-    : p.sellerKind === "local" ? "Tienda"
-    : p.sellerKind === "fabricante" ? "Fabricante"
-    : "Importador";
-  const kindCls =
-    p.sellerKind === "neiba" ? "bg-[#e8451c] text-white"
-    : p.sellerKind === "local" ? "bg-sky-100 text-sky-700 border border-sky-200"
-    : p.sellerKind === "fabricante" ? "bg-purple-100 text-purple-700 border border-purple-200"
-    : "bg-emerald-100 text-emerald-700 border border-emerald-200";
-  const isAPedido = p.sellerKind === "importer" && p.stockLocation === "factory";
-  const stockLabel = isAPedido ? "A pedido" : "Stock";
-  const stockCls = isAPedido
-    ? "bg-amber-100 text-amber-700 border border-amber-200"
-    : "bg-emerald-50 text-emerald-700 border border-emerald-200";
+function FlashSale({ product, original, price }: { product: MockProduct; original: number; price: number }) {
+  const [t, setT] = useState({ h: 2, m: 14, s: 36 });
+  useEffect(() => {
+    const id = setInterval(() => {
+      setT(({ h, m, s }) => {
+        let ns = s - 1, nm = m, nh = h;
+        if (ns < 0) { ns = 59; nm--; }
+        if (nm < 0) { nm = 59; nh--; }
+        if (nh < 0) { nh = 2; nm = 14; ns = 36; }
+        return { h: nh, m: nm, s: ns };
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const off = Math.round((1 - price / original) * 100);
+
   return (
-    <Link to="/products/$slug" params={{ slug: p.slug }} className="group block">
-      <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
-        <span>{p.emoji}</span>
-        {p.customizable && (
-          <span className="absolute right-2 top-2 rounded-md bg-fuchsia-600 px-1.5 py-0.5 text-[8px] font-black leading-none text-white">
-            Personalizable
+    <Link
+      to="/ofertas"
+      className="relative block overflow-hidden rounded-3xl p-4 text-white"
+      style={{
+        background: "linear-gradient(135deg, #7c3aed 0%, #c026d3 45%, #f97316 100%)",
+        boxShadow: "0 18px 36px -14px rgba(124,58,237,0.55)",
+      }}
+    >
+      <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/15 blur-3xl" />
+      <div className="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-orange-300/30 blur-3xl" />
+
+      <div className="relative flex items-center gap-3">
+        <div className="flex-1 min-w-0">
+          <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider backdrop-blur">
+            <Flame className="h-3 w-3" /> Flash sale
           </span>
-        )}
-      </div>
-      <p className="mt-1.5 line-clamp-1 text-xs font-semibold text-neutral-900">{p.title}</p>
-      {p.sellerKind !== "neiba" && (
-        <p className="text-[9px] text-neutral-500 line-clamp-1">por {p.sellerName}</p>
-      )}
-      <p className="text-sm font-black text-[#e8451c] leading-tight">{priceLabel}</p>
-      <div className="mt-1 flex flex-wrap gap-1">
-        <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${kindCls}`}>
-          {kindLabel}
-        </span>
-        <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[8px] font-black leading-none ${stockCls}`}>
-          {stockLabel}
-        </span>
+          <h2 className="mt-2 font-display text-xl font-black leading-tight">Oferta relámpago</h2>
+          <p className="mt-0.5 line-clamp-1 text-[11px] font-bold text-white/90">{product.title}</p>
+
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-2xl font-black tabular-nums">{formatARS(price)}</span>
+            <span className="text-xs text-white/70 line-through tabular-nums">{formatARS(original)}</span>
+            <span className="rounded-md bg-black px-1.5 py-0.5 text-[10px] font-black">-{off}% OFF</span>
+          </div>
+
+          <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-black/40 px-2 py-1 text-[11px] font-black backdrop-blur">
+            <Clock className="h-3 w-3" />
+            <span className="tabular-nums">{pad(t.h)}:{pad(t.m)}:{pad(t.s)}</span>
+          </div>
+        </div>
+
+        <div
+          className="grid h-24 w-24 shrink-0 place-items-center rounded-2xl text-5xl"
+          style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(4px)" }}
+        >
+          {product.emoji}
+        </div>
       </div>
     </Link>
   );
 }
 
-function InfiniteAll({ priceSort }: { priceSort: "none" | "asc" | "desc" }) {
+function ProductCard({ product: p }: { product: MockProduct }) {
+  const priceLabel = p.minOrder ? `${formatARS(p.price.wholesale)} c/u` : formatARS(p.price.individual);
+  const kindLabel =
+    p.sellerKind === "local" ? "Tienda"
+    : p.sellerKind === "fabricante" ? "Fabricante"
+    : p.sellerKind === "importer" ? "Importador"
+    : "NEIBA";
+  const kindCls =
+    p.sellerKind === "local" ? "bg-sky-100 text-sky-700 border border-sky-200"
+    : p.sellerKind === "fabricante" ? "bg-purple-100 text-purple-700 border border-purple-200"
+    : p.sellerKind === "importer" ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+    : "bg-orange-100 text-orange-700 border border-orange-200";
+  const isAPedido = p.stockLocation === "factory";
+  const stockText = isAPedido ? "A pedido" : "Stock";
+  const stockCls = isAPedido
+    ? "bg-amber-100 text-amber-700 border border-amber-200"
+    : "bg-emerald-50 text-emerald-700 border border-emerald-200";
+
+  return (
+    <Link to="/products/$slug" params={{ slug: p.slug }} className="group block">
+      <div className="relative aspect-square overflow-hidden rounded-2xl text-6xl grid place-items-center" style={{ background: p.gradient }}>
+        <span>{p.emoji}</span>
+        {p.customizable && (
+          <span className="absolute right-2 top-2 rounded-md bg-fuchsia-600 px-1.5 py-0.5 text-[9px] font-black leading-none text-white">
+            Personalizable
+          </span>
+        )}
+      </div>
+      <p className="mt-1.5 line-clamp-1 text-xs font-bold text-neutral-900">{p.title}</p>
+      <p className="text-[10px] text-neutral-500 line-clamp-1">por {p.sellerName}</p>
+      <p className="text-sm font-black leading-tight" style={{ color: ORANGE }}>{priceLabel}</p>
+      <div className="mt-1 flex flex-wrap gap-1">
+        <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[9px] font-black leading-none ${kindCls}`}>{kindLabel}</span>
+        <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[9px] font-black leading-none ${stockCls}`}>{stockText}</span>
+      </div>
+    </Link>
+  );
+}
+
+function InfiniteAll({ kindFilter }: { kindFilter: KindFilter }) {
   const PAGE = 12;
   const [count, setCount] = useState(PAGE);
   const sentinel = useRef<HTMLDivElement>(null);
 
-  // Lista repetida para simular catálogo infinito
-  const base = priceSort === "none"
-    ? MOCK_PRODUCTS
-    : [...MOCK_PRODUCTS].sort((a, b) =>
-        priceSort === "asc" ? a.price.individual - b.price.individual : b.price.individual - a.price.individual
-      );
+  const base = kindFilter === "all" ? MOCK_PRODUCTS : MOCK_PRODUCTS.filter((p) => p.sellerKind === kindFilter);
   const items = Array.from({ length: count }).map((_, i) => base[i % base.length]);
 
   useEffect(() => {
     const el = sentinel.current;
     if (!el) return;
     const io = new IntersectionObserver((entries) => {
-      if (entries[0]?.isIntersecting) {
-        setCount((c) => c + PAGE);
-      }
+      if (entries[0]?.isIntersecting) setCount((c) => c + PAGE);
     }, { rootMargin: "400px" });
     io.observe(el);
     return () => io.disconnect();
@@ -536,11 +383,14 @@ function InfiniteAll({ priceSort }: { priceSort: "none" | "asc" | "desc" }) {
 
   return (
     <section>
-      <SectionHeader title="Explorar todo" icon={<Sparkles className="h-4 w-4 text-primary" />} />
-      <div className="mt-3 grid grid-cols-2 gap-3">
+      <div className="mb-2.5 flex items-center gap-1.5">
+        <Sparkles className="h-4 w-4" style={{ color: ORANGE }} />
+        <h3 className="font-display text-base font-black text-neutral-900">Explorar todo</h3>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
         {items.map((p, i) => <ProductCard key={`${p.id}-${i}`} product={p} />)}
       </div>
-      <div ref={sentinel} className="mt-4 grid place-items-center py-4 text-[10px] text-muted-foreground">
+      <div ref={sentinel} className="mt-4 grid place-items-center py-4 text-[10px] text-neutral-400">
         Cargando más…
       </div>
     </section>
