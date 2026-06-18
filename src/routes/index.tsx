@@ -163,53 +163,69 @@ function Home() {
           <FilterChip active={kindFilter === "fabricante"} onClick={() => setKindFilter(kindFilter === "fabricante" ? "all" : "fabricante")} icon={<Factory className="h-3.5 w-3.5" />} label="Fabricante" color="purple" />
         </section>
 
-        {/* PRODUCTOS EN TENDENCIA — grid 2x2 con foto, nombre y precio */}
-        <section>
-          <div className="mb-2.5 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Flame className="h-4 w-4" style={{ color: ORANGE }} />
-              <h3 className="font-display text-base font-black text-neutral-900">Productos en tendencia</h3>
+        {/* FLASH SALE — banner promo izquierda + productos con imagen grande, nombre y precio a la derecha */}
+        <section
+          className="overflow-hidden rounded-3xl"
+          style={{
+            background: "linear-gradient(135deg, #7c3aed 0%, #c026d3 55%, #f97316 100%)",
+            boxShadow: "0 18px 36px -14px rgba(124,58,237,0.55)",
+          }}
+        >
+          <div className="flex items-stretch gap-3 p-3">
+            {/* LEFT — promo */}
+            <div className="flex w-[34%] shrink-0 flex-col justify-between text-white">
+              <div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider backdrop-blur">
+                  <Flame className="h-3 w-3" /> Flash sale
+                </span>
+                <h2 className="mt-2 font-display text-base font-black leading-tight">Oferta relámpago</h2>
+                <p className="mt-1 text-[10px] leading-tight text-white/85">Hasta -40% por tiempo limitado</p>
+              </div>
+              <div className="mt-2 inline-flex items-center gap-1 self-start rounded-md bg-black/40 px-2 py-1 text-[10px] font-black backdrop-blur">
+                <Clock className="h-3 w-3" />
+                <FlashTimer />
+              </div>
             </div>
-            <Link to="/search" search={{ q: "", cat: "" }} className="inline-flex items-center gap-0.5 text-[11px] font-bold text-neutral-500">
-              Ver más <ChevronRight className="h-3 w-3" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {FLASH_DEALS.slice(0, 4).map((p) => {
-              const off = Math.round((1 - p.price.group / p.price.individual) * 100);
-              return (
-                <Link
-                  key={p.id}
-                  to="/products/$slug"
-                  params={{ slug: p.slug }}
-                  className="group block overflow-hidden rounded-2xl border border-neutral-100 bg-white"
-                  style={{ boxShadow: "0 6px 16px -10px rgba(0,0,0,0.18)" }}
-                >
-                  <div className="relative aspect-square grid place-items-center text-6xl" style={{ background: p.gradient }}>
-                    <span>{p.emoji}</span>
-                    {off > 0 && (
-                      <span className="absolute left-2 top-2 rounded-md bg-black px-1.5 py-0.5 text-[9px] font-black text-white">
-                        -{off}% OFF
-                      </span>
-                    )}
-                    {p.badge && (
-                      <span className="absolute right-2 top-2 rounded-md bg-white/90 px-1.5 py-0.5 text-[9px] font-black text-neutral-900 backdrop-blur">
-                        {p.badge}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-2">
-                    <p className="line-clamp-1 text-xs font-bold text-neutral-900">{p.title}</p>
-                    <div className="mt-0.5 flex items-baseline gap-1.5">
-                      <p className="text-sm font-black tabular-nums" style={{ color: ORANGE }}>{formatARS(p.price.group)}</p>
-                      <p className="text-[10px] text-neutral-400 line-through tabular-nums">{formatARS(p.price.individual)}</p>
+
+            {/* RIGHT — productos: imagen grande, nombre y precio */}
+            <div className="-mr-3 flex gap-2.5 overflow-x-auto pr-3 scrollbar-hide">
+              {FLASH_DEALS.map((p) => {
+                const off = Math.round((1 - p.price.group / p.price.individual) * 100);
+                return (
+                  <Link
+                    key={p.id}
+                    to="/products/$slug"
+                    params={{ slug: p.slug }}
+                    className="flex w-[130px] shrink-0 flex-col overflow-hidden rounded-2xl bg-white"
+                    style={{ boxShadow: "0 6px 14px -8px rgba(0,0,0,0.4)" }}
+                  >
+                    <div className="relative aspect-square grid place-items-center text-5xl" style={{ background: p.gradient }}>
+                      <span>{p.emoji}</span>
+                      {off > 0 && (
+                        <span className="absolute left-1.5 top-1.5 rounded-md bg-black px-1.5 py-0.5 text-[9px] font-black text-white">
+                          -{off}%
+                        </span>
+                      )}
+                      {p.badge && (
+                        <span className="absolute right-1.5 top-1.5 rounded-md bg-white/90 px-1.5 py-0.5 text-[8px] font-black text-neutral-900 backdrop-blur">
+                          {p.badge}
+                        </span>
+                      )}
                     </div>
-                  </div>
-                </Link>
-              );
-            })}
+                    <div className="px-2 py-1.5">
+                      <p className="line-clamp-1 text-[11px] font-bold text-neutral-900">{p.title}</p>
+                      <div className="mt-0.5 flex items-baseline gap-1">
+                        <p className="text-sm font-black tabular-nums" style={{ color: ORANGE }}>{formatARS(p.price.group)}</p>
+                        <p className="text-[9px] text-neutral-400 line-through tabular-nums">{formatARS(p.price.individual)}</p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </section>
+
 
         {/* TENDENCIAS — 2 productos con badge TikTok viral */}
         {trending.length > 0 && (
