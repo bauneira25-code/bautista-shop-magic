@@ -6,7 +6,7 @@ import { SmartSearch } from "@/components/SmartSearch";
 import { OnboardingGender } from "@/components/OnboardingGender";
 import { useUserPrefs, GENDER_BIAS } from "@/stores/userPrefs";
 import { useUserAuth } from "@/stores/userAuth";
-import { CATEGORIES, MOCK_PRODUCTS, VIRAL, formatARS, type MockProduct, type SellerKind } from "@/lib/mockData";
+import { CATEGORIES, MOCK_PRODUCTS, FLASH_DEALS, VIRAL, formatARS, type MockProduct, type SellerKind } from "@/lib/mockData";
 import { useLiveTotalViewers, formatViewers } from "@/lib/liveViewers";
 
 import imgTech from "@/assets/cat-tech.jpg";
