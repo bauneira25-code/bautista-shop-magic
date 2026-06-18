@@ -13,6 +13,14 @@ import { ProductBadges } from "@/components/ProductBadges";
 import { CustomizeSheet } from "@/components/CustomizeSheet";
 import { ImporterChat } from "@/components/ImporterChat";
 
+const ORANGE_DETAIL = "#F97316";
+const QTY_TIERS: { qty: number; factor: number }[] = [
+  { qty: 2,  factor: 0.92 },
+  { qty: 4,  factor: 0.85 },
+  { qty: 10, factor: 0.77 },
+  { qty: 20, factor: 0.69 },
+];
+
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => {
     const product = findProduct(params.slug);
@@ -278,11 +286,65 @@ function ProductPage() {
           <h1 className="mt-2 font-display text-2xl leading-tight">{product.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{product.description}</p>
 
-          {/* Precio unitario */}
-          <div className="mt-3 rounded-xl border border-orange-200 bg-orange-50/60 px-2.5 py-1.5">
-            <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500 leading-none">Precio por unidad</p>
-            <p className="mt-1 font-display text-base leading-none text-[#e8451c]">{formatARS(price)}</p>
+          {/* Precio unitario — grande y destacado */}
+          <div className="mt-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Precio por unidad</p>
+            <p className="mt-0.5 font-display text-4xl font-black leading-none" style={{ color: ORANGE_DETAIL }}>
+              {formatARS(product.price.individual)} <span className="text-lg font-black text-neutral-400">c/u</span>
+            </p>
           </div>
+
+          {/* Precios por cantidad — descuentos escalonados */}
+          <div className="mt-3 space-y-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">Comprá más y ahorrá</p>
+            {QTY_TIERS.map((t) => {
+              const unit = Math.round(product.price.individual * t.factor);
+              const saves = (product.price.individual - unit) * t.qty;
+              return (
+                <div key={t.qty} className="flex items-center gap-3 rounded-2xl bg-neutral-100 px-3 py-2.5">
+                  <div className="min-w-[64px]">
+                    <p className="font-display text-base font-black leading-none text-neutral-900">x{t.qty}</p>
+                    <p className="text-[10px] text-neutral-500 leading-none mt-0.5">unidades</p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-display text-base font-black leading-none" style={{ color: ORANGE_DETAIL }}>
+                      {formatARS(unit)} <span className="text-[11px] font-black text-neutral-400">c/u</span>
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-bold leading-none text-emerald-600">
+                      Ahorrás {formatARS(saves)}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setMode("wholesale");
+                      setQty(t.qty);
+                      addToCart({
+                        id: `${product.slug}-tier-${t.qty}`,
+                        slug: product.slug,
+                        title: product.title,
+                        emoji: product.emoji,
+                        gradient: product.gradient,
+                        mode: "wholesale",
+                        unitPrice: unit,
+                        quantity: t.qty,
+                        variant: product.variants?.[variant],
+                        color: product.colors?.[color],
+                      });
+                      toast.success(`x${t.qty} agregado 🛒`, {
+                        description: `${formatARS(unit)} c/u · Total ${formatARS(unit * t.qty)}`,
+                        action: { label: "Ver carrito", onClick: () => navigate({ to: "/cart" }) },
+                      });
+                    }}
+                    className="shrink-0 rounded-full px-3 py-1.5 text-[11px] font-black text-white"
+                    style={{ background: ORANGE_DETAIL }}
+                  >
+                    Agregar
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
 
           {/* Pedido mínimo de la tienda (conectado al carrito) */}
           {isLocal && (() => {
